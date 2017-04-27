@@ -1,0 +1,11 @@
+{
+  "debug": false,
+  "cloud": true,
+  "proxy-name": "main",
+  "cloud-ip": "localhost",
+  "cloud-port": 8000,
+  "team-rank": 10,
+  "colored-chat-permission": "chat.colored",
+  "formatted-chat-permission": "chat.formatted",
+  "command-help-permission": "command.explicit-help"
+}

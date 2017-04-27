@@ -1,0 +1,49 @@
+{
+  "debug": false,
+  "max-ram-usage": 60,
+  "netty": {
+    "host": "localhost",
+    "port": 8000,
+    "whitelist": {
+      "activated": true,
+      "ips": [
+        "127.0.0.1"
+      ]
+    }
+  },
+  "database": {
+    "hostname": "localhost",
+    "database": "test",
+    "port": 27017,
+    "user": "user",
+    "password": "password"
+  },
+  "minecraft": {
+    "motd": "&7Das ist die erste Zeile\n&9Das ist die zweite",
+    "maintenance": false,
+    "maintenance-motd": "&cWir sind in Wartungsarbeiten\n&4Genauere Informationen",
+    "maintenance-rank": 10,
+    "max-players": 666,
+    "punishment-subtypes": [
+      "clientmods:30d",
+      "exploitation:7d",
+      "chat-behaviour:6h;chat",
+      "behaviour:1d",
+      "account:30d"
+    ],
+    "punishment-reasons": [
+      "combat:clientmods",
+      "movement:clientmods",
+      "world:clientmods",
+      "other:clientmods",
+      "bugusing:exploitation",
+      "glitching:exploitation",
+      "swearing:chat-behaviour",
+      "advertisement:chat-behaviour",
+      "discourtesy:chat-behaviour",
+      "contravention:behaviour",
+      "username:account",
+      "skin:account"
+    ]
+  }
+}

@@ -1,0 +1,5 @@
+{
+  "server-name": "server",
+  "cloud-ip": "localhost",
+  "cloud-port": 8000
+}

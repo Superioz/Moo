@@ -1,0 +1,8 @@
+{
+  "daemon-name": "main",
+  "cloud-ip": "localhost",
+  "cloud-port": 8000,
+  "servers-folder": "servers",
+  "patterns-folder": "patterns",
+  "start-file": "start"
+}

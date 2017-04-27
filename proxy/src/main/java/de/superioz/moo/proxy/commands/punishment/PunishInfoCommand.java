@@ -1,0 +1,111 @@
+package de.superioz.moo.proxy.commands.punishment;
+
+import de.superioz.moo.api.command.Command;
+import de.superioz.moo.api.command.context.CommandContext;
+import de.superioz.moo.api.command.help.ArgumentHelp;
+import de.superioz.moo.api.command.help.ArgumentHelper;
+import de.superioz.moo.api.command.param.ParamSet;
+import de.superioz.moo.api.command.tabcomplete.TabCompletion;
+import de.superioz.moo.api.command.tabcomplete.TabCompletor;
+import de.superioz.moo.api.common.PlayerInfo;
+import de.superioz.moo.api.common.RunAsynchronous;
+import de.superioz.moo.api.common.punishment.BanSubType;
+import de.superioz.moo.api.common.punishment.BanType;
+import de.superioz.moo.api.database.object.Ban;
+import de.superioz.moo.api.database.object.UniqueIdBuf;
+import de.superioz.moo.api.io.LanguageManager;
+import de.superioz.moo.api.utils.StringUtil;
+import de.superioz.moo.api.utils.TimeUtil;
+import de.superioz.moo.client.common.MooQueries;
+import de.superioz.moo.proxy.command.BungeeCommandContext;
+import de.superioz.moo.proxy.util.BungeeTeamChat;
+import net.md_5.bungee.api.ProxyServer;
+import net.md_5.bungee.api.connection.ProxiedPlayer;
+
+@RunAsynchronous
+public class PunishInfoCommand {
+
+    private static final String LABEL = "punishinfo";
+
+    @ArgumentHelp
+    public void onArgumentHelp(ArgumentHelper helper) {
+
+    }
+
+    @TabCompletion
+    public void onTabComplete(TabCompletor completor) {
+        completor.react(1, StringUtil.getStringList(
+                ProxyServer.getInstance().getPlayers(), ProxiedPlayer::getDisplayName)
+        );
+    }
+
+    @Command(label = LABEL, usage = "<player>")
+    public void onCommand(BungeeCommandContext context, ParamSet args) {
+        PlayerInfo playerInfo = args.get(0, PlayerInfo.class);
+        context.invalidArgument(playerInfo == null, LanguageManager.get("player-doesnt-exist", args.get(0)));
+
+        // get current ban/mute
+        Ban currentBan = playerInfo.getCurrentBan();
+        Ban currentChatBan = playerInfo.getCurrentChatBan();
+
+        // if he is not banned and muted
+        if(currentBan == null && currentChatBan == null) {
+            context.sendMessage(LanguageManager.get("punishment-player-is-nothing", playerInfo.getName()));
+            return;
+        }
+        context.sendMessage(LanguageManager.get("punishment-header", playerInfo.getName()));
+
+        // if the current ban is not null get the executor and send info
+        // otherwise send (not-banned)
+        if(currentBan != null) {
+            String banExecutorName = CommandContext.CONSOLE_NAME;
+            UniqueIdBuf banExecutor = MooQueries.getInstance().getUniqueIdBuffer(currentBan.by);
+            if(banExecutor != null) banExecutorName = banExecutor.name;
+
+            // values for formatting
+            long current = System.currentTimeMillis();
+            String start = TimeUtil.getFormat(currentBan.start);
+            BanSubType subType = currentBan.getSubType();
+            String typeColor = subType.getBanType() == BanType.GLOBAL ? "&c" : "&9";
+            String end = TimeUtil.getFormat(current + currentBan.duration);
+
+            context.sendEventMessage(LanguageManager.get("punishment-ban-info",
+                    start, typeColor + subType.getName(),
+                    "Details",
+                    start,
+                    end,
+                    typeColor + currentBan.reason,
+                    BungeeTeamChat.getInstance().getColor(banExecutor == null ? null : banExecutor.uuid) + banExecutorName));
+        }
+        else {
+            context.sendMessage(LanguageManager.get("punishment-player-isnt-banned", playerInfo.getName()));
+        }
+
+        // if the mute is not null get the executor as well and send info
+        // otherwise send (not-muted)
+        if(currentChatBan != null) {
+            String muteExecutorName = CommandContext.CONSOLE_NAME;
+            UniqueIdBuf muteExecutor = MooQueries.getInstance().getUniqueIdBuffer(currentChatBan.by);
+            if(muteExecutor != null) muteExecutorName = muteExecutor.name;
+
+            // values for formatting
+            long current = System.currentTimeMillis();
+            String start = TimeUtil.getFormat(currentBan.start);
+            BanSubType subType = currentBan.getSubType();
+            String typeColor = subType.getBanType() == BanType.GLOBAL ? "&c" : "&9";
+            String end = TimeUtil.getFormat(current + currentBan.duration);
+
+            context.sendEventMessage(LanguageManager.get("punishment-mute-info",
+                    start, typeColor + subType.getName(),
+                    "Details",
+                    start,
+                    end,
+                    typeColor + currentBan.reason,
+                    BungeeTeamChat.getInstance().getColor(muteExecutor == null ? null : muteExecutor.uuid) + muteExecutorName));
+        }
+        else {
+            context.sendMessage(LanguageManager.get("punishment-player-isnt-muted", playerInfo.getName()));
+        }
+    }
+
+}
