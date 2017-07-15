@@ -13,7 +13,6 @@ import de.superioz.moo.api.util.Validation;
 import de.superioz.moo.protocol.events.QueryEvent;
 import de.superioz.moo.protocol.exception.MooInputException;
 import de.superioz.moo.protocol.exception.MooOutputException;
-import net.draxento.protocol.packets.*;
 
 import java.util.ArrayList;
 import java.util.List;

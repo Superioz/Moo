@@ -29,10 +29,6 @@ import de.superioz.moo.minecraft.util.ChatUtil;
 import de.superioz.moo.protocol.client.ClientType;
 import de.superioz.moo.proxy.command.BungeeCommandContext;
 import de.superioz.moo.proxy.commands.ThunderCommand;
-import net.draxento.proxy.commands.player.PlayerEditCommand;
-import net.draxento.proxy.commands.punishment.*;
-import net.draxento.proxy.listeners.*;
-import net.draxento.proxy.commands.*;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.plugin.Command;
@@ -95,9 +91,9 @@ public class ThunderPluginModule extends Module implements EventListener, MooPlu
                 new ThunderCommand(), new TeamCommand(), new TeamChatCommand(),
                 new MaintenanceCommand(), new MotdCommand(),
                 new GroupCommand(), new RankCommand(), new PermCommand(),
-                new BanCommand(), new PunishInfoCommand(), new PunishEditCommand(),
+                new BanCommand(), new PunishInfoCommand(),
                 new UnbanCommand(), new MuteCommand(), new UnmuteCommand(), new KickCommand(),
-                new WhoisCommand(), new PlayerEditCommand()
+                new WhoisCommand()
         );
         startup.registerListeners(this,
                 new CommandListener(),

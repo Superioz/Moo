@@ -17,8 +17,6 @@ import java.util.function.Function;
 @Getter
 public class LanguageManager {
 
-    private static final long DEFAULT_EXPIRATION = 180;
-
     @Getter
     private static PropertiesConfig handle;
     private static Function<String, String> formatter;

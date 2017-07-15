@@ -8,7 +8,6 @@ import de.superioz.moo.protocol.common.Response;
 import de.superioz.moo.protocol.packet.AbstractPacket;
 import de.superioz.moo.protocol.common.ResponseStatus;
 import de.superioz.moo.protocol.packets.*;
-import net.draxento.protocol.packets.*;
 
 import java.net.InetSocketAddress;
 import java.util.Collection;

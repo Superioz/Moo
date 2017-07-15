@@ -1,9 +1,6 @@
 package de.superioz.moo.cloud;
 
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
-import de.superioz.moo.cloud.modules.*;
-import jline.console.ConsoleReader;
-import lombok.Getter;
 import de.superioz.moo.api.console.CommandTerminal;
 import de.superioz.moo.api.database.DatabaseCollection;
 import de.superioz.moo.api.database.DatabaseConnection;
@@ -13,10 +10,12 @@ import de.superioz.moo.api.io.JsonConfig;
 import de.superioz.moo.api.logging.Logs;
 import de.superioz.moo.api.logging.MooLogger;
 import de.superioz.moo.api.module.ModuleRegistry;
-import net.draxento.cloud.modules.*;
+import de.superioz.moo.cloud.modules.*;
 import de.superioz.moo.protocol.server.ClientHub;
 import de.superioz.moo.protocol.server.MooProxy;
 import de.superioz.moo.protocol.server.NetworkServer;
+import jline.console.ConsoleReader;
+import lombok.Getter;
 
 import java.nio.file.Paths;
 import java.util.concurrent.ExecutorService;
@@ -99,7 +98,7 @@ public class Cloud implements EventListener {
         executors.execute(() -> {
             try {
                 Thread.sleep(5 * 1000);
-                getLogger().info("Now should netty instances be able to connect successfully.");
+                getLogger().info("Netty instances should now be able to connect successfully.");
                 started = true;
             }
             catch(InterruptedException e) {

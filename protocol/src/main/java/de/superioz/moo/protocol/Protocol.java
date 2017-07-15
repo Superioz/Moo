@@ -3,7 +3,6 @@ package de.superioz.moo.protocol;
 import de.superioz.moo.protocol.packets.*;
 import lombok.Getter;
 import de.superioz.moo.protocol.packet.AbstractPacket;
-import net.draxento.protocol.packets.*;
 
 public enum Protocol {
 

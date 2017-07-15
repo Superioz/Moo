@@ -1,7 +1,5 @@
 package de.superioz.moo.cloud.modules;
 
-import de.superioz.moo.cloud.database.*;
-import lombok.Getter;
 import de.superioz.moo.api.database.DatabaseCollection;
 import de.superioz.moo.api.database.DatabaseConnection;
 import de.superioz.moo.api.database.DatabaseType;
@@ -9,7 +7,8 @@ import de.superioz.moo.api.io.JsonConfig;
 import de.superioz.moo.api.module.Module;
 import de.superioz.moo.api.module.ModuleDependency;
 import de.superioz.moo.cloud.Cloud;
-import net.draxento.cloud.database.*;
+import de.superioz.moo.cloud.database.*;
+import lombok.Getter;
 
 import java.util.HashMap;
 import java.util.Map;
