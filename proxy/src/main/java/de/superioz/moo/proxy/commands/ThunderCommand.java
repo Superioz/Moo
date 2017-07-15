@@ -10,7 +10,7 @@ public class ThunderCommand {
 
     @RunAsynchronous
     @Command(label = "thunder",
-            permission = "draxento.network.moo",
+            permission = "network.moo",
             usage = "[connect:disconnect]")
     public void onCommand(BungeeCommandContext context, ParamSet args) {
         boolean activated = Moo.getInstance().isActivated();

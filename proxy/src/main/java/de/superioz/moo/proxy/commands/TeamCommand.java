@@ -9,10 +9,8 @@ import de.superioz.moo.proxy.command.BungeeCommandContext;
 public class TeamCommand {
 
     private static final String LABEL = "team";
-    private static final String RANKS_COMMAND = "ranks";
-    private static final String LIST_COMMAND = "list";
 
-    @Command(label = LABEL, usage = "<subcommand>")
+    @Command(label = LABEL)
     public void onCommand(BungeeCommandContext context, ParamSet args) {
 
     }
