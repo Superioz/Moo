@@ -28,7 +28,7 @@ import de.superioz.moo.client.util.MooPluginUtil;
 import de.superioz.moo.minecraft.util.ChatUtil;
 import de.superioz.moo.protocol.client.ClientType;
 import de.superioz.moo.proxy.command.BungeeCommandContext;
-import de.superioz.moo.proxy.commands.ThunderCommand;
+import de.superioz.moo.proxy.commands.MooCommand;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.plugin.Command;
@@ -88,7 +88,7 @@ public class ThunderPluginModule extends Module implements EventListener, MooPlu
     public void loadPluginStartup(MooPluginStartup startup) {
         startup.registerCommands(
                 new DatabaseModifyCommand(),
-                new ThunderCommand(), new TeamCommand(), new TeamChatCommand(),
+                new MooCommand(), new TeamCommand(), new TeamChatCommand(),
                 new MaintenanceCommand(), new MotdCommand(),
                 new GroupCommand(), new RankCommand(), new PermCommand(),
                 new BanCommand(), new PunishInfoCommand(),

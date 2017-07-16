@@ -54,7 +54,10 @@ public class Daemon implements EventListener {
 
         // register the commands (would be possible to do it with Moo.initialise directly, but it's not a MooPlugin, so ...)
         CommandRegistry.getInstance().registerCommands(new MainCommand());
+
+        // register listeners
         EventExecutor.getInstance().register(getInstance());
+        PacketAdapting.getInstance().register(new ServerPacketListener());
 
         // if the config is loaded connect to the cloud
         if(config.isLoaded()) {
@@ -63,9 +66,6 @@ public class Daemon implements EventListener {
 
         // start the command terminal for fancy console input
         new CommandTerminal().start(true, logs, logger.getReader());
-
-        //
-        PacketAdapting.getInstance().register(new ServerPacketListener());
     }
 
     @EventHandler

@@ -264,8 +264,6 @@ public final class StringUtil {
             return 0;
         });
 
-        System.out.println("PL: " + placeHolders);
-
         // replace the placeholders
         for(int i = 0; i < replacements.length; i++) {
             if(i >= placeHolders.size()) break;
