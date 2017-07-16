@@ -1,5 +1,6 @@
 package de.superioz.moo.client.util;
 
+import de.superioz.moo.api.exceptions.InvalidConfigException;
 import de.superioz.moo.client.Moo;
 import de.superioz.moo.client.common.MooPlugin;
 import de.superioz.moo.client.exception.MooInitializationException;
@@ -55,7 +56,13 @@ public class MooPluginUtil {
 
         // .
         if(config.isLoaded()) {
-            Moo.getInstance().setActivated(config.get(CLOUD_ACTIVATION_CONFIG) == null ? true : config.get(CLOUD_ACTIVATION_CONFIG));
+            try {
+                boolean cloudActivated = config.get(CLOUD_ACTIVATION_CONFIG);
+                Moo.getInstance().setActivated(cloudActivated);
+            }
+            catch(InvalidConfigException ex) {
+                Moo.getInstance().setActivated(true);
+            }
         }
 
         return config;

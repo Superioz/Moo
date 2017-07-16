@@ -29,7 +29,7 @@ public final class SystemUtil {
         long total = bean.getTotalPhysicalMemorySize() / 1024;
         long used = total - (bean.getFreePhysicalMemorySize() / 1024);
 
-        return (int) (100 / total * used);
+        return (int) (100D / (double)total * (double)used);
     }
 
     /**

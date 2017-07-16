@@ -92,7 +92,7 @@ public class ThunderPluginModule extends Module implements EventListener, MooPlu
                 new MaintenanceCommand(), new MotdCommand(),
                 new GroupCommand(), new RankCommand(), new PermCommand(),
                 new BanCommand(), new PunishInfoCommand(),
-                new UnbanCommand(), new MuteCommand(), new UnmuteCommand(), new KickCommand(),
+                new UnbanCommand(), new KickCommand(),
                 new WhoisCommand()
         );
         startup.registerListeners(this,

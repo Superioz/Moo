@@ -7,10 +7,13 @@ import de.superioz.moo.cloud.Cloud;
 
 public class DaemonCommand {
 
-    @Command(label = "requestserver")
-    public void requestserver(CommandContext context, ParamSet set){
-        Cloud.getLogger().info("Requesting a server to start ..");
-        Cloud.getInstance().getMooProxy().requestServer("lobby", false, 1, System.out::println);
+    @Command(label = "requestserver", usage = "<type> [amount]")
+    public void requestserver(CommandContext context, ParamSet set) {
+        String type = set.get(0);
+        int amount = set.getInt(0, 1);
+
+        Cloud.getLogger().info("Requesting a server to start .. (" + amount + "x " + type + ")");
+        Cloud.getInstance().getMooProxy().requestServer(type, false, amount, System.out::println);
     }
 
 }

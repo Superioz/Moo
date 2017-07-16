@@ -15,8 +15,8 @@ public class ServerStartQueueTask implements Runnable {
     @Override
     public void run() {
         while(true){
-            if(Moo.getInstance().isConnected()){
-                for(ServerStartTask task : queue){
+            if(Moo.getInstance().isConnected()) {
+                for(ServerStartTask task : queue) {
                     Daemon.server.getExecutors().execute(task);
 
                     try {

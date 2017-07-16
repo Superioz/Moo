@@ -35,6 +35,7 @@ public class ProxyPlayerConnectListener implements Listener {
         if(target != null) {
             event.setTarget(target);
         }*/
+
     }
 
     @EventHandler

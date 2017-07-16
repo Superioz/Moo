@@ -17,4 +17,5 @@ public class ServerStartTask implements Runnable {
     public void run() {
         Daemon.server.startServer(type, Server.DEFAULT_HOST, port, autoSave);
     }
+
 }

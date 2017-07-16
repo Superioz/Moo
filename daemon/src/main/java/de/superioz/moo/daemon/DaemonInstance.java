@@ -37,7 +37,7 @@ public class DaemonInstance {
 
         this.serverQueue = new ServerStartQueueTask();
         this.executors.execute(serverQueue);
-        this.ramUsageTask = new RamUsageTask();
+        this.ramUsageTask = new RamUsageTask(Daemon.config.get("ram-usage-delay"));
         this.executors.execute(ramUsageTask);
     }
 

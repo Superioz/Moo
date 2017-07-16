@@ -56,7 +56,13 @@ public final class MooProxy {
         }
 
         PacketMessenger.create().target(bestDaemon)
-                .send(new PacketServerRequest(type, autoSave, amount), callback);
+                .send(new PacketServerRequest(type, autoSave, amount), (Consumer<AbstractPacket>) respond -> {
+                    if(respond instanceof PacketRespond) {
+                        PacketRespond packetRespond = (PacketRespond) respond;
+
+                    }
+                    callback.accept(respond);
+                });
     }
 
     /**

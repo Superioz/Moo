@@ -8,11 +8,17 @@ import de.superioz.moo.protocol.packets.PacketRamUsage;
 
 public class RamUsageTask implements Runnable {
 
+    private int delay;
+
+    public RamUsageTask(int delay) {
+        this.delay = delay;
+    }
+
     @Override
     public void run() {
         while(true){
             try {
-                Thread.sleep(2000);
+                Thread.sleep(delay);
             }
             catch(InterruptedException e) {
                 e.printStackTrace();
@@ -20,9 +26,10 @@ public class RamUsageTask implements Runnable {
 
             if(!Moo.getInstance().isConnected()) continue;
             try {
-                PacketMessenger.transfer(new PacketRamUsage(SystemUtil.getCurrentRamUsage()));
+                PacketMessenger.message(new PacketRamUsage(SystemUtil.getCurrentRamUsage()));
             }
             catch(MooOutputException e) {
+                e.printStackTrace();
                 //
             }
         }

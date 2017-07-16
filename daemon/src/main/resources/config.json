@@ -4,5 +4,6 @@
   "cloud-port": 8000,
   "servers-folder": "servers",
   "patterns-folder": "patterns",
-  "start-file": "start"
+  "start-file": "start",
+  "ram-usage-delay": 10000
 }
