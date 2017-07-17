@@ -23,7 +23,7 @@ import de.superioz.moo.client.Moo;
 import de.superioz.moo.client.common.MooPlugin;
 import de.superioz.moo.client.common.MooPluginStartup;
 import de.superioz.moo.client.common.ProxyCache;
-import de.superioz.moo.client.events.ClientConnectedEvent;
+import de.superioz.moo.client.events.CloudConnectedEvent;
 import de.superioz.moo.client.util.MooPluginUtil;
 import de.superioz.moo.minecraft.util.ChatUtil;
 import de.superioz.moo.protocol.client.ClientType;
@@ -121,7 +121,7 @@ public class ThunderPluginModule extends Module implements EventListener, MooPlu
     }
 
     @EventHandler
-    public void onStart(ClientConnectedEvent event) {
+    public void onStart(CloudConnectedEvent event) {
         Thunder.getLogs().info("** AUTHENTICATION STATUS: " + (event.getStatus()) + " **");
         if(event.getStatus().isNok()) return;
 

@@ -10,16 +10,25 @@ import de.superioz.moo.api.logging.Logs;
 import de.superioz.moo.api.logging.MooLogger;
 import de.superioz.moo.api.utils.SystemUtil;
 import de.superioz.moo.client.Moo;
-import de.superioz.moo.client.events.ClientConnectedEvent;
+import de.superioz.moo.client.events.CloudConnectedEvent;
+import de.superioz.moo.client.events.CloudDisconnectedEvent;
 import de.superioz.moo.client.util.MooPluginUtil;
 import de.superioz.moo.daemon.commands.MainCommand;
+import de.superioz.moo.daemon.common.Server;
 import de.superioz.moo.daemon.listeners.ServerPacketListener;
+import de.superioz.moo.daemon.task.ServerStartTask;
+import de.superioz.moo.daemon.util.Ports;
 import de.superioz.moo.protocol.client.ClientType;
 import de.superioz.moo.protocol.packet.PacketAdapting;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.io.File;
 import java.nio.file.Paths;
+import java.util.function.Consumer;
 
+@Getter
 public class Daemon implements EventListener {
 
     private static Daemon instance;
@@ -31,9 +40,46 @@ public class Daemon implements EventListener {
         return instance;
     }
 
-    public static DaemonInstance server;
-    public static JsonConfig config;
-    public static Logs logs;
+    public DaemonInstance server;
+    @Setter(value = AccessLevel.PRIVATE)
+    public JsonConfig config;
+    @Setter(value = AccessLevel.PRIVATE)
+    public Logs logs;
+
+    /**
+     * Checks if the daemon is connected, easily by checking if the Moo instance is connected
+     *
+     * @return The result
+     */
+    public boolean isConnected() {
+        return Moo.getInstance().isConnected();
+    }
+
+    /**
+     * Simply closes every server started by this instance
+     *
+     * @param stoppingServerConsumer The consumer for logging etc.
+     */
+    public void closeEveryServer(Consumer<Server> stoppingServerConsumer) {
+        for(Server server : Daemon.getInstance().getServer().getStartedServerByUuid().values()) {
+            if(stoppingServerConsumer != null) stoppingServerConsumer.accept(server);
+            server.stop();
+        }
+    }
+
+    /**
+     * Starts one or multiple server with given values
+     *
+     * @param type     The type of the server (e.g. lobby)
+     * @param autoSave If the server should auto save or just get deleted after shutdown
+     * @param amount   The amount of this type of server to start
+     */
+    public void startServer(String type, boolean autoSave, int amount) {
+        for(int i = 0; i < amount; i++) {
+            ServerStartTask task = new ServerStartTask(type, Ports.getAvailablePort(), autoSave);
+            Daemon.getInstance().getServer().getServerQueue().getQueue().offer(task);
+        }
+    }
 
     /**
      * The main method of the daemon
@@ -42,15 +88,16 @@ public class Daemon implements EventListener {
      */
     public static void main(String[] args) {
         MooLogger logger = new MooLogger("Daemon");
-        logs = new Logs(logger).enableFileLogging();
-        logs.prepareNativeStreams();
+        getInstance().setLogs(new Logs(logger));
+        getInstance().getLogs().enableFileLogging().prepareNativeStreams();
 
-        Daemon.logs.info("Start daemon @" + System.getProperty("user.dir") + " (" + (SystemUtil.isWindows() ? "WINDOWS" : "LINUX") + ")");
+        getInstance().getLogs().info("Start daemon @" + System.getProperty("user.dir") + " (" + (SystemUtil.isWindows() ? "WINDOWS" : "LINUX") + ")");
         Moo.initialise(logger);
 
         // load the configuration
-        Daemon.logs.info("Load configuration ..");
-        config = MooPluginUtil.loadConfig(Paths.get("configuration"), "config");
+        Daemon.getInstance().getLogs().info("Load configuration ..");
+        JsonConfig config = MooPluginUtil.loadConfig(Paths.get("configuration"), "config");
+        getInstance().setConfig(config);
 
         // register the commands (would be possible to do it with Moo.initialise directly, but it's not a MooPlugin, so ...)
         CommandRegistry.getInstance().registerCommands(new MainCommand());
@@ -65,17 +112,25 @@ public class Daemon implements EventListener {
         }
 
         // start the command terminal for fancy console input
-        new CommandTerminal().start(true, logs, logger.getReader());
+        new CommandTerminal().start(true, getInstance().getLogs(), logger.getReader());
     }
 
     @EventHandler
-    public void onStart(ClientConnectedEvent event) {
+    public void onCloudConnect(CloudConnectedEvent event) {
         logs.info("** AUTHENTICATION STATUS: " + (event.getStatus()) + " **");
 
         // create daemon instance
         server = new DaemonInstance(new File((String) config.get("patterns-folder")),
                 new File((String) config.get("servers-folder")), config.get("start-file")).fetchPatterns();
         server.createFolders();
+    }
+
+    @EventHandler
+    public void onCloudDisconnect(CloudDisconnectedEvent event) {
+
+        // if the daemon got disconnected from the cloud, stop every server
+        // (sorry, but its better this way)
+        closeEveryServer(null);
     }
 
 }

@@ -12,7 +12,7 @@ import de.superioz.moo.api.logging.Logs;
 import de.superioz.moo.client.Moo;
 import de.superioz.moo.client.common.MooPlugin;
 import de.superioz.moo.client.common.MooPluginStartup;
-import de.superioz.moo.client.events.ClientConnectedEvent;
+import de.superioz.moo.client.events.CloudConnectedEvent;
 import de.superioz.moo.client.util.MooPluginUtil;
 import de.superioz.moo.protocol.client.ClientType;
 import de.superioz.moo.spigot.listeners.ServerListener;
@@ -84,7 +84,7 @@ public class Lightning extends JavaPlugin implements EventListener, MooPlugin {
     }
 
     @EventHandler
-    public void onStart(ClientConnectedEvent event) {
+    public void onStart(CloudConnectedEvent event) {
         getLogger().info("** AUTHENTICATION STATUS: " + (event.getStatus()) + " **");
 
         /*if(respond.status == ResponseStatus.OK) {

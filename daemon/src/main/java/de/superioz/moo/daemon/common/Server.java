@@ -84,7 +84,7 @@ public class Server extends ServerPattern {
             online = false;
             getParent().getStartedServerByUuid().remove(getUuid());
             console.close();
-            Daemon.logs.info("Server " + getName() + " #" + getId() + " closed.");
+            Daemon.getInstance().getLogs().info("Server " + getName() + " #" + getId() + " closed.");
 
             // if autoSave then copy the folder first
             if(isAutoSave()) {
@@ -150,13 +150,13 @@ public class Server extends ServerPattern {
 
         ThreadableValue<Boolean> done = new ThreadableValue<>(false);
         this.console = new Console(this, this).start(s -> {
-            //Daemon.logs.info("INFO(" + getPort() + "): " + s);
+            //Daemon.getInstance().getLogs().info("INFO(" + getPort() + "): " + s);
 
             if(!done.get()) {
                 if(!s.contains("Done") || !s.contains("For help, type \"help\" or")) {
                     return;
                 }
-                Daemon.logs.info("Server @" + getHost() + ":" + getPort() + " started.");
+                Daemon.getInstance().getLogs().info("Server @" + getHost() + ":" + getPort() + " started.");
 
                 online = true;
                 done.set(!done.get());
@@ -170,7 +170,7 @@ public class Server extends ServerPattern {
                 }
             }
         }, s -> {
-            //Daemon.logs.info("ERROR(" + getPort() + "): " + s);
+            //Daemon.getInstance().getLogs().info("ERROR(" + getPort() + "): " + s);
         });
 
         return process != null && process.isAlive();

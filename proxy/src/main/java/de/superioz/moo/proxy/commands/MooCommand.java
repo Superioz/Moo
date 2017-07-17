@@ -99,7 +99,7 @@ public class MooCommand {
         // otherwise categorize the servers and display them differently
         MultiMap<String, ServerInfo> categoryServerMap = new MultiMap<>();
         serverMap.forEach((s, serverInfo) -> categoryServerMap
-                .add(s.replaceAll("[1-9_.# ]", "").toLowerCase(), serverInfo));
+                .add(s.replaceAll("[1-9_.#\\- ]", "").toLowerCase(), serverInfo));
 
         for(String category : categoryServerMap.keySet()) {
             context.sendMessage("&8# &c" + categoryServerMap.get(category).size() + " &7" + category + " server registered.");

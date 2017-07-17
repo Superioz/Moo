@@ -1,32 +1,32 @@
 package de.superioz.moo.daemon.task;
 
+import de.superioz.moo.client.Moo;
 import de.superioz.moo.daemon.Daemon;
 import lombok.Getter;
-import de.superioz.moo.client.Moo;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Queue;
+import java.util.concurrent.LinkedBlockingQueue;
 
 @Getter
 public class ServerStartQueueTask implements Runnable {
 
-    private List<ServerStartTask> queue = new ArrayList<>();
+    private Queue<ServerStartTask> queue = new LinkedBlockingQueue<>();
+    private ServerStartTask task;
 
     @Override
     public void run() {
         while(true){
-            if(Moo.getInstance().isConnected()) {
-                for(ServerStartTask task : queue) {
-                    Daemon.server.getExecutors().execute(task);
+            // if Moo is connected and one task is inside the queue
+            if(Moo.getInstance().isConnected()
+                    && (task = queue.poll()) != null) {
+                Daemon.getInstance().getServer().getExecutors().execute(task);
 
-                    try {
-                        Thread.sleep(20);
-                    }
-                    catch(InterruptedException e) {
-                        e.printStackTrace();
-                    }
+                try {
+                    Thread.sleep(20);
                 }
-                queue.clear();
+                catch(InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
 
             try {

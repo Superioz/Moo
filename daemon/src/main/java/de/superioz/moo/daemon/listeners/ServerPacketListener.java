@@ -1,9 +1,7 @@
 package de.superioz.moo.daemon.listeners;
 
 import de.superioz.moo.daemon.Daemon;
-import de.superioz.moo.daemon.util.Ports;
 import de.superioz.moo.daemon.common.Server;
-import de.superioz.moo.daemon.task.ServerStartTask;
 import de.superioz.moo.protocol.common.ResponseStatus;
 import de.superioz.moo.protocol.packet.PacketAdapter;
 import de.superioz.moo.protocol.packet.PacketHandler;
@@ -18,21 +16,18 @@ public class ServerPacketListener implements PacketAdapter {
 
         // checks if the server type exists
         // if not send NOT_FOUND status
-        if(!Daemon.server.hasPattern(serverType, false)) {
+        if(!Daemon.getInstance().getServer().hasPattern(serverType, false)) {
             packet.respond(ResponseStatus.NOT_FOUND);
             return;
         }
 
         // adds given amount of server to start queue
-        for(int i = 0; i < packet.amount; i++) {
-            ServerStartTask task = new ServerStartTask(serverType, Ports.getAvailablePort(), packet.autoSave);
-            Daemon.server.getServerQueue().getQueue().add(task);
-        }
+        Daemon.getInstance().startServer(serverType, packet.autoSave, packet.amount);
     }
 
     @PacketHandler
     public void onServerRequestShutdown(PacketServerRequestShutdown packet) {
-        Server server = Daemon.server.getServer(packet.port);
+        Server server = Daemon.getInstance().getServer().getServer(packet.port);
 
         // if the server was not found
         if(server == null){

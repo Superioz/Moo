@@ -10,7 +10,7 @@ import de.superioz.moo.protocol.common.ResponseStatus;
  */
 @AllArgsConstructor
 @Getter
-public class ClientConnectedEvent implements Event {
+public class CloudConnectedEvent implements Event {
 
     private ResponseStatus status;
 

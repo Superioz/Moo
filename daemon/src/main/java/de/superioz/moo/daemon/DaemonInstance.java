@@ -37,7 +37,7 @@ public class DaemonInstance {
 
         this.serverQueue = new ServerStartQueueTask();
         this.executors.execute(serverQueue);
-        this.ramUsageTask = new RamUsageTask(Daemon.config.get("ram-usage-delay"));
+        this.ramUsageTask = new RamUsageTask(Daemon.getInstance().getConfig().get("ram-usage-delay"));
         this.executors.execute(ramUsageTask);
     }
 
@@ -145,7 +145,7 @@ public class DaemonInstance {
     public Server createServer(String type, boolean autoSave) {
         ServerPattern pattern = getPattern(type, false);
         if(pattern == null) {
-            Daemon.logs.info("There is no pattern available with type='" + type + "'!");
+            Daemon.getInstance().getLogs().info("There is no pattern available with type='" + type + "'!");
             return null;
         }
         File targetFolder = getServersFolder();
@@ -172,7 +172,7 @@ public class DaemonInstance {
         Server server = createServer(type, autoSave);
         if(!server.isStartable()) {
             IOUtil.deleteFile(server.getFolder());
-            Daemon.logs.info("Deleted folder because server is not startable!");
+            Daemon.getInstance().getLogs().info("Deleted folder because server is not startable!");
             return null;
         }
 

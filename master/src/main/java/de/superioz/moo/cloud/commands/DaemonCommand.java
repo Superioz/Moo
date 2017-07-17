@@ -10,7 +10,7 @@ public class DaemonCommand {
     @Command(label = "requestserver", usage = "<type> [amount]")
     public void requestserver(CommandContext context, ParamSet set) {
         String type = set.get(0);
-        int amount = set.getInt(0, 1);
+        int amount = set.getInt(1, 1);
 
         Cloud.getLogger().info("Requesting a server to start .. (" + amount + "x " + type + ")");
         Cloud.getInstance().getMooProxy().requestServer(type, false, amount, System.out::println);

@@ -15,7 +15,7 @@ public class ServerStartTask implements Runnable {
 
     @Override
     public void run() {
-        Daemon.server.startServer(type, Server.DEFAULT_HOST, port, autoSave);
+        Daemon.getInstance().getServer().startServer(type, Server.DEFAULT_HOST, port, autoSave);
     }
 
 }

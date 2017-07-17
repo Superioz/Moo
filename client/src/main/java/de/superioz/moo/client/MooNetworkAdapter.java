@@ -1,8 +1,9 @@
 package de.superioz.moo.client;
 
+import de.superioz.moo.client.events.CloudDisconnectedEvent;
 import io.netty.channel.Channel;
 import de.superioz.moo.api.event.EventExecutor;
-import de.superioz.moo.client.events.ClientConnectedEvent;
+import de.superioz.moo.client.events.CloudConnectedEvent;
 import de.superioz.moo.protocol.common.NetworkEventAdapter;
 import de.superioz.moo.protocol.common.PacketMessenger;
 import de.superioz.moo.protocol.common.Response;
@@ -40,7 +41,7 @@ public class MooNetworkAdapter implements NetworkEventAdapter {
 
         PacketMessenger.transferToResponse(new PacketHandshake(moo.getClientName(), moo.getClientType()),
                 (Consumer<Response>) response -> {
-                    EventExecutor.getInstance().execute(new ClientConnectedEvent(response.getStatus()));
+                    EventExecutor.getInstance().execute(new CloudConnectedEvent(response.getStatus()));
 
                     /*// made every plugin prepare
                     Moo.getInstance().getPluginManager().onStateChange();*/
@@ -54,6 +55,7 @@ public class MooNetworkAdapter implements NetworkEventAdapter {
     @Override
     public void onChannelInactive(Channel channel) {
         moo.getLogger().info("Disconnected from cloud.");
+        EventExecutor.getInstance().execute(new CloudDisconnectedEvent());
 
         /*// made every plugin prepare
         Moo.getInstance().getPluginManager().onStateChange();*/
