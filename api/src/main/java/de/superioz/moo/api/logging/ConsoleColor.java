@@ -35,6 +35,10 @@ public enum ConsoleColor {
     public static final String ALL_CODES = "0123456789AaBbCcDdEeFfKkLlMmNnOoRr";
     public static final Pattern STRIP_COLOR_PATTERN = Pattern.compile("(?i)" + String.valueOf(COLOR_CHAR) + "[0-9A-FK-OR]");
 
+    public static final String DARK_GRAY_SPECTRUM = "013458";
+    public static final String GRAY_SPECTRUM = "6792c";
+    public static final String WHITE_SPECTRUM = "abdef";
+
     @Getter
     private final char code;
     @Getter
@@ -81,6 +85,28 @@ public enum ConsoleColor {
             if(b[i] == altColorChar && ALL_CODES.indexOf(b[i + 1]) > -1) {
                 b[i] = ConsoleColor.COLOR_CHAR;
                 b[i + 1] = Character.toLowerCase(b[i + 1]);
+            }
+        }
+        return new String(b);
+    }
+
+    public static String translateLowSpectrum(char altColorChar, String textToTranslate){
+        char[] b = textToTranslate.toCharArray();
+        for(int i = 0; i < b.length - 1; i++) {
+            if(b[i] == altColorChar && ALL_CODES.indexOf(b[i + 1]) > -1) {
+                char c = b[i + 1];
+
+                // the only difference between normal and low spectrum
+                if(DARK_GRAY_SPECTRUM.contains((c + "").toLowerCase())){
+                    b[i + 1] = '8';
+                }
+                else if(GRAY_SPECTRUM.contains((c + "").toLowerCase())){
+                    b[i + 1] = '7';
+                }
+                else if(WHITE_SPECTRUM.contains((c + "").toLowerCase())){
+                    b[i + 1] = 'f';
+                }
+                b[i] = ConsoleColor.COLOR_CHAR;
             }
         }
         return new String(b);

@@ -1,5 +1,6 @@
 package de.superioz.moo.cloud.listeners;
 
+import de.superioz.moo.api.logging.ConsoleColor;
 import io.netty.channel.Channel;
 import de.superioz.moo.api.event.EventExecutor;
 import de.superioz.moo.api.event.EventHandler;
@@ -59,7 +60,8 @@ public class HandshakeListener implements EventListener {
         // fire event of client connection
         EventExecutor.getInstance().execute(new MooClientConnectedEvent(client));
 
-        Cloud.getLogger().debug(client.getType() + " server connected @(" + remoteAddress.getAddress().getHostAddress() + ")");
+        Cloud.getLogger().debug(ConsoleColor.GREEN.toString()
+                + client.getType() + " server connected @(" + remoteAddress.getAddress().getHostAddress() + ")");
     }
 
 }

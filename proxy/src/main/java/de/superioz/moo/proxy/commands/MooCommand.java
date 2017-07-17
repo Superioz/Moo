@@ -91,7 +91,7 @@ public class MooCommand {
         // send raw server information (not recommendend for a mass of servers)
         if(args.hasFlag("r")) {
             context.sendMessage("&6Server(s)&7: {"
-                    + StringUtil.getListToString(serverMap.keySet(), "&8,&e", s -> s)
+                    + StringUtil.getListToString(serverMap.keySet(), "&8,&7", s -> s)
                     + "&7}");
             return;
         }

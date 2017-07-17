@@ -1,5 +1,6 @@
 package de.superioz.moo.protocol.server;
 
+import de.superioz.moo.api.logging.ConsoleColor;
 import de.superioz.moo.protocol.AbstractNetworkInstance;
 import de.superioz.moo.protocol.Protocol;
 import de.superioz.moo.protocol.client.ClientType;
@@ -79,10 +80,12 @@ public class NetworkServer extends AbstractNetworkInstance {
             @Override
             public void onChannelInactive(Channel channel) {
                 InetSocketAddress remoteAddress = (InetSocketAddress) channel.remoteAddress();
+                MooClient client = getHub().get(remoteAddress);
                 connectedClients.remove(channel);
 
                 getHub().remove(remoteAddress);
-                getLogger().info("Client disconnected [@" + remoteAddress.getAddress().getHostAddress() + "]");
+                getLogger().info(ConsoleColor.RED.toString()
+                        + client.getType() + " server disconnected [@" + remoteAddress.getAddress().getHostAddress() + "]");
             }
         });
     }

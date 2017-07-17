@@ -49,7 +49,6 @@ public class MainCommand {
         Server server = Daemon.server.startServer(name, "127.0.0.1", Ports.getAvailablePort(), true);
         if(server == null) {
             Daemon.logs.info("Couldn't start server!");
-            return;
         }
     }
 

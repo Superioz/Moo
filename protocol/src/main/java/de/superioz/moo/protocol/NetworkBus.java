@@ -1,6 +1,7 @@
 package de.superioz.moo.protocol;
 
 import com.google.common.base.Charsets;
+import de.superioz.moo.api.logging.ConsoleColor;
 import de.superioz.moo.protocol.common.ResponseStatus;
 import de.superioz.moo.protocol.packet.AbstractPacket;
 import de.superioz.moo.protocol.packet.PacketAdapting;
@@ -36,8 +37,9 @@ public class NetworkBus {
         //UUID packetQuid = packet.getQueryUid();
         if(channel != null) {
             String id = (packet.getQueryUid() + "").substring(0, 2);
+            id = ConsoleColor.translateLowSpectrum('&', "&" + (id.substring(0, 1))) + id + ConsoleColor.RESET;
 
-            handle.getLogger().info("[Incoming][" + id + "] '" + packet.getName() + "'");
+            handle.getLogger().info("[Incoming " + id + "] '" + packet.getName() + "'");
         }
 
         // call handler event
@@ -109,8 +111,9 @@ public class NetworkBus {
         // packet content
         String content = (packet instanceof PacketRespond ? " {" + packet.toString().split("\"payload\": ")[1] : "");
         String id = (packet.getQueryUid() + "").substring(0, 2);
+        id = ConsoleColor.translateLowSpectrum('&', "&" + (id.substring(0, 1))) + id + ConsoleColor.RESET;
 
-        handle.getLogger().info("[Outgoing][" + id + "] '" + packet.getName() + "'" + content);
+        handle.getLogger().info("[Outgoing " + id + "] '" + packet.getName() + "'" + content);
     }
 
 }

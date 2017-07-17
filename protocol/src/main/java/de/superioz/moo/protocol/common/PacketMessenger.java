@@ -137,19 +137,19 @@ public class PacketMessenger {
      * @return The respond
      */
     public static <R> R transfer(AbstractPacket packet, Class<? extends AbstractPacket> responseScopeClass, Consumer<R>... consumer) {
-        return PacketMessenger.create().responseScope(responseScopeClass).sync().send(packet, consumer);
+        return PacketMessenger.create().responseScope(responseScopeClass).send(packet, consumer);
     }
 
     public static <R> R transfer(AbstractPacket packet, ResponseScope scope, Consumer<R>... consumer) {
-        return PacketMessenger.create().responseScope(scope).sync().send(packet, consumer);
+        return PacketMessenger.create().responseScope(scope).send(packet, consumer);
     }
 
     public static <R> R transfer(AbstractPacket packet, Consumer<R>... consumer) {
-        return PacketMessenger.create().sync().send(packet, consumer);
+        return PacketMessenger.create().send(packet, consumer);
     }
 
     public static Response transferToResponse(AbstractPacket packet, Consumer<Response>... consumer) {
-        return PacketMessenger.create().responseScope(ResponseScope.RESPONSE).sync().send(packet, consumer);
+        return PacketMessenger.create().responseScope(ResponseScope.RESPONSE).send(packet, consumer);
     }
 
     /**

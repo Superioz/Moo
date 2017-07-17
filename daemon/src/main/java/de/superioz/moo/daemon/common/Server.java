@@ -97,7 +97,7 @@ public class Server extends ServerPattern {
 
             //
             try {
-                PacketMessenger.transfer(new PacketServerDone(PacketServerDone.Type.SHUTDOWN, getUuid(), getName(), getPort()));
+                PacketMessenger.message(new PacketServerDone(PacketServerDone.Type.SHUTDOWN, getUuid(), getName(), getPort()));
             }
             catch(MooOutputException e) {
                 //
@@ -119,9 +119,10 @@ public class Server extends ServerPattern {
      */
     private boolean run(String host, int port) {
         try {
-            PacketMessenger.transfer(new PacketServerAttempt(PacketServerAttempt.Type.START, getUuid()));
+            PacketMessenger.message(new PacketServerAttempt(PacketServerAttempt.Type.START, getUuid()));
         }
         catch(MooOutputException e) {
+            e.printStackTrace();
             return false;
         }
 
@@ -162,7 +163,7 @@ public class Server extends ServerPattern {
 
                 //
                 try {
-                    PacketMessenger.transfer(new PacketServerDone(PacketServerDone.Type.START, getUuid(), getName(), getPort()));
+                    PacketMessenger.message(new PacketServerDone(PacketServerDone.Type.START, getUuid(), getName(), getPort()));
                 }
                 catch(MooOutputException e) {
                     //
@@ -186,7 +187,7 @@ public class Server extends ServerPattern {
      */
     public boolean stop() {
         try {
-            PacketMessenger.transfer(new PacketServerAttempt(PacketServerAttempt.Type.SHUTDOWN, getUuid()));
+            PacketMessenger.message(new PacketServerAttempt(PacketServerAttempt.Type.SHUTDOWN, getUuid()));
         }
         catch(MooOutputException e) {
             return false;
