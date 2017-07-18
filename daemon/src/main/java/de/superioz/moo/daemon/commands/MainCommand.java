@@ -35,11 +35,10 @@ public class MainCommand {
     @Command(label = "start", usage = "<serverType> [amount]")
     public void start(CommandContext context, ParamSet args) {
         // first check if the daemon is connected
-        /*if(!Daemon.getInstance().isConnected()) {
+        if(!Daemon.getInstance().isConnected()) {
             context.sendMessage("&cYou need to be connected to the cloud for that!");
             return;
-        }*/
-        int amount = args.getInt(0, 1);
+        }
 
         // if no arguments
         if(args.size() == 0) {
@@ -51,8 +50,9 @@ public class MainCommand {
             return;
         }
         String name = args.get(0);
+        int amount = args.getInt(1, 1);
 
-        Daemon.getInstance().getLogs().info("Starting server .. (" + amount + "x " + name);
+        Daemon.getInstance().getLogs().info("Starting server .. (" + amount + "x " + name + ")");
         Daemon.getInstance().startServer(name, false, amount);
     }
 

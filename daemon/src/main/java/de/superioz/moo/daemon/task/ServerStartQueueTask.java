@@ -13,6 +13,8 @@ public class ServerStartQueueTask implements Runnable {
     private Queue<ServerStartTask> queue = new LinkedBlockingQueue<>();
     private ServerStartTask task;
 
+    private static final int MAX_WAIT_COUNT = 10;
+
     @Override
     public void run() {
         while(true){
@@ -20,20 +22,32 @@ public class ServerStartQueueTask implements Runnable {
             if(Moo.getInstance().isConnected()
                     && (task = queue.poll()) != null) {
                 Daemon.getInstance().getServer().getExecutors().execute(task);
+            }
 
+            // if server null just wait
+            if(task == null && queue.isEmpty()) {
                 try {
-                    Thread.sleep(20);
+                    Thread.sleep(1000);
                 }
                 catch(InterruptedException e) {
                     e.printStackTrace();
                 }
+                continue;
             }
 
-            try {
-                Thread.sleep(1000);
-            }
-            catch(InterruptedException e) {
-                e.printStackTrace();
+            // wait for other server to get finished
+            int maxWaitTime = 0;
+            while(task.getServer() == null || !task.getServer().isOnline()){
+                System.out.println("WAITING FOR SERVER ..");
+                if(maxWaitTime >= MAX_WAIT_COUNT) break;
+
+                try {
+                    Thread.sleep(1000);
+                }
+                catch(InterruptedException e) {
+                    e.printStackTrace();
+                }
+                maxWaitTime++;
             }
         }
     }

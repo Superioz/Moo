@@ -23,6 +23,7 @@ public class Server extends ServerPattern {
 
     public static final int DEFAULT_PORT = 25565;
     public static final String DEFAULT_HOST = "127.0.0.1";
+    private static final String STOP_COMMAND = "stop\n";
 
     private Process process;
     private DaemonInstance parent;
@@ -196,7 +197,7 @@ public class Server extends ServerPattern {
         if(!online) {
             return false;
         }
-        console.write("stop\n");
+        console.write(STOP_COMMAND);
         return false;
     }
 

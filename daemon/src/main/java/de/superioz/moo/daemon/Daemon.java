@@ -17,7 +17,6 @@ import de.superioz.moo.daemon.commands.MainCommand;
 import de.superioz.moo.daemon.common.Server;
 import de.superioz.moo.daemon.listeners.ServerPacketListener;
 import de.superioz.moo.daemon.task.ServerStartTask;
-import de.superioz.moo.daemon.util.Ports;
 import de.superioz.moo.protocol.client.ClientType;
 import de.superioz.moo.protocol.packet.PacketAdapting;
 import lombok.AccessLevel;
@@ -76,7 +75,7 @@ public class Daemon implements EventListener {
      */
     public void startServer(String type, boolean autoSave, int amount) {
         for(int i = 0; i < amount; i++) {
-            ServerStartTask task = new ServerStartTask(type, Ports.getAvailablePort(), autoSave);
+            ServerStartTask task = new ServerStartTask(type, -1, autoSave);
             Daemon.getInstance().getServer().getServerQueue().getQueue().offer(task);
         }
     }
