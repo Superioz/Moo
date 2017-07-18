@@ -18,7 +18,7 @@ public final class IOUtil {
      * @param name   The name
      * @return The id
      */
-    public static int getNextId(File folder, String name, String ending, int start) {
+    public static int getNextId(File folder, String name, String split, String ending, int start) {
         File[] files = folder.listFiles();
         int id = start;
 
@@ -28,7 +28,7 @@ public final class IOUtil {
 
         int count = start;
         while(id == start){
-            File f = new File(folder, name + "-" + count + ending);
+            File f = new File(folder, name + split + count + ending);
 
             if(!f.exists()) {
                 id = count;
@@ -38,8 +38,8 @@ public final class IOUtil {
         return id;
     }
 
-    public static int getNextId(File folder, String name){
-        return getNextId(folder, name, "", 1);
+    public static int getNextId(File folder, String split, String name){
+        return getNextId(folder, name, split, "", 1);
     }
 
     /**

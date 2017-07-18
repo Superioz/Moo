@@ -18,6 +18,8 @@ import java.util.concurrent.Executors;
 @Getter
 public class DaemonInstance {
 
+    private static final String TYPE_COUNT_SPLIT = "#";
+
     private Map<UUID, Server> startedServerByUuid = new HashMap<>();
     private ExecutorService executors = Executors.newCachedThreadPool();
 
@@ -150,8 +152,8 @@ public class DaemonInstance {
         }
         File targetFolder = getServersFolder();
 
-        int id = IOUtil.getNextId(targetFolder, type);
-        File target2 = new File(targetFolder, pattern.getName() + "#" + id);
+        int id = IOUtil.getNextId(targetFolder, TYPE_COUNT_SPLIT, type);
+        File target2 = new File(targetFolder, pattern.getName() + TYPE_COUNT_SPLIT + id);
 
         UUID uuid = UUID.nameUUIDFromBytes((type + ":" + id).getBytes());
 
