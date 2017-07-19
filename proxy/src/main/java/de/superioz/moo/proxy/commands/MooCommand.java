@@ -7,11 +7,16 @@ import de.superioz.moo.api.command.param.ParamSet;
 import de.superioz.moo.api.common.RunAsynchronous;
 import de.superioz.moo.api.utils.StringUtil;
 import de.superioz.moo.client.Moo;
+import de.superioz.moo.protocol.common.PacketMessenger;
+import de.superioz.moo.protocol.packet.AbstractPacket;
+import de.superioz.moo.protocol.packets.PacketServerRequest;
+import de.superioz.moo.protocol.packets.PacketServerRequestShutdown;
 import de.superioz.moo.proxy.command.BungeeCommandContext;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.config.ServerInfo;
 
 import java.util.Map;
+import java.util.function.Consumer;
 
 public class MooCommand {
 
@@ -104,6 +109,51 @@ public class MooCommand {
         for(String category : categoryServerMap.keySet()) {
             context.sendMessage("&8# &c" + categoryServerMap.get(category).size() + " &7" + category + " server registered.");
         }
+    }
+
+    @RunAsynchronous
+    @Command(label = "reqserver", parent = "moo", usage = "<type> [amount]", flags = "s")
+    public void reqserver(BungeeCommandContext context, ParamSet args) {
+        String type = args.get(0);
+        int amount = args.getInt(0, 1);
+
+        // check parameter
+        // also check the amount (less than 1 is crap and above 10 as well)
+        if(type == null || amount < 1 || amount > 10) {
+            context.sendMessage("&cInvalid server type or amount! (t:" + type + "; a:" + amount + ")");
+            return;
+        }
+
+        // build packet and send it to the cloud
+        context.sendMessage("Requesting server to start .. (" + amount + "x " + type + ")");
+        PacketMessenger.transfer(new PacketServerRequest(type, args.hasFlag("s"), amount), new Consumer<AbstractPacket>() {
+            @Override
+            public void accept(AbstractPacket abstractPacket) {
+                context.sendMessage(abstractPacket.toString());
+            }
+        });
+    }
+
+    @RunAsynchronous
+    @Command(label = "reqshutdown", parent = "moo", usage = "<host> <port>")
+    public void reqshutdown(BungeeCommandContext context, ParamSet args) {
+        String host = args.get(0);
+        int port = args.getInt(0, -1);
+
+        // check parameter
+        if(host == null || port < 0) {
+            context.sendMessage("&cInvalid host or port! (h:" + host + "; p:" + port + ")");
+            return;
+        }
+
+        // build packet and send it to the cloud
+        context.sendMessage("Requesting a server to shutdown .. (" + host + ":" + port + ")");
+        PacketMessenger.transfer(new PacketServerRequestShutdown(host, port), new Consumer<AbstractPacket>() {
+            @Override
+            public void accept(AbstractPacket abstractPacket) {
+                context.sendMessage(abstractPacket.toString());
+            }
+        });
     }
 
 }
