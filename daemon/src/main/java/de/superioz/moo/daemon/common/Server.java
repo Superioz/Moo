@@ -198,7 +198,7 @@ public class Server extends ServerPattern {
             return false;
         }
         console.write(STOP_COMMAND);
-        return false;
+        return true;
     }
 
 }

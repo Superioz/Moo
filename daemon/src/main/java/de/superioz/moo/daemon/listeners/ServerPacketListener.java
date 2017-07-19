@@ -36,9 +36,7 @@ public class ServerPacketListener implements PacketAdapter {
         }
 
         // if the server had an error while stopping
-        if(!server.stop()) {
-            packet.respond(ResponseStatus.INTERNAL_ERROR);
-        }
+        server.stop();
     }
 
 }

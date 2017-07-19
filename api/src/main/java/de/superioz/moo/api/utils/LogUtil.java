@@ -80,7 +80,7 @@ public final class LogUtil {
 
             // create the folder
             File targetFolder = new File(logFolder + "/" + folderName);
-            int newCount = IOUtil.getNextId(targetFolder, fileNameWithoutCount, ".log.gz", 0);
+            int newCount = IOUtil.getNextId(targetFolder, fileNameWithoutCount, "-", ".log.gz", 0);
 
             IOUtil.moveFiles(file, fileNameWithoutCount + "-" + newCount + ".log.gz", targetFolder);
         }
