@@ -18,6 +18,7 @@
         <module>spigot</module>
         <module>daemon</module>
         <module>minecraft</module>
+        <module>manager</module>
     </modules>
 
     <!-- Repository Management -->
