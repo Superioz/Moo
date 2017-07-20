@@ -30,7 +30,8 @@ public class ListenerModule extends Module {
                 new MooPlayerKickListener(),
                 new MooPlayerMuteListener(),
                 new MooPlayerConnectedServerListener(),
-                new MooPlayerJoinedServerListener()
+                new MooPlayerJoinedServerListener(),
+                new MooLoggingListener()
         );
 
         // packet adapter

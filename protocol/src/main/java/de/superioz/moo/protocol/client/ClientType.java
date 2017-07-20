@@ -25,6 +25,12 @@ public enum ClientType {
     DAEMON,
 
     /**
+     * Includes webinterface and other programs which displays
+     * only the information
+     */
+    INTERFACE,
+
+    /**
      * Any other instance (maybe webserver?)
      */
     CUSTOM;

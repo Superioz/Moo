@@ -29,7 +29,8 @@ public enum Protocol {
     SERVER_ATTEMPT(PacketServerAttempt.class),
     SERVER_DONE(PacketServerDone.class),
     SERVER_REGISTER(PacketServerRegister.class),
-    SERVER_UNREGISTER(PacketServerUnregister.class);
+    SERVER_UNREGISTER(PacketServerUnregister.class),
+    CONSOLE_OUTPUT(PacketConsoleOutput.class);
 
     public static final int PROTOCOL_VERSION = values().length + 42;
 

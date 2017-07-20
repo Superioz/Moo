@@ -1,5 +1,7 @@
 package de.superioz.moo.api.logging;
 
+import de.superioz.moo.api.event.EventExecutor;
+import de.superioz.moo.api.events.MooLoggingEvent;
 import jline.console.ConsoleReader;
 import lombok.Getter;
 import lombok.Setter;
@@ -78,6 +80,9 @@ public class MooLogger extends Logger {
 
     void doLog(LogRecord record) {
         super.log(record);
+
+        // event for processing the record further (if needed)
+        EventExecutor.getInstance().execute(new MooLoggingEvent(record));
     }
 
 }
