@@ -1,14 +1,15 @@
 package de.superioz.moo.daemon.common;
 
+import de.superioz.moo.api.utils.IOUtil;
 import de.superioz.moo.daemon.Daemon;
 import de.superioz.moo.daemon.DaemonInstance;
 import de.superioz.moo.daemon.util.ThreadableValue;
-import lombok.Getter;
-import de.superioz.moo.api.utils.IOUtil;
 import de.superioz.moo.protocol.common.PacketMessenger;
 import de.superioz.moo.protocol.exception.MooOutputException;
 import de.superioz.moo.protocol.packets.PacketServerAttempt;
 import de.superioz.moo.protocol.packets.PacketServerDone;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.io.File;
 import java.io.IOException;
@@ -17,6 +18,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.ExecutorService;
+import java.util.function.Consumer;
 
 @Getter
 public class Server extends ServerPattern {
@@ -35,6 +37,9 @@ public class Server extends ServerPattern {
     private int port = DEFAULT_PORT;
     private String host = DEFAULT_HOST;
     private boolean online = false;
+
+    @Setter
+    private Consumer<Server> serverResult;
 
     public Server(DaemonInstance parent, int id, UUID uuid, File folder, boolean autoSave) {
         super(folder, parent.getStartFileName());
@@ -124,10 +129,12 @@ public class Server extends ServerPattern {
         }
         catch(MooOutputException e) {
             e.printStackTrace();
+            serverResult.accept(null);
             return false;
         }
 
         if(online || !isStartable()) {
+            serverResult.accept(null);
             return false;
         }
         this.host = host;
@@ -146,6 +153,7 @@ public class Server extends ServerPattern {
         }
         catch(IOException e) {
             e.printStackTrace();
+            serverResult.accept(null);
             return false;
         }
 
@@ -165,9 +173,10 @@ public class Server extends ServerPattern {
                 //
                 try {
                     PacketMessenger.message(new PacketServerDone(PacketServerDone.Type.START, getUuid(), getName(), getPort()));
+                    serverResult.accept(this);
                 }
                 catch(MooOutputException e) {
-                    //
+                    serverResult.accept(null);
                 }
             }
         }, s -> {

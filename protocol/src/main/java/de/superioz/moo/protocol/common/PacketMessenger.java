@@ -129,27 +129,53 @@ public class PacketMessenger {
 
     /**
      * Sends a packet to the currently connected client with awaiting a response. Uses this class to achieve that<br>
-     * Similar to {@link #transfer(Channel, AbstractPacket, Class, Consumer[])} but without the channel
+     * Similar to {@link #transfer(AbstractPacket, ResponseScope)} but with consumer.<br>
+     *     <b>ASYNC METHOD</b>
+     *
+     * @param packet             The packet
+     * @param responseScopeClass The scope class
+     * @param <R>                The type
+     */
+    public static <R> void transfer(AbstractPacket packet, Class<? extends AbstractPacket> responseScopeClass, Consumer<R>... consumer) {
+        PacketMessenger.create().responseScope(responseScopeClass).send(packet, consumer);
+    }
+
+    public static <R> void transfer(AbstractPacket packet, ResponseScope scope, Consumer<R>... consumer) {
+        PacketMessenger.create().responseScope(scope).send(packet, consumer);
+    }
+
+    public static <R> void transfer(AbstractPacket packet, Consumer<R>... consumer) {
+        PacketMessenger.create().send(packet, consumer);
+    }
+
+    public static void transferToResponse(AbstractPacket packet, Consumer<Response>... consumer) {
+        PacketMessenger.create().responseScope(ResponseScope.RESPONSE).send(packet, consumer);
+    }
+
+    /**
+     * Sends a packet to the currently connected client with awaiting a response. Uses this class to achieve that<br>
+     * Similar to {@link #transfer(Channel, AbstractPacket, Class, Consumer[])} but without the channel<br>
+     *     <b>SYNC METHOD</b>
      *
      * @param packet             The packet
      * @param responseScopeClass The scope class
      * @param <R>                The type
      * @return The respond
      */
-    public static <R> R transfer(AbstractPacket packet, Class<? extends AbstractPacket> responseScopeClass, Consumer<R>... consumer) {
-        return PacketMessenger.create().responseScope(responseScopeClass).send(packet, consumer);
+    public static <R> R transfer(AbstractPacket packet, Class<? extends AbstractPacket> responseScopeClass) {
+        return PacketMessenger.create().responseScope(responseScopeClass).sync().send(packet);
     }
 
-    public static <R> R transfer(AbstractPacket packet, ResponseScope scope, Consumer<R>... consumer) {
-        return PacketMessenger.create().responseScope(scope).send(packet, consumer);
+    public static <R> R transfer(AbstractPacket packet, ResponseScope scope) {
+        return PacketMessenger.create().responseScope(scope).sync().send(packet);
     }
 
-    public static <R> R transfer(AbstractPacket packet, Consumer<R>... consumer) {
-        return PacketMessenger.create().send(packet, consumer);
+    public static <R> R transfer(AbstractPacket packet) {
+        return PacketMessenger.create().sync().send(packet);
     }
 
-    public static Response transferToResponse(AbstractPacket packet, Consumer<Response>... consumer) {
-        return PacketMessenger.create().responseScope(ResponseScope.RESPONSE).send(packet, consumer);
+    public static Response transferToResponse(AbstractPacket packet) {
+        return PacketMessenger.create().responseScope(ResponseScope.RESPONSE).sync().send(packet);
     }
 
     /**

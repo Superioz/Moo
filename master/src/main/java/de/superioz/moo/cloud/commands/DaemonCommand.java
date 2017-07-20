@@ -8,7 +8,7 @@ import de.superioz.moo.cloud.Cloud;
 
 public class DaemonCommand {
 
-    @Command(label = "requestserver", usage = "<type> [amount]")
+    @Command(label = "reqserver", usage = "<type> [amount]")
     public void requestserver(CommandContext context, ParamSet set) {
         String type = set.get(0);
         int amount = set.getInt(1, 1);
@@ -24,7 +24,7 @@ public class DaemonCommand {
         Cloud.getInstance().getMooProxy().requestServer(type, false, amount, packet -> context.sendMessage(packet.toString()));
     }
 
-    @Command(label = "requestshutdown", usage = "<host> <port>")
+    @Command(label = "reqshutdown", usage = "<host> <port>")
     public void requestshutdown(CommandContext context, ParamSet args) {
         String host = args.get(0);
         int port = args.getInt(1, -1);

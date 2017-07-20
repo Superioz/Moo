@@ -115,7 +115,7 @@ public class MooCommand {
     @Command(label = "reqserver", parent = "moo", usage = "<type> [amount]", flags = "s")
     public void reqserver(BungeeCommandContext context, ParamSet args) {
         String type = args.get(0);
-        int amount = args.getInt(0, 1);
+        int amount = args.getInt(1, 1);
 
         // check parameter
         // also check the amount (less than 1 is crap and above 10 as well)
@@ -138,7 +138,7 @@ public class MooCommand {
     @Command(label = "reqshutdown", parent = "moo", usage = "<host> <port>")
     public void reqshutdown(BungeeCommandContext context, ParamSet args) {
         String host = args.get(0);
-        int port = args.getInt(0, -1);
+        int port = args.getInt(1, -1);
 
         // check parameter
         if(host == null || port < 0) {

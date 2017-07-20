@@ -1,11 +1,11 @@
 package de.superioz.moo.daemon;
 
-import de.superioz.moo.daemon.task.ServerStartQueueTask;
-import lombok.Getter;
 import de.superioz.moo.api.utils.IOUtil;
 import de.superioz.moo.daemon.common.Server;
 import de.superioz.moo.daemon.common.ServerPattern;
 import de.superioz.moo.daemon.task.RamUsageTask;
+import de.superioz.moo.daemon.task.ServerStartQueueTask;
+import lombok.Getter;
 
 import java.io.File;
 import java.io.IOException;
@@ -14,6 +14,7 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.function.Consumer;
 
 @Getter
 public class DaemonInstance {
@@ -164,14 +165,18 @@ public class DaemonInstance {
     /**
      * Starts a server
      *
-     * @param type     The type of server (pattern)
-     * @param host     The host (e.g. localhost)
-     * @param port     The port
-     * @param autoSave Auto-save on shutdown?
+     * @param type                The type of server (pattern)
+     * @param host                The host (e.g. localhost)
+     * @param port                The port
+     * @param autoSave            Auto-save on shutdown?
+     * @param resultOfServerStart The result of the server start
      * @return The (started) server
      */
-    public Server startServer(String type, String host, int port, boolean autoSave) {
+    public Server startServer(String type, String host, int port, boolean autoSave, Consumer<Server> resultOfServerStart) {
         Server server = createServer(type, autoSave);
+        server.setServerResult(resultOfServerStart);
+
+        // check if the folder is correct and therefore startable
         if(!server.isStartable()) {
             IOUtil.deleteFile(server.getFolder());
             Daemon.getInstance().getLogs().info("Deleted folder because server is not startable!");

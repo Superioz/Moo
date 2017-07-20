@@ -5,6 +5,8 @@ import de.superioz.moo.daemon.common.Server;
 import de.superioz.moo.daemon.util.Ports;
 import lombok.Getter;
 
+import java.util.function.Consumer;
+
 @Getter
 public class ServerStartTask implements Runnable {
 
@@ -13,17 +15,19 @@ public class ServerStartTask implements Runnable {
     private boolean autoSave;
 
     private Server server;
+    private Consumer<Server> resultOfServerStart;
 
-    public ServerStartTask(String type, int port, boolean autoSave) {
+    public ServerStartTask(String type, int port, boolean autoSave, Consumer<Server> resultOfServerStart) {
         this.type = type;
         this.port = port;
         this.autoSave = autoSave;
+        this.resultOfServerStart = resultOfServerStart;
     }
 
     @Override
     public void run() {
         if(port < 0) port = Ports.getAvailablePort();
-        this.server = Daemon.getInstance().getServer().startServer(type, Server.DEFAULT_HOST, port, autoSave);
+        this.server = Daemon.getInstance().getServer().startServer(type, Server.DEFAULT_HOST, port, autoSave, resultOfServerStart);
     }
 
 }
