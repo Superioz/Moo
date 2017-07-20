@@ -1,4 +1,4 @@
-# MooProject
+# MooProject [![Build Status](https://travis-ci.org/Superioz/MooProject.svg?branch=master)](https://travis-ci.org/Superioz/MooProject)
 A minecraft network communication system based on netty (Some call it 'Cloud system', which is not quite correct).
 
 This project was originally written for a minecraft network, but after it went down I decided to share it on Github.  
