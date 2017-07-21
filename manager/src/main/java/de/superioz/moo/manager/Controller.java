@@ -49,7 +49,6 @@ public class Controller {
     //
 
     private TabBar tabBar;
-
     private MenuItemConnect menuItemConnect;
 
     @FXML
