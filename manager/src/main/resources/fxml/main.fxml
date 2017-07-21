@@ -14,13 +14,14 @@
 
 <AnchorPane prefHeight="680.0" prefWidth="890.0" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.superioz.moo.manager.Controller">
    <children>
-      <AnchorPane layoutY="88.0" prefHeight="593.0" prefWidth="896.0" style="-fx-background-color: white;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="87.0">
+      <AnchorPane fx:id="homePane" layoutY="88.0" prefHeight="593.0" prefWidth="896.0" style="-fx-background-color: white;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="87.0">
          <children>
-            <TextField editable="false" layoutX="13.0" layoutY="6.0" prefHeight="27.0" prefWidth="506.0" style="-fx-border-color: transparent; -fx-background-color: transparent;" text="Du bist nicht mit einem Server verbunden. Benutze &quot;Connection &gt; Connect ..&quot;" />
-            <TextArea editable="false" layoutX="13.0" layoutY="39.0" prefHeight="507.0" prefWidth="865.0" />
+            <TextField editable="false" focusTraversable="false" layoutX="13.0" layoutY="6.0" prefHeight="27.0" prefWidth="506.0" style="-fx-border-color: transparent; -fx-background-color: transparent;" text="Du bist nicht mit einem Server verbunden. Benutze &quot;Connection &gt; Connect ..&quot;" />
+            <TextArea editable="false" layoutX="13.0" layoutY="39.0" prefHeight="507.0" prefWidth="865.0" styleClass="textField" stylesheets="@../css/home_console.css" />
             <TextField layoutX="13.0" layoutY="554.0" prefHeight="25.0" prefWidth="777.0" promptText="Command .." />
             <Button layoutX="806.0" layoutY="554.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="72.0" text="Enter" />
          </children></AnchorPane>
+      <AnchorPane fx:id="serverPane" layoutY="88.0" prefHeight="593.0" prefWidth="896.0" style="-fx-background-color: white;" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="87.0" />
       <MenuBar prefHeight="25.0" prefWidth="896.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <menus>
           <Menu mnemonicParsing="false" text="Connection">
@@ -50,7 +51,7 @@
             <Tooltip text="Home" />
          </tooltip>
       </Button>
-      <Button fx:id="serverButton" disable="true" layoutX="86.0" layoutY="27.0" mnemonicParsing="false" prefHeight="55.0" prefWidth="72.0" stylesheets="@../css/button_bar.css">
+      <Button fx:id="serverButton" layoutX="86.0" layoutY="27.0" mnemonicParsing="false" prefHeight="55.0" prefWidth="72.0" stylesheets="@../css/button_bar.css">
          <graphic>
             <ImageView>
                <image>
