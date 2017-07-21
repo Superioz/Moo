@@ -1,7 +1,7 @@
 package de.superioz.moo.manager.events;
 
 import de.superioz.moo.api.event.Event;
-import de.superioz.moo.manager.entity.TabbedButton;
+import de.superioz.moo.manager.object.Tab;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -9,6 +9,6 @@ import lombok.Getter;
 @Getter
 public class ChangeTabEvent implements Event {
 
-    private TabbedButton usedButton;
+    private Tab usedButton;
 
 }

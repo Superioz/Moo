@@ -1,4 +1,4 @@
-package de.superioz.moo.manager.entity;
+package de.superioz.moo.manager.object;
 
 import de.superioz.moo.api.event.EventExecutor;
 import de.superioz.moo.manager.events.ChangeTabEvent;
@@ -7,17 +7,17 @@ import javafx.scene.layout.Pane;
 import lombok.Getter;
 
 @Getter
-public class TabbedButton {
+public class Tab {
 
     private Button button;
     private Pane pane;
 
-    public TabbedButton(Button button, final Pane pane) {
+    public Tab(Button button, final Pane pane) {
         this.button = button;
         this.pane = pane;
 
         this.button.setOnAction(event
-                -> EventExecutor.getInstance().execute(new ChangeTabEvent(TabbedButton.this)));
+                -> EventExecutor.getInstance().execute(new ChangeTabEvent(Tab.this)));
     }
 
     /**
