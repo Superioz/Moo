@@ -12,15 +12,14 @@ public class HomeTab extends Tab {
 
     private TextField connectionStatus;
     private TextArea console;
-    private TextField commandInput;
-    private Button commandEnter;
 
-    public HomeTab(Button button, Pane pane, TextField connectionStatus, TextArea console, TextField commandInput, Button commandEnter) {
+    public HomeTab(Button button, Pane pane, TextField connectionStatus, TextArea console) {
         super(button, pane);
         this.connectionStatus = connectionStatus;
         this.console = console;
-        this.commandInput = commandInput;
-        this.commandEnter = commandEnter;
+
+        // set connection status to red, because no connection exists
+        connectionStatus.setStyle("-fx-text-inner-color: red;");
     }
 
 

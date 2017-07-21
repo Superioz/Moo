@@ -1,0 +1,8 @@
+.textField {
+    -fx-border-color: transparent;
+    -fx-background-color: transparent;
+}
+
+.textArea:disabled {
+    -fx-opacity: 1.0;
+}

@@ -21,10 +21,10 @@ public class Controller {
     //
 
     @FXML
-    public Button homeButton, serverButton;
+    public Button homeButton, serverButton, consoleButton;
 
     @FXML
-    public AnchorPane homePane, serverPane;
+    public AnchorPane homePane, serverPane, consolePane;
 
     //
     // MENU
@@ -38,15 +38,10 @@ public class Controller {
     //
 
     @FXML
-    public TextField connectionStatus, commandInput;
+    public TextField connectionStatus;
 
     @FXML
     public TextArea console;
-
-    @FXML
-    public Button commandEnter;
-
-    //
 
     private TabBar tabBar;
     private MenuItemConnect menuItemConnect;
@@ -54,8 +49,9 @@ public class Controller {
     @FXML
     public void initialize() {
         this.tabBar = new TabBar(
-                new HomeTab(homeButton, homePane, connectionStatus, console, commandInput, commandEnter),
-                new Tab(serverButton, serverPane)
+                new HomeTab(homeButton, homePane, connectionStatus, console),
+                new Tab(serverButton, serverPane),
+                new Tab(consoleButton, consolePane)
         );
         this.menuItemConnect = new MenuItemConnect(connectMenu);
         EventExecutor.getInstance().register(tabBar);

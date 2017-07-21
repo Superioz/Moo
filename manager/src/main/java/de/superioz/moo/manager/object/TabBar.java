@@ -16,7 +16,7 @@ public class TabBar implements EventListener {
 
     public TabBar(Tab... tabs) {
         this.tabs = Arrays.asList(tabs);
-        this.current = this.tabs.stream().filter(Tab::isVisible).iterator().next();
+        this.changeTab(tabs[0]);
     }
 
     /**
@@ -24,7 +24,7 @@ public class TabBar implements EventListener {
      * @param newTab The newTab
      */
     public void changeTab(Tab newTab) {
-        current.toggle();
+        if(current != null) current.toggle();
         current = newTab;
         current.toggle();
     }

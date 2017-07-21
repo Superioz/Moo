@@ -7,3 +7,7 @@
 .button:hover {
   -fx-background-color: #dae7f3;
 }
+
+.button:tab-active {
+  -fx-background-color: white;
+}
