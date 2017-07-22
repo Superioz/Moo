@@ -26,6 +26,7 @@ public class MooLogger extends Logger {
     @Getter
     private ConsoleReader reader;
     private final LogDispatcher dispatcher = new LogDispatcher(this);
+    private ColoredWriter consoleHandler;
 
     @Setter @Getter
     private boolean debugMode = false;
@@ -46,7 +47,7 @@ public class MooLogger extends Logger {
 
         // checks the folder of logs
         try {
-            ColoredWriter consoleHandler = new ColoredWriter(reader);
+            this.consoleHandler = new ColoredWriter(reader);
             consoleHandler.setLevel(Level.ALL);
             consoleHandler.setFormatter(formatter);
             addHandler(consoleHandler);
@@ -82,7 +83,7 @@ public class MooLogger extends Logger {
         super.log(record);
 
         // event for processing the record further (if needed)
-        EventExecutor.getInstance().execute(new MooLoggingEvent(record));
+        EventExecutor.getInstance().execute(new MooLoggingEvent(consoleHandler.getFormatter().format(record)));
     }
 
 }

@@ -150,11 +150,11 @@ public class Cloud implements EventListener {
      */
 
     public NetworkServer getServer() {
-        return nettyModule.getServer();
+        return nettyModule == null ? null : nettyModule.getServer();
     }
 
     public ClientHub getHub() {
-        return getServer().getHub();
+        return getServer() == null ? null : getServer().getHub();
     }
 
     public DatabaseConnection getDatabaseConnection() {

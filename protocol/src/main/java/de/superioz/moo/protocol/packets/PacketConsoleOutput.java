@@ -3,6 +3,7 @@ package de.superioz.moo.protocol.packets;
 import de.superioz.moo.protocol.packet.AbstractPacket;
 import de.superioz.moo.protocol.packet.PacketBuffer;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.io.IOException;
@@ -13,9 +14,10 @@ import java.io.IOException;
  */
 @NoArgsConstructor
 @AllArgsConstructor
+@Getter
 public class PacketConsoleOutput extends AbstractPacket {
 
-    private String message;
+    public String message;
 
     @Override
     public void read(PacketBuffer buf) throws IOException {
@@ -26,4 +28,5 @@ public class PacketConsoleOutput extends AbstractPacket {
     public void write(PacketBuffer buf) throws IOException {
         buf.writeString(message);
     }
+
 }
