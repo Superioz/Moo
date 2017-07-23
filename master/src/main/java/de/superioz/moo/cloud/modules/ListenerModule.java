@@ -40,6 +40,7 @@ public class ListenerModule extends Module {
                 new PacketPingListener(),
                 new PacketRequestListener(),
                 new DaemonServerListener(),
+                new PacketConsoleInputListener(),
                 // database stuff
                 new PacketDatabaseInfoListener(),
                 new PacketDatabaseModifyListener(),

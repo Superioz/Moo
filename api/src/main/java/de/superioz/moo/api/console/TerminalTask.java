@@ -4,6 +4,7 @@ import de.superioz.moo.api.utils.SystemUtil;
 import jline.Terminal;
 import jline.TerminalFactory;
 import jline.console.ConsoleReader;
+import lombok.Getter;
 
 import java.util.function.Consumer;
 
@@ -28,6 +29,7 @@ public class TerminalTask implements Runnable {
     /**
      * The consumer when a new line is entered
      */
+    @Getter
     private Consumer<String> newLine;
 
     public TerminalTask(ConsoleReader reader, Consumer<String> newLine) {

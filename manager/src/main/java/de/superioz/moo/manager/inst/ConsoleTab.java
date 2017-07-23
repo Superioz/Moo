@@ -6,9 +6,11 @@ import de.superioz.moo.api.event.EventListener;
 import de.superioz.moo.client.events.CloudConnectedEvent;
 import de.superioz.moo.client.events.CloudDisconnectedEvent;
 import de.superioz.moo.manager.object.Tab;
+import de.superioz.moo.protocol.common.PacketMessenger;
 import de.superioz.moo.protocol.packet.PacketAdapter;
 import de.superioz.moo.protocol.packet.PacketAdapting;
 import de.superioz.moo.protocol.packet.PacketHandler;
+import de.superioz.moo.protocol.packets.PacketConsoleInput;
 import de.superioz.moo.protocol.packets.PacketConsoleOutput;
 import javafx.application.Platform;
 import javafx.scene.control.Button;
@@ -28,6 +30,13 @@ public class ConsoleTab extends Tab implements EventListener, PacketAdapter {
         this.commandInput = commandInput;
         this.commandSend = commandSend;
 
+        // for sending command
+        commandSend.setOnAction(event -> {
+            String text = commandInput.getText();
+            commandInput.clear();
+            PacketMessenger.message(new PacketConsoleInput(text));
+        });
+
         // register this as event listener
         EventExecutor.getInstance().register(this);
         PacketAdapting.getInstance().register(this);
@@ -35,9 +44,7 @@ public class ConsoleTab extends Tab implements EventListener, PacketAdapter {
 
     @PacketHandler
     public void onLogPacket(PacketConsoleOutput packet) {
-        System.out.println("Received packet: " + packet + " (" + packet.getMessage() + ")");
-
-        Platform.runLater(() -> mooConsole.appendText(packet.getMessage()));
+        Platform.runLater(() -> mooConsole.appendText(packet.message));
     }
 
     @EventHandler
@@ -47,8 +54,10 @@ public class ConsoleTab extends Tab implements EventListener, PacketAdapter {
 
     @EventHandler
     public void onMooDisconnect(CloudDisconnectedEvent event) {
-        mooConsole.clear();
-        Platform.runLater(() -> ConsoleTab.this.getButton().setDisable(true));
+        Platform.runLater(() -> {
+            mooConsole.clear();
+            ConsoleTab.this.getButton().setDisable(true);
+        });
     }
 
 }

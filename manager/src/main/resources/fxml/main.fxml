@@ -28,7 +28,7 @@
                <graphic>
                   <ImageView>
                      <image>
-                        <Image url="@../../../../../../../../../../Downloads/send-button.png" />
+                        <Image url="@../send.png" />
                      </image>
                   </ImageView>
                </graphic>

@@ -8,23 +8,21 @@ import lombok.NoArgsConstructor;
 import java.io.IOException;
 
 /**
- * This packet is for sending the console output to another server, which means
- * only a plain text message, but ... it's n-not that it's not i-important ... baka!
+ * This packet is for forcing a server to execute a commandline
  */
 @NoArgsConstructor
 @AllArgsConstructor
-public class PacketConsoleOutput extends AbstractPacket {
+public class PacketConsoleInput extends AbstractPacket {
 
-    public String message;
+    public String commandline;
 
     @Override
     public void read(PacketBuffer buf) throws IOException {
-        this.message = buf.readString();
+        this.commandline = buf.readString();
     }
 
     @Override
     public void write(PacketBuffer buf) throws IOException {
-        buf.writeString(message);
+        buf.writeString(commandline);
     }
-
 }

@@ -38,6 +38,12 @@ public class CommandTerminal implements EventListener {
     private Logs logs;
 
     /**
+     * The terminal task
+     */
+    @Getter
+    private TerminalTask terminalTask;
+
+    /**
      * Starts the commanding system of the console<br>
      * The commanding system is an implementation of the jline console
      * and it supports a prompt and some other nice features
@@ -53,7 +59,7 @@ public class CommandTerminal implements EventListener {
         CommandRegistry.getInstance().registerEventAdapter(new ConsoleCommandEventAdapter());
 
         // task for executing commands (jline)
-        executorService.execute(new TerminalTask(reader, s -> {
+        this.terminalTask = new TerminalTask(reader, s -> {
             if(!commandable) {
                 return;
             }
@@ -74,7 +80,8 @@ public class CommandTerminal implements EventListener {
                     //logs.debug(ConsoleColor.RED + "Couldn't execute command '" + command + "'");
                 }
             }
-        }));
+        });
+        executorService.execute(this.terminalTask);
 
         initialised = true;
     }
