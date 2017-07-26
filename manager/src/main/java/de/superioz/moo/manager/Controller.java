@@ -1,17 +1,10 @@
 package de.superioz.moo.manager;
 
 import de.superioz.moo.api.event.EventExecutor;
-import de.superioz.moo.manager.inst.ConsoleTab;
-import de.superioz.moo.manager.inst.HomeTab;
-import de.superioz.moo.manager.inst.MenuItemConnect;
-import de.superioz.moo.manager.inst.MenuItemDisconnect;
-import de.superioz.moo.manager.object.Tab;
+import de.superioz.moo.manager.inst.*;
 import de.superioz.moo.manager.object.TabBar;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.MenuItem;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.TextFlow;
 import lombok.Getter;
@@ -64,6 +57,16 @@ public class Controller {
     @FXML
     public Button commandSend;
 
+    //
+    // SERVER TAB
+    //
+
+    @FXML
+    public Button addButton, refreshButton;
+
+    @FXML
+    public ScrollPane scrollPane;
+
     private TabBar tabBar;
     private MenuItemConnect menuItemConnect;
     private MenuItemDisconnect menuItemDisconnect;
@@ -72,7 +75,7 @@ public class Controller {
     public void initialize() {
         this.tabBar = new TabBar(
                 new HomeTab(homeButton, homePane, connectionStatus, console),
-                new Tab(serverButton, serverPane),
+                new ServerTab(serverButton, serverPane, addButton, refreshButton, scrollPane),
                 new ConsoleTab(consoleButton, consolePane, mooConsole, commandInput, commandSend)
         );
         this.menuItemConnect = new MenuItemConnect(connectMenu);

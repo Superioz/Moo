@@ -43,7 +43,7 @@ public class TabBar implements EventListener {
 
     @EventHandler
     public void onMooDisconnect(CloudDisconnectedEvent event) {
-        if(!(current instanceof HomeTab)){
+        if(!(current instanceof HomeTab)) {
             Platform.runLater(() -> changeTab(home));
         }
     }
