@@ -40,12 +40,8 @@
                   </ImageView>
                </graphic>
             </Button>
-            <Separator layoutX="14.0" layoutY="70.0" prefHeight="3.0" prefWidth="865.0" />
-            <ScrollPane fx:id="scrollPane" layoutX="14.0" layoutY="81.0" prefHeight="501.0" prefWidth="865.0">
-              <content>
-                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="200.0" prefWidth="200.0" />
-              </content>
-            </ScrollPane>
+            <Separator layoutX="14.0" layoutY="70.0" prefHeight="3.0" prefWidth="865.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="13.0" AnchorPane.topAnchor="70.0" />
+            <ScrollPane fx:id="scrollPane" disable="true" layoutY="78.0" prefHeight="515.0" prefWidth="892.0" stylesheets="@../css/server_pane.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="78.0" />
          </children></AnchorPane>
       <AnchorPane fx:id="consolePane" layoutX="10.0" layoutY="98.0" prefHeight="593.0" prefWidth="896.0" style="-fx-background-color: white;" visible="false" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="87.0">
          <children>

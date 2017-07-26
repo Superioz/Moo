@@ -4,7 +4,7 @@ import de.superioz.moo.api.event.EventHandler;
 import de.superioz.moo.api.event.EventListener;
 import de.superioz.moo.client.events.CloudDisconnectedEvent;
 import de.superioz.moo.manager.events.ChangeTabEvent;
-import de.superioz.moo.manager.inst.HomeTab;
+import de.superioz.moo.manager.content.HomeTab;
 import javafx.application.Platform;
 import lombok.Getter;
 

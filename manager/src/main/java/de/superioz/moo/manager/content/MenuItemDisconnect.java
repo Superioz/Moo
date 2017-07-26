@@ -1,4 +1,4 @@
-package de.superioz.moo.manager.inst;
+package de.superioz.moo.manager.content;
 
 import de.superioz.moo.api.event.EventExecutor;
 import de.superioz.moo.api.event.EventHandler;

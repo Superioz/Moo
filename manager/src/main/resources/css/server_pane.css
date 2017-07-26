@@ -1,0 +1,8 @@
+.scroll-pane {
+-fx-background-color: transparent;
+   -fx-background: transparent;
+}
+
+.scroll-pane:disabled {
+    -fx-opacity: 1.0;
+}

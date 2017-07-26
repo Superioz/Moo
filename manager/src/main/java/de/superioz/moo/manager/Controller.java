@@ -1,7 +1,7 @@
 package de.superioz.moo.manager;
 
 import de.superioz.moo.api.event.EventExecutor;
-import de.superioz.moo.manager.inst.*;
+import de.superioz.moo.manager.content.*;
 import de.superioz.moo.manager.object.TabBar;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;

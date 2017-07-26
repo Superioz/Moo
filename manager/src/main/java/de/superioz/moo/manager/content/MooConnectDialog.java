@@ -1,4 +1,4 @@
-package de.superioz.moo.manager.inst;
+package de.superioz.moo.manager.content;
 
 import javafx.geometry.Insets;
 import javafx.scene.Node;
