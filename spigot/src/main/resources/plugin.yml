@@ -1,4 +1,4 @@
 name: Lightning
 version: 1.0
 author: Draxento
-main: Lightning
+main: de.superioz.moo.spigot.Lightning

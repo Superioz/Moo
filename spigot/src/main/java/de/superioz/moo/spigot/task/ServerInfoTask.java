@@ -13,9 +13,9 @@ import java.util.List;
 import java.util.function.Consumer;
 
 @AllArgsConstructor
-@Getter
 public class ServerInfoTask implements Runnable {
 
+    @Getter
     private int delay;
 
     @Override
@@ -37,8 +37,6 @@ public class ServerInfoTask implements Runnable {
 
             // send serverInfo to the cloud
             PacketMessenger.message(new PacketServerInfoUpdate(
-                    Lightning.getInstance().getUuid(),
-                    Lightning.getInstance().getType(),
                     motd, players.size(), maxPlayers, players)
             );
         }

@@ -39,7 +39,7 @@ public class NetworkBus {
             String id = (packet.getQueryUid() + "").substring(0, 2);
             id = ConsoleColor.translateLowSpectrum('&', "&" + (id.substring(0, 1))) + id + ConsoleColor.RESET;
 
-            //handle.getLogger().info("[Incoming " + id + "] '" + packet.getName() + "'");
+            handle.getLogger().info("[Incoming " + id + "] '" + packet.getName() + "'");
         }
 
         // call handler event
@@ -70,8 +70,8 @@ public class NetworkBus {
         if(packet instanceof MultiPacket) {
             final ResponseStatus[] status = new ResponseStatus[]{null};
             List<AbstractPacket> packetList = ((MultiPacket<AbstractPacket>) packet).getPacketList();
-            handle.getLogger().info("Received multi packet(" + ((MultiPacket) packet).getPacketName() + "). " +
-                    "Divided it into " + packetList.size() + " sub-packets.");
+            /*handle.getLogger().info("Received multi packet(" + ((MultiPacket) packet).getPacketName() + "). " +
+                    "Divided it into " + packetList.size() + " sub-packets.");*/
 
             for(AbstractPacket subPacket : packetList) {
                 subPacket.interceptRespond(packet1 -> {
@@ -113,7 +113,7 @@ public class NetworkBus {
         String id = (packet.getQueryUid() + "").substring(0, 2);
         id = ConsoleColor.translateLowSpectrum('&', "&" + (id.substring(0, 1))) + id + ConsoleColor.RESET;
 
-        //handle.getLogger().info("[Outgoing " + id + "] '" + packet.getName() + "'" + content);
+        handle.getLogger().info("[Outgoing " + id + "] '" + packet.getName() + "'" + content);
     }
 
 }

@@ -38,7 +38,7 @@ public final class MooProxy {
      *
      * @return The map of daemon servers
      */
-    public Map<UUID, MooServer> getSpigotServer() {
+    public Map<UUID, MooServer> getSpigotServers() {
         return spigotServerMap;
     }
 

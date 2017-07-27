@@ -30,7 +30,7 @@ public class ServerInfoCheckTask implements Runnable {
 
             // check for last update with server
             List<UUID> toDelete = new ArrayList<>();
-            for(MooServer server : Cloud.getInstance().getMooProxy().getSpigotServer().values()) {
+            for(MooServer server : Cloud.getInstance().getMooProxy().getSpigotServers().values()) {
                 if((now - server.getLastUpdate()) > threshold) {
                     toDelete.add(server.getUuid());
                 }
@@ -38,7 +38,7 @@ public class ServerInfoCheckTask implements Runnable {
 
             // delete server if they timed out
             if(!toDelete.isEmpty()) {
-                toDelete.forEach(uuid -> Cloud.getInstance().getMooProxy().getSpigotServer().remove(uuid));
+                toDelete.forEach(uuid -> Cloud.getInstance().getMooProxy().getSpigotServers().remove(uuid));
             }
         }
     }

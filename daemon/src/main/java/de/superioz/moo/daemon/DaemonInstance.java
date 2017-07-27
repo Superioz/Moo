@@ -139,7 +139,9 @@ public class DaemonInstance {
     }
 
     /**
-     * Creates a server from given values
+     * Creates a server from given values by getting the ServerPattern and copying the files<br>
+     * At this point it might be better to download the pattern from a webserver if you want to
+     * have multiple daemon instances with the same pattern, BUT I see it as not important atm.
      *
      * @param type     The type of server (pattern)
      * @param autoSave Auto-save on shutdown?

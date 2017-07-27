@@ -77,32 +77,4 @@ public class MooServer {
         this.lastUpdate = System.currentTimeMillis();
     }
 
-    /**
-     * Pings the server and updates the motd and player values
-     *
-     * @throws Exception .
-     */
-    /*public void updatePing() throws Exception {
-        Socket socket = new Socket();
-        socket.connect(address);
-        OutputStream out = socket.getOutputStream();
-        InputStream in = socket.getInputStream();
-        out.write(0xFE);
-
-        int b;
-        StringBuilder str = new StringBuilder();
-        while((b = in.read()) != -1){
-            if(b != 0 && b > 16 && b != 255 && b != 23 && b != 24) {
-                str.append((char) b);
-            }
-        }
-
-        String[] data = str.toString().split("§");
-        data[0] = data[0].substring(1, data[0].length());
-
-        this.motd = data[0];
-        this.onlinePlayers = Integer.parseInt(data[1]);
-        this.maxPlayers = Integer.parseInt(data[2]);
-    }*/
-
 }

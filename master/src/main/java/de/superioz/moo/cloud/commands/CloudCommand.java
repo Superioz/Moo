@@ -4,6 +4,7 @@ import de.superioz.moo.api.command.Command;
 import de.superioz.moo.api.command.context.CommandContext;
 import de.superioz.moo.api.command.param.ParamSet;
 import de.superioz.moo.api.common.MooPlayer;
+import de.superioz.moo.api.common.MooServer;
 import de.superioz.moo.api.event.EventListener;
 import de.superioz.moo.api.exceptions.InvalidConfigException;
 import de.superioz.moo.cloud.Cloud;
@@ -12,11 +13,16 @@ import de.superioz.moo.protocol.packets.PacketConfig;
 import de.superioz.moo.protocol.packets.PacketKeepalive;
 import de.superioz.moo.protocol.server.MooClient;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class CloudCommand implements EventListener {
 
+    /**
+     * Displays the config map
+     *
+     * @param context .
+     * @param set     .
+     */
     @Command(label = "config")
     public void config(CommandContext context, ParamSet set) {
         context.sendMessage("Config Map:");
@@ -34,11 +40,23 @@ public class CloudCommand implements EventListener {
         });
     }
 
+    /**
+     * Stops the cloud?
+     *
+     * @param context .
+     * @param set     .
+     */
     @Command(label = "end")
     public void end(CommandContext context, ParamSet set) {
         Cloud.getInstance().stop();
     }
 
+    /**
+     * Displays every ip address on the whitelist
+     *
+     * @param context .
+     * @param set     .
+     */
     @Command(label = "whitelist")
     public void whitelist(CommandContext context, ParamSet set) {
         List<String> whitelist = Cloud.getInstance().getServer().getWhitelist().getHosts();
@@ -47,6 +65,12 @@ public class CloudCommand implements EventListener {
                 + (whitelist.size() == 0 ? "" : "\n\t- " + String.join("\n\t- ", whitelist)));
     }
 
+    /**
+     * Sends a keepalive packet to every client
+     *
+     * @param context .
+     * @param set     .
+     */
     @Command(label = "keepalive", flags = "n")
     public void keepalive(CommandContext context, ParamSet set) {
         context.sendMessage("Sending keepalive to all proxy clients ..");
@@ -60,10 +84,16 @@ public class CloudCommand implements EventListener {
         });
     }
 
+    /**
+     * Displays every client currently connected to the cloud
+     *
+     * @param context .
+     * @param set     .
+     */
     @Command(label = "clients")
     public void clients(CommandContext context, ParamSet set) {
         List<MooClient> clients = Cloud.getInstance().getHub().getAll();
-        clients.sort((o1, o2) -> ((Integer) o1.getId()).compareTo(o2.getId()));
+        clients.sort(Comparator.comparingInt(MooClient::getId));
         int size = clients.size();
 
         List<String> l = new ArrayList<>();
@@ -77,6 +107,33 @@ public class CloudCommand implements EventListener {
         context.sendMessage("Clients (" + size + "): " + (l.size() == 0 ? (size != 0 ? "Too much to display!" : "") : "\n\t- " + String.join("\n\t- ", l)));
     }
 
+    /**
+     * Displays every spigot server/lightning server currently connected (with motd, players, ..)
+     *
+     * @param context .
+     * @param set     .
+     */
+    @Command(label = "lightnings")
+    public void lightnings(CommandContext context, ParamSet set) {
+        Map<UUID, MooServer> servers = Cloud.getInstance().getMooProxy().getSpigotServers();
+
+        List<String> l = new ArrayList<>();
+        if(!(servers.size() > 30)) {
+            servers.forEach((uuid, mooServer)
+                    -> l.add(mooServer.getType() + "[" + uuid + "]: "
+                    + mooServer.getOnlinePlayers() + "/" + mooServer.getMaxPlayers()
+                    + " ('" + mooServer.getMotd() + "')"));
+        }
+
+        context.sendMessage("Lightnings (" + l.size() + "): " + (l.size() == 0 ? "Nothing to display!" : "\n\t- " + String.join("\n\t- ", l)));
+    }
+
+    /**
+     * Displays every player online on this network (could be too much output, so only 30 at a time sorry)
+     *
+     * @param context .
+     * @param set     .
+     */
     @Command(label = "players")
     public void players(CommandContext context, ParamSet set) {
         List<MooPlayer> players = new ArrayList<>(Cloud.getInstance().getMooProxy().getPlayers());

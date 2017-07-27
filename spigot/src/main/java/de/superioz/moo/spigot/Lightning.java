@@ -6,7 +6,6 @@ import de.superioz.moo.api.event.EventHandler;
 import de.superioz.moo.api.event.EventListener;
 import de.superioz.moo.api.io.JsonConfig;
 import de.superioz.moo.api.logging.Logs;
-import de.superioz.moo.api.util.Validation;
 import de.superioz.moo.client.Moo;
 import de.superioz.moo.client.common.MooPlugin;
 import de.superioz.moo.client.common.MooPluginStartup;
@@ -25,7 +24,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.util.UUID;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.function.Function;
@@ -35,8 +33,8 @@ public class Lightning extends JavaPlugin implements EventListener, MooPlugin {
 
     private static Lightning instance;
 
-    public static Lightning getInstance(){
-        if(instance == null){
+    public static Lightning getInstance() {
+        if(instance == null) {
             instance = new Lightning();
         }
         return instance;
@@ -49,10 +47,6 @@ public class Lightning extends JavaPlugin implements EventListener, MooPlugin {
     private final ExecutorService executors = Executors.newCachedThreadPool(
             new ThreadFactoryBuilder().setNameFormat("lightning-pool-%d").build());
     private ServerInfoTask serverInfoTask;
-
-    private String type;
-    private int id;
-    private UUID uuid;
 
     @Override
     public void onEnable() {
@@ -72,13 +66,6 @@ public class Lightning extends JavaPlugin implements EventListener, MooPlugin {
             Moo.getInstance().connect(jsonConfig.get("server-name"), ClientType.SERVER, jsonConfig.get("cloud-ip"), jsonConfig.get("cloud-port"));
         }
 
-        // get server info
-        String serverName = getServer().getServerName();
-        String[] serverNameSplit = serverName.split("[-:#]");
-        this.type = serverNameSplit[0];
-        this.id = serverNameSplit.length > 1 ? (Validation.INTEGER.matches(serverNameSplit[1]) ? Integer.parseInt(serverNameSplit[1]) : 1) : 1;
-        this.uuid = UUID.nameUUIDFromBytes((type + ":" + id).getBytes());
-
         // start serverInfo task
         this.executors.execute(this.serverInfoTask = new ServerInfoTask(5 * 1000));
     }
@@ -97,7 +84,7 @@ public class Lightning extends JavaPlugin implements EventListener, MooPlugin {
     }
 
     @Override
-    public void loadPluginStartup(MooPluginStartup startup){
+    public void loadPluginStartup(MooPluginStartup startup) {
         startup.registerListeners(new ChatListener(), new PacketRespondListener(), new ServerListener());
     }
 
@@ -119,7 +106,7 @@ public class Lightning extends JavaPlugin implements EventListener, MooPlugin {
         getLogger().info("** AUTHENTICATION STATUS: " + (event.getStatus()) + " **");
 
         if(event.getStatus() == ResponseStatus.OK) {
-            ProxyCache.getInstance().loadGroups();
+            executors.execute(() -> ProxyCache.getInstance().loadGroups());
         }
     }
 
