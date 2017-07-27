@@ -11,6 +11,7 @@ import de.superioz.moo.api.logging.Logs;
 import de.superioz.moo.api.logging.MooLogger;
 import de.superioz.moo.api.module.ModuleRegistry;
 import de.superioz.moo.cloud.modules.*;
+import de.superioz.moo.cloud.task.ServerInfoCheckTask;
 import de.superioz.moo.protocol.server.ClientHub;
 import de.superioz.moo.protocol.server.MooProxy;
 import de.superioz.moo.protocol.server.NetworkServer;
@@ -44,6 +45,7 @@ public class Cloud implements EventListener {
     private ListenerModule listenerModule;
 
     private boolean started = false;
+    private ServerInfoCheckTask serverInfoCheckTask;
 
     /**
      * The main method
@@ -105,6 +107,7 @@ public class Cloud implements EventListener {
                 //
             }
         });
+        this.executors.execute(serverInfoCheckTask = new ServerInfoCheckTask(10 * 1000, 20 * 1000));
     }
 
     /**

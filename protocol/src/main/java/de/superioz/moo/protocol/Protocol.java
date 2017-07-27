@@ -30,6 +30,7 @@ public enum Protocol {
     SERVER_DONE(PacketServerDone.class),
     SERVER_REGISTER(PacketServerRegister.class),
     SERVER_UNREGISTER(PacketServerUnregister.class),
+    SERVER_INFO_UPDATE(PacketServerInfoUpdate.class),
     CONSOLE_OUTPUT(PacketConsoleOutput.class),
     CONSOLE_INPUT(PacketConsoleInput.class)
     ;

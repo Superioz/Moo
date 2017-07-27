@@ -1,37 +1,58 @@
 package de.superioz.moo.spigot;
 
-import de.superioz.moo.spigot.listeners.ChatListener;
-import de.superioz.moo.spigot.listeners.PacketRespondListener;
-import de.superioz.moo.spigot.util.LanguageManager;
-import lombok.Getter;
+import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import de.superioz.moo.api.event.EventExecutor;
 import de.superioz.moo.api.event.EventHandler;
 import de.superioz.moo.api.event.EventListener;
 import de.superioz.moo.api.io.JsonConfig;
 import de.superioz.moo.api.logging.Logs;
+import de.superioz.moo.api.util.Validation;
 import de.superioz.moo.client.Moo;
 import de.superioz.moo.client.common.MooPlugin;
 import de.superioz.moo.client.common.MooPluginStartup;
+import de.superioz.moo.client.common.ProxyCache;
 import de.superioz.moo.client.events.CloudConnectedEvent;
 import de.superioz.moo.client.util.MooPluginUtil;
 import de.superioz.moo.protocol.client.ClientType;
+import de.superioz.moo.protocol.common.ResponseStatus;
+import de.superioz.moo.spigot.listeners.ChatListener;
+import de.superioz.moo.spigot.listeners.PacketRespondListener;
 import de.superioz.moo.spigot.listeners.ServerListener;
+import de.superioz.moo.spigot.task.ServerInfoTask;
+import de.superioz.moo.spigot.util.LanguageManager;
+import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.util.UUID;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.function.Function;
 
+@Getter
 public class Lightning extends JavaPlugin implements EventListener, MooPlugin {
 
-    @Getter
     private static Lightning instance;
-    @Getter
-    private static Logs logs;
 
-    @Getter
-    private static LanguageManager languageManager;
-    private static JsonConfig config;
+    public static Lightning getInstance(){
+        if(instance == null){
+            instance = new Lightning();
+        }
+        return instance;
+    }
+
+    private Logs logs;
+    private LanguageManager languageManager;
+    private JsonConfig jsonConfig;
+
+    private final ExecutorService executors = Executors.newCachedThreadPool(
+            new ThreadFactoryBuilder().setNameFormat("lightning-pool-%d").build());
+    private ServerInfoTask serverInfoTask;
+
+    private String type;
+    private int id;
+    private UUID uuid;
 
     @Override
     public void onEnable() {
@@ -47,9 +68,19 @@ public class Lightning extends JavaPlugin implements EventListener, MooPlugin {
 
         // .
         EventExecutor.getInstance().register(this);
-        if(config.isLoaded()) {
-            Moo.getInstance().connect(config.get("server-name"), ClientType.SERVER, config.get("cloud-ip"), config.get("cloud-port"));
+        if(jsonConfig.isLoaded()) {
+            Moo.getInstance().connect(jsonConfig.get("server-name"), ClientType.SERVER, jsonConfig.get("cloud-ip"), jsonConfig.get("cloud-port"));
         }
+
+        // get server info
+        String serverName = getServer().getServerName();
+        String[] serverNameSplit = serverName.split("[-:#]");
+        this.type = serverNameSplit[0];
+        this.id = serverNameSplit.length > 1 ? (Validation.INTEGER.matches(serverNameSplit[1]) ? Integer.parseInt(serverNameSplit[1]) : 1) : 1;
+        this.uuid = UUID.nameUUIDFromBytes((type + ":" + id).getBytes());
+
+        // start serverInfo task
+        this.executors.execute(this.serverInfoTask = new ServerInfoTask(5 * 1000));
     }
 
     @Override
@@ -59,7 +90,7 @@ public class Lightning extends JavaPlugin implements EventListener, MooPlugin {
 
     @Override
     public void loadConfig() {
-        config = MooPluginUtil.loadConfig(getDataFolder(), "config");
+        jsonConfig = MooPluginUtil.loadConfig(getDataFolder(), "config");
 
         getLogger().info("Loading properties ..");
         languageManager = new LanguageManager("language.properties");
@@ -87,13 +118,9 @@ public class Lightning extends JavaPlugin implements EventListener, MooPlugin {
     public void onStart(CloudConnectedEvent event) {
         getLogger().info("** AUTHENTICATION STATUS: " + (event.getStatus()) + " **");
 
-        /*if(respond.status == ResponseStatus.OK) {
+        if(event.getStatus() == ResponseStatus.OK) {
             ProxyCache.getInstance().loadGroups();
-        }*/
+        }
     }
 
-    // .
-    public static JsonConfig getCustomConfig() {
-        return config;
-    }
 }

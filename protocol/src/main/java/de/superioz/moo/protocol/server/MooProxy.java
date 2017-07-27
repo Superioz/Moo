@@ -23,8 +23,9 @@ public final class MooProxy {
 
     private final Map<UUID, MooPlayer> playerMap = new HashMap<>();
     private final Map<String, MooPlayer> playerNameMap = new HashMap<>();
-    private final Map<UUID, InetSocketAddress> serverMap = new HashMap<>();
-    private final Map<UUID, MooServer> daemonServerMap = new HashMap<>();
+    private final Map<UUID, InetSocketAddress> playerServerMap = new HashMap<>();
+
+    private final Map<UUID, MooServer> spigotServerMap = new HashMap<>();
 
     private NetworkServer netServer;
 
@@ -37,8 +38,21 @@ public final class MooProxy {
      *
      * @return The map of daemon servers
      */
-    public Map<UUID, MooServer> getDaemonServers() {
-        return daemonServerMap;
+    public Map<UUID, MooServer> getSpigotServer() {
+        return spigotServerMap;
+    }
+
+    /**
+     * Gets the server out of the spigot server map where the address is the same
+     *
+     * @param address The address of the server
+     * @return The moo server object
+     */
+    public MooServer getServer(InetSocketAddress address) {
+        for(MooServer server : spigotServerMap.values()) {
+            if(server.getAddress().equals(address)) return server;
+        }
+        return null;
     }
 
     /**
@@ -90,7 +104,7 @@ public final class MooProxy {
      * @param address The address
      */
     public void serverIsGoingDown(InetSocketAddress address) {
-        serverMap.values().removeIf(address::equals);
+        playerServerMap.values().removeIf(address::equals);
     }
 
     /**
@@ -137,7 +151,7 @@ public final class MooProxy {
      */
     public void add(MooPlayer player, InetSocketAddress address) {
         if(!playerMap.containsKey(player.uuid)) {
-            serverMap.put(player.uuid, address);
+            playerServerMap.put(player.uuid, address);
             playerMap.put(player.uuid, player);
             playerNameMap.put(player.name, player);
         }
@@ -150,7 +164,7 @@ public final class MooProxy {
         if(playerMap.containsKey(uuid)) {
             playerMap.remove(uuid);
             playerNameMap.remove(name);
-            serverMap.remove(uuid);
+            playerServerMap.remove(uuid);
         }
     }
 
@@ -161,7 +175,7 @@ public final class MooProxy {
      * @return The mooClient
      */
     public MooClient getClient(MooPlayer player) {
-        InetSocketAddress address = serverMap.get(player.uuid);
+        InetSocketAddress address = playerServerMap.get(player.uuid);
         return netServer.getHub().get(address);
     }
 
@@ -173,7 +187,7 @@ public final class MooProxy {
      * @param callback The callback
      */
     public void sendMessage(MooPlayer player, PacketPlayerMessage packet, Consumer<Response> callback) {
-        InetSocketAddress address = serverMap.get(player.uuid);
+        InetSocketAddress address = playerServerMap.get(player.uuid);
         MooClient client = netServer.getHub().get(address);
 
         if(callback != null) {

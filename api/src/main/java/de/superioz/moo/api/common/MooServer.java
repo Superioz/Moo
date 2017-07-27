@@ -2,10 +2,8 @@ package de.superioz.moo.api.common;
 
 import lombok.Getter;
 
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.net.InetSocketAddress;
-import java.net.Socket;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -45,6 +43,16 @@ public class MooServer {
      */
     private int maxPlayers;
 
+    /**
+     * The online players (name:uuid)
+     */
+    private List<String> players;
+
+    /**
+     * This value is the timestamp of the last server update packet
+     */
+    private long lastUpdate;
+
     public MooServer(UUID uuid, InetSocketAddress address, String type) {
         this.uuid = uuid;
         this.address = address;
@@ -52,11 +60,29 @@ public class MooServer {
     }
 
     /**
+     * Updates the server info
+     *
+     * @param motd          The message of the day
+     * @param onlinePlayers The number of players online
+     * @param maxPlayers    The maximum amount of players
+     * @param players       The players online
+     */
+    public void updateInfo(String motd, int onlinePlayers, int maxPlayers, List<String> players) {
+        this.motd = motd;
+        this.onlinePlayers = onlinePlayers;
+        this.maxPlayers = maxPlayers;
+        this.players = players;
+
+        // last update: now.
+        this.lastUpdate = System.currentTimeMillis();
+    }
+
+    /**
      * Pings the server and updates the motd and player values
      *
      * @throws Exception .
      */
-    public void updatePing() throws Exception {
+    /*public void updatePing() throws Exception {
         Socket socket = new Socket();
         socket.connect(address);
         OutputStream out = socket.getOutputStream();
@@ -77,6 +103,6 @@ public class MooServer {
         this.motd = data[0];
         this.onlinePlayers = Integer.parseInt(data[1]);
         this.maxPlayers = Integer.parseInt(data[2]);
-    }
+    }*/
 
 }

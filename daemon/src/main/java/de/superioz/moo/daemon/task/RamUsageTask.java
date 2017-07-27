@@ -5,14 +5,14 @@ import de.superioz.moo.client.Moo;
 import de.superioz.moo.protocol.common.PacketMessenger;
 import de.superioz.moo.protocol.exception.MooOutputException;
 import de.superioz.moo.protocol.packets.PacketRamUsage;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
+@AllArgsConstructor
+@Getter
 public class RamUsageTask implements Runnable {
 
     private int delay;
-
-    public RamUsageTask(int delay) {
-        this.delay = delay;
-    }
 
     @Override
     public void run() {

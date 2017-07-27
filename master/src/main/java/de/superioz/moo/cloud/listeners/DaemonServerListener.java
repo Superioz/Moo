@@ -29,7 +29,7 @@ public class DaemonServerListener implements PacketAdapter {
             Cloud.getLogger().debug("Daemon successfully started server " + ip + " with type '" + packet.type + "'");
 
             PacketMessenger.message(new PacketServerRegister(packet.type, packet.getAddress().getHostName(), packet.port), ClientType.PROXY);
-            Cloud.getInstance().getMooProxy().getDaemonServers().put(packet.uuid, new MooServer(packet.uuid, packet.getAddress(), packet.type));
+            Cloud.getInstance().getMooProxy().getSpigotServer().put(packet.uuid, new MooServer(packet.uuid, packet.getAddress(), packet.type));
         });
 
         // daemon stopped a server
@@ -37,7 +37,7 @@ public class DaemonServerListener implements PacketAdapter {
             Cloud.getLogger().debug("Daemon has stopped server " + ip + " with type '" + packet.type + "'");
 
             PacketMessenger.message(new PacketServerUnregister(packet.port), ClientType.PROXY);
-            Cloud.getInstance().getMooProxy().getDaemonServers().remove(packet.uuid);
+            Cloud.getInstance().getMooProxy().getSpigotServer().remove(packet.uuid);
         });
     }
 
