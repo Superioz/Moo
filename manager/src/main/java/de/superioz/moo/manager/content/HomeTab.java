@@ -44,7 +44,7 @@ public class HomeTab extends Tab implements EventListener {
 
     @EventHandler
     public void onMooConnect(CloudConnectedEvent event) {
-        Manager.getInstance().getLogger().info("** AUTHENTICATION STATUS: " + (event.getStatus()) + " **");
+        Manager.getInstance().getLogger().info("** AUTHENTICATION STATUS: " + (event.getStatus().getColored()) + " **");
 
         Platform.runLater(() -> {
             connectionStatus.setText(CONNECTED);

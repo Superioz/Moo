@@ -122,7 +122,7 @@ public class ThunderPluginModule extends Module implements EventListener, MooPlu
 
     @EventHandler
     public void onStart(CloudConnectedEvent event) {
-        Thunder.getLogs().info("** AUTHENTICATION STATUS: " + (event.getStatus()) + " **");
+        Thunder.getLogs().info("** AUTHENTICATION STATUS: " + (event.getStatus().getColored()) + " **");
         if(event.getStatus().isNok()) return;
 
         // load groups

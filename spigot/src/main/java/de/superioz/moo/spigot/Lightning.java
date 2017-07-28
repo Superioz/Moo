@@ -103,7 +103,7 @@ public class Lightning extends JavaPlugin implements EventListener, MooPlugin {
 
     @EventHandler
     public void onStart(CloudConnectedEvent event) {
-        getLogger().info("** AUTHENTICATION STATUS: " + (event.getStatus()) + " **");
+        getLogger().info("** AUTHENTICATION STATUS: " + (event.getStatus().getColored()) + " **");
 
         if(event.getStatus() == ResponseStatus.OK) {
             executors.execute(() -> ProxyCache.getInstance().loadGroups());

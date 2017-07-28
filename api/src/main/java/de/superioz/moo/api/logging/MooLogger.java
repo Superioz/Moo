@@ -60,7 +60,7 @@ public class MooLogger extends Logger {
         dispatcher.start();
     }
 
-    public MooLogger(String name){
+    public MooLogger(String name) {
         this(name, Logs.DEFAULT_FORMATTING);
     }
 

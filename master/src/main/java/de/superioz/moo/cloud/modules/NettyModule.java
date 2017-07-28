@@ -1,5 +1,6 @@
 package de.superioz.moo.cloud.modules;
 
+import de.superioz.moo.api.logging.ConsoleColor;
 import de.superioz.moo.cloud.listeners.HandshakeListener;
 import io.netty.channel.Channel;
 import lombok.Getter;
@@ -91,7 +92,8 @@ public class NettyModule extends Module implements EventListener {
     @EventHandler
     public void onServerState(ServerStateEvent stateEvent) {
         if(stateEvent.getState() == NetworkServer.State.STARTED) {
-            Cloud.getLogger().info("Netty master started [" + server.getHost() + ":" + server.getPort() + "]");
+            Cloud.getLogger().info(ConsoleColor.LIGHT_PURPLE
+                    + "Netty master started [" + server.getHost() + ":" + server.getPort() + "]");
         }
     }
 

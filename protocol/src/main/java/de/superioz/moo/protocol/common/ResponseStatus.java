@@ -1,5 +1,6 @@
 package de.superioz.moo.protocol.common;
 
+import de.superioz.moo.api.logging.ConsoleColor;
 import de.superioz.moo.api.util.Validation;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -65,6 +66,15 @@ public enum ResponseStatus {
 
     ResponseStatus(int id) {
         this(id, false);
+    }
+
+    /**
+     * Get the name of this status colored
+     *
+     * @return colored name
+     */
+    public String getColored() {
+        return (this == OK ? ConsoleColor.GREEN : ConsoleColor.RED) + getName() + ConsoleColor.RESET;
     }
 
     /**

@@ -122,7 +122,7 @@ public class Daemon implements EventListener {
 
     @EventHandler
     public void onCloudConnect(CloudConnectedEvent event) {
-        logs.info("** AUTHENTICATION STATUS: " + (event.getStatus()) + " **");
+        logs.info("** AUTHENTICATION STATUS: " + (event.getStatus().getColored()) + " **");
 
         // create daemon instance
         server = new DaemonInstance(new File((String) config.get("patterns-folder")),
