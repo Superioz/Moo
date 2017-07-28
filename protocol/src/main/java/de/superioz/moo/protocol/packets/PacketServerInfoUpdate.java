@@ -9,7 +9,10 @@ import java.io.IOException;
 import java.util.List;
 
 /**
- * This packet is for sending server information to the cloud
+ * This packet is for sending server information to the cloud.
+ * This is neccessary if the cloud wants to accept server during the offline time
+ * of the proxy, so that the proxy can receive every started server to get registered after it
+ * starts again.
  */
 @NoArgsConstructor
 @AllArgsConstructor

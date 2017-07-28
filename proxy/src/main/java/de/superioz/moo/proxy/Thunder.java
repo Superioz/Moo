@@ -42,6 +42,9 @@ public class Thunder extends Plugin implements EventListener {
         this.moduleRegistry = new ModuleRegistry(logs);
         this.moduleRegistry.register(pluginModule);
         this.config = pluginModule.getConfig();
+
+        // we don't want pre-defined servers!
+        ProxyServer.getInstance().getServers().clear();
     }
 
     @Override

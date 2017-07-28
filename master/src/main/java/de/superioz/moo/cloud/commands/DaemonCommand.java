@@ -13,13 +13,6 @@ public class DaemonCommand {
         String type = set.get(0);
         int amount = set.getInt(1, 1);
 
-        // check if a bungeecord server is connected
-        // if not, error!
-        if(Cloud.getInstance().getHub().getProxyClients().isEmpty()) {
-            context.sendMessage(ConsoleColor.RED + "Can't start server without a bungeecord connected!");
-            return;
-        }
-
         context.sendMessage("Requesting server to start .. (" + amount + "x " + type + ")");
         Cloud.getInstance().getMooProxy().requestServer(type, false, amount, packet -> context.sendMessage(packet.toString()));
     }

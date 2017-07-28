@@ -26,7 +26,7 @@ public class DaemonServerListener implements PacketAdapter {
         // daemon started a server
         boolean startedServer = packet.doneType == PacketServerDone.Type.START;
         Reaction.react(startedServer, () -> {
-            Cloud.getLogger().debug("Daemon successfully started server " + ip + " with type '" + packet.type + "'");
+            Cloud.getLogger().debug("Register server " + ip + " with type '" + packet.type + "' ..");
 
             PacketMessenger.message(new PacketServerRegister(packet.type, packet.getAddress().getHostName(), packet.port), ClientType.PROXY);
             Cloud.getInstance().getMooProxy().getSpigotServers().put(packet.uuid, new MooServer(packet.uuid, packet.getAddress(), packet.type));
@@ -34,7 +34,7 @@ public class DaemonServerListener implements PacketAdapter {
 
         // daemon stopped a server
         Reaction.react(!startedServer, () -> {
-            Cloud.getLogger().debug("Daemon has stopped server " + ip + " with type '" + packet.type + "'");
+            Cloud.getLogger().debug("Unregister server " + ip + " with type '" + packet.type + "' ..");
 
             PacketMessenger.message(new PacketServerUnregister(packet.port), ClientType.PROXY);
             Cloud.getInstance().getMooProxy().getSpigotServers().remove(packet.uuid);

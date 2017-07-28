@@ -17,11 +17,8 @@ public class PacketServerInfoUpdateListener implements PacketAdapter {
         // get the server registered and check if it exists
         MooServer server = Cloud.getInstance().getMooProxy().getServer(address);
         if(server == null) {
-            // if does not exist? TODO
-            /*server = new MooServer(packet.uuid, address, packet.type);
-
-            // add it to the map agaaain
-            Cloud.getInstance().getMooProxy().getSpigotServers().put(packet.uuid, server);*/
+            // it does not exist? LUL
+            return;
         }
 
         // updates the server info

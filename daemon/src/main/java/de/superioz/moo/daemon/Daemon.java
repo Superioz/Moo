@@ -8,6 +8,7 @@ import de.superioz.moo.api.event.EventListener;
 import de.superioz.moo.api.io.JsonConfig;
 import de.superioz.moo.api.logging.Logs;
 import de.superioz.moo.api.logging.MooLogger;
+import de.superioz.moo.api.util.Validation;
 import de.superioz.moo.api.utils.SystemUtil;
 import de.superioz.moo.client.Moo;
 import de.superioz.moo.client.events.CloudConnectedEvent;
@@ -25,10 +26,14 @@ import lombok.Setter;
 
 import java.io.File;
 import java.nio.file.Paths;
+import java.util.List;
 import java.util.function.Consumer;
+import java.util.regex.Pattern;
 
 @Getter
 public class Daemon implements EventListener {
+
+    public static final Pattern PREDEFINED_SERVER_PATTERN = Pattern.compile("\\w+(:\\d+)?");
 
     private static Daemon instance;
 
@@ -123,6 +128,20 @@ public class Daemon implements EventListener {
         server = new DaemonInstance(new File((String) config.get("patterns-folder")),
                 new File((String) config.get("servers-folder")), config.get("start-file")).fetchPatterns();
         server.createFolders();
+
+        // start predefined servers
+        // ONLY if the serverlist inside config is not empty, nor null
+        List<String> predefinedServers = config.get("predefined-servers");
+        if(predefinedServers != null && !predefinedServers.isEmpty()) {
+            for(String server : predefinedServers) {
+                if(!PREDEFINED_SERVER_PATTERN.matcher(server).matches()) continue;
+                String[] split = server.split(":");
+                String type = split[0];
+                int amount = split.length > 1 && Validation.INTEGER.matches(split[1]) ? Integer.parseInt(split[1]) : 1;
+
+                this.startServer(type, false, amount, resultServer -> {});
+            }
+        }
     }
 
     @EventHandler

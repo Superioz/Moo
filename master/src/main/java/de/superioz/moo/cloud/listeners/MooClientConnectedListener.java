@@ -30,8 +30,8 @@ public class MooClientConnectedListener implements EventListener {
                 // packet register server
                 List<PacketServerRegister> list = new ArrayList<>();
 
-                for(MooServer daemon : Cloud.getInstance().getMooProxy().getSpigotServers().values()) {
-                    list.add(new PacketServerRegister(daemon.getType(), daemon.getAddress().getHostName(), daemon.getAddress().getPort()));
+                for(MooServer server : Cloud.getInstance().getMooProxy().getSpigotServers().values()) {
+                    list.add(new PacketServerRegister(server.getType(), server.getAddress().getHostName(), server.getAddress().getPort()));
                 }
                 PacketMessenger.message(new MultiPacket<>(list), client);
             }
