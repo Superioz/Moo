@@ -5,6 +5,5 @@
   "servers-folder": "servers",
   "patterns-folder": "patterns",
   "start-file": "start",
-  "ram-usage-delay": 10000,
-  "predefined-servers": []
+  "ram-usage-delay": 10000
 }

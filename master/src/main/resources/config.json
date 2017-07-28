@@ -45,5 +45,6 @@
       "username:account",
       "skin:account"
     ]
-  }
+  },
+  "predefined-servers": []
 }

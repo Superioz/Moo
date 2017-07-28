@@ -1,11 +1,14 @@
 package de.superioz.moo.protocol.server;
 
+import de.superioz.moo.api.event.EventExecutor;
+import de.superioz.moo.api.io.JsonConfig;
 import de.superioz.moo.api.logging.ConsoleColor;
 import de.superioz.moo.protocol.AbstractNetworkInstance;
 import de.superioz.moo.protocol.Protocol;
 import de.superioz.moo.protocol.client.ClientType;
 import de.superioz.moo.protocol.client.NetworkClient;
 import de.superioz.moo.protocol.common.NetworkEventAdapter;
+import de.superioz.moo.protocol.common.PipelineUtil;
 import de.superioz.moo.protocol.events.ServerStateEvent;
 import de.superioz.moo.protocol.packet.AbstractPacket;
 import de.superioz.moo.protocol.packets.PacketHandshake;
@@ -18,9 +21,6 @@ import io.netty.channel.group.ChannelGroup;
 import io.netty.channel.group.DefaultChannelGroup;
 import io.netty.util.concurrent.GlobalEventExecutor;
 import lombok.Getter;
-import de.superioz.moo.api.event.EventExecutor;
-import de.superioz.moo.api.io.JsonConfig;
-import de.superioz.moo.protocol.common.PipelineUtil;
 
 import java.net.InetSocketAddress;
 import java.util.function.Consumer;
@@ -85,7 +85,7 @@ public class NetworkServer extends AbstractNetworkInstance {
 
                 getHub().remove(remoteAddress);
                 getLogger().info(ConsoleColor.RED.toString()
-                        + client.getType() + " server disconnected [@" + remoteAddress.getAddress().getHostAddress() + "]");
+                        + client.getType() + " client disconnected [@" + remoteAddress.getAddress().getHostAddress() + "]");
             }
         });
     }
