@@ -124,18 +124,18 @@ public class DaemonInstance {
      *
      * @return The result
      */
-    public boolean cleanupServers() {
+    public int cleanupServers() throws IOException {
         int cleaned = 0;
 
-        if(!getServersFolder().exists()) return false;
+        if(!getServersFolder().exists()) return 0;
         File[] files = getServersFolder().listFiles();
-        if(files == null) return false;
+        if(files == null) return 0;
 
         for(File f : files) {
             if(!f.isDirectory()) continue;
             if(IOUtil.deleteFile(f)) cleaned++;
         }
-        return cleaned != 0;
+        return cleaned;
     }
 
     /**
@@ -174,7 +174,7 @@ public class DaemonInstance {
      * @param resultOfServerStart The result of the server start
      * @return The (started) server
      */
-    public Server startServer(String type, String host, int port, boolean autoSave, Consumer<Server> resultOfServerStart) {
+    public Server startServer(String type, String host, int port, boolean autoSave, Consumer<Server> resultOfServerStart) throws IOException {
         Server server = createServer(type, autoSave);
         server.setServerResult(resultOfServerStart);
 

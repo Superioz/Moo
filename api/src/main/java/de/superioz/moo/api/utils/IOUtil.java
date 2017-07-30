@@ -38,7 +38,7 @@ public final class IOUtil {
         return id;
     }
 
-    public static int getNextId(File folder, String split, String name){
+    public static int getNextId(File folder, String split, String name) {
         return getNextId(folder, name, split, "", 1);
     }
 
@@ -59,29 +59,24 @@ public final class IOUtil {
      * @param file The file/directory
      * @return The result
      */
-    public static boolean deleteFile(File file) {
+    public static boolean deleteFile(File file) throws IOException {
         if(!file.isDirectory()) {
             return file.delete();
         }
 
-        try {
-            Files.walkFileTree(file.toPath(), new SimpleFileVisitor<Path>() {
-                @Override
-                public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
-                    Files.delete(file);
-                    return FileVisitResult.CONTINUE;
-                }
+        Files.walkFileTree(file.toPath(), new SimpleFileVisitor<Path>() {
+            @Override
+            public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+                Files.delete(file);
+                return FileVisitResult.CONTINUE;
+            }
 
-                @Override
-                public FileVisitResult postVisitDirectory(Path dir, IOException exc) throws IOException {
-                    Files.delete(dir);
-                    return FileVisitResult.CONTINUE;
-                }
-            });
-        }
-        catch(IOException e) {
-            e.printStackTrace();
-        }
+            @Override
+            public FileVisitResult postVisitDirectory(Path dir, IOException exc) throws IOException {
+                Files.delete(dir);
+                return FileVisitResult.CONTINUE;
+            }
+        });
         return !file.exists();
     }
 

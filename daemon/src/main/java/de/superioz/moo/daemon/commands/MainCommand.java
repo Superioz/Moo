@@ -5,6 +5,7 @@ import de.superioz.moo.api.command.Command;
 import de.superioz.moo.api.command.context.CommandContext;
 import de.superioz.moo.api.command.param.ParamSet;
 import de.superioz.moo.api.utils.StringUtil;
+import de.superioz.moo.client.Moo;
 import de.superioz.moo.daemon.Daemon;
 import de.superioz.moo.daemon.common.Server;
 import de.superioz.moo.daemon.common.ServerPattern;
@@ -53,7 +54,8 @@ public class MainCommand {
         int amount = args.getInt(1, 1);
 
         Daemon.getInstance().getLogs().info("Starting server .. (" + amount + "x " + name + ")");
-        Daemon.getInstance().startServer(name, false, amount, server -> {});
+        Daemon.getInstance().startServer(name, false, amount, server -> {
+        });
     }
 
     @Command(label = "stop")
@@ -76,6 +78,17 @@ public class MainCommand {
         for(Server server : Daemon.getInstance().getServer().getStartedServerByUuid().values()) {
             context.sendMessage("- Server: " + server.getName() + " (#" + server.getId() + "), " + server.getHost() + ":" + server.getPort());
         }
+    }
+
+    @Command(label = "end")
+    public void end(CommandContext context, ParamSet args) {
+        Daemon.getInstance().getLogs().info("Stopping the daemon ..");
+        Daemon.getInstance().getLogs().info("Disconnecting Moo ..");
+        Moo.getInstance().disconnect();
+        Daemon.getInstance().getLogs().info("Shutdown processes ..");
+        Daemon.getInstance().getServer().getExecutors().shutdown();
+
+        System.exit(0);
     }
 
 }

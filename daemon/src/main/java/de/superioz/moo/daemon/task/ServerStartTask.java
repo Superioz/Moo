@@ -5,6 +5,7 @@ import de.superioz.moo.daemon.common.Server;
 import de.superioz.moo.daemon.util.Ports;
 import lombok.Getter;
 
+import java.io.IOException;
 import java.util.function.Consumer;
 
 @Getter
@@ -27,7 +28,12 @@ public class ServerStartTask implements Runnable {
     @Override
     public void run() {
         if(port < 0) port = Ports.getAvailablePort();
-        this.server = Daemon.getInstance().getServer().startServer(type, Server.DEFAULT_HOST, port, autoSave, resultOfServerStart);
+        try {
+            this.server = Daemon.getInstance().getServer().startServer(type, Server.DEFAULT_HOST, port, autoSave, resultOfServerStart);
+        }
+        catch(IOException e) {
+            Daemon.getInstance().getLogs().debug("Couldn't start server!", e);
+        }
     }
 
 }

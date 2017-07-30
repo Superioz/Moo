@@ -94,12 +94,22 @@ public class Server extends ServerPattern {
 
             // if autoSave then copy the folder first
             if(isAutoSave()) {
-                IOUtil.deleteFile(new File(getParent().getPatternFolder(), getName()));
+                try {
+                    IOUtil.deleteFile(new File(getParent().getPatternFolder(), getName()));
+                }
+                catch(IOException e) {
+                    Daemon.getInstance().getLogs().debug("Couldn't delete server folder " + getName() + "!");
+                }
                 IOUtil.copyFiles(getFolder(), new File(getParent().getPatternFolder(), getName()));
             }
 
             // Delete everything  :(
-            IOUtil.deleteFile(getFolder());
+            try {
+                IOUtil.deleteFile(getFolder());
+            }
+            catch(IOException e) {
+                Daemon.getInstance().getLogs().debug("Couldn't delete server folder " + getFolder().getName() + "!");
+            }
 
             //
             try {
@@ -152,7 +162,8 @@ public class Server extends ServerPattern {
             this.process = builder.start();
         }
         catch(IOException e) {
-            e.printStackTrace();
+            Daemon.getInstance().getLogs().debug("Error during server process " + getName() + "!", e);
+            process.destroy();
             serverResult.accept(null);
             return false;
         }
