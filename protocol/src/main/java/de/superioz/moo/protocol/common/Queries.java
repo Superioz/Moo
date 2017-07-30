@@ -125,6 +125,36 @@ public class Queries {
     }
 
     /**
+     * Receives datalist from database with given values
+     *
+     * @param type   The type of the database
+     * @param filter The filter to fetch the data
+     * @param eClass The element class to cast the data with
+     * @param <E>    The element type
+     * @return The element
+     * @throws MooInputException If the response isn't OK
+     */
+    public static <E> List<E> list(DatabaseType type, DbFilter filter, Class<E> eClass) throws MooInputException {
+        Response response = Queries.newInstance(type).filter(filter).execute();
+        if(response == null) {
+            return null;
+        }
+        return response.toComplexes(eClass);
+    }
+
+    public static <E> List<E> list(DatabaseType type, Class<?> objectClass, Object primKey, Class<E> eClass) throws MooInputException {
+        return list(type, DbFilter.fromPrimKey(objectClass, primKey), eClass);
+    }
+
+    public static <E> List<E> list(DatabaseType type, Object primKey, Class<E> eClass) throws MooInputException {
+        return list(type, type.getWrappedClass(), primKey, eClass);
+    }
+
+    public static <E> List<E> list(DatabaseType type, Object primKey) throws MooInputException {
+        return list(type, primKey, (Class<E>) type.getWrappedClass());
+    }
+
+    /**
      * Lists all elements from database type
      *
      * @param type   The type of the database

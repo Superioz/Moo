@@ -23,7 +23,7 @@ public class ServerInfoCheckTask implements Runnable {
                 Thread.sleep(delay);
             }
             catch(InterruptedException e) {
-                e.printStackTrace();
+                Thread.currentThread().interrupt();
             }
 
             long now = System.currentTimeMillis();

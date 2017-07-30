@@ -3,8 +3,8 @@ package de.superioz.moo.cloud.commands;
 import de.superioz.moo.api.command.Command;
 import de.superioz.moo.api.command.context.CommandContext;
 import de.superioz.moo.api.command.param.ParamSet;
-import de.superioz.moo.api.common.MooPlayer;
 import de.superioz.moo.api.common.MooServer;
+import de.superioz.moo.api.database.object.PlayerData;
 import de.superioz.moo.api.event.EventListener;
 import de.superioz.moo.api.exceptions.InvalidConfigException;
 import de.superioz.moo.cloud.Cloud;
@@ -136,11 +136,11 @@ public class CloudCommand implements EventListener {
      */
     @Command(label = "players")
     public void players(CommandContext context, ParamSet set) {
-        List<MooPlayer> players = new ArrayList<>(Cloud.getInstance().getMooProxy().getPlayers());
+        List<PlayerData> players = new ArrayList<>(Cloud.getInstance().getMooProxy().getPlayers());
 
         List<String> l = new ArrayList<>();
         if(!(players.size() > 30)) {
-            players.forEach(player -> l.add(player.name + "[" + player.uuid + "] @ '" + player.currentServer + "'[#" + player.proxyId + "]"));
+            players.forEach(player -> l.add(player.lastName + "[" + player.uuid + "] @ '" + player.currentServer + "'[#" + player.currentProxy + "]"));
         }
 
         context.sendMessage("Players (" + players.size() + "): " + (l.size() == 0 ? "Nothing to display!" : "\n\t- " + String.join("\n\t- ", l)));

@@ -1,6 +1,6 @@
 package de.superioz.moo.cloud.listeners;
 
-import de.superioz.moo.api.common.MooPlayer;
+import de.superioz.moo.api.database.object.PlayerData;
 import de.superioz.moo.api.reaction.Reaction;
 import de.superioz.moo.api.util.Validation;
 import de.superioz.moo.cloud.Cloud;
@@ -27,7 +27,7 @@ public class PacketPlayerMessageListener implements PacketAdapter {
 
             // get player from id
             // if the player
-            MooPlayer player = Validation.UNIQUEID.matches(id)
+            PlayerData player = Validation.UNIQUEID.matches(id)
                     ? Cloud.getInstance().getMooProxy().getPlayer(UUID.fromString(id))
                     : Cloud.getInstance().getMooProxy().getPlayer(id);
             if(player == null){

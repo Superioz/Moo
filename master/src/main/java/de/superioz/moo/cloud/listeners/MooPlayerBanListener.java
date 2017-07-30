@@ -1,6 +1,5 @@
 package de.superioz.moo.cloud.listeners;
 
-import de.superioz.moo.api.common.MooPlayer;
 import de.superioz.moo.api.common.punishment.BanSubType;
 import de.superioz.moo.api.common.punishment.Punishmental;
 import de.superioz.moo.api.database.DbModifier;
@@ -14,9 +13,9 @@ import de.superioz.moo.api.event.EventHandler;
 import de.superioz.moo.api.event.EventListener;
 import de.superioz.moo.api.event.EventPriority;
 import de.superioz.moo.api.utils.ReflectionUtil;
-import de.superioz.moo.cloud.events.MooPlayerBanEvent;
 import de.superioz.moo.cloud.Cloud;
 import de.superioz.moo.cloud.database.CloudCollections;
+import de.superioz.moo.cloud.events.MooPlayerBanEvent;
 import de.superioz.moo.cloud.events.MooPlayerPostBanEvent;
 import de.superioz.moo.protocol.common.ResponseStatus;
 import de.superioz.moo.protocol.packets.PacketPlayerKick;
@@ -97,7 +96,7 @@ public class MooPlayerBanListener implements EventListener {
         packet.respond(ResponseStatus.OK);
 
         // gets the player and kick him if he is online
-        MooPlayer player = Cloud.getInstance().getMooProxy().getPlayer(buf.uuid);
+        PlayerData player = Cloud.getInstance().getMooProxy().getPlayer(buf.uuid);
         if(player != null) {
             Cloud.getInstance().getMooProxy().kick(player, new PacketPlayerKick(null, buf.uuid + "",
                     ban.apply(ban.isPermanent() ? permBanMessage : tempBanMessage)), response -> {

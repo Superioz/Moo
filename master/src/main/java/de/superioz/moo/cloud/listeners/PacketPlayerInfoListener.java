@@ -1,6 +1,5 @@
 package de.superioz.moo.cloud.listeners;
 
-import de.superioz.moo.api.common.MooPlayer;
 import de.superioz.moo.api.database.DbFilter;
 import de.superioz.moo.api.database.object.Ban;
 import de.superioz.moo.api.database.object.PlayerData;
@@ -8,7 +7,6 @@ import de.superioz.moo.api.database.object.UniqueIdBuf;
 import de.superioz.moo.api.util.SimpleSerializable;
 import de.superioz.moo.api.util.Validation;
 import de.superioz.moo.api.utils.StringUtil;
-import de.superioz.moo.cloud.Cloud;
 import de.superioz.moo.cloud.database.CloudCollections;
 import de.superioz.moo.protocol.common.ResponseStatus;
 import de.superioz.moo.protocol.packet.PacketAdapter;
@@ -57,10 +55,6 @@ public class PacketPlayerInfoListener implements PacketAdapter {
         // respond
         List<String> respond = new ArrayList<>();
         respond.add(playerData.toString());
-
-        // get the moo player
-        MooPlayer player = Cloud.getInstance().getMooProxy().getPlayer(uuid);
-        respond.add(player != null ? player.toString() : "");
 
         // get the current ban
         Ban ban = CloudCollections.bans().get(uuid);

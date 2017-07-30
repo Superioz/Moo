@@ -6,7 +6,6 @@ import de.superioz.moo.api.command.help.ArgumentHelper;
 import de.superioz.moo.api.command.param.ParamSet;
 import de.superioz.moo.api.command.tabcomplete.TabCompletion;
 import de.superioz.moo.api.command.tabcomplete.TabCompletor;
-import de.superioz.moo.api.common.MooPlayer;
 import de.superioz.moo.api.common.PlayerInfo;
 import de.superioz.moo.api.common.RunAsynchronous;
 import de.superioz.moo.api.database.object.Ban;
@@ -50,7 +49,6 @@ public class WhoisCommand {
         // get current informations
         Ban currentBan = playerInfo.getCurrentBan();
         Ban currentChatBan = playerInfo.getCurrentChatBan();
-        MooPlayer mooPlayer = playerInfo.getMooPlayer();
         PlayerData data = playerInfo.getData();
 
         // get rough information about the player
@@ -64,11 +62,11 @@ public class WhoisCommand {
         // get online status
         String firstOnline = TimeUtil.getFormat(data.firstOnline);
         String totalOnline = data.totalOnline == null ? "0" : TimeUnit.MILLISECONDS.toHours(data.totalOnline) + "h";
-        String currentServer = mooPlayer.currentServer;
-        int currentProxy = mooPlayer.proxyId;
+        String currentServer = data.currentServer;
+        int currentProxy = data.currentProxy;
         long onlineSince = TimeUnit.MILLISECONDS.toMinutes(data.getCurrentOnline());
         String offlineSince = TimeUtil.getFormat(data.lastOnline);
-        List onlineStatus = mooPlayer == null
+        List onlineStatus = currentProxy == -1
                 ? Arrays.asList(true, offlineSince)
                 : Arrays.asList(false, currentServer, currentProxy, onlineSince);
 

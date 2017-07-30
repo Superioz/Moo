@@ -1,6 +1,5 @@
 package de.superioz.moo.cloud.listeners;
 
-import de.superioz.moo.api.common.MooPlayer;
 import de.superioz.moo.api.database.DbModifier;
 import de.superioz.moo.api.database.DbQueryUnbaked;
 import de.superioz.moo.api.database.object.Group;
@@ -49,7 +48,14 @@ public class MooPlayerJoinedProxyListener implements EventListener {
         // sets the server he is currently on
         String serverId = packet.meta;
         int proxyId = Cloud.getInstance().getHub().get(clientAddress).getId();
-        Cloud.getInstance().getMooProxy().add(new MooPlayer(data.uuid, data.lastName, data.lastip, proxyId, serverId), clientAddress);
+        data.setCurrentServer(serverId);
+        data.setCurrentProxy(proxyId);
+        Cloud.getInstance().getMooProxy().add(data, clientAddress);
+
+        // set new proxy and server into database
+        CloudCollections.players().set(data.uuid, data,
+                DbQueryUnbaked.newInstance(DbModifier.PLAYER_SERVER, serverId)
+                        .append(DbModifier.PLAYER_PROXY, proxyId), true);
 
         // update user count
         PacketMessenger.message(new PacketConfig(PacketConfig.Command.CHANGE, PacketConfig.Type.PLAYER_COUNT,

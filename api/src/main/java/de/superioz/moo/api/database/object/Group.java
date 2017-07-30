@@ -14,6 +14,8 @@ import java.util.List;
 @AllArgsConstructor
 public class Group extends SimpleSerializable {
 
+    public static final String DEFAULT_NAME = "default";
+
     /**
      * Name of the group
      */

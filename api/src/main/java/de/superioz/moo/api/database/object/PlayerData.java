@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import de.superioz.moo.api.database.DbKey;
 import de.superioz.moo.api.util.SimpleSerializable;
+import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,6 +37,26 @@ public class PlayerData extends SimpleSerializable {
      */
     @DbKey
     public String group;
+
+    /**
+     * The {@link Group} rank of the player
+     */
+    @DbKey
+    public int rank;
+
+    /**
+     * The server where the player is online atm
+     */
+    @DbKey
+    @Setter
+    public String currentServer;
+
+    /**
+     * The proxy where the player has connected to
+     */
+    @DbKey
+    @Setter
+    public int currentProxy;
 
     /**
      * Timestamp of the last online time (Last online = Leave Time)

@@ -28,7 +28,7 @@ import de.superioz.moo.client.util.MooPluginUtil;
 import de.superioz.moo.minecraft.util.ChatUtil;
 import de.superioz.moo.protocol.client.ClientType;
 import de.superioz.moo.proxy.command.BungeeCommandContext;
-import de.superioz.moo.proxy.commands.MooCommand;
+import de.superioz.moo.proxy.commands.server.MooCommand;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.plugin.Command;

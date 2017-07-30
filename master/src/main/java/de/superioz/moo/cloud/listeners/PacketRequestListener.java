@@ -1,6 +1,6 @@
 package de.superioz.moo.cloud.listeners;
 
-import de.superioz.moo.api.common.MooPlayer;
+import de.superioz.moo.api.database.object.PlayerData;
 import de.superioz.moo.api.reaction.Reaction;
 import de.superioz.moo.api.util.Validation;
 import de.superioz.moo.cloud.Cloud;
@@ -21,7 +21,7 @@ public class PacketRequestListener implements PacketAdapter {
 
         // I want to know the ping of the player
         Reaction.react(type, PacketRequest.Type.PING, () -> {
-            MooPlayer player = Validation.UNIQUEID.matches(information) ?
+            PlayerData player = Validation.UNIQUEID.matches(information) ?
                     Cloud.getInstance().getMooProxy().getPlayer(UUID.fromString(information))
                     : Cloud.getInstance().getMooProxy().getPlayer(information);
 

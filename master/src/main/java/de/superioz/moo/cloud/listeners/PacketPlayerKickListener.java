@@ -1,6 +1,6 @@
 package de.superioz.moo.cloud.listeners;
 
-import de.superioz.moo.api.common.MooPlayer;
+import de.superioz.moo.api.database.object.PlayerData;
 import de.superioz.moo.api.util.Validation;
 import de.superioz.moo.cloud.Cloud;
 import de.superioz.moo.protocol.common.ResponseStatus;
@@ -18,7 +18,7 @@ public class PacketPlayerKickListener implements PacketAdapter {
 
         // gets the player from given id
         // if the player cannot be found, than just return a bad status
-        MooPlayer player = Validation.UNIQUEID.matches(id)
+        PlayerData player = Validation.UNIQUEID.matches(id)
                 ? Cloud.getInstance().getMooProxy().getPlayer(UUID.fromString(id))
                 : Cloud.getInstance().getMooProxy().getPlayer(id);
         if(player == null) {

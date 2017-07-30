@@ -1,8 +1,8 @@
 package de.superioz.moo.protocol.server;
 
 import de.superioz.moo.api.common.MooServer;
-import de.superioz.moo.api.common.MooPlayer;
 import de.superioz.moo.api.collection.UnmodifiableList;
+import de.superioz.moo.api.database.object.PlayerData;
 import de.superioz.moo.protocol.common.PacketMessenger;
 import de.superioz.moo.protocol.common.Response;
 import de.superioz.moo.protocol.packet.AbstractPacket;
@@ -21,8 +21,8 @@ import java.util.function.Consumer;
  */
 public final class MooProxy {
 
-    private final Map<UUID, MooPlayer> playerMap = new HashMap<>();
-    private final Map<String, MooPlayer> playerNameMap = new HashMap<>();
+    private final Map<UUID, PlayerData> playerMap = new HashMap<>();
+    private final Map<String, PlayerData> playerNameMap = new HashMap<>();
     private final Map<UUID, InetSocketAddress> playerServerMap = new HashMap<>();
 
     private final Map<UUID, MooServer> spigotServerMap = new HashMap<>();
@@ -112,7 +112,7 @@ public final class MooProxy {
      *
      * @return The connected players
      */
-    public Collection<MooPlayer> getPlayers() {
+    public Collection<PlayerData> getPlayers() {
         return playerMap.values();
     }
 
@@ -122,12 +122,12 @@ public final class MooProxy {
      * @param uuid of the player
      * @return their player instance
      */
-    public MooPlayer getPlayer(UUID uuid) {
+    public PlayerData getPlayer(UUID uuid) {
         if(!contains(uuid)) return null;
         return playerMap.get(uuid);
     }
 
-    public MooPlayer getPlayer(String name) {
+    public PlayerData getPlayer(String name) {
         if(!contains(name)) return null;
         return playerNameMap.get(name);
     }
@@ -149,11 +149,11 @@ public final class MooProxy {
     /**
      * Adds a player to the map if not exists
      */
-    public void add(MooPlayer player, InetSocketAddress address) {
+    public void add(PlayerData player, InetSocketAddress address) {
         if(!playerMap.containsKey(player.uuid)) {
             playerServerMap.put(player.uuid, address);
             playerMap.put(player.uuid, player);
-            playerNameMap.put(player.name, player);
+            playerNameMap.put(player.lastName, player);
         }
     }
 
@@ -174,7 +174,7 @@ public final class MooProxy {
      * @param player The player
      * @return The mooClient
      */
-    public MooClient getClient(MooPlayer player) {
+    public MooClient getClient(PlayerData player) {
         InetSocketAddress address = playerServerMap.get(player.uuid);
         return netServer.getHub().get(address);
     }
@@ -186,7 +186,7 @@ public final class MooProxy {
      * @param packet   The packets
      * @param callback The callback
      */
-    public void sendMessage(MooPlayer player, PacketPlayerMessage packet, Consumer<Response> callback) {
+    public void sendMessage(PlayerData player, PacketPlayerMessage packet, Consumer<Response> callback) {
         InetSocketAddress address = playerServerMap.get(player.uuid);
         MooClient client = netServer.getHub().get(address);
 
@@ -198,11 +198,11 @@ public final class MooProxy {
         }
     }
 
-    public void sendMessage(MooPlayer player, PacketPlayerMessage packet) {
+    public void sendMessage(PlayerData player, PacketPlayerMessage packet) {
         sendMessage(player, packet, null);
     }
 
-    public void sendMessage(MooPlayer player, String message) {
+    public void sendMessage(PlayerData player, String message) {
         sendMessage(player, new PacketPlayerMessage(PacketPlayerMessage.Type.PRIVATE, message,
                 "", true, true));
     }
@@ -214,7 +214,7 @@ public final class MooProxy {
      * @param packet   The packets
      * @param callback The callback
      */
-    public void kick(MooPlayer player, PacketPlayerKick packet, Consumer<Response> callback) {
+    public void kick(PlayerData player, PacketPlayerKick packet, Consumer<Response> callback) {
         PacketMessenger.message(packet, callback, getClient(player));
     }
 

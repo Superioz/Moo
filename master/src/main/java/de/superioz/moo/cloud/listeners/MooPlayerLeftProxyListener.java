@@ -43,8 +43,9 @@ public class MooPlayerLeftProxyListener implements EventListener {
         // applies the times onto the database
         DbQueryUnbaked query = DbQueryUnbaked
                 .newInstance(DbModifier.PLAYER_LAST_ONLINE, current)
-                .append(DbModifier.PLAYER_TOTAL_ONLINE, totalTime)
-                .append(DbModifier.PLAYER_JOINED, 0L);
+                .equate(DbModifier.PLAYER_TOTAL_ONLINE, totalTime)
+                .equate(DbModifier.PLAYER_JOINED, 0L)
+                .equate(DbModifier.PLAYER_PROXY, -1);
         CloudCollections.players().set(data.uuid, data, query, true);
 
         // removes player from moo proxy

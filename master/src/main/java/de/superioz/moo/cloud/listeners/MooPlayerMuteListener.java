@@ -1,6 +1,5 @@
 package de.superioz.moo.cloud.listeners;
 
-import de.superioz.moo.api.common.MooPlayer;
 import de.superioz.moo.api.database.object.Ban;
 import de.superioz.moo.api.database.object.Group;
 import de.superioz.moo.api.database.object.PlayerData;
@@ -75,7 +74,7 @@ public class MooPlayerMuteListener implements EventListener {
         }
 
         // gets the player and send him message
-        MooPlayer player = Cloud.getInstance().getMooProxy().getPlayer(buf.uuid);
+        PlayerData player = Cloud.getInstance().getMooProxy().getPlayer(buf.uuid);
         if(player != null) {
             Cloud.getInstance().getMooProxy().sendMessage(player, message);
         }

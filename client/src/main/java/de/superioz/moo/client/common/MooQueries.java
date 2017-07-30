@@ -1,13 +1,9 @@
 package de.superioz.moo.client.common;
 
-import de.superioz.moo.api.database.*;
-import de.superioz.moo.protocol.packets.*;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
 import de.superioz.moo.api.common.PlayerInfo;
 import de.superioz.moo.api.common.punishment.BanSubType;
 import de.superioz.moo.api.common.punishment.BanType;
+import de.superioz.moo.api.database.*;
 import de.superioz.moo.api.database.object.Ban;
 import de.superioz.moo.api.database.object.Group;
 import de.superioz.moo.api.database.object.PlayerData;
@@ -18,6 +14,10 @@ import de.superioz.moo.protocol.common.Queries;
 import de.superioz.moo.protocol.common.Response;
 import de.superioz.moo.protocol.common.ResponseStatus;
 import de.superioz.moo.protocol.exception.MooInputException;
+import de.superioz.moo.protocol.packets.*;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.HashSet;

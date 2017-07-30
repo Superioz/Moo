@@ -1,4 +1,4 @@
-package de.superioz.moo.proxy.commands;
+package de.superioz.moo.proxy.commands.server;
 
 import de.superioz.moo.api.collection.MultiMap;
 import de.superioz.moo.api.command.Command;

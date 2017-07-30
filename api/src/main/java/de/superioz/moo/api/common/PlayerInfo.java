@@ -24,11 +24,6 @@ public class PlayerInfo {
     private PlayerData data;
 
     /**
-     * The moo player object, that means information of where the player is online etc.
-     */
-    private MooPlayer mooPlayer;
-
-    /**
      * His current ban (if he isn't ban = null)
      */
     @Setter
@@ -68,13 +63,6 @@ public class PlayerInfo {
             data = ReflectionUtil.deserialize(playerDataString, PlayerData.class);
         }
 
-        // moo player
-        String playerString = packetData.get(1);
-        MooPlayer mooPlayer = null;
-        if(!playerString.isEmpty()) {
-            mooPlayer = ReflectionUtil.deserialize(playerString, MooPlayer.class);
-        }
-
         // ban status
         String currentBan = packetData.get(2);
         Ban ban = null;
@@ -97,7 +85,7 @@ public class PlayerInfo {
                 archivedBans.add(ReflectionUtil.deserialize(s, Ban.class));
             }
         }
-        return new PlayerInfo(data, mooPlayer, ban, chatBan, archivedBans);
+        return new PlayerInfo(data, ban, chatBan, archivedBans);
     }
 
 }
