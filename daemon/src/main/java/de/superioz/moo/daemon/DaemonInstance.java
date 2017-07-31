@@ -181,7 +181,7 @@ public class DaemonInstance {
         // check if the folder is correct and therefore startable
         if(!server.isStartable()) {
             IOUtil.deleteFile(server.getFolder());
-            Daemon.getInstance().getLogs().info("Deleted folder because server is not startable!");
+            Daemon.getInstance().getLogs().debug("Deleted folder because server is not startable!");
             return null;
         }
 

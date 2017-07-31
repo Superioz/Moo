@@ -82,8 +82,11 @@ public class MainCommand {
 
     @Command(label = "end")
     public void end(CommandContext context, ParamSet args) {
-        Daemon.getInstance().getLogs().info("Stopping the daemon ..");
-        Daemon.getInstance().getLogs().info("Disconnecting Moo ..");
+        if(Daemon.getInstance().getServer().getStartedServerByUuid().size() > 0){
+            Daemon.getInstance().getLogs().warning("You need to stop the server before ending the program! Just type 'stop'.");
+            return;
+        }
+
         Moo.getInstance().disconnect();
         Daemon.getInstance().getLogs().info("Shutdown processes ..");
         Daemon.getInstance().getServer().getExecutors().shutdown();

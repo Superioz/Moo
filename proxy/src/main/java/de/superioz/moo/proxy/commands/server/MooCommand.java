@@ -107,7 +107,7 @@ public class MooCommand {
                 .add(s.replaceAll("[1-9_.#\\- ]", "").toLowerCase(), serverInfo));
 
         for(String category : categoryServerMap.keySet()) {
-            context.sendMessage("&8# &c" + categoryServerMap.get(category).size() + " &7" + category + " server registered.");
+            context.sendMessage("&8# &c" + categoryServerMap.get(category).size() + " &7unique &f" + category + " &7server registered.");
         }
     }
 

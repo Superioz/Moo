@@ -183,7 +183,7 @@ public class Server extends ServerPattern {
 
                 //
                 try {
-                    PacketMessenger.message(new PacketServerDone(PacketServerDone.Type.START, getUuid(), getName(), getPort()));
+                    //PacketMessenger.message(new PacketServerDone(PacketServerDone.Type.START, getUuid(), getName(), getPort()));
                     serverResult.accept(this);
                 }
                 catch(MooOutputException e) {

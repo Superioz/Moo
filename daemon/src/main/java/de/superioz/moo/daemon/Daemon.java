@@ -95,8 +95,8 @@ public class Daemon implements EventListener {
         getInstance().setLogs(new Logs(logger));
         getInstance().getLogs().enableFileLogging().prepareNativeStreams();
 
-        getInstance().getLogs().warning("*** STOPPING THE DAEMON FORCEFULLY RESULTS IN GHOST PROCESSES ***");
-        getInstance().getLogs().warning("*** IT IS RECOMMENDED TO USE THE 'END' COMMAND BEFORE CLOSING ***");
+        getInstance().getLogs().warning("*** STOPPING THE DAEMON FORCEFULLY RESULTS IN GHOST PROCESSES  ***");
+        getInstance().getLogs().warning("*** IT IS RECOMMENDED TO USE THE 'STOP' COMMAND BEFORE CLOSING ***");
         getInstance().getLogs().info("Start daemon @" + System.getProperty("user.dir") + " (" + (SystemUtil.isWindows() ? "WINDOWS" : "LINUX") + ")");
         Moo.initialise(logger);
 
@@ -104,6 +104,9 @@ public class Daemon implements EventListener {
         Daemon.getInstance().getLogs().info("Load configuration ..");
         JsonConfig config = MooPluginUtil.loadConfig(Paths.get("configuration"), "config");
         getInstance().setConfig(config);
+
+        Daemon.getInstance().getLogs().setDebugMode(config.get("debug"));
+        logger.info("Debug Mode: " + (Daemon.getInstance().getLogs().isDebugMode() ? "ON" : "off"));
 
         // register the commands (would be possible to do it with Moo.initialise directly, but it's not a MooPlugin, so ...)
         CommandRegistry.getInstance().registerCommands(new MainCommand());

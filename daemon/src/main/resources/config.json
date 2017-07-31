@@ -1,4 +1,5 @@
 {
+  "debug": true,
   "daemon-name": "main",
   "cloud-ip": "localhost",
   "cloud-port": 8000,

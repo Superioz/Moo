@@ -44,7 +44,10 @@ public class Thunder extends Plugin implements EventListener {
         this.config = pluginModule.getConfig();
 
         // we don't want pre-defined servers!
-        ProxyServer.getInstance().getConfigurationAdapter().getServers().clear();
+        int preDefinedServerSize = ProxyServer.getInstance().getServers().size();
+        if(preDefinedServerSize != 0) {
+            logs.warning("There is " + preDefinedServerSize + " server predefined which could lead to errors!");
+        }
     }
 
     @Override
@@ -78,6 +81,8 @@ public class Thunder extends Plugin implements EventListener {
         int similar = Thunder.getServers("(" + name + "-[0-9]*|" + name + ")").size();
         name = similar == 0 ? name : name + "-" + (similar + 1);
 
+        getLogs().debug("Register server '" + name + "'(" + host + ":" + port + ") ..");
+
         return Thunder.registerServer(name, host, port, "", false);
     }
 
@@ -105,6 +110,8 @@ public class Thunder extends Plugin implements EventListener {
      * @return The server
      */
     public static ServerInfo unregisterServer(String host, int port) {
+        getLogs().debug("Unregister server (" + host + ":" + port + ") ..");
+
         ServerInfo info = null;
         for(ServerInfo server : ProxyServer.getInstance().getServers().values()) {
             InetSocketAddress address = (info = server).getAddress();

@@ -43,7 +43,7 @@ public class DaemonServerListener implements PacketAdapter {
 
     @PacketHandler
     public void onRamUsage(PacketRamUsage packet) {
-        Cloud.getLogger().debug("Updates ram usage for " + packet.getChannel().remoteAddress() + " (to " + packet.ramUsage + "%)");
+        //Cloud.getLogger().debug("Updates ram usage for " + packet.getChannel().remoteAddress() + " (to " + packet.ramUsage + "%)");
 
         Cloud.getInstance().getHub().updateRamUsage((InetSocketAddress) packet.getChannel().remoteAddress(), packet.ramUsage);
     }

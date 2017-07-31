@@ -17,6 +17,8 @@ public class ServerPacketListener implements PacketAdapter {
     public void onServerRequest(PacketServerRequest packet) {
         String serverType = packet.type;
 
+        Daemon.getInstance().getLogs().debug("Got request for " + packet.amount + "x " + serverType + " servers.");
+
         // checks if the server type exists
         // if not send NOT_FOUND status
         if(!Daemon.getInstance().getServer().hasPattern(serverType, false)) {
@@ -24,11 +26,13 @@ public class ServerPacketListener implements PacketAdapter {
             return;
         }
 
+        Daemon.getInstance().getLogs().debug("Starting server ..");
+
         // adds given amount of server to start queue
         Daemon.getInstance().startServer(serverType, packet.autoSave, packet.amount,
                 server -> packet.respond(server == null
                         ? new PacketServerDone(PacketServerDone.Type.START, new UUID(0, 0), "", -1)
-                        : new PacketServerDone(PacketServerDone.Type.START, server.getUuid(), serverType, server.getPort())));
+                        : new PacketServerDone(PacketServerDone.Type.START, server.getUuid(), server.getName(), server.getPort())));
     }
 
     @PacketHandler
