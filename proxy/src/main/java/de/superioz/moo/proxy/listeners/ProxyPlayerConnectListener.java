@@ -7,6 +7,9 @@ import de.superioz.moo.protocol.common.Response;
 import de.superioz.moo.protocol.exception.MooOutputException;
 import de.superioz.moo.protocol.packets.PacketPlayerState;
 import de.superioz.moo.proxy.Thunder;
+import de.superioz.moo.proxy.common.ServerCache;
+import de.superioz.moo.proxy.common.ServerSpecificInfo;
+import net.md_5.bungee.api.config.ServerInfo;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.event.PlayerDisconnectEvent;
 import net.md_5.bungee.api.event.ServerConnectEvent;
@@ -14,28 +17,40 @@ import net.md_5.bungee.api.event.ServerConnectedEvent;
 import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.event.EventHandler;
 
+import java.util.List;
+
 public class ProxyPlayerConnectListener implements Listener {
 
     /**
      * When the player is about connecting to a server
-     * TODO forward to free lobby
      *
      * @param event The event
      */
     private void onServerConnectAsync(ServerConnectEvent event) {
-        /*if(!event.getTarget().getName().contains("lobby")) return;
-        List<ServerInfo> l = Thunder.getServers("(lobby-[0-9]*)");
+        if(!event.getTarget().getName().contains("lobby")) return;
+        List<ServerInfo> l = ServerCache.getInstance().getServer("(lobby-[0-9]*)");
 
-        // get random number (random lobby)
-        int number = NumberUtil.getRandom(0, l.size() - 1);
-        if(number >= l.size() || number < 0) return;
-        ServerInfo target = l.get(number);
+        // if no lobby server is registered
+        if(l.isEmpty()) {
+            return;
+        }
 
-        // set the new server (a random lobby)
-        if(target != null) {
-            event.setTarget(target);
-        }*/
+        // get lobby with fewest player online
+        ServerInfo lobbyFewest = null;
+        int fewestPlayer = -1;
+        for(ServerInfo serverInfo : l) {
+            ServerSpecificInfo serverSpecificInfo = ServerCache.getInstance().getCachedServer().get(serverInfo);
+            if(fewestPlayer == -1 || serverSpecificInfo.getOnlinePlayers() < fewestPlayer) {
+                fewestPlayer = serverSpecificInfo.getOnlinePlayers();
+                lobbyFewest = serverInfo;
+            }
+        }
+        if(lobbyFewest == null) {
+            // rip
+            return;
+        }
 
+        event.setTarget(lobbyFewest);
     }
 
     @EventHandler

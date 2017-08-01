@@ -8,6 +8,7 @@ import lombok.Getter;
 import org.bukkit.Server;
 import org.bukkit.entity.Player;
 
+import java.net.InetSocketAddress;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
@@ -37,7 +38,8 @@ public class ServerInfoTask implements Runnable {
 
             // send serverInfo to the cloud
             PacketMessenger.message(new PacketServerInfoUpdate(
-                    motd, players.size(), maxPlayers, players)
+                    new InetSocketAddress(Lightning.getInstance().getServer().getIp(), Lightning.getInstance().getServer().getPort()),
+                    motd, players.size(), maxPlayers)
             );
         }
     }

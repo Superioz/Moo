@@ -2,6 +2,8 @@ package de.superioz.moo.cloud.listeners;
 
 import de.superioz.moo.api.common.MooServer;
 import de.superioz.moo.cloud.Cloud;
+import de.superioz.moo.protocol.client.ClientType;
+import de.superioz.moo.protocol.common.PacketMessenger;
 import de.superioz.moo.protocol.packet.PacketAdapter;
 import de.superioz.moo.protocol.packet.PacketHandler;
 import de.superioz.moo.protocol.packets.PacketServerInfoUpdate;
@@ -12,7 +14,7 @@ public class PacketServerInfoUpdateListener implements PacketAdapter {
 
     @PacketHandler
     public void onServerUpdate(PacketServerInfoUpdate packet) {
-        InetSocketAddress address = packet.getAddress();
+        InetSocketAddress address = packet.serverAddress;
 
         // get the server registered and check if it exists
         MooServer server = Cloud.getInstance().getMooProxy().getServer(address);
@@ -22,7 +24,10 @@ public class PacketServerInfoUpdateListener implements PacketAdapter {
         }
 
         // updates the server info
-        server.updateInfo(packet.motd, packet.onlinePlayers, packet.maxPlayers, packet.players);
+        server.updateInfo(packet.motd, packet.onlinePlayers, packet.maxPlayers);
+
+        // Go inform the bungee!
+        PacketMessenger.message(packet, ClientType.PROXY);
     }
 
 }

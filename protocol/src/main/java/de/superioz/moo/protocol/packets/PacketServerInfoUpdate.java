@@ -6,7 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
 import java.io.IOException;
-import java.util.List;
+import java.net.InetSocketAddress;
 
 /**
  * This packet is for sending server information to the cloud.
@@ -18,24 +18,25 @@ import java.util.List;
 @AllArgsConstructor
 public class PacketServerInfoUpdate extends AbstractPacket {
 
+    public InetSocketAddress serverAddress;
     public String motd;
     public int onlinePlayers;
     public int maxPlayers;
-    public List<String> players;
 
     @Override
     public void read(PacketBuffer buf) throws IOException {
+        this.serverAddress = new InetSocketAddress(buf.readString(), buf.readInt());
         this.motd = buf.readString();
         this.onlinePlayers = buf.readInt();
         this.maxPlayers = buf.readInt();
-        this.players = buf.readStringList();
     }
 
     @Override
     public void write(PacketBuffer buf) throws IOException {
+        buf.writeString(serverAddress.getHostName());
+        buf.writeInt(serverAddress.getPort());
         buf.writeString(motd);
         buf.writeInt(onlinePlayers);
         buf.writeInt(maxPlayers);
-        buf.writeStringList(players);
     }
 }

@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.UUID;
 
 /**
- * Created on 21.10.2016.
+ * IDK If this class is still needed?
  */
 public class ProxyCache {
 

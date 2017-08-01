@@ -3,7 +3,6 @@ package de.superioz.moo.api.common;
 import lombok.Getter;
 
 import java.net.InetSocketAddress;
-import java.util.List;
 import java.util.UUID;
 
 /**
@@ -44,11 +43,6 @@ public class MooServer {
     private int maxPlayers;
 
     /**
-     * The online players (name:uuid)
-     */
-    private List<String> players;
-
-    /**
      * This value is the timestamp of the last server update packet
      */
     private long lastUpdate;
@@ -65,13 +59,11 @@ public class MooServer {
      * @param motd          The message of the day
      * @param onlinePlayers The number of players online
      * @param maxPlayers    The maximum amount of players
-     * @param players       The players online
      */
-    public void updateInfo(String motd, int onlinePlayers, int maxPlayers, List<String> players) {
+    public void updateInfo(String motd, int onlinePlayers, int maxPlayers) {
         this.motd = motd;
         this.onlinePlayers = onlinePlayers;
         this.maxPlayers = maxPlayers;
-        this.players = players;
 
         // last update: now.
         this.lastUpdate = System.currentTimeMillis();
