@@ -36,7 +36,7 @@ public class DaemonServerListener implements PacketAdapter {
         Reaction.react(!startedServer, () -> {
             Cloud.getLogger().debug("Unregister server " + ip + " with type '" + packet.type + "' ..");
 
-            PacketMessenger.message(new PacketServerUnregister(packet.port), ClientType.PROXY);
+            PacketMessenger.message(new PacketServerUnregister(packet.getAddress()), ClientType.PROXY);
             Cloud.getInstance().getMooProxy().getSpigotServers().remove(packet.uuid);
         });
     }

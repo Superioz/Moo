@@ -6,20 +6,22 @@ import de.superioz.moo.protocol.packet.AbstractPacket;
 import de.superioz.moo.protocol.packet.PacketBuffer;
 
 import java.io.IOException;
+import java.net.InetSocketAddress;
 
 @AllArgsConstructor
 @NoArgsConstructor
 public class PacketServerUnregister extends AbstractPacket {
 
-    public int port;
+    public InetSocketAddress address;
 
     @Override
     public void read(PacketBuffer buf) throws IOException {
-        this.port = buf.readInt();
+        this.address = new InetSocketAddress(buf.readString(), buf.readInt());
     }
 
     @Override
     public void write(PacketBuffer buf) throws IOException {
-        buf.writeInt(port);
+        buf.writeString(address.getHostName());
+        buf.writeInt(address.getPort());
     }
 }

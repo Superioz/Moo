@@ -7,8 +7,6 @@ import de.superioz.moo.protocol.common.Response;
 import de.superioz.moo.protocol.exception.MooOutputException;
 import de.superioz.moo.protocol.packets.PacketPlayerState;
 import de.superioz.moo.proxy.Thunder;
-import de.superioz.moo.proxy.common.ServerCache;
-import de.superioz.moo.proxy.common.ServerSpecificInfo;
 import net.md_5.bungee.api.config.ServerInfo;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.event.PlayerDisconnectEvent;
@@ -28,7 +26,7 @@ public class ProxyPlayerConnectListener implements Listener {
      */
     private void onServerConnectAsync(ServerConnectEvent event) {
         if(!event.getTarget().getName().contains("lobby")) return;
-        List<ServerInfo> l = ServerCache.getInstance().getServer("(lobby-[0-9]*)");
+        List<ServerInfo> l = Thunder.getServers("(lobby-[0-9]*)");
 
         // if no lobby server is registered
         if(l.isEmpty()) {
@@ -39,9 +37,8 @@ public class ProxyPlayerConnectListener implements Listener {
         ServerInfo lobbyFewest = null;
         int fewestPlayer = -1;
         for(ServerInfo serverInfo : l) {
-            ServerSpecificInfo serverSpecificInfo = ServerCache.getInstance().getCachedServer().get(serverInfo);
-            if(fewestPlayer == -1 || serverSpecificInfo.getOnlinePlayers() < fewestPlayer) {
-                fewestPlayer = serverSpecificInfo.getOnlinePlayers();
+            if(fewestPlayer == -1 || serverInfo.getPlayers().size() < fewestPlayer) {
+                fewestPlayer = serverInfo.getPlayers().size();
                 lobbyFewest = serverInfo;
             }
         }

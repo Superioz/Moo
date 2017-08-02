@@ -2,8 +2,6 @@ package de.superioz.moo.cloud.listeners;
 
 import de.superioz.moo.api.common.MooServer;
 import de.superioz.moo.cloud.Cloud;
-import de.superioz.moo.protocol.client.ClientType;
-import de.superioz.moo.protocol.common.PacketMessenger;
 import de.superioz.moo.protocol.packet.PacketAdapter;
 import de.superioz.moo.protocol.packet.PacketHandler;
 import de.superioz.moo.protocol.packets.PacketServerInfoUpdate;
@@ -25,9 +23,6 @@ public class PacketServerInfoUpdateListener implements PacketAdapter {
 
         // updates the server info
         server.updateInfo(packet.motd, packet.onlinePlayers, packet.maxPlayers);
-
-        // Go inform the bungee!
-        PacketMessenger.message(packet, ClientType.PROXY);
     }
 
 }

@@ -2,6 +2,8 @@ package de.superioz.moo.cloud.task;
 
 import de.superioz.moo.api.common.MooServer;
 import de.superioz.moo.cloud.Cloud;
+import de.superioz.moo.protocol.common.PacketMessenger;
+import de.superioz.moo.protocol.packets.PacketServerUnregister;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -36,9 +38,12 @@ public class ServerInfoCheckTask implements Runnable {
                 }
             }
 
-            // delete server if they timed out
+            // delete server if they timed out and send to bungee!
             if(!toDelete.isEmpty()) {
-                toDelete.forEach(uuid -> Cloud.getInstance().getMooProxy().getSpigotServers().remove(uuid));
+                toDelete.forEach(uuid -> {
+                    MooServer serverDeleted = Cloud.getInstance().getMooProxy().getSpigotServers().remove(uuid);
+                    PacketMessenger.message(new PacketServerUnregister(serverDeleted.getAddress()));
+                });
             }
         }
     }

@@ -15,7 +15,7 @@ public class ServerRegisterChangeListener implements PacketAdapter {
 
     @PacketHandler
     public void onServerUnregister(PacketServerUnregister packet) {
-        Thunder.unregisterServer(packet.getAddress().getHostName(), packet.port);
+        Thunder.unregisterServer(packet.address.getHostName(), packet.address.getPort());
     }
 
 }

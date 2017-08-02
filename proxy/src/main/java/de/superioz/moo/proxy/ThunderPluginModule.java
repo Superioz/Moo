@@ -101,7 +101,7 @@ public class ThunderPluginModule extends Module implements EventListener, MooPlu
                 new PacketRequestListener(), new PacketRespondListener(), new PermissionListener(),
                 new ProxyPingListener(), new PacketConfigListener(),
                 new ProxyPlayerLoginListener(), new ProxyPlayerConnectListener(),
-                new ServerRegisterChangeListener(), new PacketServerUpdateListener());
+                new ServerRegisterChangeListener());
         startup.registerTypes(new PlayerParamType());
     }
 

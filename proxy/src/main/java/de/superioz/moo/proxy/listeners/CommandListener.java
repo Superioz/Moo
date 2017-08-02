@@ -159,10 +159,8 @@ public class CommandListener extends CommandEventAdapter<CommandSender> implemen
         }
         // if the instance has NO children show a detailed command info
         else {
-            List<String> flags = StringUtil.getStringList(instance.getFlags(), s -> {
-                CommandFlag flag = instance.getFlagBase(s);
-                return "&f-" + flag.getLabel() + " &7" + flag.getDescription();
-            });
+            List<String> flags = StringUtil.getStringList(instance.getFlagBases(),
+                    flagBase -> "&f-" + flagBase.getLabel() + " &7" + flagBase.getDescription());
 
             // send command help as detailed list
             context.sendMessage(LanguageManager.get("help-command-leaf-header", instance.getLabel()));

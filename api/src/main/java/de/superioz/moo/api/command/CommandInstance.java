@@ -1,8 +1,12 @@
 package de.superioz.moo.api.command;
 
+import de.superioz.moo.api.command.context.CommandContext;
 import de.superioz.moo.api.command.help.ArgumentHelp;
 import de.superioz.moo.api.command.help.ArgumentHelper;
 import de.superioz.moo.api.command.param.ParamSet;
+import de.superioz.moo.api.command.tabcomplete.TabCompletion;
+import de.superioz.moo.api.command.tabcomplete.TabCompletor;
+import de.superioz.moo.api.common.RunAsynchronous;
 import de.superioz.moo.api.event.EventExecutor;
 import de.superioz.moo.api.events.CommandErrorEvent;
 import de.superioz.moo.api.events.CommandHelpEvent;
@@ -12,10 +16,6 @@ import de.superioz.moo.api.utils.StringUtil;
 import javafx.util.Pair;
 import lombok.Getter;
 import lombok.Setter;
-import de.superioz.moo.api.command.context.CommandContext;
-import de.superioz.moo.api.command.tabcomplete.TabCompletion;
-import de.superioz.moo.api.command.tabcomplete.TabCompletor;
-import de.superioz.moo.api.common.RunAsynchronous;
 
 import java.lang.reflect.Method;
 import java.util.*;
@@ -43,6 +43,7 @@ public class CommandInstance {
     private String description;
     private String permission;
     private List<String> flags;
+    private List<CommandFlag> flagBases = new ArrayList<>();
     private CommandUsage usage;
     private AllowedCommandSender commandTarget;
 
@@ -118,6 +119,7 @@ public class CommandInstance {
         // remove empties
         this.aliases = StringUtil.removeEmpties(aliases);
         this.flags = StringUtil.removeEmpties(flags);
+        this.flagBases = clearFlags();
 
         this.commandType = parentName.isEmpty() ? CommandType.ROOT : CommandType.SUB;
     }
@@ -225,22 +227,48 @@ public class CommandInstance {
     }
 
     /**
+     * Clears the flags by removing the descriptor and creating an initialised flag list
+     *
+     * @return The flag list
+     */
+    private List<CommandFlag> clearFlags() {
+        List<String> newFlags = new ArrayList<>();
+        List<CommandFlag> initialisedFlags = new ArrayList<>();
+
+        for(String s : flags) {
+            String[] split = s.split("\\[", 2);
+
+            String desc = split.length > 1 ? split[1].replace("]", "") : "";
+            String label = split[0];
+            newFlags.add(label);
+            initialisedFlags.add(new CommandFlag(label, desc));
+        }
+        this.flags = newFlags;
+        return initialisedFlags;
+    }
+
+    /**
      * Gets the flag base of given label flag
      *
      * @param label The label of the flag
      * @return The flag base
      */
     public CommandFlag getFlagBase(String label) {
-        CommandFlag flag = null;
         if(label.equals(HELP_FLAG)) return new CommandFlag(label, "");
-        for(String s : flags) {
-            if(s.startsWith(label)) {
-                String desc = s.contains("[") ? s.split("\\[", 2)[1].replace("]", "") : "";
+        for(CommandFlag f : flagBases) {
+            if(f.getLabel().equals(label)) {
+                return f;
+            }
+            /*if(s.startsWith(label)) {
+                String[] split = s.split("\\[", 2);
+
+                String desc = split.length > 1 ? split[1].replace("]", "") : "";
+                label = split[0];
                 flag = new CommandFlag(label, desc);
                 break;
-            }
+            }*/
         }
-        return flag;
+        return null;
     }
 
     /**

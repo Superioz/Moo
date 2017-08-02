@@ -16,6 +16,7 @@ import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.config.ServerInfo;
 
 import java.util.Map;
+import java.util.Set;
 import java.util.function.Consumer;
 
 public class MooCommand {
@@ -83,7 +84,7 @@ public class MooCommand {
     }
 
     @RunAsynchronous
-    @Command(label = "listserver", parent = "moo", flags = "r")
+    @Command(label = "listserver", parent = "moo", flags = {"r[raw]"})
     public void listserver(BungeeCommandContext context, ParamSet args) {
         Map<String, ServerInfo> serverMap = ProxyServer.getInstance().getServers();
 
@@ -94,6 +95,8 @@ public class MooCommand {
         }
 
         // send raw server information (not recommendend for a mass of servers)
+        // AT this point we could check if the servers are online but by default
+        // only online servers should be registered, so ..
         if(args.hasFlag("r")) {
             context.sendMessage("&6Server(s)&7: {"
                     + StringUtil.getListToString(serverMap.keySet(), "&8,&7", s -> s)
@@ -107,7 +110,13 @@ public class MooCommand {
                 .add(s.replaceAll("[1-9_.#\\- ]", "").toLowerCase(), serverInfo));
 
         for(String category : categoryServerMap.keySet()) {
-            context.sendMessage("&8# &c" + categoryServerMap.get(category).size() + " &7unique &f" + category + " &7server registered.");
+            Set<ServerInfo> serverInfoList = categoryServerMap.get(category);
+            int playersOnline = 0;
+            for(ServerInfo serverInfo : serverInfoList) {
+                playersOnline += serverInfo.getPlayers().size();
+            }
+
+            context.sendMessage("&8# &c" + categoryServerMap.get(category).size() + " &7unique &f" + category + " &7server registered. (" + playersOnline + " players online)");
         }
     }
 
