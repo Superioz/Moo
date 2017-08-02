@@ -17,7 +17,7 @@ public class ServerPacketListener implements PacketAdapter {
     public void onServerRequest(PacketServerRequest packet) {
         String serverType = packet.type;
 
-        Daemon.getInstance().getLogs().debug("Got request for " + packet.amount + "x " + serverType + " servers.");
+        Daemon.getInstance().getLogs().debug("Got request for " + packet.amount + "x " + serverType + " server(s).");
 
         // checks if the server type exists
         // if not send NOT_FOUND status

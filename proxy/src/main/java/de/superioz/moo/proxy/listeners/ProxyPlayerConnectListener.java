@@ -24,9 +24,44 @@ public class ProxyPlayerConnectListener implements Listener {
      *
      * @param event The event
      */
-    private void onServerConnectAsync(ServerConnectEvent event) {
-        if(!event.getTarget().getName().contains("lobby")) return;
-        List<ServerInfo> l = Thunder.getServers("(lobby-[0-9]*)");
+    /*private void onServerConnectAsync(ServerConnectEvent event) {
+        if(!event.getTarget().getName().contains(Thunder.LOBBY_NAME) &&
+                !event.getTarget().getName().contains(Thunder.LIMBO_NAME)){
+            return;
+        }
+        List<ServerInfo> l = Thunder.getServers(Thunder.LOBBY_REGEX);
+
+        // if no lobby server is registered
+        if(l.isEmpty()) {
+            System.out.println("No lobby server rip");
+            return;
+        }
+
+        // get lobby with fewest player online
+        ServerInfo lobbyFewest = null;
+        int fewestPlayer = -1;
+        for(ServerInfo serverInfo : l) {
+            if(fewestPlayer == -1 || serverInfo.getPlayers().size() < fewestPlayer) {
+                fewestPlayer = serverInfo.getPlayers().size();
+                lobbyFewest = serverInfo;
+            }
+        }
+        if(lobbyFewest == null) {
+            System.out.println("RIP");
+            // rip
+            return;
+        }
+
+        event.setTarget(lobbyFewest);
+    }*/
+
+    @EventHandler
+    public void onServerConnect(ServerConnectEvent event) {
+        if(!event.getTarget().getName().contains(Thunder.LOBBY_NAME) &&
+                !event.getTarget().getName().contains(Thunder.LIMBO_NAME)){
+            return;
+        }
+        List<ServerInfo> l = Thunder.getServers(Thunder.LOBBY_REGEX);
 
         // if no lobby server is registered
         if(l.isEmpty()) {
@@ -48,19 +83,6 @@ public class ProxyPlayerConnectListener implements Listener {
         }
 
         event.setTarget(lobbyFewest);
-    }
-
-    @EventHandler
-    public void onServerConnect(ServerConnectEvent event) {
-        Thunder.getInstance().getProxy().getScheduler().runAsync(Thunder.getInstance(), () -> {
-            try {
-                onServerConnectAsync(event);
-            }
-            catch(MooOutputException e) {
-                e.printStackTrace();
-                //
-            }
-        });
     }
 
     /**

@@ -176,6 +176,7 @@ public class DaemonInstance {
      */
     public Server startServer(String type, String host, int port, boolean autoSave, Consumer<Server> resultOfServerStart) throws IOException {
         Server server = createServer(type, autoSave);
+        if(server == null) return null;
         server.setServerResult(resultOfServerStart);
 
         // check if the folder is correct and therefore startable

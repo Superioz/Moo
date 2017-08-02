@@ -84,6 +84,10 @@ public class NetworkServer extends AbstractNetworkInstance {
                 connectedClients.remove(channel);
 
                 getHub().remove(remoteAddress);
+
+                if(client == null){
+                    getLogger().warning(ConsoleColor.DARK_RED + "Client shouldn't be null. (Address: " + remoteAddress + ")");
+                }
                 getLogger().info(ConsoleColor.RED.toString()
                         + client.getType() + " client disconnected [@" + remoteAddress.getAddress().getHostAddress() + "]");
             }

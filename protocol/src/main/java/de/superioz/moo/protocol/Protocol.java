@@ -31,7 +31,8 @@ public enum Protocol {
     SERVER_REGISTER(PacketServerRegister.class),
     SERVER_UNREGISTER(PacketServerUnregister.class),
     CONSOLE_OUTPUT(PacketConsoleOutput.class),
-    CONSOLE_INPUT(PacketConsoleInput.class)
+    CONSOLE_INPUT(PacketConsoleInput.class),
+    SERVER_INFO_UPDATE(PacketServerInfoUpdate.class),
     ;
 
     public static final int PROTOCOL_VERSION = values().length + 42;

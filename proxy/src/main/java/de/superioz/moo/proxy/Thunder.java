@@ -18,6 +18,10 @@ import java.util.regex.Pattern;
 @Getter
 public class Thunder extends Plugin implements EventListener {
 
+    public static final String LOBBY_NAME = "lobby";
+    public static final String LIMBO_NAME = "limbo";
+    public static final String LOBBY_REGEX = "(" + LOBBY_NAME + "-[0-9]*)|(" + LOBBY_NAME + ")";
+
     @Getter
     private static Thunder instance;
     @Getter

@@ -54,8 +54,7 @@ public class MainCommand {
         int amount = args.getInt(1, 1);
 
         Daemon.getInstance().getLogs().info("Starting server .. (" + amount + "x " + name + ")");
-        Daemon.getInstance().startServer(name, false, amount, server -> {
-        });
+        Daemon.getInstance().startServer(name, false, amount, null);
     }
 
     @Command(label = "stop")

@@ -43,12 +43,12 @@
             </resource>
         </resources>
         <plugins>
-            <plugin>
+            <!--<plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
                 <version>2.4</version>
                 <executions>
-                    <!-- Run shade goal on package phase -->
+                    &lt;!&ndash; Run shade goal on package phase &ndash;&gt;
                     <execution>
                         <phase>package</phase>
                         <goals>
@@ -57,17 +57,17 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <!--<artifactSet>
+                    &lt;!&ndash;<artifactSet>
                         <excludes>
                             <exclude>org.spigotmc:*</exclude>
                             <exclude>org.bukkit:*</exclude>
                             <exclude>net.md_5:*</exclude>
                         </excludes>
-                    </artifactSet>-->
+                    </artifactSet>&ndash;&gt;
                     <createDependencyReducedPom>false</createDependencyReducedPom>
                     <minimizeJar>true</minimizeJar>
                 </configuration>
-            </plugin>
+            </plugin>-->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>

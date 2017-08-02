@@ -129,8 +129,8 @@ public class Server extends ServerPattern {
      * Runs the server task and returns if the server has been started
      * (If the server is already started, the result is false)
      *
-     * @param host      The host
-     * @param port      The port
+     * @param host The host
+     * @param port The port
      * @return The result
      */
     private boolean run(String host, int port) {
@@ -139,12 +139,12 @@ public class Server extends ServerPattern {
         }
         catch(MooOutputException e) {
             e.printStackTrace();
-            serverResult.accept(null);
+            if(serverResult != null) serverResult.accept(null);
             return false;
         }
 
         if(online || !isStartable()) {
-            serverResult.accept(null);
+            if(serverResult != null) serverResult.accept(null);
             return false;
         }
         this.host = host;
@@ -164,7 +164,7 @@ public class Server extends ServerPattern {
         catch(IOException e) {
             Daemon.getInstance().getLogs().debug("Error during server process " + getName() + "!", e);
             process.destroy();
-            serverResult.accept(null);
+            if(serverResult != null) serverResult.accept(null);
             return false;
         }
 
@@ -183,11 +183,15 @@ public class Server extends ServerPattern {
 
                 //
                 try {
-                    //PacketMessenger.message(new PacketServerDone(PacketServerDone.Type.START, getUuid(), getName(), getPort()));
-                    serverResult.accept(this);
+                    if(serverResult == null) {
+                        PacketMessenger.message(new PacketServerDone(PacketServerDone.Type.START, getUuid(), getName(), getPort()));
+                    }
+                    else {
+                        serverResult.accept(this);
+                    }
                 }
                 catch(MooOutputException e) {
-                    serverResult.accept(null);
+                    if(serverResult != null) serverResult.accept(null);
                 }
             }
         }, s -> {
