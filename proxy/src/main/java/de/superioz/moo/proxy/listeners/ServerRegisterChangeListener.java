@@ -10,7 +10,7 @@ public class ServerRegisterChangeListener implements PacketAdapter {
 
     @PacketHandler
     public void onServerRegister(PacketServerRegister packet) {
-        Thunder.registerServer(packet.type, packet.getAddress().getHostName(), packet.port);
+        Thunder.registerServer(packet.type, packet.host, packet.port);
     }
 
     @PacketHandler

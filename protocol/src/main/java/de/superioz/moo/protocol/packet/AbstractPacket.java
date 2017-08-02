@@ -202,7 +202,6 @@ public abstract class AbstractPacket {
 
         // loop through map and apply them onto the instance
         keyFieldMap.forEach((s1, s2) -> {
-            System.out.println(s1 + ": '" + s2 + "'");
             Field f = ReflectionUtil.getFieldRecursively(s1, pClass);
             if(f == null) return;
 

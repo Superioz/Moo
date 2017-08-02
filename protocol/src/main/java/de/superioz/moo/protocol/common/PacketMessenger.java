@@ -54,23 +54,23 @@ public class PacketMessenger {
      * @see #transfer(Channel, AbstractPacket, Class, Consumer[])
      * @see #transfer(AbstractPacket, Class, Consumer[])
      */
-    public static void message(AbstractPacket packet, Channel... channels) {
+    public static <P extends AbstractPacket> void message(P packet, Channel... channels) {
         PacketMessenger.create().target(channels).send(packet);
     }
 
-    public static void message(AbstractPacket packet, MooClient... clients) {
+    public static <P extends AbstractPacket> void message(P packet, MooClient... clients) {
         PacketMessenger.create().target(clients).send(packet);
     }
 
-    public static void message(AbstractPacket packet, List<MooClient> clients) {
+    public static <P extends AbstractPacket> void message(P packet, List<MooClient> clients) {
         PacketMessenger.create().target(clients.toArray(new MooClient[]{})).send(packet);
     }
 
-    public static void message(AbstractPacket packet, ClientType... types) {
+    public static <P extends AbstractPacket> void message(P packet, ClientType... types) {
         PacketMessenger.create().target(types).send(packet);
     }
 
-    public static void message(AbstractPacket packet) {
+    public static <P extends AbstractPacket> void message(P packet) {
         PacketMessenger.create().send(packet);
     }
 
@@ -81,23 +81,23 @@ public class PacketMessenger {
      * @param consumer The consumer if a response comes back
      * @param channels The channels to be receiving the packets
      */
-    public static void message(AbstractPacket packet, Consumer<Response> consumer, Channel... channels) {
+    public static <P extends AbstractPacket> void message(P packet, Consumer<Response> consumer, Channel... channels) {
         PacketMessenger.create().target(channels).send(packet, consumer);
     }
 
-    public static void message(AbstractPacket packet, Consumer<Response> consumer, MooClient... clients) {
+    public static <P extends AbstractPacket> void message(P packet, Consumer<Response> consumer, MooClient... clients) {
         PacketMessenger.create().target(clients).send(packet, consumer);
     }
 
-    public static void message(AbstractPacket packet, Consumer<Response> consumer, List<MooClient> clients) {
+    public static <P extends AbstractPacket> void message(P packet, Consumer<Response> consumer, List<MooClient> clients) {
         PacketMessenger.create().target(clients.toArray(new MooClient[]{})).send(packet, consumer);
     }
 
-    public static void message(AbstractPacket packet, Consumer<Response> consumer, ClientType... types) {
+    public static <P extends AbstractPacket> void message(P packet, Consumer<Response> consumer, ClientType... types) {
         PacketMessenger.create().target(types).send(packet, consumer);
     }
 
-    public static void message(AbstractPacket packet, Consumer<Response> consumer) {
+    public static <P extends AbstractPacket> void message(P packet, Consumer<Response> consumer) {
         PacketMessenger.create().send(packet, consumer);
     }
 
@@ -111,19 +111,19 @@ public class PacketMessenger {
      * @param <R>                The response type
      * @return The response
      */
-    public static <R> R transfer(Channel channel, AbstractPacket packet, Class<? extends AbstractPacket> responseScopeClass, Consumer<R>... consumers) {
+    public static <R, P extends AbstractPacket> R transfer(Channel channel, P packet, Class<? extends AbstractPacket> responseScopeClass, Consumer<R>... consumers) {
         return PacketMessenger.create().target(channel).responseScope(responseScopeClass).sync().send(packet, consumers);
     }
 
-    public static <R> R transfer(Channel channel, AbstractPacket packet, ResponseScope scope, Consumer<R>... consumers) {
+    public static <R, P extends AbstractPacket> R transfer(Channel channel, P packet, ResponseScope scope, Consumer<R>... consumers) {
         return PacketMessenger.create().target(channel).responseScope(scope).sync().send(packet, consumers);
     }
 
-    public static <R> R transfer(Channel channel, AbstractPacket packet, Consumer<R>... consumers) {
+    public static <R, P extends AbstractPacket> R transfer(Channel channel, P packet, Consumer<R>... consumers) {
         return PacketMessenger.create().target(channel).sync().send(packet, consumers);
     }
 
-    public static <R> R transferToResponse(Channel channel, AbstractPacket packet, Consumer<R>... consumers) {
+    public static <R, P extends AbstractPacket> R transferToResponse(Channel channel, P packet, Consumer<R>... consumers) {
         return PacketMessenger.create().target(channel).responseScope(ResponseScope.RESPONSE).sync().send(packet, consumers);
     }
 
@@ -136,19 +136,19 @@ public class PacketMessenger {
      * @param responseScopeClass The scope class
      * @param <R>                The type
      */
-    public static <R> void transfer(AbstractPacket packet, Class<? extends AbstractPacket> responseScopeClass, Consumer<R>... consumer) {
+    public static <R, P extends AbstractPacket> void transfer(P packet, Class<? extends AbstractPacket> responseScopeClass, Consumer<R>... consumer) {
         PacketMessenger.create().responseScope(responseScopeClass).send(packet, consumer);
     }
 
-    public static <R> void transfer(AbstractPacket packet, ResponseScope scope, Consumer<R>... consumer) {
+    public static <R, P extends AbstractPacket> void transfer(P packet, ResponseScope scope, Consumer<R>... consumer) {
         PacketMessenger.create().responseScope(scope).send(packet, consumer);
     }
 
-    public static <R> void transfer(AbstractPacket packet, Consumer<R>... consumer) {
+    public static <R, P extends AbstractPacket> void transfer(P packet, Consumer<R>... consumer) {
         PacketMessenger.create().send(packet, consumer);
     }
 
-    public static void transferToResponse(AbstractPacket packet, Consumer<Response>... consumer) {
+    public static <P extends AbstractPacket> void transferToResponse(P packet, Consumer<Response>... consumer) {
         PacketMessenger.create().responseScope(ResponseScope.RESPONSE).send(packet, consumer);
     }
 
@@ -333,7 +333,7 @@ public class PacketMessenger {
      */
     public <R> R send(AbstractPacket packet, Consumer<R>... consumers) {
         // automatically copying packet for forwarding
-        if(packet.getStamp() != 0) {
+        if(packet.getStamp() != -1) {
             packet = packet.deepCopy();
         }
 

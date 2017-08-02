@@ -20,7 +20,7 @@ public class DaemonServerListener implements PacketAdapter {
 
     @PacketHandler
     public void onServerDone(PacketServerDone packet) {
-        String ip = packet.getAddress() + "[:" + packet.port + "]";
+        String ip = packet.getAddress().getHostName() + ":" + packet.port;
         PacketMessenger.message(packet, ClientType.PROXY);
 
         // daemon started a server
@@ -29,7 +29,8 @@ public class DaemonServerListener implements PacketAdapter {
             Cloud.getLogger().debug("Register server " + ip + " with type '" + packet.type + "' ..");
 
             PacketMessenger.message(new PacketServerRegister(packet.type, packet.getAddress().getHostName(), packet.port), ClientType.PROXY);
-            Cloud.getInstance().getMooProxy().getSpigotServers().put(packet.uuid, new MooServer(packet.uuid, packet.getAddress(), packet.type));
+            Cloud.getInstance().getMooProxy().getSpigotServers().put(packet.uuid,
+                    new MooServer(packet.uuid, new InetSocketAddress(packet.getAddress().getHostName(), packet.port), packet.type));
         });
 
         // daemon stopped a server

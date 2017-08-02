@@ -92,7 +92,7 @@ public class NettyModule extends Module implements EventListener {
     @EventHandler
     public void onServerState(ServerStateEvent stateEvent) {
         if(stateEvent.getState() == NetworkServer.State.STARTED) {
-            Cloud.getLogger().info(ConsoleColor.LIGHT_PURPLE
+            Cloud.getLogger().info(ConsoleColor.WHITE
                     + "Netty master started [" + server.getHost() + ":" + server.getPort() + "]");
         }
     }

@@ -242,4 +242,20 @@ public class Logs {
         debug(msg, null);
     }
 
+    /**
+     * Prints a debug message but as info level
+     *
+     * @param msg The message
+     * @param thr Exception?
+     */
+    public void debugInfo(String msg, Throwable thr) {
+        if(logger != null && isDebugMode()) {
+            logger.log(Level.INFO, msg, thr);
+        }
+    }
+
+    public void debugInfo(String msg) {
+        debugInfo(msg, null);
+    }
+
 }

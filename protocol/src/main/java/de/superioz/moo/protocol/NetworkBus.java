@@ -69,8 +69,8 @@ public class NetworkBus {
         if(packet instanceof MultiPacket) {
             final ResponseStatus[] status = new ResponseStatus[]{null};
             List<AbstractPacket> packetList = ((MultiPacket<AbstractPacket>) packet).getPacketList();
-            /*handle.getLogger().info("Received multi packet(" + ((MultiPacket) packet).getPacketName() + "). " +
-                    "Divided it into " + packetList.size() + " sub-packets.");*/
+            handle.getLogger().info("Received multi packet(" + ((MultiPacket) packet).getPacketName() + "). " +
+                    "Divided it into " + packetList.size() + " sub-packets.");
 
             for(AbstractPacket subPacket : packetList) {
                 subPacket.interceptRespond(packet1 -> {

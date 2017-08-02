@@ -25,7 +25,7 @@ public class MultiPacket<P extends AbstractPacket> extends AbstractPacket {
     private Class<P> pClass;
 
     public MultiPacket(List<P> packets) {
-        if(packets.size() != 0) {
+        if(packets.size() > 0) {
             pClass = (Class<P>) packets.get(0).getClass();
         }
         this.packetList = packets;

@@ -36,11 +36,23 @@ public class MooClientConnectedListener implements EventListener {
                 for(MooServer server : Cloud.getInstance().getMooProxy().getSpigotServers().values()) {
                     list.add(new PacketServerRegister(server.getType(), server.getAddress().getHostName(), server.getAddress().getPort()));
                 }
-                PacketMessenger.message(new MultiPacket<>(list), client);
+
+                Cloud.getLogger().debug("Send already registered server to proxy (" + list.size() + "x) ..");
+                MultiPacket<PacketServerRegister> multiPacket = new MultiPacket<>(list);
+                PacketMessenger.message(multiPacket, client);
+            }
+        });
+
+        Reaction.react(client.getType(), new Reactor<ClientType>(ClientType.DAEMON) {
+            @Override
+            public void invoke() {
+                // if this is not the first daemon, rip
+                if(Cloud.getInstance().getHub().getClients(ClientType.DAEMON).size() > 1) {
+                    return;
+                }
 
                 // start predefined servers
                 // ONLY if the serverlist inside config is not empty, nor null
-                // AND if a daemon is connected (which will be checked automatically)
                 List<String> predefinedServers = Cloud.getInstance().getConfig().get("predefined-servers");
                 if(predefinedServers != null && !predefinedServers.isEmpty()) {
                     for(String server : predefinedServers) {

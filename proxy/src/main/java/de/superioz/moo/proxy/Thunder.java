@@ -42,11 +42,13 @@ public class Thunder extends Plugin implements EventListener {
         this.moduleRegistry = new ModuleRegistry(logs);
         this.moduleRegistry.register(pluginModule);
         this.config = pluginModule.getConfig();
+        logs.setDebugMode(config.get("debug"));
+        logs.info("Debug Mode is " + (logs.isDebugMode() ? "ON" : "off"));
 
-        // we don't want pre-defined servers!
+        // we don't want pre-defined servers! dk if its event possible to block them completely :thinking:
         int preDefinedServerSize = ProxyServer.getInstance().getServers().size();
         if(preDefinedServerSize != 0) {
-            logs.warning("There is " + preDefinedServerSize + " server predefined which could lead to errors!");
+            logs.info("There is " + preDefinedServerSize + " server predefined which could lead to errors!");
         }
     }
 
@@ -81,7 +83,7 @@ public class Thunder extends Plugin implements EventListener {
         int similar = Thunder.getServers("(" + name + "-[0-9]*|" + name + ")").size();
         name = similar == 0 ? name : name + "-" + (similar + 1);
 
-        getLogs().debug("Register server '" + name + "'(" + host + ":" + port + ") ..");
+        getLogs().debugInfo("Register server '" + name + "'(" + host + ":" + port + ") ..");
 
         return Thunder.registerServer(name, host, port, "", false);
     }
@@ -110,7 +112,7 @@ public class Thunder extends Plugin implements EventListener {
      * @return The server
      */
     public static ServerInfo unregisterServer(String host, int port) {
-        getLogs().debug("Unregister server (" + host + ":" + port + ") ..");
+        getLogs().debugInfo("Unregister server (" + host + ":" + port + ") ..");
 
         ServerInfo info = null;
         for(ServerInfo server : ProxyServer.getInstance().getServers().values()) {

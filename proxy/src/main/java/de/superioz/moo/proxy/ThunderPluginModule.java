@@ -108,7 +108,7 @@ public class ThunderPluginModule extends Module implements EventListener, MooPlu
     @EventHandler
     public void onCommandRegister(CommandRegisterEvent event) {
         CommandInstance command = event.getInstance();
-        Thunder.getLogs().debug("Register command: " + command.getLabel());
+        Thunder.getLogs().debugInfo("Register command: " + command.getLabel());
 
         Command bungeeCommand = new Command(command.getLabel(), command.getPermission(),
                 command.getAliases().toArray(new String[]{})) {

@@ -44,7 +44,6 @@ public final class Functionality {
 
     private boolean checkParameter(Object... params) {
         if(params.length != parameterTypes.length){
-            System.out.println("RIP 1");
             return false;
         }
 
@@ -54,7 +53,6 @@ public final class Functionality {
 
             if(!o.getClass().isAssignableFrom(c)) {
                 System.out.println(o.getClass() + "; " + c);
-                System.out.println("RIP 2");
                 return false;
             }
         }

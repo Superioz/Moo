@@ -122,6 +122,8 @@ public class Cloud implements EventListener {
 
         this.commandTerminal.stop();
         logger.disable();
+
+        System.exit(0);
     }
 
     /**
