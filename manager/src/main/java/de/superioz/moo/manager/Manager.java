@@ -43,7 +43,7 @@ public class Manager extends Application {
         // get root pane
         Pane root = null;
         try {
-            root = FXMLLoader.load(getClass().getResource("/fxml/main.fxml"));
+            root = FXMLLoader.load(getClass().getResource("/main.fxml"));
         }
         catch(IOException e) {
             e.printStackTrace();

@@ -17,8 +17,8 @@
    <children>
       <AnchorPane fx:id="homePane" layoutY="88.0" prefHeight="593.0" prefWidth="896.0" style="-fx-background-color: white;" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="87.0">
          <children>
-            <TextField fx:id="connectionStatus" editable="false" focusTraversable="false" layoutX="13.0" layoutY="6.0" prefHeight="27.0" prefWidth="506.0" styleClass="textField" stylesheets="@../css/home_tab.css" text="Du bist nicht mit einem Server verbunden. Benutze &quot;Connection &gt; Connect ..&quot;" AnchorPane.leftAnchor="13.0" AnchorPane.topAnchor="6.0" />
-            <TextArea fx:id="console" disable="true" editable="false" layoutX="13.0" layoutY="36.0" prefHeight="545.0" prefWidth="865.0" styleClass="textArea" stylesheets="@../css/home_tab.css" wrapText="true" AnchorPane.bottomAnchor="12.0" AnchorPane.leftAnchor="13.0" AnchorPane.rightAnchor="12.0" AnchorPane.topAnchor="36.0" />
+            <TextField fx:id="connectionStatus" editable="false" focusTraversable="false" layoutX="13.0" layoutY="6.0" prefHeight="27.0" prefWidth="506.0" styleClass="textField" stylesheets="@home_tab.css" text="Du bist nicht mit einem Server verbunden. Benutze &quot;Connection &gt; Connect ..&quot;" AnchorPane.leftAnchor="13.0" AnchorPane.topAnchor="6.0" />
+            <TextArea fx:id="console" disable="true" editable="false" layoutX="13.0" layoutY="36.0" prefHeight="545.0" prefWidth="865.0" styleClass="textArea" stylesheets="@home_tab.css" wrapText="true" AnchorPane.bottomAnchor="12.0" AnchorPane.leftAnchor="13.0" AnchorPane.rightAnchor="12.0" AnchorPane.topAnchor="36.0" />
          </children></AnchorPane>
       <AnchorPane fx:id="serverPane" layoutY="88.0" prefHeight="593.0" prefWidth="896.0" style="-fx-background-color: white;" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="87.0">
          <children>
@@ -26,7 +26,7 @@
                <graphic>
                   <ImageView>
                      <image>
-                        <Image url="@../add.png" />
+                        <Image url="@add.png" />
                      </image>
                   </ImageView>
                </graphic>
@@ -35,34 +35,34 @@
                <graphic>
                   <ImageView>
                      <image>
-                        <Image url="@../reload.png" />
+                        <Image url="@reload.png" />
                      </image>
                   </ImageView>
                </graphic>
             </Button>
             <Separator layoutX="14.0" layoutY="70.0" prefHeight="3.0" prefWidth="865.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="13.0" AnchorPane.topAnchor="70.0" />
-            <ScrollPane fx:id="scrollPane" disable="true" layoutY="78.0" prefHeight="515.0" prefWidth="892.0" stylesheets="@../css/server_pane.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="78.0" />
+            <ScrollPane fx:id="scrollPane" disable="true" layoutY="78.0" prefHeight="515.0" prefWidth="892.0" stylesheets="@server_pane.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="78.0" />
          </children></AnchorPane>
       <AnchorPane fx:id="consolePane" layoutX="10.0" layoutY="98.0" prefHeight="593.0" prefWidth="896.0" style="-fx-background-color: white;" visible="false" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="87.0">
          <children>
-            <TextArea fx:id="mooConsole" disable="true" editable="false" layoutX="13.0" layoutY="9.0" prefHeight="545.0" prefWidth="865.0" styleClass="textArea" stylesheets="@../css/home_tab.css" wrapText="true" />
+            <TextArea fx:id="mooConsole" disable="true" editable="false" layoutX="13.0" layoutY="9.0" prefHeight="545.0" prefWidth="865.0" styleClass="textArea" stylesheets="@home_tab.css" wrapText="true" />
             <TextField fx:id="commandInput" layoutX="13.0" layoutY="561.0" prefHeight="25.0" prefWidth="790.0" promptText="Execute command .." />
             <Button fx:id="commandSend" layoutX="817.0" layoutY="561.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="61.0">
                <graphic>
                   <ImageView>
                      <image>
-                        <Image url="@../send.png" />
+                        <Image url="@send.png" />
                      </image>
                   </ImageView>
                </graphic>
             </Button>
          </children></AnchorPane>
       <Separator layoutY="87.0" prefHeight="3.0" prefWidth="896.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
-      <Button fx:id="serverButton" disable="true" layoutX="86.0" layoutY="23.0" mnemonicParsing="false" prefHeight="66.0" prefWidth="72.0" stylesheets="@../css/button_bar.css" AnchorPane.topAnchor="23.0">
+      <Button fx:id="serverButton" disable="true" layoutX="86.0" layoutY="23.0" mnemonicParsing="false" prefHeight="66.0" prefWidth="72.0" stylesheets="@button_bar.css" AnchorPane.topAnchor="23.0">
          <graphic>
             <ImageView>
                <image>
-                  <Image url="@../server.png" />
+                  <Image url="@server.png" />
                </image>
             </ImageView>
          </graphic>
@@ -70,11 +70,11 @@
             <Tooltip text="Serverlist" />
          </tooltip>
       </Button>
-      <Button fx:id="consoleButton" disable="true" layoutX="158.0" layoutY="23.0" mnemonicParsing="false" prefHeight="66.0" prefWidth="72.0" stylesheets="@../css/button_bar.css" AnchorPane.topAnchor="23.0">
+      <Button fx:id="consoleButton" disable="true" layoutX="158.0" layoutY="23.0" mnemonicParsing="false" prefHeight="66.0" prefWidth="72.0" stylesheets="@button_bar.css" AnchorPane.topAnchor="23.0">
          <graphic>
             <ImageView>
                <image>
-                  <Image url="@../terminal.png" />
+                  <Image url="@terminal.png" />
                </image>
             </ImageView>
          </graphic>
@@ -82,11 +82,11 @@
             <Tooltip text="Console" />
          </tooltip>
       </Button>
-      <Button fx:id="homeButton" layoutX="14.0" layoutY="23.0" mnemonicParsing="false" prefHeight="66.0" prefWidth="72.0" stylesheets="@../css/button_bar.css" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="23.0">
+      <Button fx:id="homeButton" layoutX="14.0" layoutY="23.0" mnemonicParsing="false" prefHeight="66.0" prefWidth="72.0" stylesheets="@button_bar.css" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="23.0">
          <graphic>
             <ImageView>
                <image>
-                  <Image url="@../home.png" />
+                  <Image url="@home.png" />
                </image>
             </ImageView>
          </graphic>
