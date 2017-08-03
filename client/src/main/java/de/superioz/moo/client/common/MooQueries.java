@@ -226,7 +226,9 @@ public final class MooQueries {
         if(target.group.equalsIgnoreCase(newGroup.name)) {
             return new Response(ResponseStatus.CONFLICT).getStatus();
         }
-        return modifyPlayerData(target.uuid, DbQueryUnbaked.newInstance(DbModifier.PLAYER_GROUP, newGroup.name));
+        return modifyPlayerData(target.uuid,
+                DbQueryUnbaked.newInstance(DbModifier.PLAYER_GROUP, newGroup.name)
+                        .equate(DbModifier.PLAYER_RANK, newGroup.rank));
     }
 
     /**

@@ -1,4 +1,4 @@
-package de.superioz.moo.proxy.commands.punishment;
+package de.superioz.moo.proxy.commands;
 
 import de.superioz.moo.api.command.Command;
 import de.superioz.moo.api.command.help.ArgumentHelp;
