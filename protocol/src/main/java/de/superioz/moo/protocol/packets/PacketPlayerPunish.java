@@ -62,28 +62,6 @@ public class PacketPlayerPunish extends AbstractPacket {
         );
     }
 
-    /**
-     * Constructor for a mute punishment
-     *
-     * @param executor    The executor (null if console; uuid if player)
-     * @param target      The target to be banned (name or uuid as string)
-     * @param banSubType  The sub type of the ban
-     * @param reason      The reason
-     * @param muteMessage The format of the ban message
-     */
-    public PacketPlayerPunish(UUID executor, String target, BanSubType banSubType, String reason, String muteMessage) {
-        this(executor + "", target, Type.MUTE, Arrays.asList(
-                new Ban(executor, banSubType, reason).toString(), muteMessage)
-        );
-    }
-
-    public PacketPlayerPunish(UUID executor, String target, BanSubType banSubType, String reason,
-                              long duration, String muteMessage) {
-        this(executor + "", target, Type.MUTE, Arrays.asList(
-                new Ban(executor, banSubType, reason, duration).toString(), muteMessage)
-        );
-    }
-
     @Override
     public void read(PacketBuffer buf) throws IOException {
         this.executor = buf.readString();
@@ -108,7 +86,6 @@ public class PacketPlayerPunish extends AbstractPacket {
 
         KICK,
         BAN,
-        MUTE,
         UNKNOWN
 
     }

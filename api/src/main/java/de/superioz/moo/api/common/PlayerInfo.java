@@ -30,12 +30,6 @@ public class PlayerInfo {
     private Ban currentBan;
 
     /**
-     * His current chatban (null=not muted]
-     */
-    @Setter
-    private Ban currentChatBan;
-
-    /**
      * Every archived ban of this player
      */
     private List<Ban> archivedBans;
@@ -64,28 +58,21 @@ public class PlayerInfo {
         }
 
         // ban status
-        String currentBan = packetData.get(2);
+        String currentBan = packetData.get(1);
         Ban ban = null;
         if(!currentBan.isEmpty()) {
             ban = ReflectionUtil.deserialize(currentBan, Ban.class);
         }
 
-        // ban status
-        String currentChatBan = packetData.get(3);
-        Ban chatBan = null;
-        if(!currentChatBan.isEmpty()) {
-            chatBan = ReflectionUtil.deserialize(currentChatBan, Ban.class);
-        }
-
         // former bans
-        String archivedBansString = packetData.get(4);
+        String archivedBansString = packetData.get(2);
         List<Ban> archivedBans = new ArrayList<>();
         if(!archivedBansString.isEmpty()) {
             for(String s : archivedBansString.split(StringUtil.SEPERATOR_2)) {
                 archivedBans.add(ReflectionUtil.deserialize(s, Ban.class));
             }
         }
-        return new PlayerInfo(data, ban, chatBan, archivedBans);
+        return new PlayerInfo(data, ban, archivedBans);
     }
 
 }

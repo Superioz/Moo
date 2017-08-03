@@ -46,10 +46,9 @@ public class PunishInfoCommand {
 
         // get current ban/mute
         Ban currentBan = playerInfo.getCurrentBan();
-        Ban currentChatBan = playerInfo.getCurrentChatBan();
 
         // if he is not banned and muted
-        if(currentBan == null && currentChatBan == null) {
+        if(currentBan == null) {
             context.sendMessage(LanguageManager.get("punishment-player-is-nothing", playerInfo.getName()));
             return;
         }
@@ -79,32 +78,6 @@ public class PunishInfoCommand {
         }
         else {
             context.sendMessage(LanguageManager.get("punishment-player-isnt-banned", playerInfo.getName()));
-        }
-
-        // if the mute is not null get the executor as well and send info
-        // otherwise send (not-muted)
-        if(currentChatBan != null) {
-            String muteExecutorName = CommandContext.CONSOLE_NAME;
-            UniqueIdBuf muteExecutor = MooQueries.getInstance().getUniqueIdBuffer(currentChatBan.by);
-            if(muteExecutor != null) muteExecutorName = muteExecutor.name;
-
-            // values for formatting
-            long current = System.currentTimeMillis();
-            String start = TimeUtil.getFormat(currentBan.start);
-            BanSubType subType = currentBan.getSubType();
-            String typeColor = subType.getBanType() == BanType.GLOBAL ? "&c" : "&9";
-            String end = TimeUtil.getFormat(current + currentBan.duration);
-
-            context.sendEventMessage(LanguageManager.get("punishment-mute-info",
-                    start, typeColor + subType.getName(),
-                    "Details",
-                    start,
-                    end,
-                    typeColor + currentBan.reason,
-                    BungeeTeamChat.getInstance().getColor(muteExecutor == null ? null : muteExecutor.uuid) + muteExecutorName));
-        }
-        else {
-            context.sendMessage(LanguageManager.get("punishment-player-isnt-muted", playerInfo.getName()));
         }
     }
 

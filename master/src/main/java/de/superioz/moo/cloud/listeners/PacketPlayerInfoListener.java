@@ -58,12 +58,7 @@ public class PacketPlayerInfoListener implements PacketAdapter {
 
         // get the current ban
         Ban ban = CloudCollections.bans().get(uuid);
-
         respond.add(ban != null ? ban.toString() : "");
-
-        // get the current chatBan
-        Ban chatBan = CloudCollections.mutes().get(uuid);
-        respond.add(chatBan != null ? chatBan.toString() : "");
 
         // get former bans
         List<Ban> archivedBans =

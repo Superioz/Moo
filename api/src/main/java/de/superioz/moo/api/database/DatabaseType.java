@@ -15,7 +15,6 @@ public enum DatabaseType {
     PLAYER(PlayerData.class, "players"),
     GROUP(Group.class, "groups"),
     BAN(Ban.class, "bans"),
-    MUTE(Ban.class, "mutes"),
     BAN_ARCHIVE(Ban.class, "ban-archive"),
     UUID_BUFFER(UniqueIdBuf.class, "uuid-buffer");
 

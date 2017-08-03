@@ -9,7 +9,6 @@ import de.superioz.moo.api.util.Validation;
 import de.superioz.moo.cloud.events.MooPlayerBanEvent;
 import de.superioz.moo.cloud.database.CloudCollections;
 import de.superioz.moo.cloud.events.MooPlayerKickEvent;
-import de.superioz.moo.cloud.events.MooPlayerMuteEvent;
 import de.superioz.moo.protocol.common.ResponseStatus;
 import de.superioz.moo.protocol.packet.PacketAdapter;
 import de.superioz.moo.protocol.packet.PacketHandler;
@@ -56,12 +55,6 @@ public class PacketPlayerPunishListener implements PacketAdapter {
                     public void invoke() {
                         // the player needs to be kicked
                         EventExecutor.getInstance().execute(new MooPlayerKickEvent(packet, finalData));
-                    }
-                }, new Reactor<PacketPlayerPunish.Type>(PacketPlayerPunish.Type.MUTE) {
-                    @Override
-                    public void invoke() {
-                        // the player needs to be muted
-                        EventExecutor.getInstance().execute(new MooPlayerMuteEvent(packet, finalData));
                     }
                 });
     }

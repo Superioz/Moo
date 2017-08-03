@@ -17,10 +17,6 @@ public class CloudCollections {
         return Cloud.getInstance().getDatabaseCollection(DatabaseType.BAN);
     }
 
-    public static MuteCollection mutes() {
-        return Cloud.getInstance().getDatabaseCollection(DatabaseType.MUTE);
-    }
-
     public static BanArchiveCollection banArchive() {
         return Cloud.getInstance().getDatabaseCollection(DatabaseType.BAN_ARCHIVE);
     }

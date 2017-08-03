@@ -48,7 +48,6 @@ public class WhoisCommand {
 
         // get current informations
         Ban currentBan = playerInfo.getCurrentBan();
-        Ban currentChatBan = playerInfo.getCurrentChatBan();
         PlayerData data = playerInfo.getData();
 
         // get rough information about the player
@@ -81,7 +80,7 @@ public class WhoisCommand {
                         .addTranslated("playerinfo-entry-totalonline", totalOnline)
                         .addTranslated("playerinfo-entry-onlinestatus", onlineStatus)
                         .addTranslated("playerinfo-entry-banpoints", banPoints)
-                        .addTranslated("playerinfo-entry-banstatus", currentBan != null, currentChatBan != null));
+                        .addTranslated("playerinfo-entry-banstatus", currentBan != null));
     }
 
 }

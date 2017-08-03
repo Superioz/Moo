@@ -2,7 +2,6 @@ package de.superioz.moo.client.common;
 
 import de.superioz.moo.api.common.PlayerInfo;
 import de.superioz.moo.api.common.punishment.BanSubType;
-import de.superioz.moo.api.common.punishment.BanType;
 import de.superioz.moo.api.database.*;
 import de.superioz.moo.api.database.object.Ban;
 import de.superioz.moo.api.database.object.Group;
@@ -106,9 +105,6 @@ public final class MooQueries {
                 if(info.getCurrentBan() == null) {
                     if(!checkBan(info.getCurrentBan())) info.setCurrentBan(null);
 
-                }
-                if(info.getCurrentChatBan() == null) {
-                    if(!checkBan(info.getCurrentChatBan())) info.setCurrentChatBan(null);
                 }
             }
             return info;
@@ -278,8 +274,7 @@ public final class MooQueries {
     public boolean checkBan(Ban ban) {
         if(ban == null) return false;
         if(ban.until() <= System.currentTimeMillis()) {
-            if(ban.getSubType().getBanType() == BanType.CHAT) archiveChatBan(ban);
-            else archiveBan(ban);
+            archiveBan(ban);
             return false;
         }
         return true;
@@ -303,27 +298,6 @@ public final class MooQueries {
     }
 
     public Ban getBan(UUID uuid) {
-        return getBan(uuid.toString());
-    }
-
-    /**
-     * Gets the mute of the player from playerName
-     *
-     * @param playerName The playerName
-     * @return The respond of the request
-     */
-    public Ban getMute(String playerName) {
-        try {
-            Ban mute = Queries.get(DatabaseType.MUTE, playerName);
-            if(!checkBan(mute)) return null;
-            return mute;
-        }
-        catch(MooInputException e) {
-            return null;
-        }
-    }
-
-    public Ban getMute(UUID uuid) {
         return getBan(uuid.toString());
     }
 
@@ -354,16 +328,6 @@ public final class MooQueries {
     public void archiveBan(Ban ban) {
         Queries.delete(DatabaseType.BAN, ban.banned);
         Queries.create(DatabaseType.BAN, ban);
-    }
-
-    /**
-     * Its the same as {@link #archiveBan(Ban)} but different
-     *
-     * @param chatBan The chat ban
-     */
-    public void archiveChatBan(Ban chatBan) {
-        Queries.delete(DatabaseType.MUTE, chatBan.banned);
-        Queries.create(DatabaseType.BAN, chatBan);
     }
 
     /**
@@ -406,28 +370,6 @@ public final class MooQueries {
                               String tempMessagePattern, String permMessagePattern) {
         return PacketMessenger.transferToResponse(
                 new PacketPlayerPunish(executor, target, banSubType, reason, duration, tempMessagePattern, permMessagePattern)
-        ).getStatus();
-    }
-
-    /**
-     * Bans the player
-     *
-     * @param executor       The executor (either null for console or uuid for player)
-     * @param target         The target to be banned
-     * @param messagePattern The message pattern for a temp ban
-     * @return The respond
-     */
-    public ResponseStatus mute(UUID executor, String target, BanSubType banSubType, String reason,
-                               String messagePattern) {
-        return PacketMessenger.transferToResponse(
-                new PacketPlayerPunish(executor, target, banSubType, reason, messagePattern)
-        ).getStatus();
-    }
-
-    public ResponseStatus mute(UUID executor, String target, BanSubType banSubType, String reason, Long duration,
-                               String messagePattern) {
-        return PacketMessenger.transferToResponse(
-                new PacketPlayerPunish(executor, target, banSubType, reason, duration, messagePattern)
         ).getStatus();
     }
 

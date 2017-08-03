@@ -28,7 +28,6 @@ public class ListenerModule extends Module {
                 new MooPlayerBanListener(),
                 new MooPlayerPostBanListener(),
                 new MooPlayerKickListener(),
-                new MooPlayerMuteListener(),
                 new MooPlayerConnectedServerListener(),
                 new MooPlayerJoinedServerListener(),
                 new MooLoggingListener()

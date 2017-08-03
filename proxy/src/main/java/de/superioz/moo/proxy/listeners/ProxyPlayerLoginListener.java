@@ -78,16 +78,6 @@ public class ProxyPlayerLoginListener implements Listener {
             }
         }
 
-        // check the same for the chatban
-        Ban chatBan = playerInfo.getCurrentChatBan();
-        if(chatBan != null) {
-            long stamp = ban.start + ban.duration;
-            if(ban.duration != -1 && stamp < System.currentTimeMillis()) {
-                // ban ran out; please archive it
-                MooQueries.getInstance().archiveChatBan(chatBan);
-            }
-        }
-
         // get group for checking the maintenance bypassability
         Group group = MooQueries.getInstance().getGroup(playerInfo.getData().group);
         boolean maintenanceBypass = group.rank >= ProxyCache.getInstance().getConfigEntry(PacketConfig.Type.MAINTENANCE_RANK, Integer.class);
