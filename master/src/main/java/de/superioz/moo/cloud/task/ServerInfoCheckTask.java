@@ -22,13 +22,6 @@ public class ServerInfoCheckTask implements Runnable {
     @Override
     public void run() {
         while(true){
-            try {
-                Thread.sleep(delay);
-            }
-            catch(InterruptedException e) {
-                Thread.currentThread().interrupt();
-            }
-
             long now = System.currentTimeMillis();
 
             // check for last update with server
@@ -47,6 +40,14 @@ public class ServerInfoCheckTask implements Runnable {
                             + " [" + serverDeleted.getAddress().getHostName() + ":" + serverDeleted.getAddress().getPort() + "] timed out.");
                     PacketMessenger.message(new PacketServerUnregister(serverDeleted.getAddress()), ClientType.PROXY);
                 });
+            }
+
+            // delay
+            try {
+                Thread.sleep(delay);
+            }
+            catch(InterruptedException e) {
+                Thread.currentThread().interrupt();
             }
         }
     }

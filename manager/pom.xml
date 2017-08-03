@@ -43,12 +43,12 @@
             </resource>
         </resources>
         <plugins>
-            <!--<plugin>
+            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
-                <version>2.4</version>
+                <!--<version>2.4</version>-->
                 <executions>
-                    &lt;!&ndash; Run shade goal on package phase &ndash;&gt;
+                    <!-- Run shade goal on package phase -->
                     <execution>
                         <phase>package</phase>
                         <goals>
@@ -57,17 +57,23 @@
                     </execution>
                 </executions>
                 <configuration>
-                    &lt;!&ndash;<artifactSet>
+                    <!--<artifactSet>
                         <excludes>
                             <exclude>org.spigotmc:*</exclude>
                             <exclude>org.bukkit:*</exclude>
                             <exclude>net.md_5:*</exclude>
                         </excludes>
-                    </artifactSet>&ndash;&gt;
+                    </artifactSet>-->
+                    <!-- I don't really know if it really works like that tbh, but let's see .. -->
+                    <transformers>
+                        <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                            <mainClass>de.superioz.moo.manager.Manager</mainClass>
+                        </transformer>
+                    </transformers>
                     <createDependencyReducedPom>false</createDependencyReducedPom>
                     <minimizeJar>true</minimizeJar>
                 </configuration>
-            </plugin>-->
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -77,7 +83,7 @@
                     <target>1.8</target>
                 </configuration>
             </plugin>
-            <plugin>
+            <!--<plugin>
                 <artifactId>maven-assembly-plugin</artifactId>
                 <configuration>
                     <archive>
@@ -91,14 +97,14 @@
                 </configuration>
                 <executions>
                     <execution>
-                        <id>make-assembly</id> <!-- this is used for inheritance merges -->
-                        <phase>package</phase> <!-- bind to the packaging phase -->
+                        <id>make-assembly</id> &lt;!&ndash; this is used for inheritance merges &ndash;&gt;
+                        <phase>package</phase> &lt;!&ndash; bind to the packaging phase &ndash;&gt;
                         <goals>
                             <goal>single</goal>
                         </goals>
                     </execution>
                 </executions>
-            </plugin>
+            </plugin>-->
         </plugins>
     </build>
 

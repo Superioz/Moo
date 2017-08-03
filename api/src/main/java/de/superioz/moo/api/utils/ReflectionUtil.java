@@ -276,6 +276,8 @@ public final class ReflectionUtil {
             else if(c.equals(Integer.class) || c.equals(int.class)) return Integer.valueOf(s);
             else if(c.equals(Long.class) || c.equals(long.class)) return Long.valueOf(s);
         }
+        else if(s.equalsIgnoreCase("true")
+                || s.equalsIgnoreCase("false")) return Boolean.valueOf(s);
         else if(Enum.class.isAssignableFrom(c)) {
             for(Object e : c.getEnumConstants()) {
                 if((e + "").equalsIgnoreCase(s)) {

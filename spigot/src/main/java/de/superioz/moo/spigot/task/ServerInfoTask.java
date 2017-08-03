@@ -22,13 +22,6 @@ public class ServerInfoTask implements Runnable {
     @Override
     public void run() {
         while(true){
-            try {
-                Thread.sleep(delay);
-            }
-            catch(InterruptedException e) {
-                e.printStackTrace();
-            }
-
             // get server info
             Server server = Lightning.getInstance().getServer();
             String motd = server.getMotd();
@@ -41,6 +34,14 @@ public class ServerInfoTask implements Runnable {
                     new InetSocketAddress(Lightning.getInstance().getServer().getIp(), Lightning.getInstance().getServer().getPort()),
                     motd, players.size(), maxPlayers)
             );
+
+            // delay
+            try {
+                Thread.sleep(delay);
+            }
+            catch(InterruptedException e) {
+                e.printStackTrace();
+            }
         }
     }
 }
