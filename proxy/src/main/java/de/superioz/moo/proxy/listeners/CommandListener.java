@@ -1,8 +1,6 @@
 package de.superioz.moo.proxy.listeners;
 
 import de.superioz.moo.api.command.*;
-import de.superioz.moo.proxy.Thunder;
-import javafx.util.Pair;
 import de.superioz.moo.api.command.context.CommandContext;
 import de.superioz.moo.api.command.tabcomplete.TabCompletor;
 import de.superioz.moo.api.common.RunAsynchronous;
@@ -20,7 +18,9 @@ import de.superioz.moo.api.utils.DisplayFormats;
 import de.superioz.moo.api.utils.StringUtil;
 import de.superioz.moo.minecraft.util.ChatUtil;
 import de.superioz.moo.protocol.exception.MooOutputException;
+import de.superioz.moo.proxy.Thunder;
 import de.superioz.moo.proxy.command.BungeeCommandContext;
+import javafx.util.Pair;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
@@ -159,8 +159,10 @@ public class CommandListener extends CommandEventAdapter<CommandSender> implemen
         }
         // if the instance has NO children show a detailed command info
         else {
-            List<String> flags = StringUtil.getStringList(instance.getFlagBases(),
-                    flagBase -> "&f-" + flagBase.getLabel() + " &7" + flagBase.getDescription());
+            List<String> flags = StringUtil.getStringList(instance.getFlags(), s -> {
+                CommandFlag flag = instance.getFlagBase(s);
+                return "&f-" + flag.getLabel() + " &7" + flag.getDescription();
+            });
 
             // send command help as detailed list
             context.sendMessage(LanguageManager.get("help-command-leaf-header", instance.getLabel()));

@@ -116,13 +116,13 @@ public class Thunder extends Plugin implements EventListener {
      * @return The server
      */
     public static ServerInfo unregisterServer(String host, int port) {
-        getLogs().debugInfo("Unregister server (" + host + ":" + port + ") ..");
-
         ServerInfo info = null;
         for(ServerInfo server : ProxyServer.getInstance().getServers().values()) {
             InetSocketAddress address = (info = server).getAddress();
             if(address.getHostName().equals(host)
                     && address.getPort() == port) {
+                // send message only if really one server has been found to remove
+                getLogs().debugInfo("Unregister server (" + host + ":" + port + ") ..");
                 break;
             }
         }

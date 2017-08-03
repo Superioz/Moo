@@ -263,8 +263,7 @@ public class Moo {
     }
 
     public ResponseStatus broadcast(String message, int rank, boolean colored, boolean formatted) {
-        return MooQueries.getInstance().sendMessage(PacketPlayerMessage.Type.RESTRICTED_RANK, message, rank + "",
-                colored, formatted);
+        return MooQueries.getInstance().sendMessage(PacketPlayerMessage.Type.RESTRICTED_RANK, message, rank + "", colored, formatted);
     }
 
     /**

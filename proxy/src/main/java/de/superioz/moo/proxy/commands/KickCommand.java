@@ -57,7 +57,7 @@ public class KickCommand {
         }
 
         // kicks the player
-        context.sendMessage(LanguageManager.get("kick-player-load"));
+        context.sendMessage(LanguageManager.get("kick-player-load", playerName));
         ResponseStatus status = MooQueries.getInstance().kickPlayer(executor, playerName, LanguageManager.get("kick-player", reason));
         context.invalidArgument(status.isNok(), LanguageManager.get("kick-player-complete-failure", status));
 

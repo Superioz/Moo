@@ -27,7 +27,8 @@ public class ServerInfoCheckTask implements Runnable {
             // check for last update with server
             List<UUID> toDelete = new ArrayList<>();
             for(MooServer server : Cloud.getInstance().getMooProxy().getSpigotServers().values()) {
-                if((now - server.getLastUpdate()) > threshold) {
+                if(server.getLastUpdate() != -1
+                        && (now - server.getLastUpdate()) > threshold) {
                     toDelete.add(server.getUuid());
                 }
             }

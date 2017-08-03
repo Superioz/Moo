@@ -45,7 +45,7 @@ public class MooServer {
     /**
      * This value is the timestamp of the last server update packet
      */
-    private long lastUpdate;
+    private long lastUpdate = -1;
 
     public MooServer(UUID uuid, InetSocketAddress address, String type) {
         this.uuid = uuid;

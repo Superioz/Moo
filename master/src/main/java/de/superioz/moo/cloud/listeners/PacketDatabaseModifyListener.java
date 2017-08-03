@@ -9,6 +9,7 @@ import de.superioz.moo.api.utils.ReflectionUtil;
 import de.superioz.moo.api.utils.StringUtil;
 import de.superioz.moo.cloud.Cloud;
 import de.superioz.moo.cloud.database.CloudCollections;
+import de.superioz.moo.protocol.client.ClientType;
 import de.superioz.moo.protocol.common.PacketMessenger;
 import de.superioz.moo.protocol.common.ResponseStatus;
 import de.superioz.moo.protocol.packet.AbstractPacket;
@@ -258,7 +259,9 @@ public class PacketDatabaseModifyListener implements PacketAdapter {
 
         // send respond
         req.respond(processResult ? ResponseStatus.OK : ResponseStatus.NOK);
-        if(processResult) PacketMessenger.message(respond, Cloud.getInstance().getHub().getMinecraftClients());
+        if(processResult) {
+            PacketMessenger.message(respond, ClientType.PROXY, ClientType.SERVER);
+        }
     }
 
 }

@@ -52,7 +52,9 @@ public class CustomPermissible extends PermissibleBase {
 
     @Override
     public boolean isPermissionSet(String name) {
+        System.out.println("Is permission set '" + name + "'");
         for(String s : ProxyCache.getPermissions(uniqueId)) {
+            System.out.println("-- Permission to check: " + s);
             if(s.equals("*")) return true;
             s = s.substring(2, s.length());
             if(s.startsWith("-")) {
@@ -64,6 +66,7 @@ public class CustomPermissible extends PermissibleBase {
             }
             if(name.startsWith(s)) return true;
         }
+        System.out.println("Nah no true.");
         return false;
     }
 
@@ -74,6 +77,7 @@ public class CustomPermissible extends PermissibleBase {
 
     @Override
     public boolean hasPermission(String inName) {
+        System.out.println("Has Permission '" + inName + "'? ");
         String name = inName.toLowerCase();
 
         if(isPermissionSet(name)) {

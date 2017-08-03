@@ -74,6 +74,8 @@ public class NetworkServer extends AbstractNetworkInstance {
                 InetSocketAddress remoteAddress = (InetSocketAddress) channel.remoteAddress();
 
                 connectedClients.add(channel);
+
+                // attempt means that the server isn't accepted yet
                 getLogger().info("Client attempting to connect .. [@" + remoteAddress.getAddress().getHostAddress() + "]");
             }
 

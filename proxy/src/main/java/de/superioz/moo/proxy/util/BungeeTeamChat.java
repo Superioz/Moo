@@ -2,7 +2,6 @@ package de.superioz.moo.proxy.util;
 
 import de.superioz.moo.api.command.context.CommandContext;
 import de.superioz.moo.api.database.object.Group;
-import de.superioz.moo.api.io.LanguageManager;
 import de.superioz.moo.client.Moo;
 import de.superioz.moo.client.common.MooQueries;
 import de.superioz.moo.minecraft.chat.TeamChat;
@@ -28,7 +27,7 @@ public class BungeeTeamChat extends TeamChat<CommandSender, ResponseStatus> {
     public ResponseStatus send(String formattedMessage, boolean colored, boolean formatted) {
         Integer rank = Thunder.getInstance().getConfig().get(TeamChat.RANK_KEY);
         if(rank == null) return ResponseStatus.BAD_REQUEST;
-        return Moo.getInstance().broadcast(LanguageManager.get("teamchat-format", formattedMessage), rank, colored, formatted);
+        return Moo.getInstance().broadcast(formattedMessage, rank, colored, formatted);
     }
 
     @Override

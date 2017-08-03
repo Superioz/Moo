@@ -1,14 +1,14 @@
 package de.superioz.moo.client;
 
-import de.superioz.moo.client.events.CloudDisconnectedEvent;
-import io.netty.channel.Channel;
 import de.superioz.moo.api.event.EventExecutor;
 import de.superioz.moo.client.events.CloudConnectedEvent;
+import de.superioz.moo.client.events.CloudDisconnectedEvent;
 import de.superioz.moo.protocol.common.NetworkEventAdapter;
 import de.superioz.moo.protocol.common.PacketMessenger;
 import de.superioz.moo.protocol.common.Response;
 import de.superioz.moo.protocol.packet.AbstractPacket;
 import de.superioz.moo.protocol.packets.PacketHandshake;
+import io.netty.channel.Channel;
 
 import java.util.function.Consumer;
 
@@ -39,17 +39,28 @@ public class MooNetworkAdapter implements NetworkEventAdapter {
     public void onChannelActive(Channel channel) {
         moo.getLogger().info("Request connection to cloud ..");
 
-        PacketMessenger.transferToResponse(new PacketHandshake(moo.getClientName(), moo.getClientType()),
-                (Consumer<Response>) response -> {
-                    EventExecutor.getInstance().execute(new CloudConnectedEvent(response.getStatus()));
+        // we're gonna wait a bit until sending the request ..
+        moo.getExecutors().execute(() -> {
+            // 1s should be enough
+            try {
+                Thread.sleep(1000);
+            }
+            catch(InterruptedException e) {
+                e.printStackTrace();
+            }
 
-                    /*// made every plugin prepare
-                    Moo.getInstance().getPluginManager().onStateChange();*/
+            PacketMessenger.transferToResponse(new PacketHandshake(moo.getClientName(), moo.getClientType()),
+                    (Consumer<Response>) response -> {
+                        EventExecutor.getInstance().execute(new CloudConnectedEvent(response.getStatus()));
 
-                    // set authenticated
-                    moo.getClient().setAuthenticated(response.isOk());
-                    moo.getClient().setMasterVersion(response.getMessage());
-                });
+                /*// made every plugin prepare
+                Moo.getInstance().getPluginManager().onStateChange();*/
+
+                        // set authenticated
+                        moo.getClient().setAuthenticated(response.isOk());
+                        moo.getClient().setMasterVersion(response.getMessage());
+                    });
+        });
     }
 
     @Override

@@ -43,7 +43,6 @@ public class CommandInstance {
     private String description;
     private String permission;
     private List<String> flags;
-    private List<CommandFlag> flagBases = new ArrayList<>();
     private CommandUsage usage;
     private AllowedCommandSender commandTarget;
 
@@ -119,7 +118,6 @@ public class CommandInstance {
         // remove empties
         this.aliases = StringUtil.removeEmpties(aliases);
         this.flags = StringUtil.removeEmpties(flags);
-        this.flagBases = clearFlags();
 
         this.commandType = parentName.isEmpty() ? CommandType.ROOT : CommandType.SUB;
     }
@@ -231,7 +229,7 @@ public class CommandInstance {
      *
      * @return The flag list
      */
-    private List<CommandFlag> clearFlags() {
+    /*private List<CommandFlag> clearFlags() {
         List<String> newFlags = new ArrayList<>();
         List<CommandFlag> initialisedFlags = new ArrayList<>();
 
@@ -245,7 +243,7 @@ public class CommandInstance {
         }
         this.flags = newFlags;
         return initialisedFlags;
-    }
+    }*/
 
     /**
      * Gets the flag base of given label flag
@@ -255,18 +253,14 @@ public class CommandInstance {
      */
     public CommandFlag getFlagBase(String label) {
         if(label.equals(HELP_FLAG)) return new CommandFlag(label, "");
-        for(CommandFlag f : flagBases) {
-            if(f.getLabel().equals(label)) {
-                return f;
-            }
-            /*if(s.startsWith(label)) {
+        for(String s : flags) {
+            if(s.startsWith(label)) {
                 String[] split = s.split("\\[", 2);
 
                 String desc = split.length > 1 ? split[1].replace("]", "") : "";
                 label = split[0];
-                flag = new CommandFlag(label, desc);
-                break;
-            }*/
+                return new CommandFlag(label, desc);
+            }
         }
         return null;
     }

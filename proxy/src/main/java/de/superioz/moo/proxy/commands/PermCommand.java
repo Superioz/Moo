@@ -100,6 +100,7 @@ public class PermCommand {
                 LanguageManager.get("permission-list-empty"),
                 LanguageManager.get("permission-list-header"),
                 LanguageManager.get("permission-list-entry-empty"), groupPermission -> {
+                    // get prefix for the permission (indicates the workspace)
                     String prefix = groupPermission.isProxied() ? "&bb" : (groupPermission.isStar() ? "&9*" : "&es");
 
                     context.sendMessage(LanguageManager.format(entryFormat, prefix,
@@ -107,6 +108,7 @@ public class PermCommand {
                                     .replace("*", "&9*&7")
                                     .replace("-", "&c-&7")));
                 }, () -> {
+                    // get the command to see the next page
                     String command = "/perm list " + (page + 1) + " " + (args.hasFlag("g")
                             ? args.getFlag("g").getRawCommandline() : args.hasFlag("p")
                             ? args.getFlag("p").getRawCommandline() : "");
@@ -223,9 +225,11 @@ public class PermCommand {
 
         // permissions from group
         if(args.hasFlag(groupFlag)) {
+            System.out.println("Args: " + args.getRawCommandline());
             CommandFlag flag = args.getFlag(groupFlag);
             Group group = flag.get(0, Group.class);
-            context.invalidArgument(group == null || group.name == null, LanguageManager.get("", flag.get(0)));
+            System.out.println("Found group: " + group + " (" + flag.get(0) + ")");
+            context.invalidArgument(group == null || group.name == null, LanguageManager.get("group-doesnt-exist", flag.get(0)));
 
             permissions = new HashSet<>(group.permissions);
             primKey = group.name;

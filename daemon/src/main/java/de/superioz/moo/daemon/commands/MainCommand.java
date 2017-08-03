@@ -10,6 +10,7 @@ import de.superioz.moo.daemon.Daemon;
 import de.superioz.moo.daemon.common.Server;
 import de.superioz.moo.daemon.common.ServerPattern;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -81,7 +82,7 @@ public class MainCommand {
 
     @Command(label = "end")
     public void end(CommandContext context, ParamSet args) {
-        if(Daemon.getInstance().getServer().getStartedServerByUuid().size() > 0){
+        if(Daemon.getInstance().getServer().getStartedServerByUuid().size() > 0) {
             Daemon.getInstance().getLogs().warning("You need to stop the server before ending the program! Just type 'stop'.");
             return;
         }
@@ -91,6 +92,18 @@ public class MainCommand {
         Daemon.getInstance().getServer().getExecutors().shutdown();
 
         System.exit(0);
+    }
+
+    @Command(label = "clear")
+    public void clear(CommandContext context, ParamSet args) {
+        // clears the folder
+        try {
+            context.sendMessage("Cleanup ..");
+            Daemon.getInstance().getServer().cleanupServers();
+        }
+        catch(IOException e) {
+            context.sendMessage("Couldn't cleanup!");
+        }
     }
 
 }
