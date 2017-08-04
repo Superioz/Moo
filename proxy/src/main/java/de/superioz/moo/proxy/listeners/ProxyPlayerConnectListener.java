@@ -3,7 +3,6 @@ package de.superioz.moo.proxy.listeners;
 import de.superioz.moo.api.database.object.PlayerData;
 import de.superioz.moo.client.common.MooQueries;
 import de.superioz.moo.client.common.ProxyCache;
-import de.superioz.moo.protocol.common.Response;
 import de.superioz.moo.protocol.exception.MooOutputException;
 import de.superioz.moo.protocol.packets.PacketPlayerState;
 import de.superioz.moo.proxy.Thunder;
@@ -101,7 +100,7 @@ public class ProxyPlayerConnectListener implements Listener {
 
         // changes the state of the player
         MooQueries.getInstance().changePlayerState(data, PacketPlayerState.State.CONNECT_SERVER,
-                event.getServer().getInfo().getName());
+                event.getServer().getInfo().getName(), response -> {});
     }
 
     @EventHandler
@@ -124,10 +123,11 @@ public class ProxyPlayerConnectListener implements Listener {
         data.lastip = player.getAddress().getHostString();
 
         // changes the player's state; removes player data
-        Response respond = MooQueries.getInstance().changePlayerState(data, PacketPlayerState.State.LEAVE_PROXY);
-        if(respond.isOk()) {
-            ProxyCache.getInstance().remove(data);
-        }
+        MooQueries.getInstance().changePlayerState(data, PacketPlayerState.State.LEAVE_PROXY, response -> {
+            if(response.isOk()) {
+                ProxyCache.getInstance().remove(data);
+            }
+        });
     }
 
     @EventHandler

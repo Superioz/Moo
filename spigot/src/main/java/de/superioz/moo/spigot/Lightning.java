@@ -55,7 +55,6 @@ public class Lightning extends JavaPlugin implements EventListener, MooPlugin {
 
         // logging
         logs = new Logs(getLogger());
-        logs.prepareNativeStreams().enableFileLogging();
 
         // .
         this.loadConfig();
@@ -65,14 +64,12 @@ public class Lightning extends JavaPlugin implements EventListener, MooPlugin {
         if(jsonConfig.isLoaded()) {
             Moo.getInstance().connect(jsonConfig.get("server-name"), ClientType.SERVER, jsonConfig.get("cloud-ip"), jsonConfig.get("cloud-port"));
         }
-
-        // start serverInfo task
-        this.executors.execute(this.serverInfoTask = new ServerInfoTask(5 * 1000));
     }
 
     @Override
     public void onDisable() {
-        //
+        logs.disable();
+        Moo.getInstance().disconnect();
     }
 
     @Override
@@ -85,17 +82,15 @@ public class Lightning extends JavaPlugin implements EventListener, MooPlugin {
 
     @Override
     public void loadPluginStartup(MooPluginStartup startup) {
-        startup.registerListeners(new ChatListener(), new PacketRespondListener(), new ServerListener());
+        startup.registerListeners(new PacketRespondListener(), new ServerListener(), new ChatListener());
     }
 
     @Override
     public Function<Object, Boolean> registerLeftOvers() {
         return object -> {
             if(object instanceof Listener) {
-                if(MooPluginUtil.hasMooDependency(object)) {
-                    Bukkit.getPluginManager().registerEvents((Listener) object, Lightning.this);
-                    return true;
-                }
+                Bukkit.getPluginManager().registerEvents((Listener) object, Lightning.this);
+                return true;
             }
             return false;
         };
@@ -108,6 +103,9 @@ public class Lightning extends JavaPlugin implements EventListener, MooPlugin {
         if(event.getStatus() == ResponseStatus.OK) {
             executors.execute(() -> ProxyCache.getInstance().loadGroups());
         }
+
+        // start serverInfo task
+        this.executors.execute(this.serverInfoTask = new ServerInfoTask(5 * 1000));
     }
 
 }

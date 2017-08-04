@@ -9,7 +9,6 @@ import de.superioz.moo.api.utils.ReflectionUtil;
 import de.superioz.moo.client.Moo;
 import de.superioz.moo.client.common.MooQueries;
 import de.superioz.moo.client.common.ProxyCache;
-import de.superioz.moo.protocol.common.Response;
 import de.superioz.moo.protocol.exception.MooOutputException;
 import de.superioz.moo.protocol.packets.PacketConfig;
 import de.superioz.moo.protocol.packets.PacketPlayerState;
@@ -122,13 +121,14 @@ public class ProxyPlayerLoginListener implements Listener {
 
         // changes the state of the player
         // if the respond was successful put the deserialized values into the proxycache
-        Response respond = MooQueries.getInstance().changePlayerState(data, PacketPlayerState.State.JOIN_PROXY);
-        if(respond.isOk()) {
-            data = ReflectionUtil.deserialize(respond.get(0), PlayerData.class);
-            Group group = ReflectionUtil.deserialize(respond.get(1), Group.class);
+        MooQueries.getInstance().changePlayerState(data, PacketPlayerState.State.JOIN_PROXY, response -> {
+            if(response.isOk()) {
+                PlayerData newData = ReflectionUtil.deserialize(response.get(0), PlayerData.class);
+                Group group = ReflectionUtil.deserialize(response.get(1), Group.class);
 
-            ProxyCache.getInstance().apply(data, group);
-        }
+                ProxyCache.getInstance().apply(newData, group);
+            }
+        });
     }
 
     @EventHandler

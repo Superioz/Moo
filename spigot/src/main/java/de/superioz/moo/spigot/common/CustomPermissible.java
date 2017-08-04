@@ -1,9 +1,9 @@
 package de.superioz.moo.spigot.common;
 
-import de.superioz.moo.spigot.cache.ProxyCache;
-import lombok.Getter;
 import de.superioz.moo.api.common.GroupPermission;
+import de.superioz.moo.client.common.ProxyCache;
 import de.superioz.moo.client.util.PermissionUtil;
+import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.permissions.*;
@@ -31,7 +31,7 @@ public class CustomPermissible extends PermissibleBase {
     }
 
     public List<GroupPermission> getPermissions() {
-        List<String> l = ProxyCache.PERMISSION_CACHE.get(uniqueId);
+        List<String> l = ProxyCache.getInstance().getPermissions(uniqueId);
         List<GroupPermission> permissions = new ArrayList<>();
 
         for(String s : l) {
@@ -52,9 +52,7 @@ public class CustomPermissible extends PermissibleBase {
 
     @Override
     public boolean isPermissionSet(String name) {
-        System.out.println("Is permission set '" + name + "'");
-        for(String s : ProxyCache.getPermissions(uniqueId)) {
-            System.out.println("-- Permission to check: " + s);
+        for(String s : ProxyCache.getInstance().getPermissions(uniqueId)) {
             if(s.equals("*")) return true;
             s = s.substring(2, s.length());
             if(s.startsWith("-")) {
@@ -77,11 +75,10 @@ public class CustomPermissible extends PermissibleBase {
 
     @Override
     public boolean hasPermission(String inName) {
-        System.out.println("Has Permission '" + inName + "'? ");
         String name = inName.toLowerCase();
 
         if(isPermissionSet(name)) {
-            boolean b = PermissionUtil.hasPermission(inName, false, ProxyCache.getPermissions(uniqueId));
+            boolean b = PermissionUtil.hasPermission(inName, false, ProxyCache.getInstance().getPermissions(uniqueId));
             return b;
         }
         else {

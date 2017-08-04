@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.UUID;
+import java.util.function.Consumer;
 
 /**
  * Similar to {@link Queries} but with more specific methods for managing the data<br>
@@ -50,14 +51,13 @@ public final class MooQueries {
      * @param data  The data
      * @param state The state
      * @param meta  The meta
-     * @return The respond
      */
-    public Response changePlayerState(PlayerData data, PacketPlayerState.State state, String meta) {
-        return PacketMessenger.transferToResponse(new PacketPlayerState(data, state, meta));
+    public void changePlayerState(PlayerData data, PacketPlayerState.State state, String meta, Consumer<Response> callback) {
+        PacketMessenger.message(new PacketPlayerState(data, state, meta), callback);
     }
 
-    public Response changePlayerState(PlayerData data, PacketPlayerState.State state) {
-        return changePlayerState(data, state, "");
+    public void changePlayerState(PlayerData data, PacketPlayerState.State state, Consumer<Response> callback) {
+        changePlayerState(data, state, "", callback);
     }
 
     /**

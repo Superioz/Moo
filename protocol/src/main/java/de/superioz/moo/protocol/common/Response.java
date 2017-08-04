@@ -137,7 +137,12 @@ public class Response {
 
     /**
      * Converts the list of messages into a list of elements of given class
-     * This method is only for complex classes like {@link PlayerData}
+     * This method is only for complex classes like {@link PlayerData}<br>
+     * <p>
+     * A really common pitfall is using the class for the same index of the respond list for this method,
+     * because this method counts different.
+     * e.g.: Respond list is: PlayerData, Group, PlayerData
+     * Means the index is:    0           0      1
      *
      * @param eClass The element's class
      * @param <E>    The element type
@@ -169,12 +174,18 @@ public class Response {
         return l;
     }
 
+    /**
+     * @see #toComplexes(Class)
+     */
     public <E> E toComplex(Class<E> eClass, int index) throws MooInputException {
         List<E> l = toComplexes(eClass);
         if(l.isEmpty()) return null;
         return l.get(index);
     }
 
+    /**
+     * @see #toComplexes(Class)
+     */
     public <E> E toComplex(Class<E> eClass) throws MooInputException {
         return toComplex(eClass, 0);
     }
