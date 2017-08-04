@@ -60,7 +60,7 @@ public class ProxyPlayerConnectListener implements Listener {
                 !event.getTarget().getName().contains(Thunder.LIMBO_NAME)){
             return;
         }
-        List<ServerInfo> l = Thunder.getServers(Thunder.LOBBY_REGEX);
+        List<ServerInfo> l = Thunder.getInstance().getServers(Thunder.LOBBY_REGEX);
 
         // if no lobby server is registered
         if(l.isEmpty()) {

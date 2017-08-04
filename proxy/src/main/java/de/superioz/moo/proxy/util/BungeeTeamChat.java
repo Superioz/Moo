@@ -25,7 +25,7 @@ public class BungeeTeamChat extends TeamChat<CommandSender, ResponseStatus> {
 
     @Override
     public ResponseStatus send(String formattedMessage, boolean colored, boolean formatted) {
-        Integer rank = Thunder.getInstance().getConfig().get(TeamChat.RANK_KEY);
+        Integer rank = Thunder.getInstance().getPluginModule().getConfig().get(TeamChat.RANK_KEY);
         if(rank == null) return ResponseStatus.BAD_REQUEST;
         return Moo.getInstance().broadcast(formattedMessage, rank, colored, formatted);
     }
@@ -37,7 +37,7 @@ public class BungeeTeamChat extends TeamChat<CommandSender, ResponseStatus> {
             Group group = MooQueries.getInstance().getGroup(player.getUniqueId());
 
             return group != null
-                    && group.rank >= (Integer) Thunder.getInstance().getConfig().get(TeamChat.RANK_KEY);
+                    && group.rank >= (Integer) Thunder.getInstance().getPluginModule().getConfig().get(TeamChat.RANK_KEY);
         }
         return false;
     }

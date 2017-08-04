@@ -12,7 +12,6 @@ import de.superioz.moo.api.utils.SystemUtil;
 import de.superioz.moo.client.Moo;
 import de.superioz.moo.client.events.CloudConnectedEvent;
 import de.superioz.moo.client.events.CloudDisconnectedEvent;
-import de.superioz.moo.client.util.MooPluginUtil;
 import de.superioz.moo.daemon.commands.MainCommand;
 import de.superioz.moo.daemon.common.Server;
 import de.superioz.moo.daemon.listeners.ServerPacketListener;
@@ -102,7 +101,7 @@ public class Daemon implements EventListener {
 
         // load the configuration
         Daemon.getInstance().getLogs().info("Load configuration ..");
-        JsonConfig config = MooPluginUtil.loadConfig(Paths.get("configuration"), "config");
+        JsonConfig config = Moo.getInstance().loadConfig(Paths.get("configuration").toFile(), "config");
         getInstance().setConfig(config);
 
         Daemon.getInstance().getLogs().setDebugMode(config.get("debug"));

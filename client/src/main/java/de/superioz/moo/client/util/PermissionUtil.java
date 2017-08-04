@@ -11,7 +11,7 @@ import java.util.Set;
 /**
  * A helper class for group & permissions
  */
-public class PermissionUtil {
+public final class PermissionUtil {
 
     /**
      * Gets all permissions from given base (parents from groups)

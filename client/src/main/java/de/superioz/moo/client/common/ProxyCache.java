@@ -21,7 +21,7 @@ import java.util.*;
  * This class is for caching player data and similar<br>
  * That includes: {@link PlayerData}s, permissions and {@link Group}s
  */
-public class ProxyCache implements PacketAdapter {
+public final class ProxyCache implements PacketAdapter {
 
     private static ProxyCache instance;
 

@@ -53,7 +53,13 @@ public class MooClientConnectedListener implements EventListener {
 
                 // start predefined servers
                 // ONLY if the serverlist inside config is not empty, nor null
-                List<String> predefinedServers = Cloud.getInstance().getConfig().get("predefined-servers");
+                // AND ONLY IF AUTOMATIC MODE IS ACTIVATED
+                if(!(boolean)Cloud.getInstance().getConfig().get("predefined-servers.activated")){
+                    return;
+                }
+
+                // otherwise start
+                List<String> predefinedServers = Cloud.getInstance().getConfig().get("predefined-servers.list");
                 if(predefinedServers != null && !predefinedServers.isEmpty()) {
                     for(String server : predefinedServers) {
                         if(!PREDEFINED_SERVER_PATTERN.matcher(server).matches()) continue;

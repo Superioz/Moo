@@ -1,11 +1,10 @@
 package de.superioz.moo.proxy;
 
-import lombok.Getter;
 import de.superioz.moo.api.event.EventListener;
-import de.superioz.moo.api.io.JsonConfig;
 import de.superioz.moo.api.logging.Logs;
 import de.superioz.moo.api.module.ModuleRegistry;
 import de.superioz.moo.client.Moo;
+import lombok.Getter;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.config.ServerInfo;
 import net.md_5.bungee.api.plugin.Plugin;
@@ -24,29 +23,23 @@ public class Thunder extends Plugin implements EventListener {
 
     @Getter
     private static Thunder instance;
-    @Getter
-    private static Logs logs;
+    private Logs logs;
 
     private ModuleRegistry moduleRegistry;
     private ThunderPluginModule pluginModule;
-    private JsonConfig config;
 
     @Override
     public void onEnable() {
         instance = this;
 
-        // logging
-        logs = new Logs(getLogger());
-        logs.prepareNativeStreams().enableFileLogging();
-
         // initialise moo and plugin module
+        Moo.initialise((logs = new Logs(getLogger())).prepareNativeStreams().enableFileLogging().getLogger());
         this.pluginModule = new ThunderPluginModule();
-        Moo.initialise(pluginModule, getLogger());
-
         this.moduleRegistry = new ModuleRegistry(logs);
         this.moduleRegistry.register(pluginModule);
-        this.config = pluginModule.getConfig();
-        logs.setDebugMode(config.get("debug"));
+
+        // get config
+        logs.setDebugMode(pluginModule.getConfig().get("debug"));
         logs.info("Debug Mode is " + (logs.isDebugMode() ? "ON" : "off"));
 
         // we don't want pre-defined servers! dk if its event possible to block them completely :thinking:
@@ -74,7 +67,7 @@ public class Thunder extends Plugin implements EventListener {
      * @param restricted Is the server restricted
      * @return The server
      */
-    public static ServerInfo registerServer(String name, String host, int port, String motd, boolean restricted) {
+    public ServerInfo registerServer(String name, String host, int port, String motd, boolean restricted) {
         if(ProxyServer.getInstance().getServers().containsKey(name)) return ProxyServer.getInstance().getServers().get(name);
 
         //
@@ -83,13 +76,13 @@ public class Thunder extends Plugin implements EventListener {
         return ProxyServer.getInstance().getServers().put(name, info);
     }
 
-    public static ServerInfo registerServer(String name, String host, int port) {
-        int similar = Thunder.getServers("(" + name + "-[0-9]*|" + name + ")").size();
+    public ServerInfo registerServer(String name, String host, int port) {
+        int similar = getServers("(" + name + "-[0-9]*|" + name + ")").size();
         name = similar == 0 ? name : name + "-" + (similar + 1);
 
         getLogs().debugInfo("Register server '" + name + "'(" + host + ":" + port + ") ..");
 
-        return Thunder.registerServer(name, host, port, "", false);
+        return registerServer(name, host, port, "", false);
     }
 
     /**
@@ -98,7 +91,7 @@ public class Thunder extends Plugin implements EventListener {
      * @param regex The regex
      * @return The list of serverInfos
      */
-    public static List<ServerInfo> getServers(String regex) {
+    public List<ServerInfo> getServers(String regex) {
         List<ServerInfo> list = new ArrayList<>();
         Pattern p = Pattern.compile(regex);
 
@@ -115,7 +108,7 @@ public class Thunder extends Plugin implements EventListener {
      * @param port The port
      * @return The server
      */
-    public static ServerInfo unregisterServer(String host, int port) {
+    public ServerInfo unregisterServer(String host, int port) {
         ServerInfo info = null;
         for(ServerInfo server : ProxyServer.getInstance().getServers().values()) {
             InetSocketAddress address = (info = server).getAddress();

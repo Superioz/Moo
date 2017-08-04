@@ -1,16 +1,7 @@
 package de.superioz.moo.proxy;
 
-import de.superioz.moo.proxy.command.PlayerParamType;
-import de.superioz.moo.proxy.commands.*;
-import de.superioz.moo.proxy.commands.WhoisCommand;
-import de.superioz.moo.proxy.commands.GroupCommand;
-import de.superioz.moo.proxy.commands.PermCommand;
-import de.superioz.moo.proxy.commands.RankCommand;
-import de.superioz.moo.proxy.commands.MaintenanceCommand;
-import de.superioz.moo.proxy.commands.MotdCommand;
-import de.superioz.moo.proxy.listeners.*;
-import lombok.Getter;
 import de.superioz.moo.api.command.CommandInstance;
+import de.superioz.moo.api.command.CommandRegistry;
 import de.superioz.moo.api.event.EventExecutor;
 import de.superioz.moo.api.event.EventHandler;
 import de.superioz.moo.api.event.EventListener;
@@ -19,26 +10,24 @@ import de.superioz.moo.api.io.JsonConfig;
 import de.superioz.moo.api.io.LanguageManager;
 import de.superioz.moo.api.module.Module;
 import de.superioz.moo.client.Moo;
-import de.superioz.moo.client.common.MooPlugin;
-import de.superioz.moo.client.common.MooPluginStartup;
 import de.superioz.moo.client.common.ProxyCache;
 import de.superioz.moo.client.events.CloudConnectedEvent;
-import de.superioz.moo.client.util.MooPluginUtil;
 import de.superioz.moo.minecraft.util.ChatUtil;
 import de.superioz.moo.protocol.client.ClientType;
 import de.superioz.moo.proxy.command.BungeeCommandContext;
-import de.superioz.moo.proxy.commands.MooCommand;
+import de.superioz.moo.proxy.command.PlayerParamType;
+import de.superioz.moo.proxy.commands.*;
+import de.superioz.moo.proxy.listeners.*;
+import lombok.Getter;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.plugin.Command;
 import net.md_5.bungee.api.plugin.Listener;
 
-import java.io.File;
 import java.util.Locale;
-import java.util.function.Function;
 
 @Getter
-public class ThunderPluginModule extends Module implements EventListener, MooPlugin {
+public class ThunderPluginModule extends Module implements EventListener {
 
     private JsonConfig config;
     private LanguageManager languageManager;
@@ -52,6 +41,36 @@ public class ThunderPluginModule extends Module implements EventListener, MooPlu
     protected void onEnable() {
         EventExecutor.getInstance().register(this);
 
+        // load config
+        this.config = Moo.getInstance().loadConfig(Thunder.getInstance().getDataFolder());
+        this.languageManager = new LanguageManager(Thunder.getInstance().getDataFolder(), ChatUtil::fabulize);
+        this.languageManager.load(Locale.US);
+
+        // register commands
+        CommandRegistry.getInstance().registerCommands(
+                new DatabaseModifyCommand(),
+                new MooCommand(), new TeamCommand(), new TeamChatCommand(),
+                new MaintenanceCommand(), new MotdCommand(),
+                new GroupCommand(), new RankCommand(), new PermCommand(),
+                new BanCommand(), new PunishInfoCommand(),
+                new UnbanCommand(), new KickCommand(),
+                new WhoisCommand()
+        );
+        CommandRegistry.getInstance().getParamTypeRegistry().register(new PlayerParamType());
+
+        // register handler
+        Moo.getInstance().registerHandler(o -> {
+                    if(o instanceof Listener) ProxyServer.getInstance().getPluginManager().registerListener(Thunder.getInstance(), (Listener) o);
+                },
+                new CommandListener(),
+                new PacketPlayerKickListener(), new PacketPlayerMessageListener(),
+                new PacketRequestListener(), new PacketRespondListener(), new PacketConfigListener(),
+                new PermissionListener(), new ProxyPingListener(),
+                new ProxyPlayerLoginListener(), new ProxyPlayerConnectListener(),
+                new ServerRegisterChangeListener()
+        );
+
+        // connect to cloud
         if(config.isLoaded()) {
             Moo.getInstance().connect(config.get("proxy-name"), ClientType.PROXY,
                     config.get("cloud-ip"), config.get("cloud-port"));
@@ -63,51 +82,10 @@ public class ThunderPluginModule extends Module implements EventListener, MooPlu
 
     }
 
-    @Override
-    public void loadConfig() {
-        File folder = Thunder.getInstance().getDataFolder();
-        config = MooPluginUtil.loadConfig(folder, "config");
-
-        Thunder.getLogs().info("Loading properties ..");
-        languageManager = new LanguageManager(folder, ChatUtil::fabulize);
-        languageManager.load(Locale.US);
-    }
-
-    @Override
-    public Function<Object, Boolean> registerLeftOvers() {
-        return object -> {
-            if(object instanceof Listener) {
-                ProxyServer.getInstance().getPluginManager().registerListener(Thunder.getInstance(), (Listener) object);
-            }
-            return false;
-        };
-    }
-
-    @Override
-    public void loadPluginStartup(MooPluginStartup startup) {
-        startup.registerCommands(
-                new DatabaseModifyCommand(),
-                new MooCommand(), new TeamCommand(), new TeamChatCommand(),
-                new MaintenanceCommand(), new MotdCommand(),
-                new GroupCommand(), new RankCommand(), new PermCommand(),
-                new BanCommand(), new PunishInfoCommand(),
-                new UnbanCommand(), new KickCommand(),
-                new WhoisCommand()
-        );
-        startup.registerListeners(this,
-                new CommandListener(),
-                new PacketPlayerKickListener(), new PacketPlayerMessageListener(),
-                new PacketRequestListener(), new PacketRespondListener(), new PermissionListener(),
-                new ProxyPingListener(), new PacketConfigListener(),
-                new ProxyPlayerLoginListener(), new ProxyPlayerConnectListener(),
-                new ServerRegisterChangeListener());
-        startup.registerTypes(new PlayerParamType());
-    }
-
     @EventHandler
     public void onCommandRegister(CommandRegisterEvent event) {
         CommandInstance command = event.getInstance();
-        Thunder.getLogs().debugInfo("Register command: " + command.getLabel());
+        Thunder.getInstance().getLogs().debugInfo("Register command: " + command.getLabel());
 
         Command bungeeCommand = new Command(command.getLabel(), command.getPermission(),
                 command.getAliases().toArray(new String[]{})) {
@@ -121,7 +99,7 @@ public class ThunderPluginModule extends Module implements EventListener, MooPlu
 
     @EventHandler
     public void onStart(CloudConnectedEvent event) {
-        Thunder.getLogs().info("** AUTHENTICATION STATUS: " + (event.getStatus().getColored()) + " **");
+        Thunder.getInstance().getLogs().info("** AUTHENTICATION STATUS: " + (event.getStatus().getColored()) + " **");
         if(event.getStatus().isNok()) return;
 
         // load groups

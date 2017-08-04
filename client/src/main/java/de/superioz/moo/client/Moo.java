@@ -1,19 +1,20 @@
 package de.superioz.moo.client;
 
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
-import de.superioz.moo.client.common.*;
-import de.superioz.moo.client.paramtypes.GroupParamType;
-import de.superioz.moo.client.paramtypes.PlayerInfoParamType;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 import de.superioz.moo.api.command.CommandRegistry;
 import de.superioz.moo.api.command.param.ParamType;
 import de.superioz.moo.api.event.EventExecutor;
+import de.superioz.moo.api.event.EventListener;
+import de.superioz.moo.api.exceptions.InvalidConfigException;
+import de.superioz.moo.api.io.JsonConfig;
+import de.superioz.moo.client.common.MooDatabase;
+import de.superioz.moo.client.common.MooQueries;
+import de.superioz.moo.client.common.ProxyCache;
+import de.superioz.moo.client.exception.MooInitializationException;
 import de.superioz.moo.client.listeners.QueryClientListener;
+import de.superioz.moo.client.paramtypes.GroupParamType;
 import de.superioz.moo.client.paramtypes.PlayerDataParamType;
-import de.superioz.moo.client.util.MooPluginUtil;
+import de.superioz.moo.client.paramtypes.PlayerInfoParamType;
 import de.superioz.moo.protocol.client.ClientType;
 import de.superioz.moo.protocol.client.NetworkClient;
 import de.superioz.moo.protocol.common.PacketMessenger;
@@ -21,13 +22,20 @@ import de.superioz.moo.protocol.common.Response;
 import de.superioz.moo.protocol.common.ResponseScope;
 import de.superioz.moo.protocol.common.ResponseStatus;
 import de.superioz.moo.protocol.packet.AbstractPacket;
+import de.superioz.moo.protocol.packet.PacketAdapter;
 import de.superioz.moo.protocol.packet.PacketAdapting;
 import de.superioz.moo.protocol.packets.PacketConfig;
 import de.superioz.moo.protocol.packets.PacketPing;
 import de.superioz.moo.protocol.packets.PacketPlayerMessage;
 import de.superioz.moo.protocol.packets.PacketServerRequest;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+import java.io.File;
 import java.util.concurrent.*;
+import java.util.function.Consumer;
 import java.util.logging.Logger;
 
 /**
@@ -36,6 +44,18 @@ import java.util.logging.Logger;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class Moo {
+
+    /**
+     * Name of the config file per default
+     * (if you want to load a config without thinking of a name)
+     */
+    public static final String CONFIG_DEFAULT_NAME = "config";
+
+    /**
+     * The activation field inside the config for checking if the cloud
+     * should be activated or deactivated
+     */
+    public static final String CLOUD_ACTIVATION_CONFIG = "cloud";
 
     private static Moo instance;
 
@@ -73,13 +93,9 @@ public class Moo {
     private MooDatabase database;
 
     /**
-     * This class manages the MooPlugins
-     */
-    private MooPluginManager pluginManager = new MooPluginManager();
-
-    /**
      * The logger of the client
      */
+    @Setter
     private Logger logger;
 
     @Setter private boolean activated = true;
@@ -99,40 +115,18 @@ public class Moo {
     }
 
     /**
-     * Initialises the moo instance with given {@link MooPlugin}<br>
-     * It will create the {@link Moo} instance, initialise the logger and loads the config
-     * of the plugin<br>
-     * (If you don't want to create a config leave the {@link MooPlugin#loadConfig()} method empty)
+     * Initialises the moo instance<br>
+     * It will create the {@link Moo} instance, initialise the logger and database
      */
-    public static Moo initialise(MooPlugin plugin, Logger logger) {
+    public static void initialise(Logger logger) {
         // create new instance
         if(instance == null) {
             getInstance();
         }
 
         // reinitialise the values
-        instance.logger = logger;
+        if(logger != null) instance.logger = logger;
         instance.database = new MooDatabase(instance);
-
-        // register the plugin if the plugin is not null
-        if(plugin != null) {
-            String pluginName = plugin.getClass().getName();
-            if(!instance.getPluginManager().contains(pluginName)) {
-                instance.getPluginManager().register(pluginName, plugin);
-            }
-
-            // load the config
-            plugin.loadConfig();
-
-            // prepare the plugin (register listeners, ..)
-            MooPluginUtil.preparePlugin(plugin);
-        }
-
-        return instance;
-    }
-
-    public static Moo initialise(Logger logger) {
-        return initialise(null, logger);
     }
 
     /**
@@ -168,7 +162,6 @@ public class Moo {
      * Starts the netclient. If moo is already connected nothing will happen.
      * Otherwise will the {@link NetworkClient} be initialised. If the client is already
      * initialised then Moo will just connect.<br>
-     * To tell every {@link MooPlugin} that Moo has just started, ev
      *
      * @param host The host
      * @param port The port
@@ -230,10 +223,84 @@ public class Moo {
         return client != null && client.isConnected();
     }
 
+    /**
+     * Checks if Moo is initialized, that means checking if the instance is null, if it is
+     * throw an exception, if not check if it is activated
+     *
+     * @return The result
+     */
+    public boolean check() {
+        if(instance == null) throw new MooInitializationException();
+        return isActivated();
+    }
+
+
     /*
     ============================================
-    SPECIAL METHODS (NON CLIENT-WRAPPER METHODS)
+    SPECIAL METHODS >> PLUGIN METHODS
     ============================================
+     */
+
+    /**
+     * Loads a config file for you (Only .json). If you want to use yaml use
+     * spigot or bungee.
+     *
+     * @param folder The folder where the config should be placed inside
+     * @param name   The name of the file (without suffix)
+     * @return The config
+     */
+    public JsonConfig loadConfig(File folder, String name) {
+        // check for activation
+        check();
+
+        // load configuration
+        getLogger().info("Loading configuration ..");
+        JsonConfig config = new JsonConfig(name, folder);
+        config.load(true, true);
+
+        // check for cloud activation
+        if(config.isLoaded()) {
+            try {
+                Moo.getInstance().setActivated(config.get(CLOUD_ACTIVATION_CONFIG));
+            }
+            catch(InvalidConfigException ex) {
+                // do nothing, true is default anyway
+            }
+        }
+
+        return config;
+    }
+
+    public JsonConfig loadConfig(File folder) {
+        return loadConfig(folder, CONFIG_DEFAULT_NAME);
+    }
+
+    /**
+     * Registers all handlers within given object array<br>
+     * This method checks for the classes who either implements {@link EventListener} or {@link PacketAdapter}<br>
+     * If you want to check for custom class instances use the custom check consumer.
+     *
+     * @param classes The classes to be registered
+     */
+    public void registerHandler(Consumer<Object> customCheckConsumer, Object... classes) {
+        boolean customCheck = customCheckConsumer != null;
+
+        // go through classes
+        for(Object listenerClass : classes) {
+            if(listenerClass instanceof EventListener) EventExecutor.getInstance().register((EventListener) listenerClass);
+            if(listenerClass instanceof PacketAdapter) PacketAdapting.getInstance().register((PacketAdapter) listenerClass);
+            if(customCheck) customCheckConsumer.accept(listenerClass);
+        }
+    }
+
+    public void registerHandler(Object... classes) {
+        registerHandler(null, classes);
+    }
+
+    /*
+    ===============================================
+    SPECIAL METHODS >> PACKET METHODS
+    ===============================================
      */
 
     /**
