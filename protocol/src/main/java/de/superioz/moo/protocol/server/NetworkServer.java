@@ -8,7 +8,7 @@ import de.superioz.moo.protocol.Protocol;
 import de.superioz.moo.protocol.client.ClientType;
 import de.superioz.moo.protocol.client.NetworkClient;
 import de.superioz.moo.protocol.common.NetworkEventAdapter;
-import de.superioz.moo.protocol.common.PipelineUtil;
+import de.superioz.moo.protocol.util.PipelineUtil;
 import de.superioz.moo.protocol.events.ServerStateEvent;
 import de.superioz.moo.protocol.packet.AbstractPacket;
 import de.superioz.moo.protocol.packets.PacketHandshake;
@@ -38,7 +38,7 @@ public class NetworkServer extends AbstractNetworkInstance {
     private final ChannelGroup connectedClients = new DefaultChannelGroup(GlobalEventExecutor.INSTANCE);
     private ServerBootstrap bootstrap;
     private HostWhitelist whitelist;
-    private ClientHub hub;
+    private ClientManager hub;
 
     private JsonConfig config;
 
@@ -51,7 +51,7 @@ public class NetworkServer extends AbstractNetworkInstance {
         whitelist.load();
 
         // get hub
-        hub = new ClientHub(this);
+        hub = new ClientManager(this);
 
         // register adapter
         super.registerEventAdapter(new NetworkEventAdapter() {

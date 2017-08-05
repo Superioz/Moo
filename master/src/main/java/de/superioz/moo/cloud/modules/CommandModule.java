@@ -18,13 +18,13 @@ public class CommandModule extends Module {
 
     @Override
     protected void onEnable() {
-        Cloud.getLogger().debug("Registering commands ..");
+        Cloud.getInstance().getLogger().debug("Registering commands ..");
         EventExecutor.getInstance().register(new CloudCommand());
         CommandRegistry.getInstance().registerCommandsSeperately(new CloudCommand(),
                 new DatabaseCommand(),
                 new CacheCommand(),
                 new DaemonCommand());
-        Cloud.getLogger().debug("Commands registered.");
+        Cloud.getInstance().getLogger().debug("Commands registered.");
     }
 
     @Override

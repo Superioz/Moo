@@ -17,14 +17,14 @@ import java.util.concurrent.ConcurrentMap;
  *
  * @see MooClient
  */
-public final class ClientHub {
+public final class ClientManager {
 
     /**
      * It is only necessary to only have one ClientHub instance so this is the static access for this
      * class after it has been initialised by the network server
      */
     @Getter
-    private static ClientHub instance;
+    private static ClientManager instance;
 
     /**
      * The connected {@link MooClient}'s by the type of them
@@ -42,7 +42,7 @@ public final class ClientHub {
      */
     private NetworkServer netServer;
 
-    public ClientHub(NetworkServer netServer) {
+    public ClientManager(NetworkServer netServer) {
         instance = this;
         this.netServer = netServer;
 
@@ -110,14 +110,14 @@ public final class ClientHub {
      * @param address The address (the key)
      * @return This
      */
-    public ClientHub remove(InetSocketAddress address) {
+    public ClientManager remove(InetSocketAddress address) {
         for(Map<InetSocketAddress, MooClient> m : clientsByType.values()) {
             m.entrySet().removeIf(entry -> entry.getKey().equals(address));
         }
         return this;
     }
 
-    public ClientHub remove(MooClient cl) {
+    public ClientManager remove(MooClient cl) {
         return remove(cl.getAddress());
     }
 

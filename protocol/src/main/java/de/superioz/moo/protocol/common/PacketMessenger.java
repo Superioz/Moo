@@ -4,7 +4,7 @@ import de.superioz.moo.protocol.client.ClientType;
 import de.superioz.moo.protocol.events.PacketQueueEvent;
 import de.superioz.moo.protocol.packet.AbstractPacket;
 import de.superioz.moo.protocol.packets.PacketRespond;
-import de.superioz.moo.protocol.server.ClientHub;
+import de.superioz.moo.protocol.server.ClientManager;
 import de.superioz.moo.protocol.server.MooClient;
 import de.superioz.moo.protocol.util.NettyUtil;
 import io.netty.channel.Channel;
@@ -24,7 +24,7 @@ import java.util.function.Consumer;
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @Getter
-public class PacketMessenger {
+public final class PacketMessenger {
 
     /**
      * The class of the response scope (e.g. {@link PacketRespond})
@@ -228,7 +228,7 @@ public class PacketMessenger {
     }
 
     public PacketMessenger target(ClientType... types) {
-        ClientHub hub = ClientHub.getInstance();
+        ClientManager hub = ClientManager.getInstance();
         if(hub == null) return this;
 
         List<MooClient> clients = new ArrayList<>();

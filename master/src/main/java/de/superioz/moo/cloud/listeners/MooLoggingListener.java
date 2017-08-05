@@ -13,8 +13,8 @@ public class MooLoggingListener implements EventListener {
 
     @EventHandler
     public void onLogging(MooLoggingEvent event) {
-        if(Cloud.getInstance() == null || Cloud.getInstance().getHub() == null) return;
-        UnmodifiableList list = Cloud.getInstance().getHub().getClients(ClientType.INTERFACE);
+        if(Cloud.getInstance() == null || Cloud.getInstance().getClientManager() == null) return;
+        UnmodifiableList list = Cloud.getInstance().getClientManager().getClients(ClientType.INTERFACE);
         if(list == null || list.isEmpty()) return;
 
         PacketMessenger.message(new PacketConsoleOutput(event.getMessage()), ClientType.INTERFACE);

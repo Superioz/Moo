@@ -15,7 +15,7 @@ public class DaemonServerListener implements PacketAdapter {
 
     @PacketHandler
     public void onServerAttempt(PacketServerAttempt packet) {
-        Cloud.getLogger().debug("Daemon attempted to " + packet.type.name() + " a server. [" + packet.id + "]");
+        Cloud.getInstance().getLogger().debug("Daemon attempted to " + packet.type.name() + " a server. [" + packet.id + "]");
     }
 
     @PacketHandler
@@ -26,7 +26,7 @@ public class DaemonServerListener implements PacketAdapter {
         // daemon started a server
         boolean startedServer = packet.doneType == PacketServerDone.Type.START;
         Reaction.react(startedServer, () -> {
-            Cloud.getLogger().debug("Register server " + ip + " with type '" + packet.type + "' ..");
+            Cloud.getInstance().getLogger().debug("Register server " + ip + " with type '" + packet.type + "' ..");
 
             PacketMessenger.message(new PacketServerRegister(packet.type, packet.getAddress().getHostName(), packet.port), ClientType.PROXY);
             Cloud.getInstance().getMooProxy().getSpigotServers().put(packet.uuid,
@@ -37,7 +37,7 @@ public class DaemonServerListener implements PacketAdapter {
         Reaction.react(!startedServer, () -> {
             // check if the spigot server exists anyway
             if(Cloud.getInstance().getMooProxy().getSpigotServers().containsKey(packet.uuid)) {
-                Cloud.getLogger().debug("Unregister server " + ip + " with type '" + packet.type + "' ..");
+                Cloud.getInstance().getLogger().debug("Unregister server " + ip + " with type '" + packet.type + "' ..");
 
                 PacketMessenger.message(new PacketServerUnregister(packet.getAddress()), ClientType.PROXY);
                 Cloud.getInstance().getMooProxy().getSpigotServers().remove(packet.uuid);
@@ -47,9 +47,9 @@ public class DaemonServerListener implements PacketAdapter {
 
     @PacketHandler
     public void onRamUsage(PacketRamUsage packet) {
-        //Cloud.getLogger().debug("Updates ram usage for " + packet.getChannel().remoteAddress() + " (to " + packet.ramUsage + "%)");
+        //Cloud.getInstance().getLogger().debug("Updates ram usage for " + packet.getChannel().remoteAddress() + " (to " + packet.ramUsage + "%)");
 
-        Cloud.getInstance().getHub().updateRamUsage((InetSocketAddress) packet.getChannel().remoteAddress(), packet.ramUsage);
+        Cloud.getInstance().getClientManager().updateRamUsage((InetSocketAddress) packet.getChannel().remoteAddress(), packet.ramUsage);
     }
 
     @PacketHandler

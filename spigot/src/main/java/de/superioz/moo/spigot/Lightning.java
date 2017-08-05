@@ -2,7 +2,7 @@ package de.superioz.moo.spigot;
 
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import de.superioz.moo.api.event.EventListener;
-import de.superioz.moo.api.logging.Logs;
+import de.superioz.moo.api.logging.Loogger;
 import de.superioz.moo.api.module.ModuleRegistry;
 import de.superioz.moo.client.Moo;
 import lombok.Getter;
@@ -22,7 +22,7 @@ public class Lightning extends JavaPlugin implements EventListener {
     }
 
     private static Lightning instance;
-    private Logs logs;
+    private Loogger logs;
 
     private ModuleRegistry moduleRegistry;
     private LightningPluginModule pluginModule;
@@ -35,7 +35,7 @@ public class Lightning extends JavaPlugin implements EventListener {
         instance = this;
 
         // initialises moo and plugin module
-        Moo.initialise((logs = new Logs(getLogger())).getLogger());
+        Moo.initialise((logs = new Loogger(getLogger())).getLogger());
         this.pluginModule = new LightningPluginModule();
         this.moduleRegistry = new ModuleRegistry(getLogs());
         this.moduleRegistry.register(pluginModule);

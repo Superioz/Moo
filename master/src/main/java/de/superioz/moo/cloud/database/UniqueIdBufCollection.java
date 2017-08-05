@@ -4,7 +4,7 @@ import de.superioz.moo.api.cache.DatabaseCache;
 import de.superioz.moo.api.database.*;
 import de.superioz.moo.api.database.object.PlayerData;
 import de.superioz.moo.api.database.object.UniqueIdBuf;
-import de.superioz.moo.cloud.cache.UniqueIdBufCache;
+import de.superioz.moo.cloud.database.cache.UniqueIdBufCache;
 import de.superioz.moo.protocol.common.Queries;
 
 import java.util.UUID;

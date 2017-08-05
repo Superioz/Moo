@@ -17,7 +17,7 @@ public class ListenerModule extends Module {
 
     @Override
     protected void onEnable() {
-        Cloud.getLogger().debug("Registering listeners ..");
+        Cloud.getInstance().getLogger().debug("Registering listeners ..");
 
         // event listeners
         EventExecutor.getInstance().register(
@@ -51,7 +51,7 @@ public class ListenerModule extends Module {
                 new PacketPlayerPunishListener(),
                 new PacketServerInfoUpdateListener()
         );
-        Cloud.getLogger().debug("Finished registering listeners.");
+        Cloud.getInstance().getLogger().debug("Finished registering listeners.");
     }
 
     @Override

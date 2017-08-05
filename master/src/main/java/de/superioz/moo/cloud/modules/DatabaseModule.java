@@ -41,15 +41,15 @@ public class DatabaseModule extends Module {
                 .build();
 
         // connects
-        Cloud.getLogger().info("Connecting to database .. [" + dbConn.getHost() + ":" + dbConn.getPort() + "]" +
+        Cloud.getInstance().getLogger().info("Connecting to database .. [" + dbConn.getHost() + ":" + dbConn.getPort() + "]" +
                 "{user: '" + dbConn.getUser() + "', pw: '" + dbConn.getPassword() + "', db: '" + dbConn.getDatabase() + "'}");
         dbConn.connect(dbWorker -> {
             int size = dbWorker.getCollections().size();
-            Cloud.getLogger().info("Connected to database! [" + dbWorker.getUser() + ":" + dbWorker.getDatabase() + "@" + dbWorker.getHost() + "]");
-            Cloud.getLogger().debug("Collections (" + size + "): " + dbWorker.getCollections());
+            Cloud.getInstance().getLogger().info("Connected to database! [" + dbWorker.getUser() + ":" + dbWorker.getDatabase() + "@" + dbWorker.getHost() + "]");
+            Cloud.getInstance().getLogger().debug("Collections (" + size + "): " + dbWorker.getCollections());
         });
 
-        Cloud.getLogger().debug("Registering database collections ..");
+        Cloud.getInstance().getLogger().debug("Registering database collections ..");
         this.registerDatabaseCollections(
                 new GroupCollection(dbConn),
                 new PlayerDataCollection(dbConn),
@@ -57,7 +57,7 @@ public class DatabaseModule extends Module {
                 new BanArchiveCollection(dbConn),
                 new UniqueIdBufCollection(dbConn)
         );
-        Cloud.getLogger().debug("Finished registering database collections. (" + collectionMap.size() + ")");
+        Cloud.getInstance().getLogger().debug("Finished registering database collections. (" + collectionMap.size() + ")");
     }
 
     @Override

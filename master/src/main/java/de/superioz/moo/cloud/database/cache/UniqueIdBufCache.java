@@ -1,4 +1,4 @@
-package de.superioz.moo.cloud.cache;
+package de.superioz.moo.cloud.database.cache;
 
 import de.superioz.moo.api.cache.DatabaseCache;
 import de.superioz.moo.api.database.object.UniqueIdBuf;

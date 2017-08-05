@@ -7,12 +7,12 @@ import de.superioz.moo.api.database.DatabaseConnection;
 import de.superioz.moo.api.database.DatabaseType;
 import de.superioz.moo.api.event.EventListener;
 import de.superioz.moo.api.io.JsonConfig;
-import de.superioz.moo.api.logging.Logs;
+import de.superioz.moo.api.logging.Loogger;
 import de.superioz.moo.api.logging.MooLogger;
 import de.superioz.moo.api.module.ModuleRegistry;
 import de.superioz.moo.cloud.modules.*;
 import de.superioz.moo.cloud.task.ServerInfoCheckTask;
-import de.superioz.moo.protocol.server.ClientHub;
+import de.superioz.moo.protocol.server.ClientManager;
 import de.superioz.moo.protocol.server.MooProxy;
 import de.superioz.moo.protocol.server.NetworkServer;
 import jline.console.ConsoleReader;
@@ -28,7 +28,7 @@ public class Cloud implements EventListener {
     @Getter
     private static Cloud instance;
     @Getter
-    private static Logs logger;
+    private Loogger logger;
 
     private final ExecutorService executors = Executors.newCachedThreadPool(
             new ThreadFactoryBuilder().setNameFormat("cloud-pool-%d").build());
@@ -64,8 +64,8 @@ public class Cloud implements EventListener {
         // initialises the console things
         MooLogger logger = new MooLogger("Moo");
         reader = logger.getReader();
-        Cloud.logger = new Logs(logger).enableFileLogging();
-        Cloud.logger.prepareNativeStreams();
+        this.logger = new Loogger(logger).enableFileLogging();
+        this.logger.prepareNativeStreams();
     }
 
     /**
@@ -157,7 +157,7 @@ public class Cloud implements EventListener {
         return nettyModule == null ? null : nettyModule.getServer();
     }
 
-    public ClientHub getHub() {
+    public ClientManager getClientManager() {
         return getServer() == null ? null : getServer().getHub();
     }
 

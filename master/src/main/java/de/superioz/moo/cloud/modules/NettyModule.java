@@ -38,8 +38,8 @@ public class NettyModule extends Module implements EventListener {
 
     @Override
     protected void onEnable() {
-        Cloud.getLogger().info("Starting netty server ..");
-        this.server = new NetworkServer(config.get("netty.host"), config.get("netty.port"), config, Cloud.getLogger().getLogger());
+        Cloud.getInstance().getLogger().info("Starting netty server ..");
+        this.server = new NetworkServer(config.get("netty.host"), config.get("netty.port"), config, Cloud.getInstance().getLogger().getLogger());
 
         // register protocol listeners
         //EventExecutor.getInstance().register(new NettyServerListener(server));
@@ -80,7 +80,7 @@ public class NettyModule extends Module implements EventListener {
             server.setup().start();
         }
         catch(Exception e) {
-            Cloud.getLogger().severe("Couldn't start netty server!", e);
+            Cloud.getInstance().getLogger().severe("Couldn't start netty server!", e);
         }
     }
 
@@ -92,7 +92,7 @@ public class NettyModule extends Module implements EventListener {
     @EventHandler
     public void onServerState(ServerStateEvent stateEvent) {
         if(stateEvent.getState() == NetworkServer.State.STARTED) {
-            Cloud.getLogger().info(ConsoleColor.WHITE
+            Cloud.getInstance().getLogger().info(ConsoleColor.WHITE
                     + "Netty master started [" + server.getHost() + ":" + server.getPort() + "]");
         }
     }

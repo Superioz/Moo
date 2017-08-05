@@ -37,7 +37,7 @@ public class MooClientConnectedListener implements EventListener {
                     list.add(new PacketServerRegister(server.getType(), server.getAddress().getHostName(), server.getAddress().getPort()));
                 }
 
-                Cloud.getLogger().debug("Send already registered server to proxy (" + list.size() + "x) ..");
+                Cloud.getInstance().getLogger().debug("Send already registered server to proxy (" + list.size() + "x) ..");
                 MultiPacket<PacketServerRegister> multiPacket = new MultiPacket<>(list);
                 PacketMessenger.message(multiPacket, client);
             }
@@ -47,7 +47,7 @@ public class MooClientConnectedListener implements EventListener {
             @Override
             public void invoke() {
                 // if this is not the first daemon, rip
-                if(Cloud.getInstance().getHub().getClients(ClientType.DAEMON).size() > 1) {
+                if(Cloud.getInstance().getClientManager().getClients(ClientType.DAEMON).size() > 1) {
                     return;
                 }
 

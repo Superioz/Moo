@@ -76,7 +76,7 @@ public class CloudCommand implements EventListener {
         context.sendMessage("Sending keepalive to all proxy clients ..");
         int count = set.hasFlag("n") ? set.getFlag("n").getInt(0) : 1;
 
-        List<MooClient> clients = Cloud.getInstance().getHub().getProxyClients();
+        List<MooClient> clients = Cloud.getInstance().getClientManager().getProxyClients();
         clients.forEach(mooClient -> {
             for(int i = 0; i < count; i++) {
                 PacketMessenger.message(new PacketKeepalive(), mooClient);
@@ -92,7 +92,7 @@ public class CloudCommand implements EventListener {
      */
     @Command(label = "clients")
     public void clients(CommandContext context, ParamSet set) {
-        List<MooClient> clients = Cloud.getInstance().getHub().getAll();
+        List<MooClient> clients = Cloud.getInstance().getClientManager().getAll();
         clients.sort(Comparator.comparingInt(MooClient::getId));
         int size = clients.size();
 

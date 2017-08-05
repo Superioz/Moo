@@ -37,7 +37,7 @@ public class ServerInfoCheckTask implements Runnable {
             if(!toDelete.isEmpty()) {
                 toDelete.forEach(uuid -> {
                     MooServer serverDeleted = Cloud.getInstance().getMooProxy().getSpigotServers().remove(uuid);
-                    Cloud.getLogger().debug("Server " + serverDeleted.getType()
+                    Cloud.getInstance().getLogger().debug("Server " + serverDeleted.getType()
                             + " [" + serverDeleted.getAddress().getHostName() + ":" + serverDeleted.getAddress().getPort() + "] timed out.");
                     PacketMessenger.message(new PacketServerUnregister(serverDeleted.getAddress()), ClientType.PROXY);
                 });

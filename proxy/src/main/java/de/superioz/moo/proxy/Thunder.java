@@ -1,7 +1,7 @@
 package de.superioz.moo.proxy;
 
 import de.superioz.moo.api.event.EventListener;
-import de.superioz.moo.api.logging.Logs;
+import de.superioz.moo.api.logging.Loogger;
 import de.superioz.moo.api.module.ModuleRegistry;
 import de.superioz.moo.client.Moo;
 import lombok.Getter;
@@ -23,7 +23,7 @@ public class Thunder extends Plugin implements EventListener {
 
     @Getter
     private static Thunder instance;
-    private Logs logs;
+    private Loogger logs;
 
     private ModuleRegistry moduleRegistry;
     private ThunderPluginModule pluginModule;
@@ -33,7 +33,7 @@ public class Thunder extends Plugin implements EventListener {
         instance = this;
 
         // initialise moo and plugin module
-        Moo.initialise((logs = new Logs(getLogger())).prepareNativeStreams().enableFileLogging().getLogger());
+        Moo.initialise((logs = new Loogger(getLogger())).prepareNativeStreams().enableFileLogging().getLogger());
         this.pluginModule = new ThunderPluginModule();
         this.moduleRegistry = new ModuleRegistry(logs);
         this.moduleRegistry.register(pluginModule);

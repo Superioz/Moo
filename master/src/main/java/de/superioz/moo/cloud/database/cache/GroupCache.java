@@ -1,4 +1,4 @@
-package de.superioz.moo.cloud.cache;
+package de.superioz.moo.cloud.database.cache;
 
 import de.superioz.moo.api.cache.DatabaseCache;
 import de.superioz.moo.api.database.object.Group;
@@ -17,7 +17,7 @@ public class GroupCache extends DatabaseCache<String, Group> {
 
     @Override
     public void load() {
-        Cloud.getLogger().debug("Loading groups from database ..");
+        Cloud.getInstance().getLogger().debug("Loading groups from database ..");
         getDatabaseCollection().fetch(null, -1).forEach((Consumer<Document>) document -> {
             Group group = getDatabaseCollection().convert(document);
             insert(group.name, group);
@@ -25,7 +25,7 @@ public class GroupCache extends DatabaseCache<String, Group> {
 
         List<String> l = new ArrayList<>();
         queryLooped(null).forEach(group -> l.add(group.name));
-        Cloud.getLogger().debug("Found groups(" + size() + "): " + l);
+        Cloud.getInstance().getLogger().debug("Found groups(" + size() + "): " + l);
     }
 
 }

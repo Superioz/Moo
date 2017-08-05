@@ -5,7 +5,7 @@ import de.superioz.moo.api.database.DatabaseCollection;
 import de.superioz.moo.api.database.DatabaseConnection;
 import de.superioz.moo.api.database.DatabaseType;
 import de.superioz.moo.api.database.object.Ban;
-import de.superioz.moo.cloud.cache.BanCache;
+import de.superioz.moo.cloud.database.cache.BanCache;
 
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;

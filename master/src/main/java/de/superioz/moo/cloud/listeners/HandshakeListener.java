@@ -42,7 +42,7 @@ public class HandshakeListener implements EventListener {
         }
 
         // checks if already a daemon from this host connected to the server
-        if(packet.type == ClientType.DAEMON && Cloud.getInstance().getHub().contains(remoteAddress)) {
+        if(packet.type == ClientType.DAEMON && Cloud.getInstance().getClientManager().contains(remoteAddress)) {
             packet.respond(new PacketRespond(header, version, ResponseStatus.FORBIDDEN));
             channel.disconnect();
             return;
@@ -55,12 +55,12 @@ public class HandshakeListener implements EventListener {
         MooClient client = new MooClient(packet.identifier,
                 remoteAddress.getAddress().getHostAddress(),
                 remoteAddress.getPort(), packet.type, channel);
-        client.setId(Cloud.getInstance().getHub().add(client));
+        client.setId(Cloud.getInstance().getClientManager().add(client));
 
         // fire event of client connection
         EventExecutor.getInstance().execute(new MooClientConnectedEvent(client));
 
-        Cloud.getLogger().debug(ConsoleColor.GREEN.toString()
+        Cloud.getInstance().getLogger().debug(ConsoleColor.GREEN.toString()
                 + client.getType() + " client connected @(" + remoteAddress.getAddress().getHostAddress() + ")");
     }
 

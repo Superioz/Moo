@@ -47,7 +47,7 @@ public class MooPlayerJoinedProxyListener implements EventListener {
 
         // sets the server he is currently on
         String serverId = packet.meta;
-        int proxyId = Cloud.getInstance().getHub().get(clientAddress).getId();
+        int proxyId = Cloud.getInstance().getClientManager().get(clientAddress).getId();
         data.setCurrentServer(serverId);
         data.setCurrentProxy(proxyId);
         Cloud.getInstance().getMooProxy().add(data, clientAddress);

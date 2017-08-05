@@ -48,7 +48,7 @@ public class PacketDatabaseModifyListener implements PacketAdapter {
 
         // get collection
         DatabaseCollection module = Cloud.getInstance().getDatabaseCollection(dbType);
-        Cloud.getLogger().debug("Attempting to modify " + dbType.name() + " modules .. (" + type.name() + ")." +
+        Cloud.getInstance().getLogger().debug("Attempting to modify " + dbType.name() + " modules .. (" + type.name() + ")." +
                 " With filter (as " + filter + ") and query (as " + updates + ")");
 
         // primary key of the filter
@@ -57,7 +57,7 @@ public class PacketDatabaseModifyListener implements PacketAdapter {
 
         // get data from filtering
         List<Object> data = module.getFilteredData(CloudCollections.uniqueIds(), filter, packet.queried, packet.limit);
-        Cloud.getLogger().debug("Found data(" + data.size() + ") to " + type.name() + ": " + data);
+        Cloud.getInstance().getLogger().debug("Found data(" + data.size() + ") to " + type.name() + ": " + data);
 
         // for informing minecraft
         FinalValue<Boolean> result = new FinalValue<>(true);
@@ -187,13 +187,13 @@ public class PacketDatabaseModifyListener implements PacketAdapter {
             return;
         }
 
-        Cloud.getLogger().debug("Attempting to modify " + database + " database .. (" + type.name() + ")." +
+        Cloud.getInstance().getLogger().debug("Attempting to modify " + database + " database .. (" + type.name() + ")." +
                 " With filter (as " + filter + ") and query (as " + updates + ")");
 
         // get to-edit data
         List<Document> data = databaseConnection.findSync(collection, filter.toBson(), packet.limit).into(new ArrayList<>());
 
-        Cloud.getLogger().debug("Found documents(" + data.size() + ") to " + type.name() + ".");
+        Cloud.getInstance().getLogger().debug("Found documents(" + data.size() + ") to " + type.name() + ".");
 
         // create some data
         Reaction.react(type, DatabaseModifyType.CREATE, () -> {
@@ -254,7 +254,7 @@ public class PacketDatabaseModifyListener implements PacketAdapter {
         //respond.setUniqueId(req.getUniqueId());
 
         //.
-        Cloud.getLogger().debug("Inform servers about " + type.name()
+        Cloud.getInstance().getLogger().debug("Inform servers about " + type.name()
                 + " database modification(" + data.size() + "): " + data);
 
         // send respond

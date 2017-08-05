@@ -31,7 +31,7 @@ import java.util.concurrent.TimeUnit;
  */
 @Getter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class Queries {
+public final class Queries {
 
     private DatabaseType databaseType;
     private String databaseName;

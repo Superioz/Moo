@@ -1,4 +1,4 @@
-package de.superioz.moo.protocol.common;
+package de.superioz.moo.protocol.util;
 
 import de.superioz.moo.protocol.AbstractNetworkInstance;
 import de.superioz.moo.protocol.lib.Varint32FrameDecoder;

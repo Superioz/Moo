@@ -4,7 +4,7 @@ import de.superioz.moo.api.cache.DatabaseCache;
 import de.superioz.moo.api.database.*;
 import de.superioz.moo.api.database.object.Group;
 import de.superioz.moo.api.database.object.PlayerData;
-import de.superioz.moo.cloud.cache.PlayerDataCache;
+import de.superioz.moo.cloud.database.cache.PlayerDataCache;
 
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;

@@ -61,7 +61,7 @@ public class MooLogger extends Logger {
     }
 
     public MooLogger(String name) {
-        this(name, Logs.DEFAULT_FORMATTING);
+        this(name, Loogger.DEFAULT_FORMATTING);
     }
 
     /**

@@ -42,7 +42,7 @@ public class PacketDatabaseInfoListener implements PacketAdapter {
 
         // get the database collection
         DatabaseCollection module = Cloud.getInstance().getDatabaseCollection(type);
-        Cloud.getLogger().debug("Attempting to fetch data from modules .. (" + type.name() + ")." +
+        Cloud.getInstance().getLogger().debug("Attempting to fetch data from modules .. (" + type.name() + ")." +
                 " With filter (as " + filter + ")");
 
         // get data from filtering
@@ -82,7 +82,7 @@ public class PacketDatabaseInfoListener implements PacketAdapter {
             return;
         }
 
-        Cloud.getLogger().debug("Attempting to fetch data from explicit database .. (" + database + ")." +
+        Cloud.getInstance().getLogger().debug("Attempting to fetch data from explicit database .. (" + database + ")." +
                 " With filter (as " + filter + ")");
 
         // find entries and send them

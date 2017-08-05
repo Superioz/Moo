@@ -7,7 +7,7 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import lombok.Getter;
 import lombok.Setter;
 import de.superioz.moo.protocol.AbstractNetworkInstance;
-import de.superioz.moo.protocol.common.PipelineUtil;
+import de.superioz.moo.protocol.util.PipelineUtil;
 import de.superioz.moo.protocol.Protocol;
 
 import java.util.concurrent.ExecutorService;

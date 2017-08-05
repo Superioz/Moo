@@ -38,6 +38,13 @@
             <artifactId>junit-jupiter-api</artifactId>
             <version>5.0.0-RC2</version>
         </dependency>
+
+        <!-- Redisson -->
+        <dependency>
+            <groupId>org.redisson</groupId>
+            <artifactId>redisson</artifactId>
+            <version>3.5.0</version>
+        </dependency>
     </dependencies>
 
     <!-- Build Parameter -->

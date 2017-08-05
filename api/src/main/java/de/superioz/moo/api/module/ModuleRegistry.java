@@ -4,7 +4,7 @@ import com.google.common.base.Strings;
 import lombok.Getter;
 import lombok.Setter;
 import de.superioz.moo.api.exceptions.InvalidConfigException;
-import de.superioz.moo.api.logging.Logs;
+import de.superioz.moo.api.logging.Loogger;
 import de.superioz.moo.api.utils.NumberUtil;
 import de.superioz.moo.api.utils.StringUtil;
 
@@ -31,9 +31,9 @@ public class ModuleRegistry {
     private ExecutorService service;
 
     @Getter
-    private Logs logger;
+    private Loogger logger;
 
-    public ModuleRegistry(Logs logger) {
+    public ModuleRegistry(Loogger logger) {
         this.logger = logger;
     }
 

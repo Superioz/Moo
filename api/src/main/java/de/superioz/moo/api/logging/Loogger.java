@@ -28,7 +28,7 @@ import java.util.logging.Logger;
  * <p>
  * If you are using this for a custom program I recommend to use the {@link MooLogger} because it supports colors and jline!
  */
-public class Logs {
+public class Loogger {
 
     public static final Formatter DEFAULT_FORMATTING = new ConciseFormatter();
     private static final String LOG_FILE = "latest.log";
@@ -44,7 +44,7 @@ public class Logs {
     @Getter
     private boolean fileLogging = false;
 
-    public Logs(Logger logger) {
+    public Loogger(Logger logger) {
         AnsiConsole.systemInstall();
         this.logger = logger;
     }
@@ -67,7 +67,7 @@ public class Logs {
      *
      * @return This
      */
-    public Logs prepareNativeStreams() {
+    public Loogger prepareNativeStreams() {
         System.setErr(new PrintStream(new LoggingOutputStream(getLogger(), Level.SEVERE), true));
         System.setOut(new PrintStream(new LoggingOutputStream(getLogger(), Level.INFO), true));
         return this;
@@ -75,11 +75,11 @@ public class Logs {
 
     /**
      * Enables the file logging which will automatically logs everything from the console inside a file called latest.logging<br>
-     * Before every handler creation {@link Logs#clean(String)} will be called (to clean up the logs folder)
+     * Before every handler creation {@link Loogger#clean(String)} will be called (to clean up the logs folder)
      *
      * @return This
      */
-    public Logs enableFileLogging() {
+    public Loogger enableFileLogging() {
         if(fileLogging || logger == null) return this;
         this.checkFolder();
         String path = LOG_FOLDER + "/" + LOG_FILE;

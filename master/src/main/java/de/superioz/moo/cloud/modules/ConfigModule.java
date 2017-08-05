@@ -25,14 +25,14 @@ public class ConfigModule extends Module {
 
     @Override
     protected void onEnable() {
-        Cloud.getLogger().info("Load configuration ..");
+        Cloud.getInstance().getLogger().info("Load configuration ..");
         config = new JsonConfig("config", Paths.get("configuration"));
         config.load(true, true);
-        Cloud.getLogger().info(config.isLoaded() ? "Loaded config @(" + config.getPath() + ")" : "Could not load config.");
+        Cloud.getInstance().getLogger().info(config.isLoaded() ? "Loaded config @(" + config.getPath() + ")" : "Could not load config.");
 
         // debug
-        Cloud.getLogger().setDebugMode(config.get("debug", true));
-        Cloud.getLogger().info("Debug Mode is " + (Cloud.getLogger().isDebugMode() ? "on" : "OFF"));
+        Cloud.getInstance().getLogger().setDebugMode(config.get("debug", true));
+        Cloud.getInstance().getLogger().info("Debug Mode is " + (Cloud.getInstance().getLogger().isDebugMode() ? "on" : "OFF"));
 
         config.getCache().keySet().forEach(s -> {
             String[] s0 = s.split(":");
@@ -40,7 +40,7 @@ public class ConfigModule extends Module {
             Object val = config.get(key);
 
             if(val != null) {
-                Cloud.getLogger().debug("-" + key + " has value '" + (val.toString().replace("\n", "\\n")) + "'");
+                Cloud.getInstance().getLogger().debug("-" + key + " has value '" + (val.toString().replace("\n", "\\n")) + "'");
             }
         });
         Punishmental.getInstance().init(
