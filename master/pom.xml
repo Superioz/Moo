@@ -102,7 +102,7 @@
                             <mainClass>de.superioz.moo.cloud.Cloud</mainClass>
                         </manifest>
                         <manifestEntries>
-                            <Implementation-Version>${version}</Implementation-Version>
+                            <Implementation-Version>${project.version}</Implementation-Version>
                         </manifestEntries>
                     </archive>
                 </configuration>
