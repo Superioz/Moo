@@ -1,4 +1,5 @@
 {
+  "debug": false,
   "activated": true,
   "server-name": "server",
   "cloud-ip": "localhost",

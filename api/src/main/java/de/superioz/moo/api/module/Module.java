@@ -1,15 +1,25 @@
 package de.superioz.moo.api.module;
 
+import de.superioz.moo.api.common.RunAsynchronous;
+import de.superioz.moo.api.exceptions.ModuleInitializeException;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
-import de.superioz.moo.api.common.RunAsynchronous;
-import de.superioz.moo.api.exceptions.ModuleInitializeException;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
+import java.util.function.Consumer;
 
+/**
+ * With this Module you can split up program parts so that the code looks clearer.
+ * Also, you can use {@link ModuleDependency} and {@link RunAsynchronous} to modify the
+ * enabling behaviour. Remember, if the module runs async no other module can depend on it via
+ * the {@link ModuleDependency}, because the dependency system is only for determining the order
+ * of enabling the modules.
+ */
 @Getter
 public abstract class Module {
 
@@ -35,6 +45,12 @@ public abstract class Module {
      */
     @Setter
     private Throwable errorReason;
+
+    /**
+     * Future only if started async
+     */
+    @Getter @Setter
+    private Future<? extends Module> future;
 
     public abstract String getName();
 
@@ -63,6 +79,26 @@ public abstract class Module {
         synchronized(this) {
             this.notifyAll();
         }
+    }
+
+    /**
+     * Waiting for the module to be finished.
+     *
+     * @return The module afterr finished
+     */
+    public <M extends Module> M waitFor() {
+        if(future == null) return (M) this;
+        try {
+            return (M) future.get();
+        }
+        catch(InterruptedException | ExecutionException e) {
+            //
+        }
+        return (M) this;
+    }
+
+    public <M extends Module> void waitForAsync(Consumer<M> onFinished) {
+        new Thread(() -> onFinished.accept(waitFor())).run();
     }
 
     /**

@@ -76,7 +76,7 @@ public class CommandTerminal implements EventListener {
             }
             else {
                 if(!CommandRegistry.getInstance().executeCommand(args,
-                        new ConsoleCommandContext(logs.getLogger()))) {
+                        new ConsoleCommandContext(logs.getBaseLogger()))) {
                     //logs.debug(ConsoleColor.RED + "Couldn't execute command '" + command + "'");
                 }
             }

@@ -4,6 +4,7 @@
   "proxy-name": "main",
   "cloud-ip": "localhost",
   "cloud-port": 8000,
+  "redis-config": "redis_config.json",
   "team-rank": 10,
   "colored-chat-permission": "chat.colored",
   "formatted-chat-permission": "chat.formatted",

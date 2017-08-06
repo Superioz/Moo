@@ -1,5 +1,6 @@
 {
   "debug": false,
+  "redis-config": "redis_config.json",
   "max-ram-usage": 60,
   "netty": {
     "host": "localhost",

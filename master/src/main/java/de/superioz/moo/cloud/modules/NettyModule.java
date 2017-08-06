@@ -39,17 +39,17 @@ public class NettyModule extends Module implements EventListener {
     @Override
     protected void onEnable() {
         Cloud.getInstance().getLogger().info("Starting netty server ..");
-        this.server = new NetworkServer(config.get("netty.host"), config.get("netty.port"), config, Cloud.getInstance().getLogger().getLogger());
+        this.server = new NetworkServer(config.get("netty.host"), config.get("netty.port"), config, Cloud.getInstance().getLogger().getBaseLogger());
 
         // register protocol listeners
         //EventExecutor.getInstance().register(new NettyServerListener(server));
         EventExecutor.getInstance().register(this);
         EventExecutor.getInstance().register(new HandshakeListener());
 
+        // register event adapter
         server.registerEventAdapter(new NetworkEventAdapter() {
             @Override
             public void onPacketReceive(AbstractPacket packet) {
-                //
             }
 
             @Override
@@ -59,21 +59,18 @@ public class NettyModule extends Module implements EventListener {
 
             @Override
             public void onPacketSend(AbstractPacket packet) {
-                //
             }
 
             @Override
             public void onChannelActive(Channel channel) {
-                //
             }
 
             @Override
             public void onChannelInactive(Channel channel) {
-                //
             }
         });
 
-        //
+        // send info to program parts waiting for me
         super.finished(true);
 
         try {

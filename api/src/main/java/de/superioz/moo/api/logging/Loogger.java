@@ -38,23 +38,23 @@ public class Loogger {
     private ExecutorService executor = Executors.newSingleThreadExecutor(new ThreadFactoryBuilder().setNameFormat("logging-pool-%d").build());
 
     @Getter
-    private final Logger logger;
+    private final Logger baseLogger;
     @Getter @Setter
     private boolean debugMode = false;
     @Getter
     private boolean fileLogging = false;
 
-    public Loogger(Logger logger) {
+    public Loogger(Logger baseLogger) {
         AnsiConsole.systemInstall();
-        this.logger = logger;
+        this.baseLogger = baseLogger;
     }
 
     /**
      * Disables the logger and shutdowns the ansi console
      */
     public void disable() {
-        if(logger instanceof MooLogger) {
-            ((MooLogger) logger).close();
+        if(baseLogger instanceof MooLogger) {
+            ((MooLogger) baseLogger).close();
         }
         AnsiConsole.systemUninstall();
     }
@@ -68,8 +68,8 @@ public class Loogger {
      * @return This
      */
     public Loogger prepareNativeStreams() {
-        System.setErr(new PrintStream(new LoggingOutputStream(getLogger(), Level.SEVERE), true));
-        System.setOut(new PrintStream(new LoggingOutputStream(getLogger(), Level.INFO), true));
+        System.setErr(new PrintStream(new LoggingOutputStream(getBaseLogger(), Level.SEVERE), true));
+        System.setOut(new PrintStream(new LoggingOutputStream(getBaseLogger(), Level.INFO), true));
         return this;
     }
 
@@ -80,7 +80,7 @@ public class Loogger {
      * @return This
      */
     public Loogger enableFileLogging() {
-        if(fileLogging || logger == null) return this;
+        if(fileLogging || baseLogger == null) return this;
         this.checkFolder();
         String path = LOG_FOLDER + "/" + LOG_FILE;
 
@@ -90,7 +90,7 @@ public class Loogger {
 
             FileHandler fileHandler = new FileHandler(path, 1000 * 1024, 1, true);
             fileHandler.setFormatter(DEFAULT_FORMATTING);
-            logger.addHandler(fileHandler);
+            baseLogger.addHandler(fileHandler);
         }
         catch(Exception ex) {
             System.err.println("Could not register logger!");
@@ -191,7 +191,7 @@ public class Loogger {
      * @param thr Exception?
      */
     public void info(String msg, Throwable thr) {
-        if(logger != null) logger.log(Level.INFO, msg, thr);
+        if(baseLogger != null) baseLogger.log(Level.INFO, msg, thr);
     }
 
     public void info(String msg) {
@@ -205,7 +205,7 @@ public class Loogger {
      * @param thr Exception?
      */
     public void severe(String msg, Throwable thr) {
-        if(logger != null) logger.log(Level.SEVERE, msg, thr);
+        if(baseLogger != null) baseLogger.log(Level.SEVERE, msg, thr);
     }
 
     public void severe(String msg) {
@@ -219,7 +219,7 @@ public class Loogger {
      * @param thr Exception?
      */
     public void warning(String msg, Throwable thr) {
-        if(logger != null) logger.log(Level.WARNING, msg, thr);
+        if(baseLogger != null) baseLogger.log(Level.WARNING, msg, thr);
     }
 
     public void warning(String msg) {
@@ -233,8 +233,8 @@ public class Loogger {
      * @param thr Exception?
      */
     public void debug(String msg, Throwable thr) {
-        if(logger != null && isDebugMode()) {
-            logger.log(Level.FINE, msg, thr);
+        if(baseLogger != null && isDebugMode()) {
+            baseLogger.log(Level.FINE, msg, thr);
         }
     }
 
@@ -249,8 +249,8 @@ public class Loogger {
      * @param thr Exception?
      */
     public void debugInfo(String msg, Throwable thr) {
-        if(logger != null && isDebugMode()) {
-            logger.log(Level.INFO, msg, thr);
+        if(baseLogger != null && isDebugMode()) {
+            baseLogger.log(Level.INFO, msg, thr);
         }
     }
 

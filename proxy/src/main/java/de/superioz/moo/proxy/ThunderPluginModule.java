@@ -31,6 +31,7 @@ public class ThunderPluginModule extends Module implements EventListener {
 
     private JsonConfig config;
     private LanguageManager languageManager;
+    private JsonConfig redisConfig;
 
     @Override
     public String getName() {
@@ -70,8 +71,23 @@ public class ThunderPluginModule extends Module implements EventListener {
                 new ServerRegisterChangeListener()
         );
 
-        // connect to cloud
+        // connection config stuff
         if(config.isLoaded()) {
+            // connect to redis
+            /*redisConfig = new JsonConfig(config.get("redis-config"), Thunder.getInstance().getDataFolder());
+            redisConfig.load(true, true);
+            if(redisConfig.isLoaded()) {
+                try {
+                    MooRedis.getInstance().connectRedis(redisConfig.getFile());
+                    Thunder.getInstance().getLogs().info("Connection status of Redis: "
+                            + (MooRedis.getInstance().isRedisConnected() ? "ON" : "off"));
+                }
+                catch(IOException e) {
+                    Thunder.getInstance().getLogs().info("Error while connecting to redis: ", e);
+                }
+            }*/
+
+            // connect to cloud
             Moo.getInstance().connect(config.get("proxy-name"), ClientType.PROXY,
                     config.get("cloud-ip"), config.get("cloud-port"));
         }

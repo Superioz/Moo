@@ -6,10 +6,12 @@ import de.superioz.moo.api.database.DatabaseCollection;
 import de.superioz.moo.api.database.DatabaseConnection;
 import de.superioz.moo.api.database.DatabaseType;
 import de.superioz.moo.api.event.EventListener;
+import de.superioz.moo.api.io.CustomFile;
 import de.superioz.moo.api.io.JsonConfig;
 import de.superioz.moo.api.logging.Loogger;
 import de.superioz.moo.api.logging.MooLogger;
 import de.superioz.moo.api.module.ModuleRegistry;
+import de.superioz.moo.api.modules.RedisModule;
 import de.superioz.moo.cloud.modules.*;
 import de.superioz.moo.cloud.task.ServerInfoCheckTask;
 import de.superioz.moo.protocol.server.ClientManager;
@@ -82,6 +84,12 @@ public class Cloud implements EventListener {
         this.listenerModule = moduleRegistry.register(new ListenerModule());
         this.commandModule = moduleRegistry.register(new CommandModule());
         this.configModule = moduleRegistry.register(new ConfigModule(this));
+        this.configModule.waitForAsync(module -> {
+            if(module.getErrorReason() != null) return;
+            CustomFile customFile = new CustomFile(((ConfigModule)module).getConfig().get("redis-config"), Paths.get("configuration"));
+            customFile.load(true, true);
+            moduleRegistry.register(new RedisModule(customFile.getFile(), getLogger().getBaseLogger()));
+        });
         this.config = configModule.getConfig();
         this.databaseModule = moduleRegistry.register(new DatabaseModule(config));
         this.nettyModule = moduleRegistry.register(new NettyModule(config));
@@ -89,7 +97,7 @@ public class Cloud implements EventListener {
 
         // send module summary
         getLogger().info("Finished initializing modules.");
-        moduleRegistry.sendModuleSummary();
+        moduleRegistry.sendModuleSummaryAsync();
 
         // commands
         this.commandTerminal = new CommandTerminal();

@@ -32,19 +32,18 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.redisson.Redisson;
 import org.redisson.api.RedissonClient;
 import org.redisson.config.Config;
 
 import java.io.File;
-import java.io.IOException;
-import java.net.URI;
 import java.util.concurrent.*;
 import java.util.function.Consumer;
 import java.util.logging.Logger;
 
 /**
  * This class is for connecting to the cloud as client
+ *
+ * @see de.superioz.moo.api.cache.MooRedis
  */
 @Getter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -251,41 +250,6 @@ public class Moo {
         return isActivated();
     }
 
-    /*
-    ============================================
-    SPECIAL METHODS >> REDIS
-    ============================================
-     */
-
-    /**
-     * Connects to a redis server with given config.<br>
-     * It is recommended to set the address and authentification to the config.<br>
-     * Example: {@link org.redisson.config.SingleServerConfig#setAddress(URI)}
-     *
-     * @param config The redisson config
-     */
-    public void connectRedis(Config config) {
-        if(redisClient != null) return;
-        this.redisConfig = config;
-
-        if(config != null) {
-            this.redisClient = Redisson.create(config);
-        }
-    }
-
-    /**
-     * Connects to a redis server the same as {@link #connectRedis(Config)} does but
-     * with automatically getting the {@link Config} from a file. The file has to be
-     * either a .json or a .yml
-     *
-     * @param configFile The file of configuration
-     * @throws IOException /
-     * @see <a href="https://github.com/redisson/redisson/wiki/2.-Configuration">Configuration Wiki</a>
-     */
-    public void connectRedis(File configFile) throws IOException {
-        this.connectRedis(configFile.getName().endsWith("json")
-                ? Config.fromJSON(configFile) : Config.fromYAML(configFile));
-    }
 
     /*
     ============================================

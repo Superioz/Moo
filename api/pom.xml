@@ -45,6 +45,13 @@
             <artifactId>redisson</artifactId>
             <version>3.5.0</version>
         </dependency>
+
+        <!-- I hate my life -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-nop</artifactId>
+            <version>1.7.12</version>
+        </dependency>
     </dependencies>
 
     <!-- Build Parameter -->

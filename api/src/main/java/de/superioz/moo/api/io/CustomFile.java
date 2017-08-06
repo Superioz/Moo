@@ -6,7 +6,7 @@ import java.io.*;
 import java.nio.file.Path;
 
 @Getter
-public abstract class CustomFile {
+public class CustomFile {
 
     /**
      * The name of the file
@@ -29,13 +29,20 @@ public abstract class CustomFile {
     protected FileType filetype;
 
     public CustomFile(String filename, String extraPath, Path root, FileType filetype) {
-        String pathAdd = extraPath;
         this.filetype = filetype;
-        this.filename = filename + "." + filetype.getName();
+        this.filename = filename + (filetype == null ? "" : "." + filetype.getName());
 
-        if(!pathAdd.isEmpty())
-            pathAdd = "/" + pathAdd + "/";
-        file = new File(root + pathAdd, this.filename);
+        if(!extraPath.isEmpty())
+            extraPath = "/" + extraPath + "/";
+        file = new File(root + extraPath, this.filename);
+    }
+
+    public CustomFile(String filename, Path root, FileType filetype) {
+        this(filename, "", root, filetype);
+    }
+
+    public CustomFile(String filename, Path root) {
+        this(filename, "", root, null);
     }
 
     /**

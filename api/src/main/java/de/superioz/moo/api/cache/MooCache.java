@@ -68,21 +68,19 @@ public final class MooCache {
     private RedissonClient redisClient;
 
     /**
-     * Initializes the {@link RMap}s of this cache but only if the {@link RedissonClient} is gucci<br>
-     *
-     * @param config The config file of the instance to get all map's keys
+     * Initializes the {@link RMap}s of this cache.
      */
-    public void initialize(RedissonClient client, JsonConfig config) {
-        this.redisClient = client;
-        if(client != null && !client.isShutdown()) return;
+    public void initialize(JsonConfig config) {
+        if(redisClient != null && !redisClient.isShutdown()) return;
+        this.redisClient = MooRedis.getInstance().getClient();
 
         // get redis maps by fetching the keys out of the config
-        this.groupMap = client.getMap(config.get(RedisConfig.GROUP_MAP.getKey()));
-        this.uniqueIdPlayerMap = client.getMap(config.get(RedisConfig.PLAYER_DATA_MAP.getKey()));
-        this.nameUniqueIdMap = client.getMap(config.get(RedisConfig.PLAYER_ID_MAP.getKey()));
-        this.playerPermissionMap = client.getMap(config.get(RedisConfig.PLAYER_PERMISSION_MAP.getKey()));
-        this.configMap = client.getMap(config.get(RedisConfig.CONFIG_MAP.getKey()));
-        this.serverMap = client.getMap(config.get(RedisConfig.SERVER_MAP.getKey()));
+        this.groupMap = redisClient.getMap(config.get(RedisConfig.GROUP_MAP.getKey()));
+        this.uniqueIdPlayerMap = redisClient.getMap(config.get(RedisConfig.PLAYER_DATA_MAP.getKey()));
+        this.nameUniqueIdMap = redisClient.getMap(config.get(RedisConfig.PLAYER_ID_MAP.getKey()));
+        this.playerPermissionMap = redisClient.getMap(config.get(RedisConfig.PLAYER_PERMISSION_MAP.getKey()));
+        this.configMap = redisClient.getMap(config.get(RedisConfig.CONFIG_MAP.getKey()));
+        this.serverMap = redisClient.getMap(config.get(RedisConfig.SERVER_MAP.getKey()));
     }
 
 }

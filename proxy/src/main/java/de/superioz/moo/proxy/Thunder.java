@@ -1,8 +1,10 @@
 package de.superioz.moo.proxy;
 
 import de.superioz.moo.api.event.EventListener;
+import de.superioz.moo.api.io.CustomFile;
 import de.superioz.moo.api.logging.Loogger;
 import de.superioz.moo.api.module.ModuleRegistry;
+import de.superioz.moo.api.modules.RedisModule;
 import de.superioz.moo.client.Moo;
 import lombok.Getter;
 import net.md_5.bungee.api.ProxyServer;
@@ -10,6 +12,7 @@ import net.md_5.bungee.api.config.ServerInfo;
 import net.md_5.bungee.api.plugin.Plugin;
 
 import java.net.InetSocketAddress;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -32,11 +35,17 @@ public class Thunder extends Plugin implements EventListener {
     public void onEnable() {
         instance = this;
 
-        // initialise moo and plugin module
-        Moo.initialise((logs = new Loogger(getLogger())).prepareNativeStreams().enableFileLogging().getLogger());
+        // initialise moo and modules
+        Moo.initialise((logs = new Loogger(getLogger())).prepareNativeStreams().enableFileLogging().getBaseLogger());
         this.pluginModule = new ThunderPluginModule();
         this.moduleRegistry = new ModuleRegistry(logs);
         this.moduleRegistry.register(pluginModule);
+        this.pluginModule.waitForAsync(module -> {
+            if(module.getErrorReason() != null) return;
+            CustomFile customFile = new CustomFile(((ThunderPluginModule) module).getConfig().get("redis-config"), Paths.get("configuration"));
+            customFile.load(true, true);
+            moduleRegistry.register(new RedisModule(customFile.getFile(), getLogger()));
+        });
 
         // get config
         logs.setDebugMode(pluginModule.getConfig().get("debug"));
@@ -45,8 +54,11 @@ public class Thunder extends Plugin implements EventListener {
         // we don't want pre-defined servers! dk if its event possible to block them completely :thinking:
         int preDefinedServerSize = ProxyServer.getInstance().getServers().size();
         if(preDefinedServerSize != 0) {
-            logs.info("There is " + preDefinedServerSize + " server predefined which could lead to errors!");
+            logs.debug("There is " + preDefinedServerSize + " server predefined.");
         }
+
+        // summary?
+        moduleRegistry.sendModuleSummaryAsync();
     }
 
     @Override

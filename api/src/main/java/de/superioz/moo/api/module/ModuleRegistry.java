@@ -1,12 +1,12 @@
 package de.superioz.moo.api.module;
 
 import com.google.common.base.Strings;
-import lombok.Getter;
-import lombok.Setter;
 import de.superioz.moo.api.exceptions.InvalidConfigException;
 import de.superioz.moo.api.logging.Loogger;
 import de.superioz.moo.api.utils.NumberUtil;
 import de.superioz.moo.api.utils.StringUtil;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -41,6 +41,7 @@ public class ModuleRegistry {
      * Sends a module summary (similar to the Maven Reactor Summary)
      */
     public void sendModuleSummary() {
+        if(logger == null) return;
         logger.info(Strings.repeat("-", 75));
         logger.info("Module Summary: ");
         logger.info(" ");
@@ -60,12 +61,36 @@ public class ModuleRegistry {
 
             String timeString = "[ " + Strings.padStart(StringUtil.applyDecimalLength(time, 3),
                     6, ' ') + " s]";
+            String error = m.isEnabled() ? "" : " ("
+                    + (m.getErrorReason() != null ? m.getErrorReason().getClass().getSimpleName() : "Not Finished Yet")
+                    + ")";
             logger.info(name + " " + state + " " + timeString);
         }
         logger.info(" ");
-        logger.info("Success rate: " + NumberUtil.round(successCount/getModules().size() * 100, 4) + "% " +
-                "| Average time: " + NumberUtil.round(totalTime/getModules().size(), 4) + "s");
+        logger.info("Success rate: " + NumberUtil.round(successCount / getModules().size() * 100, 4) + "% " +
+                "| Average time: " + NumberUtil.round(totalTime / getModules().size(), 4) + "s");
         logger.info(Strings.repeat("-", 75));
+    }
+
+    public void sendModuleSummaryAsync() {
+        if(service != null) {
+            service.execute(() -> {
+                for(Module m : getModules()) {
+                    while(!m.isEnabled()){
+                        try {
+                            Thread.sleep(5);
+                        }
+                        catch(InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+                sendModuleSummary();
+            });
+        }
+        else {
+            sendModuleSummary();
+        }
     }
 
     /**
@@ -153,10 +178,10 @@ public class ModuleRegistry {
             // AND is auto enable activated?
             if(!m.isEnabled() && autoEnable) {
                 if(m.isRunningAsync() && getService() != null) {
-                    getService().execute(() -> enableModule(m));
+                    m.setFuture(getService().submit(() -> enableModule(m)));
 
                     // wait for module to be finished
-                    if(m.isRunningAsync() && getService() != null) {
+                    /*if(m.isRunningAsync() && getService() != null) {
                         synchronized(m) {
                             try {
                                 m.wait();
@@ -165,7 +190,7 @@ public class ModuleRegistry {
                                 e.printStackTrace();
                             }
                         }
-                    }
+                    }*/
                 }
                 else {
                     enableModule(m);

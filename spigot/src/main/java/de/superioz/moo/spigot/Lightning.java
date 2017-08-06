@@ -2,12 +2,15 @@ package de.superioz.moo.spigot;
 
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import de.superioz.moo.api.event.EventListener;
+import de.superioz.moo.api.io.CustomFile;
 import de.superioz.moo.api.logging.Loogger;
 import de.superioz.moo.api.module.ModuleRegistry;
+import de.superioz.moo.api.modules.RedisModule;
 import de.superioz.moo.client.Moo;
 import lombok.Getter;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.nio.file.Paths;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -35,10 +38,23 @@ public class Lightning extends JavaPlugin implements EventListener {
         instance = this;
 
         // initialises moo and plugin module
-        Moo.initialise((logs = new Loogger(getLogger())).getLogger());
+        Moo.initialise((logs = new Loogger(getLogger())).getBaseLogger());
         this.pluginModule = new LightningPluginModule();
         this.moduleRegistry = new ModuleRegistry(getLogs());
         this.moduleRegistry.register(pluginModule);
+        this.pluginModule.waitForAsync(module -> {
+            if(module.getErrorReason() != null) return;
+            CustomFile customFile = new CustomFile(((LightningPluginModule)module).getConfig().get("redis-config"), Paths.get("configuration"));
+            customFile.load(true, true);
+            moduleRegistry.register(new RedisModule(customFile.getFile(), getLogger()));
+        });
+
+        // get config
+        logs.setDebugMode(pluginModule.getConfig().get("debug"));
+        logs.info("Debug Mode is " + (logs.isDebugMode() ? "ON" : "off"));
+
+        // summary
+        moduleRegistry.sendModuleSummaryAsync();
     }
 
     @Override
