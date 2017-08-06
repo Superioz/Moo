@@ -1,6 +1,7 @@
 package de.superioz.moo.api.modules;
 
-import de.superioz.moo.api.cache.MooRedis;
+import de.superioz.moo.api.cache.MooCache;
+import de.superioz.moo.api.cache.RedisConnection;
 import de.superioz.moo.api.module.Module;
 import lombok.Getter;
 import org.redisson.config.Config;
@@ -22,9 +23,12 @@ public class RedisModule extends Module {
     private Config config;
     private Logger logger;
 
+    private RedisConnection redisConnection;
+
     public RedisModule(File configFile, Logger logger) {
         this.logger = logger;
         this.configFile = configFile;
+        this.redisConnection = new RedisConnection();
 
         try {
             this.config = configFile.getName().endsWith(".json") ? Config.fromJSON(configFile) : Config.fromYAML(configFile);
@@ -47,12 +51,15 @@ public class RedisModule extends Module {
             super.finished(false);
             return;
         }
-        MooRedis.getInstance().connectRedis(config);
-        logger.info("Redis connection status: " + (MooRedis.getInstance().isRedisConnected() ? "ON" : "off"));
+        redisConnection.connectRedis(config);
+        logger.info("Redis connection status: " + (redisConnection.isRedisConnected() ? "ON" : "off"));
+
+        // loading the RedisCache
+        MooCache.getInstance().initialize(redisConnection);
     }
 
     @Override
     protected void onDisable() {
-        MooRedis.getInstance().getClient().shutdown();
+        redisConnection.getClient().shutdown();
     }
 }

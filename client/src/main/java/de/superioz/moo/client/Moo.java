@@ -1,6 +1,7 @@
 package de.superioz.moo.client;
 
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
+import de.superioz.moo.api.cache.RedisConnection;
 import de.superioz.moo.api.command.CommandRegistry;
 import de.superioz.moo.api.command.param.ParamType;
 import de.superioz.moo.api.event.EventExecutor;
@@ -43,7 +44,7 @@ import java.util.logging.Logger;
 /**
  * This class is for connecting to the cloud as client
  *
- * @see de.superioz.moo.api.cache.MooRedis
+ * @see RedisConnection
  */
 @Getter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)

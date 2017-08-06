@@ -10,16 +10,20 @@ import de.superioz.moo.api.utils.ReflectionUtil;
 import de.superioz.moo.api.utils.StringUtil;
 import de.superioz.moo.client.events.PermissionUpdateEvent;
 import de.superioz.moo.client.util.PermissionUtil;
+import de.superioz.moo.protocol.common.ResponseStatus;
 import de.superioz.moo.protocol.exception.MooOutputException;
 import de.superioz.moo.protocol.packet.PacketAdapter;
 import de.superioz.moo.protocol.packet.PacketHandler;
 import de.superioz.moo.protocol.packets.PacketConfig;
+import de.superioz.moo.protocol.packets.PacketRespond;
 
 import java.util.*;
 
 /**
  * This class is for caching player data and similar<br>
  * That includes: {@link PlayerData}s, permissions and {@link Group}s
+ *
+ * TODO remove this class and put everything into MooCache
  */
 public final class ProxyCache implements PacketAdapter {
 
@@ -37,6 +41,22 @@ public final class ProxyCache implements PacketAdapter {
     private HashMap<UUID, PlayerData> uuidPlayerdataMap = new HashMap<>();
     private HashMap<UUID, List<String>> uuidPermissionMap = new HashMap<>();
     private HashMap<PacketConfig.Type, String> configValueMap = new HashMap<>();
+
+    @PacketHandler
+    public void onRespond(PacketRespond respond) {
+        if(respond == null || respond.status != ResponseStatus.OK) return;
+        String header = respond.header;
+        if(!header.startsWith("mod-")) return;
+
+        // ..
+        String type = header.replaceFirst("mod-", "");
+        for(String s : respond.message) {
+
+            String[] s0 = s.split(":", 2);
+            int mod = Integer.parseInt(s0[0]);
+            ProxyCache.getInstance().update(type, s0[1], mod);
+        }
+    }
 
     @PacketHandler(priority = EventPriority.HIGHEST)
     public void onConfig(PacketConfig packet) {
@@ -127,7 +147,7 @@ public final class ProxyCache implements PacketAdapter {
      *
      * @return The groups as list
      */
-    List<Group> getGroups() {
+    public List<Group> getGroups() {
         return new ArrayList<>(groupMap.values());
     }
 
@@ -137,7 +157,7 @@ public final class ProxyCache implements PacketAdapter {
      * @param name The groupName
      * @return The group object
      */
-    Group getGroup(String name) {
+    public Group getGroup(String name) {
         return groupMap.get(name);
     }
 

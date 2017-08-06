@@ -3,7 +3,6 @@ package de.superioz.moo.api.cache;
 import de.superioz.moo.api.common.MooServer;
 import de.superioz.moo.api.database.object.Group;
 import de.superioz.moo.api.database.object.PlayerData;
-import de.superioz.moo.api.io.JsonConfig;
 import lombok.Getter;
 import org.redisson.api.RMap;
 import org.redisson.api.RedissonClient;
@@ -70,17 +69,17 @@ public final class MooCache {
     /**
      * Initializes the {@link RMap}s of this cache.
      */
-    public void initialize(JsonConfig config) {
+    public void initialize(RedisConnection connection) {
         if(redisClient != null && !redisClient.isShutdown()) return;
-        this.redisClient = MooRedis.getInstance().getClient();
+        this.redisClient = connection.getClient();
 
         // get redis maps by fetching the keys out of the config
-        this.groupMap = redisClient.getMap(config.get(RedisConfig.GROUP_MAP.getKey()));
-        this.uniqueIdPlayerMap = redisClient.getMap(config.get(RedisConfig.PLAYER_DATA_MAP.getKey()));
-        this.nameUniqueIdMap = redisClient.getMap(config.get(RedisConfig.PLAYER_ID_MAP.getKey()));
-        this.playerPermissionMap = redisClient.getMap(config.get(RedisConfig.PLAYER_PERMISSION_MAP.getKey()));
-        this.configMap = redisClient.getMap(config.get(RedisConfig.CONFIG_MAP.getKey()));
-        this.serverMap = redisClient.getMap(config.get(RedisConfig.SERVER_MAP.getKey()));
+        this.groupMap = redisClient.getMap(RedisConfig.GROUP_MAP.getKey());
+        this.uniqueIdPlayerMap = redisClient.getMap(RedisConfig.PLAYER_DATA_MAP.getKey());
+        this.nameUniqueIdMap = redisClient.getMap(RedisConfig.PLAYER_ID_MAP.getKey());
+        this.playerPermissionMap = redisClient.getMap(RedisConfig.PLAYER_PERMISSION_MAP.getKey());
+        this.configMap = redisClient.getMap(RedisConfig.CONFIG_MAP.getKey());
+        this.serverMap = redisClient.getMap(RedisConfig.SERVER_MAP.getKey());
     }
 
 }

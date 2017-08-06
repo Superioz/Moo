@@ -1,6 +1,5 @@
 package de.superioz.moo.spigot;
 
-import de.superioz.moo.api.cache.MooRedis;
 import de.superioz.moo.api.event.EventExecutor;
 import de.superioz.moo.api.event.EventHandler;
 import de.superioz.moo.api.event.EventListener;
@@ -13,14 +12,11 @@ import de.superioz.moo.client.events.CloudConnectedEvent;
 import de.superioz.moo.protocol.client.ClientType;
 import de.superioz.moo.protocol.common.ResponseStatus;
 import de.superioz.moo.spigot.listeners.ChatListener;
-import de.superioz.moo.spigot.listeners.PacketRespondListener;
 import de.superioz.moo.spigot.listeners.ServerListener;
 import de.superioz.moo.spigot.task.ServerInfoTask;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.event.Listener;
-
-import java.io.IOException;
 
 @Getter
 public class LightningPluginModule extends Module implements EventListener {
@@ -54,25 +50,10 @@ public class LightningPluginModule extends Module implements EventListener {
         // register handler
         Moo.getInstance().registerHandler(o -> {
             if(o instanceof Listener) Bukkit.getServer().getPluginManager().registerEvents((Listener) o, Lightning.getInstance());
-        }, new ChatListener(), new ServerListener(), new PacketRespondListener());
+        }, new ChatListener(), new ServerListener());
 
-        // connection stuff
+        // connect to cloud
         if(config.isLoaded()) {
-            // connect to redis
-            redisConfig = new JsonConfig(config.get("redis-config"), Lightning.getInstance().getDataFolder());
-            redisConfig.load(true, true);
-            if(redisConfig.isLoaded()) {
-                try {
-                    MooRedis.getInstance().connectRedis(redisConfig.getFile());
-                    Lightning.getInstance().getLogs().info("Connection status of Redis: "
-                            + (MooRedis.getInstance().isRedisConnected() ? "ON" : "off"));
-                }
-                catch(IOException e) {
-                    Lightning.getInstance().getLogs().info("Error while connecting to redis: ", e);
-                }
-            }
-
-            // connect to cloud
             Moo.getInstance().connect(config.get("server-name"), ClientType.SERVER, config.get("cloud-ip"), config.get("cloud-port"));
         }
     }

@@ -47,13 +47,4 @@ public enum RedisConfig {
         return name().toLowerCase();
     }
 
-    /**
-     * Gets the path to fetch it from a config file
-     *
-     * @return The path as string
-     */
-    public String getPath() {
-        return REDIS_PATH + REDIS_CONFIG_PATH + getKey();
-    }
-
 }

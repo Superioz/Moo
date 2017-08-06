@@ -13,16 +13,7 @@ import java.net.URI;
  * This class is for connecting to Redis, yeah ..
  */
 @Getter
-public final class MooRedis {
-
-    private static MooRedis instance;
-
-    public static MooRedis getInstance(){
-        if(instance == null){
-            instance = new MooRedis();
-        }
-        return instance;
-    }
+public class RedisConnection {
 
     private Config config;
     private RedissonClient client;

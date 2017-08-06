@@ -65,29 +65,14 @@ public class ThunderPluginModule extends Module implements EventListener {
                 },
                 new CommandListener(),
                 new PacketPlayerKickListener(), new PacketPlayerMessageListener(),
-                new PacketRequestListener(), new PacketRespondListener(), new PacketConfigListener(),
+                new PacketRequestListener(), new PacketConfigListener(),
                 new PermissionListener(), new ProxyPingListener(),
                 new ProxyPlayerLoginListener(), new ProxyPlayerConnectListener(),
                 new ServerRegisterChangeListener()
         );
 
-        // connection config stuff
+        // connect to cloud
         if(config.isLoaded()) {
-            // connect to redis
-            /*redisConfig = new JsonConfig(config.get("redis-config"), Thunder.getInstance().getDataFolder());
-            redisConfig.load(true, true);
-            if(redisConfig.isLoaded()) {
-                try {
-                    MooRedis.getInstance().connectRedis(redisConfig.getFile());
-                    Thunder.getInstance().getLogs().info("Connection status of Redis: "
-                            + (MooRedis.getInstance().isRedisConnected() ? "ON" : "off"));
-                }
-                catch(IOException e) {
-                    Thunder.getInstance().getLogs().info("Error while connecting to redis: ", e);
-                }
-            }*/
-
-            // connect to cloud
             Moo.getInstance().connect(config.get("proxy-name"), ClientType.PROXY,
                     config.get("cloud-ip"), config.get("cloud-port"));
         }
