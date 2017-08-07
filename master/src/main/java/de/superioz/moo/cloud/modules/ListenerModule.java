@@ -30,7 +30,8 @@ public class ListenerModule extends Module {
                 new MooPlayerKickListener(),
                 new MooPlayerConnectedServerListener(),
                 new MooPlayerJoinedServerListener(),
-                new MooLoggingListener()
+                new MooLoggingListener(),
+                new RedisConnectionListener()
         );
 
         // packet adapter

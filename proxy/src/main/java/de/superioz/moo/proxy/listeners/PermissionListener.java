@@ -1,10 +1,10 @@
 package de.superioz.moo.proxy.listeners;
 
 import de.superioz.moo.api.event.EventListener;
+import de.superioz.moo.client.Moo;
 import de.superioz.moo.client.common.ProxyCache;
 import de.superioz.moo.client.events.PermissionUpdateEvent;
 import de.superioz.moo.client.util.PermissionUtil;
-import de.superioz.moo.proxy.Thunder;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
@@ -33,7 +33,7 @@ public class PermissionListener implements Listener, EventListener {
     @de.superioz.moo.api.event.EventHandler
     public void onPermissionChange(PermissionUpdateEvent event) {
         // just updates the permissions
-        ProxyServer.getInstance().getScheduler().runAsync(Thunder.getInstance(), () -> {
+        Moo.getInstance().executeAsync(() -> {
             for(ProxiedPlayer player : ProxyServer.getInstance().getPlayers()) {
                 ProxyCache.getInstance().updatePermission(player.getUniqueId());
             }

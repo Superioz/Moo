@@ -1,16 +1,15 @@
 package de.superioz.moo.proxy.listeners;
 
+import de.superioz.moo.api.cache.MooCache;
 import de.superioz.moo.api.common.PlayerInfo;
 import de.superioz.moo.api.database.object.Ban;
 import de.superioz.moo.api.database.object.Group;
 import de.superioz.moo.api.database.object.PlayerData;
 import de.superioz.moo.api.io.LanguageManager;
-import de.superioz.moo.api.utils.ReflectionUtil;
+import de.superioz.moo.api.io.MooConfigType;
 import de.superioz.moo.client.Moo;
 import de.superioz.moo.client.common.MooQueries;
-import de.superioz.moo.client.common.ProxyCache;
 import de.superioz.moo.protocol.exception.MooOutputException;
-import de.superioz.moo.protocol.packets.PacketConfig;
 import de.superioz.moo.protocol.packets.PacketPlayerState;
 import de.superioz.moo.proxy.Thunder;
 import net.md_5.bungee.api.connection.PendingConnection;
@@ -79,11 +78,10 @@ public class ProxyPlayerLoginListener implements Listener {
 
         // get group for checking the maintenance bypassability
         Group group = MooQueries.getInstance().getGroup(playerInfo.getData().group);
-        boolean maintenanceBypass = group.rank >= ProxyCache.getInstance().getConfigEntry(PacketConfig.Type.MAINTENANCE_RANK, Integer.class);
+        boolean maintenanceBypass = group.rank >= (int) MooCache.getInstance().getConfigEntry(MooConfigType.MAINTENANCE_RANK);
 
         // if maintenance mode is active and the player is not allowed to bypass it
-        if(ProxyCache.getInstance().getConfigEntry(PacketConfig.Type.MAINTENANCE).equals(true + "")
-                && !maintenanceBypass) {
+        if(MooCache.getInstance().getConfigEntry(MooConfigType.MAINTENANCE).equals(true + "") && !maintenanceBypass) {
             event.setCancelReason(LanguageManager.get("currently-in-maintenance"));
             event.setCancelled(true);
         }
@@ -123,10 +121,8 @@ public class ProxyPlayerLoginListener implements Listener {
         // if the respond was successful put the deserialized values into the proxycache
         MooQueries.getInstance().changePlayerState(data, PacketPlayerState.State.JOIN_PROXY, response -> {
             if(response.isOk()) {
-                PlayerData newData = ReflectionUtil.deserialize(response.get(0), PlayerData.class);
-                Group group = ReflectionUtil.deserialize(response.get(1), Group.class);
-
-                ProxyCache.getInstance().apply(newData, group);
+                // only update the permission, the rest has been updated before
+                MooQueries.getInstance().updatePermission(data.uuid);
             }
         });
     }
@@ -139,7 +135,6 @@ public class ProxyPlayerLoginListener implements Listener {
             }
             catch(MooOutputException e) {
                 e.printStackTrace();
-                //
             }
         });
     }

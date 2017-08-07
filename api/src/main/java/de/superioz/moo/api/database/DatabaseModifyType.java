@@ -15,6 +15,11 @@ public enum DatabaseModifyType {
     /**
      * Updates something from the database
      */
-    MODIFY
+    MODIFY,
+
+    /**
+     * Updates something from the database (including the primary key)
+     */
+    MODIFY_PRIMARY
 
 }

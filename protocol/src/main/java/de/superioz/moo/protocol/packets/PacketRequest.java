@@ -9,6 +9,7 @@ import java.io.IOException;
 
 /**
  * This packet is to request specific values from smth or someone
+ * OR just to trigger
  */
 @NoArgsConstructor
 @AllArgsConstructor
@@ -24,6 +25,10 @@ public class PacketRequest extends AbstractPacket {
      */
     public String meta;
 
+    public PacketRequest(Type type) {
+        this(type, "");
+    }
+
     @Override
     public void read(PacketBuffer buf) throws IOException {
         this.type = buf.readEnumValue(Type.class);
@@ -38,7 +43,8 @@ public class PacketRequest extends AbstractPacket {
 
     public enum Type {
 
-        PING
+        PING,
+        UPDATE_PERM
 
     }
 

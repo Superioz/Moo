@@ -1,23 +1,21 @@
 package de.superioz.moo.client.common;
 
-import de.superioz.moo.api.common.punishment.Punishmental;
 import de.superioz.moo.api.database.DatabaseType;
 import de.superioz.moo.api.database.object.Group;
 import de.superioz.moo.api.database.object.PlayerData;
 import de.superioz.moo.api.event.EventExecutor;
-import de.superioz.moo.api.event.EventPriority;
 import de.superioz.moo.api.utils.ReflectionUtil;
 import de.superioz.moo.api.utils.StringUtil;
 import de.superioz.moo.client.events.PermissionUpdateEvent;
-import de.superioz.moo.client.util.PermissionUtil;
 import de.superioz.moo.protocol.common.ResponseStatus;
-import de.superioz.moo.protocol.exception.MooOutputException;
 import de.superioz.moo.protocol.packet.PacketAdapter;
 import de.superioz.moo.protocol.packet.PacketHandler;
-import de.superioz.moo.protocol.packets.PacketConfig;
 import de.superioz.moo.protocol.packets.PacketRespond;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.UUID;
 
 /**
  * This class is for caching player data and similar<br>
@@ -40,7 +38,6 @@ public final class ProxyCache implements PacketAdapter {
     private HashMap<String, Group> groupMap = new HashMap<>();
     private HashMap<UUID, PlayerData> uuidPlayerdataMap = new HashMap<>();
     private HashMap<UUID, List<String>> uuidPermissionMap = new HashMap<>();
-    private HashMap<PacketConfig.Type, String> configValueMap = new HashMap<>();
 
     @PacketHandler
     public void onRespond(PacketRespond respond) {
@@ -56,69 +53,6 @@ public final class ProxyCache implements PacketAdapter {
             int mod = Integer.parseInt(s0[0]);
             ProxyCache.getInstance().update(type, s0[1], mod);
         }
-    }
-
-    @PacketHandler(priority = EventPriority.HIGHEST)
-    public void onConfig(PacketConfig packet) {
-        PacketConfig.Type type = packet.type;
-        PacketConfig.Command command = packet.command;
-        String meta = packet.meta;
-
-        if(command == PacketConfig.Command.INFO) {
-            packet.respond(getConfigEntry(type));
-            return;
-        }
-        putConfig(type, meta);
-
-        // if all changed
-        if(type == PacketConfig.Type.PUNISHMENT_SUBTYPES) {
-            Punishmental.getInstance().init(meta, null);
-        }
-        else if(type == PacketConfig.Type.PUNISHMENT_REASONS) {
-            Punishmental.getInstance().init(null, meta);
-        }
-    }
-
-    /**
-     * Gets something from the config map
-     *
-     * @param type The type
-     * @return The object
-     */
-    public String getConfigEntry(PacketConfig.Type type) {
-        return configValueMap.get(type);
-    }
-
-    public <T> T getConfigEntry(PacketConfig.Type type, Class<T> tClass) {
-        String o = getConfigEntry(type);
-        if(o == null) o = type.getDefaultValue();
-
-        // get object
-        Object object = null;
-        if(o != null && tClass != null) {
-            object = ReflectionUtil.safeCast(o, tClass);
-        }
-        return object == null ? null
-                : (tClass.isAssignableFrom(object.getClass()) ? (T) object : null);
-    }
-
-    /**
-     * Get the whole config map
-     *
-     * @return The map
-     */
-    public Map<PacketConfig.Type, String> getConfig() {
-        return configValueMap;
-    }
-
-    /**
-     * Puts something into the config map
-     *
-     * @param type The type
-     * @param o    The value
-     */
-    public void putConfig(PacketConfig.Type type, String o) {
-        configValueMap.put(type, o);
     }
 
     /**
@@ -209,45 +143,13 @@ public final class ProxyCache implements PacketAdapter {
 
                 // UPDATE PERMISSIONS IF EDITED
                 if(mod == 2) {
-                    updatePermission(playerData.uuid);
+                    MooQueries.getInstance().updatePermission(playerData.uuid);
                 }
             }
             else if(mod == 3) {
                 // WTF?
             }
         }
-        return true;
-    }
-
-    /**
-     * Updates permissions for given uniqueId
-     *
-     * @param uuid The uniqueId
-     * @return The result
-     */
-    public boolean updatePermission(UUID uuid) {
-        if(!uuidPlayerdataMap.containsKey(uuid)) return false;
-        PlayerData data = uuidPlayerdataMap.get(uuid);
-        String groupName = data.group;
-
-        // ..
-        if(!groupMap.containsKey(groupName)) {
-            Group group = new Group();
-            group.name = groupName;
-
-            try {
-                MooQueries.getInstance().createGroup(new Group(groupName));
-            }
-            catch(MooOutputException e) {
-                e.printStackTrace();
-            }
-            groupMap.put(groupName, group);
-        }
-        Group group = groupMap.get(groupName);
-
-        List<String> permissions = new ArrayList<>(data.extraPerms);
-        permissions.addAll(PermissionUtil.getAllPermissions(group, new ArrayList<>(groupMap.values())));
-        uuidPermissionMap.put(data.uuid, permissions);
         return true;
     }
 
@@ -262,7 +164,7 @@ public final class ProxyCache implements PacketAdapter {
         if(data == null || group == null) return false;
         uuidPlayerdataMap.put(data.uuid, data);
 
-        updatePermission(data.uuid);
+        MooQueries.getInstance().updatePermission(data.uuid);
         return true;
     }
 
@@ -275,16 +177,6 @@ public final class ProxyCache implements PacketAdapter {
     public boolean remove(PlayerData data) {
         uuidPlayerdataMap.remove(data.uuid);
         uuidPermissionMap.remove(data.uuid);
-        return true;
-    }
-
-    /**
-     * Loads all groups from cload
-     */
-    public boolean loadGroups() {
-        List<Group> groupList = MooQueries.getInstance().listGroups();
-        groupList.forEach(group -> groupMap.put(group.name, group));
-
         return true;
     }
 

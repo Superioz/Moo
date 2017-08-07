@@ -8,6 +8,7 @@ import de.superioz.moo.api.event.EventExecutor;
 import de.superioz.moo.api.event.EventListener;
 import de.superioz.moo.api.exceptions.InvalidConfigException;
 import de.superioz.moo.api.io.JsonConfig;
+import de.superioz.moo.api.io.MooConfigType;
 import de.superioz.moo.client.common.MooDatabase;
 import de.superioz.moo.client.common.MooQueries;
 import de.superioz.moo.client.common.ProxyCache;
@@ -33,8 +34,6 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.redisson.api.RedissonClient;
-import org.redisson.config.Config;
 
 import java.io.File;
 import java.util.concurrent.*;
@@ -96,18 +95,6 @@ public class Moo {
      * The database object of the database part of the cloud connection
      */
     private MooDatabase database;
-
-    /**
-     * This client is for connecting and handling the redis cache.
-     * I decided to use the redis cache because of more flexibality and scalabality then my
-     * old Proxy cache. (So instead of multi-instance synchronizing, now it's external)
-     */
-    private RedissonClient redisClient;
-
-    /**
-     * Config of {@link #redisClient} for various settings
-     */
-    private Config redisConfig;
 
     /**
      * The logger of the client
@@ -353,20 +340,12 @@ public class Moo {
     /**
      * Sends a config packets
      *
-     * @param command  The command
      * @param type     The type
      * @param metadata The metadata
      * @return The respond
      */
-    public ResponseStatus config(PacketConfig.Command command, PacketConfig.Type type, String metadata) {
-        return PacketMessenger.<Response>transfer(new PacketConfig(command, type, metadata), ResponseScope.RESPONSE).getStatus();
-    }
-
-    /**
-     * Loads the proxy config by simply sending a packetConfig#all request
-     */
-    public void loadProxyConfig() {
-        PacketMessenger.message(new PacketConfig(PacketConfig.Command.INFO, PacketConfig.Type.ALL));
+    public ResponseStatus config(MooConfigType type, String metadata) {
+        return PacketMessenger.<Response>transfer(new PacketConfig(type, metadata), ResponseScope.RESPONSE).getStatus();
     }
 
     /**

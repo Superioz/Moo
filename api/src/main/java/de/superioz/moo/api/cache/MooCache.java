@@ -3,12 +3,13 @@ package de.superioz.moo.api.cache;
 import de.superioz.moo.api.common.MooServer;
 import de.superioz.moo.api.database.object.Group;
 import de.superioz.moo.api.database.object.PlayerData;
+import de.superioz.moo.api.io.MooConfigType;
 import lombok.Getter;
+import org.redisson.api.RFuture;
 import org.redisson.api.RMap;
 import org.redisson.api.RedissonClient;
 
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
 /**
@@ -49,12 +50,12 @@ public final class MooCache {
     /**
      * This map stores the permissions of one player
      */
-    private Map<UUID, List<String>> playerPermissionMap;
+    private RMap<UUID, List<String>> playerPermissionMap;
 
     /**
      * This map stores config values of the cloud
      */
-    private RMap<String, String> configMap;
+    private RMap<String, Object> configMap;
 
     /**
      * This map stores all started servers behind their unique id
@@ -81,5 +82,25 @@ public final class MooCache {
         this.configMap = redisClient.getMap(RedisConfig.CONFIG_MAP.getKey());
         this.serverMap = redisClient.getMap(RedisConfig.SERVER_MAP.getKey());
     }
+
+    /**
+     * Gets something from the config map
+     *
+     * @param type The type
+     * @return The object
+     */
+    public Object getConfigEntry(MooConfigType type) {
+        return configMap.get(type.name().toLowerCase());
+    }
+
+    public RFuture<Object> getConfigEntryAsync(MooConfigType type) {
+        return configMap.getAsync(type.name().toLowerCase());
+    }
+
+    /*
+    ============================================
+    SPECIAL METHODS
+    ============================================
+     */
 
 }

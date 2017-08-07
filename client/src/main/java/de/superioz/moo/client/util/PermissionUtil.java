@@ -3,10 +3,7 @@ package de.superioz.moo.client.util;
 import de.superioz.moo.api.common.GroupPermission;
 import de.superioz.moo.api.database.object.Group;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * A helper class for group & permissions
@@ -20,7 +17,7 @@ public final class PermissionUtil {
      * @param groups The list of groups to get all parents
      * @return The listOfString
      */
-    public static Set<String> getAllPermissions(Group base, List<Group> groups) {
+    public static Set<String> getAllPermissions(Group base, Collection<Group> groups) {
         Set<String> permissions = new HashSet<>(base.permissions);
         Set<String> inheritances = new HashSet<>();
 

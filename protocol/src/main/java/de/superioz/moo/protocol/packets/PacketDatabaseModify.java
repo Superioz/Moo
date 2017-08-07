@@ -21,13 +21,6 @@ import java.util.ArrayList;
 @AllArgsConstructor
 public class PacketDatabaseModify extends AbstractPacket {
 
-    public static final int MODIFY_CREATE = 0;
-    public static final int MODIFY_DELETE = 1;
-    public static final int MODIFY_MODIFY = 2;
-    public static final int MODIFY_PRIMARY = 3;
-
-    public static final String MODIFY_SEPERATOR = ":";
-
     /**
      * The database type as enum
      */

@@ -1,8 +1,11 @@
 package de.superioz.moo.cloud.listeners;
 
 import com.mongodb.client.MongoCollection;
-import de.superioz.moo.api.collection.Tuple;
+import de.superioz.moo.api.cache.MooCache;
+import de.superioz.moo.api.collection.MultiMap;
 import de.superioz.moo.api.database.*;
+import de.superioz.moo.api.database.object.Group;
+import de.superioz.moo.api.database.object.PlayerData;
 import de.superioz.moo.api.keyvalue.FinalValue;
 import de.superioz.moo.api.reaction.Reaction;
 import de.superioz.moo.api.utils.ReflectionUtil;
@@ -17,11 +20,13 @@ import de.superioz.moo.protocol.packet.PacketAdapter;
 import de.superioz.moo.protocol.packet.PacketHandler;
 import de.superioz.moo.protocol.packets.PacketDatabaseModify;
 import de.superioz.moo.protocol.packets.PacketDatabaseModifyNative;
-import de.superioz.moo.protocol.packets.PacketRespond;
+import de.superioz.moo.protocol.packets.PacketRequest;
 import org.bson.Document;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.UUID;
 
 public class PacketDatabaseModifyListener implements PacketAdapter {
 
@@ -61,7 +66,7 @@ public class PacketDatabaseModifyListener implements PacketAdapter {
 
         // for informing minecraft
         FinalValue<Boolean> result = new FinalValue<>(true);
-        Tuple<Object> newData = new Tuple();
+        MultiMap<DatabaseModifyType, Object> updatedData = new MultiMap<>();
 
         // create some data
         Reaction.react(type, DatabaseModifyType.CREATE, () -> {
@@ -85,7 +90,7 @@ public class PacketDatabaseModifyListener implements PacketAdapter {
             module.create(primaryKey, instance, true);
 
             // add newdata
-            newData.add(PacketDatabaseModify.MODIFY_CREATE, instance);
+            updatedData.add(DatabaseModifyType.CREATE, instance);
         });
 
         // delete found data
@@ -100,12 +105,12 @@ public class PacketDatabaseModifyListener implements PacketAdapter {
             // if the primaryKey is null then use the filter to delete the value
             // otherwise delete it with the key
             if(primaryKey == null) {
-                result0 = module.unset(filter, true, (k, e) -> newData.add(PacketDatabaseModify.MODIFY_DELETE, k));
+                result0 = module.unset(filter, true, (k, e) -> updatedData.add(DatabaseModifyType.DELETE, k));
             }
             else {
                 result0 = module.delete(primaryKey, true);
 
-                newData.add(PacketDatabaseModify.MODIFY_DELETE, primaryKey);
+                updatedData.add(DatabaseModifyType.DELETE, primaryKey);
             }
 
             // was the deletion successful
@@ -145,14 +150,14 @@ public class PacketDatabaseModifyListener implements PacketAdapter {
                     // set to the module with id and modified object / query
                     result0 = module.set(id, updates.get(0).getValue(), o, query.build(), true);
 
-                    newData.add(PacketDatabaseModify.MODIFY_PRIMARY, StringUtil.join(id, o));
+                    updatedData.add(DatabaseModifyType.MODIFY_PRIMARY, StringUtil.join(id, o));
                 }
                 else {
                     // set to the module with id and modified object / query
                     result0 = module.set(id, o, query.build(), true);
 
                     // add to updated data
-                    newData.add(PacketDatabaseModify.MODIFY_MODIFY, o);
+                    updatedData.add(DatabaseModifyType.MODIFY, o);
                 }
             }
 
@@ -161,8 +166,7 @@ public class PacketDatabaseModifyListener implements PacketAdapter {
         });
 
         // informs the minecraft servers about the update
-        informMinecraft(packet, newData.toList(objects -> String.join(PacketDatabaseModify.MODIFY_SEPERATOR, StringUtil.toStringList(objects))),
-                dbType, result.get());
+        updateData(packet, updatedData, dbType, result.get());
     }
 
     @PacketHandler
@@ -242,26 +246,81 @@ public class PacketDatabaseModifyListener implements PacketAdapter {
      * Informs all server about the update
      * The modType (0 = create; 1 = delete; 2 = edit; 3 = edit primkey)
      *
-     * @param req           The packets (request)
+     * @param request       The packets (request)
      * @param type          The type (Group, Player, ..)
      * @param data          The data (e.g. the key or the new data)
      * @param processResult Result (success or not?)
      */
-    private void informMinecraft(AbstractPacket req, List<String> data, DatabaseType type, boolean processResult) {
-        // create respond
-        PacketRespond respond = new PacketRespond(PacketRespond.MODIFICATION_PREFIX + type.name().toLowerCase(), data,
-                processResult ? ResponseStatus.OK : ResponseStatus.NOK);
-        //respond.setUniqueId(req.getUniqueId());
-
-        //.
-        Cloud.getInstance().getLogger().debug("Inform servers about " + type.name()
-                + " database modification(" + data.size() + "): " + data);
-
-        // send respond
-        req.respond(processResult ? ResponseStatus.OK : ResponseStatus.NOK);
-        if(processResult) {
-            PacketMessenger.message(respond, ClientType.PROXY, ClientType.SERVER);
+    private void updateData(AbstractPacket request, MultiMap<DatabaseModifyType, Object> data, DatabaseType type, boolean processResult) {
+        // update info
+        boolean updateDataResult = false;
+        for(DatabaseModifyType modifyType : data.keySet()) {
+            Set<Object> modifiedData = data.get(modifyType);
+            for(Object modifiedDatum : modifiedData) {
+                updateDataResult = !updateDataResult && updateData(modifyType, modifiedDatum.toString(), type);
+            }
         }
+
+        // trigger update permissions
+        request.respond(processResult ? ResponseStatus.OK : ResponseStatus.NOK);
+        if(processResult && updateDataResult) {
+            PacketMessenger.message(new PacketRequest(PacketRequest.Type.UPDATE_PERM), ClientType.PROXY, ClientType.SERVER);
+        }
+    }
+
+    /**
+     * Updates the data inside the cache
+     *
+     * @param modifyType The modify type
+     * @param data       The data
+     * @param type       The database type
+     * @return The result (true=updatePerm; false=do not)
+     */
+    private boolean updateData(DatabaseModifyType modifyType, String data, DatabaseType type) {
+        if(type == DatabaseType.GROUP) {
+            if(modifyType == DatabaseModifyType.DELETE) {
+                MooCache.getInstance().getGroupMap().remove(data);
+
+                // GROUP HAS BEEN DELETED
+                return true;
+            }
+            else if(modifyType == DatabaseModifyType.CREATE || modifyType == DatabaseModifyType.MODIFY) {
+                Group group = ReflectionUtil.deserialize(data, Group.class);
+                MooCache.getInstance().getGroupMap().fastPut(group.name, group);
+
+                // GROUP HAS BEEN UPDATED
+                if(modifyType == DatabaseModifyType.CREATE) {
+                    return true;
+                }
+            }
+            else if(modifyType == DatabaseModifyType.MODIFY_PRIMARY) {
+                List<String> l = StringUtil.split(data);
+                Object id = ReflectionUtil.safeCast(l.get(0));
+                Group group = ReflectionUtil.deserialize(l.get(1), Group.class);
+
+                MooCache.getInstance().getGroupMap().remove((String) id);
+                MooCache.getInstance().getGroupMap().fastPut(group.name, group);
+
+                return true;
+            }
+        }
+        else if(type == DatabaseType.PLAYER) {
+            if(modifyType == DatabaseModifyType.DELETE) {
+                MooCache.getInstance().getUniqueIdPlayerMap().remove(UUID.fromString(data));
+
+                // PLAYERDATA HAS BEEN DELETED ? WHAT THE FLACK? (Shouldnt happen)
+            }
+            else if(modifyType == DatabaseModifyType.CREATE || modifyType == DatabaseModifyType.MODIFY) {
+                PlayerData playerData = ReflectionUtil.deserialize(data, PlayerData.class);
+                MooCache.getInstance().getUniqueIdPlayerMap().fastPut(playerData.uuid, playerData);
+
+                // UPDATE PERMISSIONS IF EDITED
+                if(modifyType == DatabaseModifyType.MODIFY) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
 }

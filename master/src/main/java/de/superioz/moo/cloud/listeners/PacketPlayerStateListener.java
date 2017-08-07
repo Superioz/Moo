@@ -14,10 +14,6 @@ import de.superioz.moo.protocol.packet.PacketAdapter;
 import de.superioz.moo.protocol.packet.PacketHandler;
 import de.superioz.moo.protocol.packets.PacketPlayerState;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 public class PacketPlayerStateListener implements PacketAdapter {
 
     @PacketHandler
@@ -86,12 +82,12 @@ public class PacketPlayerStateListener implements PacketAdapter {
         if(packet.isResponded()) return;
 
         // check state and eventually respond with playerData and group
-        List<String> respondData = new ArrayList<>();
+        /*List<String> respondData = new ArrayList<>();
         if(newState == PacketPlayerState.State.JOIN_PROXY
                 || newState == PacketPlayerState.State.JOIN_SERVER) {
             respondData = Arrays.asList(currentData.toString(), CloudCollections.groups().get(currentData.group).toString());
-        }
-        packet.respond(respondData);
+        }*/
+        packet.respond(packet);
     }
 
 }

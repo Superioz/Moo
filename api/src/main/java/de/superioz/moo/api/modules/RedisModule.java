@@ -2,6 +2,8 @@ package de.superioz.moo.api.modules;
 
 import de.superioz.moo.api.cache.MooCache;
 import de.superioz.moo.api.cache.RedisConnection;
+import de.superioz.moo.api.event.EventExecutor;
+import de.superioz.moo.api.events.RedisConnectionEvent;
 import de.superioz.moo.api.module.Module;
 import lombok.Getter;
 import org.redisson.config.Config;
@@ -46,13 +48,16 @@ public class RedisModule extends Module {
 
     @Override
     protected void onEnable() {
-        if(config == null){
+        if(config == null) {
             logger.info("Can't connect to Redis because the config is null!");
             super.finished(false);
             return;
         }
         redisConnection.connectRedis(config);
         logger.info("Redis connection status: " + (redisConnection.isRedisConnected() ? "ON" : "off"));
+
+        // call event that redis changed its connection state
+        EventExecutor.getInstance().execute(new RedisConnectionEvent(this, redisConnection.isRedisConnected()));
 
         // loading the RedisCache
         MooCache.getInstance().initialize(redisConnection);
@@ -61,5 +66,8 @@ public class RedisModule extends Module {
     @Override
     protected void onDisable() {
         redisConnection.getClient().shutdown();
+
+        // call event that redis got disconnected
+        EventExecutor.getInstance().execute(new RedisConnectionEvent(this, false));
     }
 }

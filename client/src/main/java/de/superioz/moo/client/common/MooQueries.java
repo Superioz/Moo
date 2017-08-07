@@ -1,5 +1,6 @@
 package de.superioz.moo.client.common;
 
+import de.superioz.moo.api.cache.MooCache;
 import de.superioz.moo.api.common.PlayerInfo;
 import de.superioz.moo.api.common.punishment.BanSubType;
 import de.superioz.moo.api.database.*;
@@ -8,11 +9,13 @@ import de.superioz.moo.api.database.object.Group;
 import de.superioz.moo.api.database.object.PlayerData;
 import de.superioz.moo.api.database.object.UniqueIdBuf;
 import de.superioz.moo.api.utils.CollectionUtil;
+import de.superioz.moo.client.util.PermissionUtil;
 import de.superioz.moo.protocol.common.PacketMessenger;
 import de.superioz.moo.protocol.common.Queries;
 import de.superioz.moo.protocol.common.Response;
 import de.superioz.moo.protocol.common.ResponseStatus;
 import de.superioz.moo.protocol.exception.MooInputException;
+import de.superioz.moo.protocol.exception.MooOutputException;
 import de.superioz.moo.protocol.packets.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -380,6 +383,48 @@ public final class MooQueries {
      */
 
     /**
+     * Updates permissions for given uniqueId. This method is used when group or playerdata
+     * has been changed of one player, so that the permissions are up to date at every time.
+     * It is recommended to not use this method very often (player join and on change data)
+     * otherwise it could put a lot of stress onto the server (it's the same with every
+     * database/cache actions anyway).
+     *
+     * @param uuid The uniqueId
+     * @return The result
+     */
+    public boolean updatePermission(UUID uuid) {
+        PlayerData data = MooCache.getInstance().getUniqueIdPlayerMap().get(uuid);
+        if(data == null) return false;
+        String groupName = data.group;
+
+        // get the group out of the cache
+        // if the group doesnt exist create a "default" group
+        Group group = MooCache.getInstance().getGroupMap().get(groupName);
+        if(group == null) {
+            group = new Group();
+            group.name = Group.DEFAULT_NAME;
+
+            try {
+                this.createGroup(new Group(groupName));
+            }
+            catch(MooOutputException e) {
+                e.printStackTrace();
+            }
+
+            // creates the group
+            //MooCache.getInstance().getGroupMap().fastPutAsync(groupName, group);
+
+            // sets the player's group
+            this.rankPlayer(data, group);
+        }
+
+        List<String> permissions = new ArrayList<>(data.extraPerms);
+        permissions.addAll(PermissionUtil.getAllPermissions(group, MooCache.getInstance().getGroupMap().values()));
+        MooCache.getInstance().getPlayerPermissionMap().put(data.uuid, permissions);
+        return true;
+    }
+
+    /**
      * Gets the color of the group with given name
      *
      * @param groupName The name of group
@@ -398,8 +443,8 @@ public final class MooQueries {
      * @return The group
      */
     public Group getGroup(String groupName) {
-        if(ProxyCache.getInstance().getGroups().size() > 0) {
-            return ProxyCache.getInstance().getGroup(groupName);
+        if(MooCache.getInstance().getGroupMap().size() > 0) {
+            return MooCache.getInstance().getGroupMap().get(groupName);
         }
         try {
             return Queries.get(DatabaseType.GROUP, groupName, Group.class);
@@ -410,7 +455,7 @@ public final class MooQueries {
     }
 
     public Group getGroup(UUID playerUniqueId) {
-        PlayerData data = ProxyCache.getInstance().getPlayerData(playerUniqueId);
+        PlayerData data = MooCache.getInstance().getUniqueIdPlayerMap().get(playerUniqueId);
         if(data == null) return null;
 
         return getGroup(data.group);

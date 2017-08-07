@@ -1,5 +1,6 @@
 package de.superioz.moo.cloud.listeners;
 
+import de.superioz.moo.api.cache.MooCache;
 import de.superioz.moo.api.database.DbModifier;
 import de.superioz.moo.api.database.DbQueryUnbaked;
 import de.superioz.moo.api.database.object.Group;
@@ -7,13 +8,11 @@ import de.superioz.moo.api.database.object.PlayerData;
 import de.superioz.moo.api.event.EventHandler;
 import de.superioz.moo.api.event.EventListener;
 import de.superioz.moo.api.event.EventPriority;
+import de.superioz.moo.api.io.MooConfigType;
 import de.superioz.moo.cloud.Cloud;
 import de.superioz.moo.cloud.database.CloudCollections;
 import de.superioz.moo.cloud.events.MooPlayerJoinedProxyEvent;
-import de.superioz.moo.protocol.client.ClientType;
-import de.superioz.moo.protocol.common.PacketMessenger;
 import de.superioz.moo.protocol.common.ResponseStatus;
-import de.superioz.moo.protocol.packets.PacketConfig;
 import de.superioz.moo.protocol.packets.PacketPlayerState;
 
 import java.net.InetSocketAddress;
@@ -57,9 +56,12 @@ public class MooPlayerJoinedProxyListener implements EventListener {
                 DbQueryUnbaked.newInstance(DbModifier.PLAYER_SERVER, serverId)
                         .append(DbModifier.PLAYER_PROXY, proxyId), true);
 
-        // update user count
-        PacketMessenger.message(new PacketConfig(PacketConfig.Command.CHANGE, PacketConfig.Type.PLAYER_COUNT,
-                Cloud.getInstance().getMooProxy().getPlayers().size() + ""), ClientType.PROXY);
+        // update moo cache (user count and playerData)
+        MooCache.getInstance().getConfigMap().fastPutAsync(MooConfigType.PLAYER_COUNT.getKey(),
+                Cloud.getInstance().getMooProxy().getPlayers().size());
+        MooCache.getInstance().getUniqueIdPlayerMap().fastPutAsync(data.uuid, data)
+                .thenAccept(aBoolean -> packet.respond(ResponseStatus.OK));
+        MooCache.getInstance().getNameUniqueIdMap().fastPutAsync(data.lastName, data.uuid);
     }
 
 }

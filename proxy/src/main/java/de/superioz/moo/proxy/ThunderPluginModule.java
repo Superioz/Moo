@@ -10,7 +10,6 @@ import de.superioz.moo.api.io.JsonConfig;
 import de.superioz.moo.api.io.LanguageManager;
 import de.superioz.moo.api.module.Module;
 import de.superioz.moo.client.Moo;
-import de.superioz.moo.client.common.ProxyCache;
 import de.superioz.moo.client.events.CloudConnectedEvent;
 import de.superioz.moo.minecraft.util.ChatUtil;
 import de.superioz.moo.protocol.client.ClientType;
@@ -67,7 +66,7 @@ public class ThunderPluginModule extends Module implements EventListener {
                 new PacketPlayerKickListener(), new PacketPlayerMessageListener(),
                 new PacketRequestListener(), new PacketConfigListener(),
                 new PermissionListener(), new ProxyPingListener(),
-                new ProxyPlayerLoginListener(), new ProxyPlayerConnectListener(),
+                new ProxyPlayerLoginListener(), new ProxyPlayerConnectionListener(),
                 new ServerRegisterChangeListener()
         );
 
@@ -103,11 +102,7 @@ public class ThunderPluginModule extends Module implements EventListener {
         Thunder.getInstance().getLogs().info("** AUTHENTICATION STATUS: " + (event.getStatus().getColored()) + " **");
         if(event.getStatus().isNok()) return;
 
-        // load groups
-        ProxyServer.getInstance().getScheduler().runAsync(Thunder.getInstance(), () -> ProxyCache.getInstance().loadGroups());
-
-        // load config
-        Moo.getInstance().loadProxyConfig();
+        // lil
     }
 
 }

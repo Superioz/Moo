@@ -1,6 +1,8 @@
 package de.superioz.moo.api.common.punishment;
 
+import de.superioz.moo.api.cache.MooCache;
 import de.superioz.moo.api.collection.MultiMap;
+import de.superioz.moo.api.io.MooConfigType;
 import de.superioz.moo.api.util.Validation;
 import de.superioz.moo.api.utils.CollectionUtil;
 import de.superioz.moo.api.utils.ReflectionUtil;
@@ -51,11 +53,21 @@ public class Punishmental {
                 BanReason reason = new BanReason(s);
                 reason.init(banTypeMap);
                 if(reason.getBanSubTypeStr() != null
-                        && !banTypeMap.containsValue(reason)){
+                        && !banTypeMap.containsValue(reason)) {
                     banTypeMap.add(reason.getBanSubType(), reason);
                 }
             });
         }
+    }
+
+    /**
+     * Simply initializes this class but with automatically getting the needed informations
+     */
+    public void init() {
+        this.init(
+                (String) MooCache.getInstance().getConfigMap().get(MooConfigType.PUNISHMENT_SUBTYPES.getKey()),
+                (String) MooCache.getInstance().getConfigMap().get(MooConfigType.PUNISHMENT_REASONS.getKey())
+        );
     }
 
     /**
