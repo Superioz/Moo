@@ -2,6 +2,7 @@ package de.superioz.moo.proxy.listeners;
 
 import de.superioz.moo.api.event.EventListener;
 import de.superioz.moo.client.Moo;
+import de.superioz.moo.client.common.MooQueries;
 import de.superioz.moo.client.common.ProxyCache;
 import de.superioz.moo.client.events.PermissionUpdateEvent;
 import de.superioz.moo.client.util.PermissionUtil;
@@ -35,7 +36,7 @@ public class PermissionListener implements Listener, EventListener {
         // just updates the permissions
         Moo.getInstance().executeAsync(() -> {
             for(ProxiedPlayer player : ProxyServer.getInstance().getPlayers()) {
-                ProxyCache.getInstance().updatePermission(player.getUniqueId());
+                MooQueries.getInstance().updatePermission(player.getUniqueId());
             }
         });
     }

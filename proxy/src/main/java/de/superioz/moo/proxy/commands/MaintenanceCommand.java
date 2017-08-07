@@ -5,11 +5,6 @@ import de.superioz.moo.api.command.param.ParamSet;
 import de.superioz.moo.api.command.tabcomplete.TabCompletion;
 import de.superioz.moo.api.command.tabcomplete.TabCompletor;
 import de.superioz.moo.api.common.RunAsynchronous;
-import de.superioz.moo.api.io.LanguageManager;
-import de.superioz.moo.client.Moo;
-import de.superioz.moo.client.common.ProxyCache;
-import de.superioz.moo.protocol.common.ResponseStatus;
-import de.superioz.moo.protocol.packets.PacketConfig;
 import de.superioz.moo.proxy.command.BungeeCommandContext;
 
 @RunAsynchronous
@@ -28,25 +23,25 @@ public class MaintenanceCommand {
     @Command(label = LABEL, usage = "[toggle]")
     public void onCommand(BungeeCommandContext context, ParamSet args) {
         // display the maintenance state
-        boolean maintenance = ProxyCache.getInstance().getConfigEntry(PacketConfig.Type.MAINTENANCE, Boolean.class);
-        context.sendMessage(LanguageManager.get("maintenance-info", maintenance));
+        /*boolean maintenance = MooCache.getInstance().getConfigEntry(PacketConfig.Type.MAINTENANCE, Boolean.class);
+        context.sendMessage(LanguageManager.get("maintenance-info", maintenance));*/
     }
 
     @Command(label = TOGGLE_COMMAND, parent = LABEL)
     public void onToggleCommand(BungeeCommandContext context, ParamSet args) {
         // toggles the maintenance state
-        boolean maintenance = ProxyCache.getInstance().getConfigEntry(PacketConfig.Type.MAINTENANCE, Boolean.class);
+        /*boolean maintenance = ProxyCache.getInstance().getConfigEntry(PacketConfig.Type.MAINTENANCE, Boolean.class);
 
         context.sendMessage(LanguageManager.get("maintenance-toggle-load"));
         ResponseStatus status = Moo.getInstance().config(PacketConfig.Command.CHANGE, PacketConfig.Type.MAINTENANCE, !maintenance + "");
         context.invalidArgument(status.isNok(), LanguageManager.get("maintenance-toggle-complete-failure", status));
-        context.sendMessage(LanguageManager.get("maintenance-toggle-complete-success"));
+        context.sendMessage(LanguageManager.get("maintenance-toggle-complete-success"));*/
     }
 
     @Command(label = MOTD_COMMAND, parent = LABEL, usage = "[newMotd]")
     public void onMotdCommand(BungeeCommandContext context, ParamSet args) {
         // if the player want to set the motd
-        if(args.size() >= 1) {
+        /*if(args.size() >= 1) {
             String newMotd = String.join(" ", args.getRange(0));
 
             // set maintenance motd
@@ -59,7 +54,7 @@ public class MaintenanceCommand {
 
         // otherwise display the motd
         String motd = ProxyCache.getInstance().getConfigEntry(PacketConfig.Type.MAINTENANCE_MOTD);
-        context.sendMessage(LanguageManager.get("maintenance-motd-info", motd));
+        context.sendMessage(LanguageManager.get("maintenance-motd-info", motd));*/
     }
 
 }

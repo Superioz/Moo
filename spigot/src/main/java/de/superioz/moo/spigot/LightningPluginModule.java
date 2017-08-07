@@ -7,10 +7,8 @@ import de.superioz.moo.api.io.JsonConfig;
 import de.superioz.moo.api.io.LanguageManager;
 import de.superioz.moo.api.module.Module;
 import de.superioz.moo.client.Moo;
-import de.superioz.moo.client.common.ProxyCache;
 import de.superioz.moo.client.events.CloudConnectedEvent;
 import de.superioz.moo.protocol.client.ClientType;
-import de.superioz.moo.protocol.common.ResponseStatus;
 import de.superioz.moo.spigot.listeners.ChatListener;
 import de.superioz.moo.spigot.listeners.ServerListener;
 import de.superioz.moo.spigot.task.ServerInfoTask;
@@ -66,10 +64,6 @@ public class LightningPluginModule extends Module implements EventListener {
     @EventHandler
     public void onStart(CloudConnectedEvent event) {
         Lightning.getInstance().getLogs().info("** AUTHENTICATION STATUS: " + (event.getStatus().getColored()) + " **");
-
-        if(event.getStatus() == ResponseStatus.OK) {
-            Lightning.getInstance().getExecutors().execute(() -> ProxyCache.getInstance().loadGroups());
-        }
 
         // start serverInfo task
         Lightning.getInstance().getExecutors().execute(this.serverInfoTask = new ServerInfoTask(5 * 1000));

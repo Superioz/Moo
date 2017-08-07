@@ -6,10 +6,8 @@ import de.superioz.moo.api.command.param.ParamSet;
 import de.superioz.moo.api.common.MooServer;
 import de.superioz.moo.api.database.object.PlayerData;
 import de.superioz.moo.api.event.EventListener;
-import de.superioz.moo.api.exceptions.InvalidConfigException;
 import de.superioz.moo.cloud.Cloud;
 import de.superioz.moo.protocol.common.PacketMessenger;
-import de.superioz.moo.protocol.packets.PacketConfig;
 import de.superioz.moo.protocol.packets.PacketKeepalive;
 import de.superioz.moo.protocol.server.MooClient;
 
@@ -26,7 +24,7 @@ public class CloudCommand implements EventListener {
     @Command(label = "config")
     public void config(CommandContext context, ParamSet set) {
         context.sendMessage("Config Map:");
-        PacketConfig.Type.ALL.getKeys().forEach(type -> {
+        /*PacketConfig.Type.ALL.getKeys().forEach(type -> {
             Object object = null;
             try {
                 object = Cloud.getInstance().getConfig().get(type.getKey());
@@ -37,7 +35,7 @@ public class CloudCommand implements EventListener {
 
             context.sendMessage("- " + type + " | "
                     + (object == null ? "NULL" : object.toString().replace("\n", "\\n")));
-        });
+        });*/
     }
 
     /**

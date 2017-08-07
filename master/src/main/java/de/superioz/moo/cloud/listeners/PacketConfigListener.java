@@ -1,6 +1,7 @@
 package de.superioz.moo.cloud.listeners;
 
 import de.superioz.moo.api.cache.MooCache;
+import de.superioz.moo.api.io.MooConfigType;
 import de.superioz.moo.api.util.Validation;
 import de.superioz.moo.cloud.Cloud;
 import de.superioz.moo.protocol.client.ClientType;
@@ -14,7 +15,7 @@ public class PacketConfigListener implements PacketAdapter {
 
     @PacketHandler
     public void onConfig(PacketConfig packet) {
-        PacketConfig.Type type = packet.type;
+        MooConfigType type = packet.type;
         String meta = packet.meta;
 
         // change some config
@@ -24,10 +25,10 @@ public class PacketConfigListener implements PacketAdapter {
 
         // get the config key and new data
         // special types
-        if(type == PacketConfig.Type.MAINTENANCE) {
+        if(type == MooConfigType.MAINTENANCE) {
             newData = meta.equalsIgnoreCase(true + "");
         }
-        else if(type == PacketConfig.Type.MAX_PLAYERS) {
+        else if(type == MooConfigType.MAX_PLAYERS) {
             newData = Integer.parseInt(meta);
             result = Validation.INTEGER.matches(meta);
         }
