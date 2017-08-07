@@ -11,7 +11,6 @@ import de.superioz.moo.api.io.JsonConfig;
 import de.superioz.moo.api.io.MooConfigType;
 import de.superioz.moo.client.common.MooDatabase;
 import de.superioz.moo.client.common.MooQueries;
-import de.superioz.moo.client.common.ProxyCache;
 import de.superioz.moo.client.exception.MooInitializationException;
 import de.superioz.moo.client.listeners.QueryClientListener;
 import de.superioz.moo.client.paramtypes.GroupParamType;
@@ -113,7 +112,6 @@ public class Moo {
     };
 
     static {
-        PacketAdapting.getInstance().register(ProxyCache.getInstance());
         EventExecutor.getInstance().register(new QueryClientListener());
         CommandRegistry.getInstance().getParamTypeRegistry().register(DEFAULT_PARAM_TYPES);
     }

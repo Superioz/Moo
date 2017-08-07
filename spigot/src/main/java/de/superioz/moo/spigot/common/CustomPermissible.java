@@ -1,7 +1,7 @@
 package de.superioz.moo.spigot.common;
 
+import de.superioz.moo.api.cache.MooCache;
 import de.superioz.moo.api.common.GroupPermission;
-import de.superioz.moo.client.common.ProxyCache;
 import de.superioz.moo.client.util.PermissionUtil;
 import lombok.Getter;
 import org.bukkit.Bukkit;
@@ -31,7 +31,7 @@ public class CustomPermissible extends PermissibleBase {
     }
 
     public List<GroupPermission> getPermissions() {
-        List<String> l = ProxyCache.getInstance().getPermissions(uniqueId);
+        List<String> l = MooCache.getInstance().getPlayerPermissionMap().get(uniqueId);
         List<GroupPermission> permissions = new ArrayList<>();
 
         for(String s : l) {
@@ -52,7 +52,7 @@ public class CustomPermissible extends PermissibleBase {
 
     @Override
     public boolean isPermissionSet(String name) {
-        for(String s : ProxyCache.getInstance().getPermissions(uniqueId)) {
+        for(String s : MooCache.getInstance().getPlayerPermissionMap().get(uniqueId)) {
             if(s.equals("*")) return true;
             s = s.substring(2, s.length());
             if(s.startsWith("-")) {
@@ -78,7 +78,7 @@ public class CustomPermissible extends PermissibleBase {
         String name = inName.toLowerCase();
 
         if(isPermissionSet(name)) {
-            boolean b = PermissionUtil.hasPermission(inName, false, ProxyCache.getInstance().getPermissions(uniqueId));
+            boolean b = PermissionUtil.hasPermission(inName, false, MooCache.getInstance().getPlayerPermissionMap().get(uniqueId));
             return b;
         }
         else {

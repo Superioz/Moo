@@ -21,10 +21,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.function.Consumer;
 
 /**
@@ -79,7 +76,7 @@ public final class MooQueries {
     }
 
     public PlayerData getPlayerData(UUID uuid) {
-        PlayerData data = ProxyCache.getInstance().getPlayerData(uuid);
+        PlayerData data = MooCache.getInstance().getUniqueIdPlayerMap().get(uuid);
         if(data != null) {
             return data;
         }
@@ -496,9 +493,9 @@ public final class MooQueries {
      * @return The list of groups
      */
     public List<Group> listGroups() {
-        List<Group> groups = ProxyCache.getInstance().getGroups();
+        Collection<Group> groups = MooCache.getInstance().getGroupMap().values();
         if(groups != null && !groups.isEmpty()) {
-            return groups;
+            return new ArrayList<>(groups);
         }
         try {
             return Queries.list(DatabaseType.GROUP, Group.class);

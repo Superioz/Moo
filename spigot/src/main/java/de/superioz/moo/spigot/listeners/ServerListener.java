@@ -1,11 +1,8 @@
 package de.superioz.moo.spigot.listeners;
 
-import de.superioz.moo.api.database.object.Group;
 import de.superioz.moo.api.database.object.PlayerData;
 import de.superioz.moo.client.Moo;
 import de.superioz.moo.client.common.MooQueries;
-import de.superioz.moo.client.common.ProxyCache;
-import de.superioz.moo.protocol.exception.MooInputException;
 import de.superioz.moo.protocol.exception.MooOutputException;
 import de.superioz.moo.protocol.packets.PacketPlayerState;
 import de.superioz.moo.spigot.common.CustomPermissible;
@@ -48,26 +45,16 @@ public class ServerListener implements Listener {
         data.lastip = player.getAddress().getHostString();
 
         // changes state
-        MooQueries.getInstance().changePlayerState(data, PacketPlayerState.State.JOIN_SERVER, "", response -> {
-            if(response.isOk()) {
-                try {
-                    PlayerData foundData = response.toComplex(PlayerData.class, 0);
-                    Group group = response.toComplex(Group.class, 0);
+        MooQueries.getInstance().changePlayerState(data, PacketPlayerState.State.JOIN_SERVER, response -> {
+            if(response.isNotOk()) return;
 
-                    ProxyCache.getInstance().apply(foundData, group);
+            Permissible oldPermissible = PermissionInjector.getPermissible(player);
+            CustomPermissible customPermissible = new CustomPermissible(player, data.uuid, oldPermissible);
+            PermissionInjector.inject(player, customPermissible);
 
-                    Permissible oldPermissible = PermissionInjector.getPermissible(player);
-                    CustomPermissible customPermissible = new CustomPermissible(player, data.uuid, oldPermissible);
-                    PermissionInjector.inject(player, customPermissible);
-
-                    // SET JOIN MESSAGE
-                    String playerName = MooQueries.getInstance().getGroup(player.getUniqueId()).color + player.getName();
-                    Bukkit.getServer().broadcastMessage(LanguageManager.get("join-message-pattern", playerName));
-                }
-                catch(MooInputException e) {
-                    // do nothing
-                }
-            }
+            // SET JOIN MESSAGE
+            String playerName = MooQueries.getInstance().getGroup(player.getUniqueId()).color + player.getName();
+            Bukkit.getServer().broadcastMessage(LanguageManager.get("join-message-pattern", playerName));
         });
     }
 
@@ -84,8 +71,6 @@ public class ServerListener implements Listener {
         // SET QUIT MESSAGE
         String playerName = MooQueries.getInstance().getGroup(player.getUniqueId()).color + player.getName();
         event.setQuitMessage(LanguageManager.get("quit-message-pattern", playerName));
-
-        ProxyCache.getInstance().remove(data);
     }
 
 }

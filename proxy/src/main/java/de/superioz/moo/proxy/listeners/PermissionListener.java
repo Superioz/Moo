@@ -1,13 +1,9 @@
 package de.superioz.moo.proxy.listeners;
 
+import de.superioz.moo.api.cache.MooCache;
 import de.superioz.moo.api.event.EventListener;
-import de.superioz.moo.client.Moo;
-import de.superioz.moo.client.common.MooQueries;
-import de.superioz.moo.client.common.ProxyCache;
-import de.superioz.moo.client.events.PermissionUpdateEvent;
 import de.superioz.moo.client.util.PermissionUtil;
 import net.md_5.bungee.api.CommandSender;
-import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.event.PermissionCheckEvent;
 import net.md_5.bungee.api.plugin.Listener;
@@ -26,19 +22,9 @@ public class PermissionListener implements Listener, EventListener {
         boolean result = true;
         if(sender instanceof ProxiedPlayer) {
             result = PermissionUtil.hasPermission(checkedPerm, true,
-                    ProxyCache.getInstance().getPermissions(((ProxiedPlayer) sender).getUniqueId()));
+                    MooCache.getInstance().getPlayerPermissionMap().get(((ProxiedPlayer) sender).getUniqueId()));
         }
         event.setHasPermission(result);
-    }
-
-    @de.superioz.moo.api.event.EventHandler
-    public void onPermissionChange(PermissionUpdateEvent event) {
-        // just updates the permissions
-        Moo.getInstance().executeAsync(() -> {
-            for(ProxiedPlayer player : ProxyServer.getInstance().getPlayers()) {
-                MooQueries.getInstance().updatePermission(player.getUniqueId());
-            }
-        });
     }
 
 }

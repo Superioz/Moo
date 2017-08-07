@@ -69,6 +69,16 @@ public enum ResponseStatus {
     }
 
     /**
+     * Simply turn the condition into a status
+     *
+     * @param condition The condition
+     * @return The status (condition=true -> OK; otherwise: NOK)
+     */
+    public static ResponseStatus fromCondition(boolean condition) {
+        return condition ? OK : NOK;
+    }
+
+    /**
      * Get the name of this status colored
      *
      * @return colored name

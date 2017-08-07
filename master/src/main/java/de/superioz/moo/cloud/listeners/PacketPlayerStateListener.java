@@ -81,13 +81,8 @@ public class PacketPlayerStateListener implements PacketAdapter {
         );
         if(packet.isResponded()) return;
 
-        // check state and eventually respond with playerData and group
-        /*List<String> respondData = new ArrayList<>();
-        if(newState == PacketPlayerState.State.JOIN_PROXY
-                || newState == PacketPlayerState.State.JOIN_SERVER) {
-            respondData = Arrays.asList(currentData.toString(), CloudCollections.groups().get(currentData.group).toString());
-        }*/
-        packet.respond(packet);
+        // send respond
+        packet.respond(ResponseStatus.fromCondition(currentData != null));
     }
 
 }

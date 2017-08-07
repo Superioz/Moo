@@ -16,29 +16,6 @@ import java.util.*;
 public class CloudCommand implements EventListener {
 
     /**
-     * Displays the config map
-     *
-     * @param context .
-     * @param set     .
-     */
-    @Command(label = "config")
-    public void config(CommandContext context, ParamSet set) {
-        context.sendMessage("Config Map:");
-        /*PacketConfig.Type.ALL.getKeys().forEach(type -> {
-            Object object = null;
-            try {
-                object = Cloud.getInstance().getConfig().get(type.getKey());
-            }
-            catch(InvalidConfigException ex) {
-                //
-            }
-
-            context.sendMessage("- " + type + " | "
-                    + (object == null ? "NULL" : object.toString().replace("\n", "\\n")));
-        });*/
-    }
-
-    /**
      * Stops the cloud?
      *
      * @param context .
