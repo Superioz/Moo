@@ -102,6 +102,14 @@ public class ProxyPlayerConnectionListener implements Listener {
         // changes the player's state; removes player data
         MooQueries.getInstance().changePlayerState(data, PacketPlayerState.State.LEAVE_PROXY, response -> {
             if(response.isOk()) {
+                try {
+                    Thread.sleep(1000L);
+                }
+                catch(InterruptedException e) {
+                    //
+                }
+
+                // removes data of player after 1s
                 MooCache.getInstance().getPlayerPermissionMap().removeAsync(data.uuid);
                 MooCache.getInstance().getUniqueIdPlayerMap().removeAsync(data.uuid);
                 MooCache.getInstance().getNameUniqueIdMap().removeAsync(data.lastName);

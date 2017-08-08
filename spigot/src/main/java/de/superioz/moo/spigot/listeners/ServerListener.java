@@ -1,13 +1,13 @@
 package de.superioz.moo.spigot.listeners;
 
 import de.superioz.moo.api.database.object.PlayerData;
+import de.superioz.moo.api.io.LanguageManager;
 import de.superioz.moo.client.Moo;
 import de.superioz.moo.client.common.MooQueries;
 import de.superioz.moo.protocol.exception.MooOutputException;
 import de.superioz.moo.protocol.packets.PacketPlayerState;
 import de.superioz.moo.spigot.common.CustomPermissible;
 import de.superioz.moo.spigot.common.PermissionInjector;
-import de.superioz.moo.spigot.util.LanguageManager;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -25,7 +25,7 @@ public class ServerListener implements Listener {
             onJoin02(event);
         }
         catch(MooOutputException e) {
-            //
+            e.printStackTrace();
         }
     }
 
@@ -34,7 +34,7 @@ public class ServerListener implements Listener {
      * <p>
      * SERVER JOIN
      */
-    private void onJoin02(PlayerJoinEvent event)  {
+    private void onJoin02(PlayerJoinEvent event) {
         if(!Moo.getInstance().isConnected()) return;
         event.setJoinMessage(null);
         Player player = event.getPlayer();
@@ -45,16 +45,15 @@ public class ServerListener implements Listener {
         data.lastip = player.getAddress().getHostString();
 
         // changes state
+        Permissible oldPermissible = PermissionInjector.getPermissible(player);
+        CustomPermissible customPermissible = new CustomPermissible(player, data.uuid, oldPermissible);
+        PermissionInjector.inject(player, customPermissible);
+
+        // SET JOIN MESSAGE
+        String playerName = MooQueries.getInstance().getGroup(player.getUniqueId()).color + player.getName();
+        Bukkit.getServer().broadcastMessage(LanguageManager.get("join-message-pattern", playerName));
+
         MooQueries.getInstance().changePlayerState(data, PacketPlayerState.State.JOIN_SERVER, response -> {
-            if(response.isNotOk()) return;
-
-            Permissible oldPermissible = PermissionInjector.getPermissible(player);
-            CustomPermissible customPermissible = new CustomPermissible(player, data.uuid, oldPermissible);
-            PermissionInjector.inject(player, customPermissible);
-
-            // SET JOIN MESSAGE
-            String playerName = MooQueries.getInstance().getGroup(player.getUniqueId()).color + player.getName();
-            Bukkit.getServer().broadcastMessage(LanguageManager.get("join-message-pattern", playerName));
         });
     }
 

@@ -14,6 +14,7 @@ import de.superioz.moo.spigot.listeners.ServerListener;
 import de.superioz.moo.spigot.task.ServerInfoTask;
 import lombok.Getter;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.event.Listener;
 
 @Getter
@@ -36,7 +37,8 @@ public class LightningPluginModule extends Module implements EventListener {
 
         // load config
         this.config = Moo.getInstance().loadConfig(Lightning.getInstance().getDataFolder());
-        this.languageManager = new LanguageManager(Lightning.getInstance().getDataFolder());
+        this.languageManager = new LanguageManager(Lightning.getInstance().getDataFolder(),
+                s -> ChatColor.translateAlternateColorCodes('&', s));
         this.languageManager.load("language");
 
         // if disabled stop enabling

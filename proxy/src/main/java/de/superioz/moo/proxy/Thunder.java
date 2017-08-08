@@ -40,7 +40,7 @@ public class Thunder extends Plugin implements EventListener {
         this.pluginModule = new ThunderPluginModule();
         this.moduleRegistry = new ModuleRegistry(logs);
         this.moduleRegistry.register(pluginModule);
-        this.pluginModule.waitForAsync(module -> {
+        this.pluginModule.waitFor(module -> {
             if(module.getErrorReason() != null) return;
             CustomFile customFile = new CustomFile(((ThunderPluginModule) module).getConfig().get("redis-config"), Paths.get("configuration"));
             customFile.load(true, true);

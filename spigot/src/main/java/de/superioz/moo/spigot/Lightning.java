@@ -42,7 +42,7 @@ public class Lightning extends JavaPlugin implements EventListener {
         this.pluginModule = new LightningPluginModule();
         this.moduleRegistry = new ModuleRegistry(getLogs());
         this.moduleRegistry.register(pluginModule);
-        this.pluginModule.waitForAsync(module -> {
+        this.pluginModule.waitFor(module -> {
             if(module.getErrorReason() != null) return;
             CustomFile customFile = new CustomFile(((LightningPluginModule)module).getConfig().get("redis-config"), Paths.get("configuration"));
             customFile.load(true, true);
