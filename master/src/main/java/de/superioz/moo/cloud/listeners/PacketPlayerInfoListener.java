@@ -34,7 +34,7 @@ public class PacketPlayerInfoListener implements PacketAdapter {
             uuid = UUID.fromString(id);
         }
         else {
-            UniqueIdBuf buf = CloudCollections.uniqueIds().get(id);
+            UniqueIdBuf buf = CloudCollections.UUID_BUFFER.get(id);
             if(buf == null) {
                 status = ResponseStatus.NOT_FOUND;
             }
@@ -47,7 +47,7 @@ public class PacketPlayerInfoListener implements PacketAdapter {
         // just return a bad status
         PlayerData playerData;
         if(status != ResponseStatus.OK
-                || (playerData = CloudCollections.players().get(uuid)) == null) {
+                || (playerData = CloudCollections.PLAYER.get(uuid)) == null) {
             packet.respond(status);
             return;
         }
@@ -57,12 +57,12 @@ public class PacketPlayerInfoListener implements PacketAdapter {
         respond.add(playerData.toString());
 
         // get the current ban
-        Ban ban = CloudCollections.bans().get(uuid);
+        Ban ban = CloudCollections.BAN.get(uuid);
         respond.add(ban != null ? ban.toString() : "");
 
         // get former bans
         List<Ban> archivedBans =
-                CloudCollections.banArchive().get(DbFilter.fromPrimKey(Ban.class, uuid), false, -1);
+                CloudCollections.BAN_ARCHIVE.get(DbFilter.fromPrimKey(Ban.class, uuid), false, -1);
         respond.add((archivedBans != null && !archivedBans.isEmpty())
                 ? StringUtil.getListToString(archivedBans, StringUtil.SEPERATOR_2, SimpleSerializable::toString)
                 : "");

@@ -38,7 +38,7 @@ public class PlayerDataCollection extends DatabaseCollection<UUID, PlayerData> {
 
         PlayerData currentData = get(uuid);
         if(currentData == null) {
-            Group def = CloudCollections.groups().getDefault();
+            Group def = CloudCollections.GROUP.getDefault();
             id.group = def.name;
             id.rank = def.rank;
             id.lastOnline = 0L;
@@ -59,8 +59,8 @@ public class PlayerDataCollection extends DatabaseCollection<UUID, PlayerData> {
             if(!currentData.lastip.equals(id.lastip)) {
                 updates.equate(DbModifier.PLAYER_IP, id.lastip);
             }
-            if(!CloudCollections.groups().has(currentData.group)) {
-                Group def = CloudCollections.groups().getDefault();
+            if(!CloudCollections.GROUP.has(currentData.group)) {
+                Group def = CloudCollections.GROUP.getDefault();
                 updates.equate(DbModifier.PLAYER_GROUP, def.name).equate(DbModifier.PLAYER_RANK, def.rank);
                 currentData.group = def.name;
             }

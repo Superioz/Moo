@@ -46,7 +46,7 @@ public class MooPlayerLeftProxyListener implements EventListener {
                 .equate(DbModifier.PLAYER_TOTAL_ONLINE, totalTime)
                 .equate(DbModifier.PLAYER_JOINED, 0L)
                 .equate(DbModifier.PLAYER_PROXY, -1);
-        CloudCollections.players().set(data.uuid, data, query, true);
+        CloudCollections.PLAYER.set(data.uuid, data, query, true);
 
         // removes player from moo proxy
         Cloud.getInstance().getMooProxy().remove(data.uuid, data.lastName);

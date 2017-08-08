@@ -1,36 +1,25 @@
 package de.superioz.moo.cloud.database;
 
-import de.superioz.moo.api.database.DatabaseCollection;
 import de.superioz.moo.api.database.DatabaseType;
 import de.superioz.moo.cloud.Cloud;
 
 /**
  * Wrapper class for every database collection
  */
-public class CloudCollections {
+public final class CloudCollections {
 
-    public static DatabaseCollection get(DatabaseType type) {
-        return Cloud.getInstance().getDatabaseCollection(type);
-    }
+    public static final BanCollection BAN;
+    public static final BanArchiveCollection BAN_ARCHIVE;
+    public static final PlayerDataCollection PLAYER;
+    public static final UniqueIdBufCollection UUID_BUFFER;
+    public static final GroupCollection GROUP;
 
-    public static BanCollection bans() {
-        return Cloud.getInstance().getDatabaseCollection(DatabaseType.BAN);
-    }
-
-    public static BanArchiveCollection banArchive() {
-        return Cloud.getInstance().getDatabaseCollection(DatabaseType.BAN_ARCHIVE);
-    }
-
-    public static PlayerDataCollection players() {
-        return Cloud.getInstance().getDatabaseCollection(DatabaseType.PLAYER);
-    }
-
-    public static UniqueIdBufCollection uniqueIds() {
-        return Cloud.getInstance().getDatabaseCollection(DatabaseType.UUID_BUFFER);
-    }
-
-    public static GroupCollection groups() {
-        return Cloud.getInstance().getDatabaseCollection(DatabaseType.GROUP);
+    static {
+        BAN = Cloud.getInstance().getDatabaseCollection(DatabaseType.BAN);
+        BAN_ARCHIVE = Cloud.getInstance().getDatabaseCollection(DatabaseType.BAN_ARCHIVE);
+        PLAYER = Cloud.getInstance().getDatabaseCollection(DatabaseType.PLAYER);
+        UUID_BUFFER = Cloud.getInstance().getDatabaseCollection(DatabaseType.UUID_BUFFER);
+        GROUP = Cloud.getInstance().getDatabaseCollection(DatabaseType.GROUP);
     }
 
 }

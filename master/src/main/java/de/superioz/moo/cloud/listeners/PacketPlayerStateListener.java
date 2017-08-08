@@ -24,7 +24,7 @@ public class PacketPlayerStateListener implements PacketAdapter {
         // get current data from player
         // check if the data is valid
         // otherwise update the data of the packets for the events
-        PlayerData currentData = CloudCollections.players().getCurrentData(playerData, true);
+        PlayerData currentData = CloudCollections.PLAYER.getCurrentData(playerData, true);
         if(currentData == null) {
             packet.respond(ResponseStatus.NOK);
             return;
@@ -33,7 +33,7 @@ public class PacketPlayerStateListener implements PacketAdapter {
         // check state and eventually validates uuid buf
         if(newState == PacketPlayerState.State.JOIN_PROXY
                 || newState == PacketPlayerState.State.JOIN_SERVER) {
-            CloudCollections.uniqueIds().getCurrentBuf(playerData, true);
+            CloudCollections.UUID_BUFFER.getCurrentBuf(playerData, true);
         }
         packet.data = currentData;
 

@@ -31,7 +31,7 @@ public class MooPlayerConnectedServerListener implements EventListener {
         packet.respond(ResponseStatus.OK);
 
         // update data of player in database and cache
-        CloudCollections.players().set(data.uuid, data,
+        CloudCollections.PLAYER.set(data.uuid, data,
                 DbQueryUnbaked.newInstance(DbModifier.PLAYER_SERVER, packet.meta), true);
         MooCache.getInstance().getUniqueIdPlayerMap().fastPutAsync(data.uuid, player);
     }

@@ -31,12 +31,12 @@ public class MooPlayerJoinedProxyListener implements EventListener {
         data.joined = current;
 
         // set the new time into the database
-        CloudCollections.players().set(data.uuid, data,
+        CloudCollections.PLAYER.set(data.uuid, data,
                 DbQueryUnbaked.newInstance(DbModifier.PLAYER_JOINED, current), true);
 
         // get group
         // check maintenance
-        Group group = CloudCollections.groups().get(data.group);
+        Group group = CloudCollections.GROUP.get(data.group);
         if((boolean) Cloud.getInstance().getConfig().get("minecraft.maintenance")
                 && (group.rank < ((Integer) Cloud.getInstance().getConfig().get("minecraft.maintenance-rank")))) {
             // if maintenance is true and rank is too low
@@ -52,7 +52,7 @@ public class MooPlayerJoinedProxyListener implements EventListener {
         Cloud.getInstance().getMooProxy().add(data, clientAddress);
 
         // set new proxy and server into database
-        CloudCollections.players().set(data.uuid, data,
+        CloudCollections.PLAYER.set(data.uuid, data,
                 DbQueryUnbaked.newInstance(DbModifier.PLAYER_SERVER, serverId)
                         .append(DbModifier.PLAYER_PROXY, proxyId), true);
 

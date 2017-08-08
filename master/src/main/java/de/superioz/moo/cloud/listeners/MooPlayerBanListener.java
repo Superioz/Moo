@@ -33,7 +33,7 @@ public class MooPlayerBanListener implements EventListener {
         List<String> meta = packet.meta;
 
         // get unique id buf and check if it is valid
-        UniqueIdBuf buf = CloudCollections.uniqueIds().get(data.lastName);
+        UniqueIdBuf buf = CloudCollections.UUID_BUFFER.get(data.lastName);
         if(buf == null) {
             packet.respond(ResponseStatus.NOK);
             return;
@@ -51,7 +51,7 @@ public class MooPlayerBanListener implements EventListener {
         String permBanMessage = meta.get(2);
 
         // checks if the player is banned
-        Ban banBefore = CloudCollections.bans().get(uuid);
+        Ban banBefore = CloudCollections.BAN.get(uuid);
         if(banBefore != null) {
             packet.respond(ResponseStatus.CONFLICT);
             return;
@@ -64,12 +64,12 @@ public class MooPlayerBanListener implements EventListener {
         // checks if the executor is allowed to ban the target
         // and send FORBIDDEN if he isn't
         if(ban.by != null) {
-            PlayerData executor = CloudCollections.players().get(ban.by);
-            PlayerData target = CloudCollections.players().get(ban.banned);
+            PlayerData executor = CloudCollections.PLAYER.get(ban.by);
+            PlayerData target = CloudCollections.PLAYER.get(ban.banned);
 
             if(executor != null && target != null) {
-                Group executorGroup = CloudCollections.groups().get(executor.group);
-                Group targetGroup = CloudCollections.groups().get(target.group);
+                Group executorGroup = CloudCollections.GROUP.get(executor.group);
+                Group targetGroup = CloudCollections.GROUP.get(target.group);
 
                 if(!(executorGroup == null || targetGroup == null || executorGroup.rank > targetGroup.rank)) {
                     packet.respond(ResponseStatus.FORBIDDEN);
@@ -88,11 +88,11 @@ public class MooPlayerBanListener implements EventListener {
 
         // ban the player and if it isn't successful then respond error
         // update the ban points of the player
-        if(!CloudCollections.bans().set(uuid, ban, true)) {
+        if(!CloudCollections.BAN.set(uuid, ban, true)) {
             packet.respond(ResponseStatus.NOK);
             return;
         }
-        CloudCollections.players().set(data.uuid, data, DbQueryUnbaked.newInstance(DbModifier.PLAYER_BANPOINTS, data.banPoints), true);
+        CloudCollections.PLAYER.set(data.uuid, data, DbQueryUnbaked.newInstance(DbModifier.PLAYER_BANPOINTS, data.banPoints), true);
         packet.respond(ResponseStatus.OK);
 
         // gets the player and kick him if he is online

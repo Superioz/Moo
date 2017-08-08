@@ -25,13 +25,13 @@ public class PacketPlayerPunishListener implements PacketAdapter {
         // get the playerData
         PlayerData data = null;
         if(Validation.UNIQUEID.matches(target)) {
-            data = CloudCollections.players().get(UUID.fromString(target));
+            data = CloudCollections.PLAYER.get(UUID.fromString(target));
         }
         else {
-            UniqueIdBuf buf = CloudCollections.uniqueIds().get(target);
+            UniqueIdBuf buf = CloudCollections.UUID_BUFFER.get(target);
 
             if(buf != null) {
-                data = CloudCollections.players().get(buf.uuid);
+                data = CloudCollections.PLAYER.get(buf.uuid);
             }
         }
 

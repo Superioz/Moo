@@ -126,8 +126,8 @@ public class Cloud implements EventListener {
         started = false;
 
         getLogger().info("Stopping cloud ..");
-        moduleRegistry.disableAll();
         MooCache.getInstance().delete();
+        moduleRegistry.disableAll();
         executors.shutdownNow();
 
         this.commandTerminal.stop();
