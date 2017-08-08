@@ -1,10 +1,10 @@
 package de.superioz.moo.cloud.modules;
 
-import lombok.Getter;
 import de.superioz.moo.api.common.punishment.Punishmental;
 import de.superioz.moo.api.io.JsonConfig;
 import de.superioz.moo.api.module.Module;
 import de.superioz.moo.cloud.Cloud;
+import lombok.Getter;
 
 import java.nio.file.Paths;
 
@@ -44,8 +44,8 @@ public class ConfigModule extends Module {
             }
         });
         Punishmental.getInstance().init(
-                config.get("minecraft.punishment-subtypes") + "",
-                config.get("minecraft.punishment-reasons") + "");
+                config.get("minecraft.punishment-subtypes"),
+                config.get("minecraft.punishment-reasons"));
     }
 
     @Override

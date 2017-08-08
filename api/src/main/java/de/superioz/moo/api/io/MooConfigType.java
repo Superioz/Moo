@@ -29,7 +29,7 @@ public enum MooConfigType {
      * @return The key as string
      */
     public String getKey() {
-        return name().toLowerCase();
+        return name().toLowerCase().replace("_", "-");
     }
 
     /**

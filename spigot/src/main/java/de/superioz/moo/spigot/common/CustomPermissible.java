@@ -64,7 +64,6 @@ public class CustomPermissible extends PermissibleBase {
             }
             if(name.startsWith(s)) return true;
         }
-        System.out.println("Nah no true.");
         return false;
     }
 

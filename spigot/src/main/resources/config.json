@@ -3,5 +3,6 @@
   "activated": true,
   "server-name": "server",
   "cloud-ip": "localhost",
-  "cloud-port": 8000
+  "cloud-port": 8000,
+  "redis-config": "redis_config.json"
 }

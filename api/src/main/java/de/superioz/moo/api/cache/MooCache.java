@@ -24,6 +24,7 @@ import java.util.UUID;
 public final class MooCache {
 
     private static MooCache instance;
+    private boolean initialized = false;
 
     public static synchronized MooCache getInstance() {
         if(instance == null) {
@@ -71,7 +72,6 @@ public final class MooCache {
      * Initializes the {@link RMap}s of this cache.
      */
     public void initialize(RedisConnection connection) {
-        if(redisClient != null && !redisClient.isShutdown()) return;
         this.redisClient = connection.getClient();
 
         // get redis maps by fetching the keys out of the config
@@ -81,6 +81,8 @@ public final class MooCache {
         this.playerPermissionMap = redisClient.getMap(RedisConfig.PLAYER_PERMISSION_MAP.getKey());
         this.configMap = redisClient.getMap(RedisConfig.CONFIG_MAP.getKey());
         this.serverMap = redisClient.getMap(RedisConfig.SERVER_MAP.getKey());
+
+        this.initialized = true;
     }
 
     /**
@@ -90,7 +92,7 @@ public final class MooCache {
      * @return The object
      */
     public Object getConfigEntry(MooConfigType type) {
-        return configMap.get(type.name().toLowerCase());
+        return configMap.get(type.getKey());
     }
 
     public RFuture<Object> getConfigEntryAsync(MooConfigType type) {

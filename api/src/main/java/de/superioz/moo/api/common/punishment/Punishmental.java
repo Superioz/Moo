@@ -3,11 +3,11 @@ package de.superioz.moo.api.common.punishment;
 import de.superioz.moo.api.cache.MooCache;
 import de.superioz.moo.api.collection.MultiMap;
 import de.superioz.moo.api.io.MooConfigType;
-import de.superioz.moo.api.util.Validation;
 import de.superioz.moo.api.utils.CollectionUtil;
-import de.superioz.moo.api.utils.ReflectionUtil;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 public class Punishmental {
@@ -29,31 +29,29 @@ public class Punishmental {
     /**
      * Initialises the {@link #banTypeMap} by using the given strings (Most likely are they from the cloud config)
      *
-     * @param banSubTypeString The string of the ban subtypes list
-     * @param banReasonString  The string of the ban reasons list
+     * @param banSubTypes The string of the ban subtypes list
+     * @param banReasons  The string of the ban reasons list
      */
-    public void init(String banSubTypeString, String banReasonString) {
+    public void init(List<String> banSubTypes, List<String> banReasons) {
         // add bansubtypes to the map
-        if(banSubTypeString != null
-                && !banSubTypeString.isEmpty() && Validation.LIST.matches(banSubTypeString)) {
+        if(banSubTypes != null && !banSubTypes.isEmpty()) {
             banTypeMap.clear();
 
-            List<String> listString = (List<String>) ReflectionUtil.safeCast(banSubTypeString);
-            for(int i = 0; i < listString.size(); i++) {
-                BanSubType subType = new BanSubType(listString.get(i), i);
+            // get ban sub types
+            for(int i = 0; i < banSubTypes.size(); i++) {
+                BanSubType subType = new BanSubType(banSubTypes.get(i), i);
                 if(subType.getName() != null) banTypeMap.add(subType);
             }
         }
 
         // then add the reasons to the bansubtypes
-        if(banReasonString != null
-                && !banReasonString.isEmpty() && Validation.LIST.matches(banReasonString)) {
-            List<String> listString = (List<String>) ReflectionUtil.safeCast(banReasonString);
-            listString.forEach(s -> {
+        if(banReasons != null && !banReasons.isEmpty()) {
+
+            // loop through ban reasons
+            banReasons.forEach(s -> {
                 BanReason reason = new BanReason(s);
                 reason.init(banTypeMap);
-                if(reason.getBanSubTypeStr() != null
-                        && !banTypeMap.containsValue(reason)) {
+                if(reason.getBanSubTypeStr() != null && !banTypeMap.containsValue(reason)) {
                     banTypeMap.add(reason.getBanSubType(), reason);
                 }
             });
@@ -64,9 +62,10 @@ public class Punishmental {
      * Simply initializes this class but with automatically getting the needed informations
      */
     public void init() {
+        if(!MooCache.getInstance().isInitialized()) return;
         this.init(
-                (String) MooCache.getInstance().getConfigMap().get(MooConfigType.PUNISHMENT_SUBTYPES.getKey()),
-                (String) MooCache.getInstance().getConfigMap().get(MooConfigType.PUNISHMENT_REASONS.getKey())
+                (List<String>)MooCache.getInstance().getConfigMap().get(MooConfigType.PUNISHMENT_SUBTYPES.getKey()),
+                (List<String>)MooCache.getInstance().getConfigMap().get(MooConfigType.PUNISHMENT_REASONS.getKey())
         );
     }
 

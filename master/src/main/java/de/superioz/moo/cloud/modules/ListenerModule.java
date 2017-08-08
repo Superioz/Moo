@@ -31,7 +31,8 @@ public class ListenerModule extends Module {
                 new MooPlayerConnectedServerListener(),
                 new MooPlayerJoinedServerListener(),
                 new MooLoggingListener(),
-                new RedisConnectionListener()
+                new RedisConnectionListener(),
+                new CloudStartedListener()
         );
 
         // packet adapter

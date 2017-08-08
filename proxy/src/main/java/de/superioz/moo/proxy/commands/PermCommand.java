@@ -225,10 +225,8 @@ public class PermCommand {
 
         // permissions from group
         if(args.hasFlag(groupFlag)) {
-            System.out.println("Args: " + args.getRawCommandline());
             CommandFlag flag = args.getFlag(groupFlag);
             Group group = flag.get(0, Group.class);
-            System.out.println("Found group: " + group + " (" + flag.get(0) + ")");
             context.invalidArgument(group == null || group.name == null, LanguageManager.get("group-doesnt-exist", flag.get(0)));
 
             permissions = new HashSet<>(group.permissions);

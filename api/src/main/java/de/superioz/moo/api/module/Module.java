@@ -97,8 +97,13 @@ public abstract class Module {
         return (M) this;
     }
 
+    public <M extends Module> void waitFor(Consumer<M> onFinished) {
+        waitFor();
+        onFinished.accept((M) this);
+    }
+
     public <M extends Module> void waitForAsync(Consumer<M> onFinished) {
-        new Thread(() -> onFinished.accept(waitFor())).run();
+        new Thread(() -> onFinished.accept(waitFor())).start();
     }
 
     /**

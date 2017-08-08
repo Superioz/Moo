@@ -26,11 +26,11 @@ import java.util.function.Consumer;
 
 /**
  * Similar to {@link Queries} but with more specific methods for managing the data<br>
- * It also uses the {@link ProxyCache} to fetch e.g. cached groups
+ * It also uses the {@link MooCache} to fetch e.g. cached groups
  * <br>
  * This class inherits every method you need for managing player/group data per packets
  *
- * @see ProxyCache
+ * @see MooCache
  */
 @Getter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)

@@ -1,23 +1,24 @@
 package de.superioz.moo.cloud.modules;
 
-import de.superioz.moo.api.logging.ConsoleColor;
-import de.superioz.moo.cloud.listeners.HandshakeListener;
-import io.netty.channel.Channel;
-import lombok.Getter;
 import de.superioz.moo.api.common.RunAsynchronous;
 import de.superioz.moo.api.event.EventExecutor;
 import de.superioz.moo.api.event.EventHandler;
 import de.superioz.moo.api.event.EventListener;
 import de.superioz.moo.api.io.JsonConfig;
+import de.superioz.moo.api.logging.ConsoleColor;
 import de.superioz.moo.api.module.Module;
 import de.superioz.moo.api.module.ModuleDependency;
 import de.superioz.moo.cloud.Cloud;
+import de.superioz.moo.cloud.events.CloudStartedEvent;
 import de.superioz.moo.cloud.events.HandshakeEvent;
+import de.superioz.moo.cloud.listeners.HandshakeListener;
 import de.superioz.moo.protocol.common.NetworkEventAdapter;
 import de.superioz.moo.protocol.events.ServerStateEvent;
 import de.superioz.moo.protocol.packet.AbstractPacket;
 import de.superioz.moo.protocol.packets.PacketHandshake;
 import de.superioz.moo.protocol.server.NetworkServer;
+import io.netty.channel.Channel;
+import lombok.Getter;
 
 @ModuleDependency(modules = {"config"})
 @RunAsynchronous
@@ -72,6 +73,7 @@ public class NettyModule extends Module implements EventListener {
 
         // send info to program parts waiting for me
         super.finished(true);
+        EventExecutor.getInstance().execute(new CloudStartedEvent());
 
         try {
             server.setup().start();

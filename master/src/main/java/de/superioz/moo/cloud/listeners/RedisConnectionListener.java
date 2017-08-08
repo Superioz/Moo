@@ -4,6 +4,7 @@ import de.superioz.moo.api.cache.MooCache;
 import de.superioz.moo.api.event.EventHandler;
 import de.superioz.moo.api.event.EventListener;
 import de.superioz.moo.api.events.RedisConnectionEvent;
+import de.superioz.moo.api.exceptions.InvalidConfigException;
 import de.superioz.moo.api.io.MooConfigType;
 import de.superioz.moo.cloud.Cloud;
 
@@ -19,8 +20,16 @@ public class RedisConnectionListener implements EventListener {
 
         // if the cloud connected to redis we want to set config information into the cache
         for(MooConfigType configType : MooConfigType.values()) {
-            MooCache.getInstance().getConfigMap().fastPutAsync(configType.getKey(),
-                    Cloud.getInstance().getConfig().get("minecraft." + configType.getKey()));
+            Object data;
+            try {
+                data = Cloud.getInstance().getConfig().get("minecraft." + configType.getKey());
+            }
+            catch(InvalidConfigException ex) {
+                data = configType.getDefaultValue();
+            }
+
+            if(data == null) return;
+            MooCache.getInstance().getConfigMap().fastPutAsync(configType.getKey(), data);
         }
     }
 

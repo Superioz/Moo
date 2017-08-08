@@ -34,7 +34,6 @@ public class Cloud implements EventListener {
 
     private final ExecutorService executors = Executors.newCachedThreadPool(
             new ThreadFactoryBuilder().setNameFormat("cloud-pool-%d").build());
-    private JsonConfig config;
     private ConsoleReader reader;
     private MooProxy mooProxy;
     private CommandTerminal commandTerminal;
@@ -84,15 +83,16 @@ public class Cloud implements EventListener {
         this.listenerModule = moduleRegistry.register(new ListenerModule());
         this.commandModule = moduleRegistry.register(new CommandModule());
         this.configModule = moduleRegistry.register(new ConfigModule(this));
-        this.configModule.waitForAsync(module -> {
+        this.configModule.waitFor(module -> {
             if(module.getErrorReason() != null) return;
-            CustomFile customFile = new CustomFile(((ConfigModule)module).getConfig().get("redis-config"), Paths.get("configuration"));
+
+            // start redis
+            CustomFile customFile = new CustomFile(((ConfigModule) module).getConfig().get("redis-config"), Paths.get("configuration"));
             customFile.load(true, true);
             moduleRegistry.register(new RedisModule(customFile.getFile(), getLogger().getBaseLogger()));
         });
-        this.config = configModule.getConfig();
-        this.databaseModule = moduleRegistry.register(new DatabaseModule(config));
-        this.nettyModule = moduleRegistry.register(new NettyModule(config));
+        this.databaseModule = moduleRegistry.register(new DatabaseModule(getConfig()));
+        this.nettyModule = moduleRegistry.register(new NettyModule(getConfig()));
         this.mooProxy = new MooProxy(getServer());
 
         // send module summary
@@ -132,6 +132,15 @@ public class Cloud implements EventListener {
         logger.disable();
 
         System.exit(0);
+    }
+
+    /**
+     * Gets the config from the config module
+     *
+     * @return The config object
+     */
+    public JsonConfig getConfig() {
+        return configModule.getConfig();
     }
 
     /**

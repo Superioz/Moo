@@ -56,11 +56,11 @@ public class RedisModule extends Module {
         redisConnection.connectRedis(config);
         logger.info("Redis connection status: " + (redisConnection.isRedisConnected() ? "ON" : "off"));
 
-        // call event that redis changed its connection state
-        EventExecutor.getInstance().execute(new RedisConnectionEvent(this, redisConnection.isRedisConnected()));
-
         // loading the RedisCache
         MooCache.getInstance().initialize(redisConnection);
+
+        // call event that redis changed its connection state
+        EventExecutor.getInstance().execute(new RedisConnectionEvent(this, redisConnection.isRedisConnected()));
     }
 
     @Override
