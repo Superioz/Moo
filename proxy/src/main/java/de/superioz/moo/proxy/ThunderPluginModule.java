@@ -47,7 +47,7 @@ public class ThunderPluginModule extends Module implements EventListener {
         this.languageManager.load(Locale.US);
 
         // register commands
-        CommandRegistry.getInstance().registerCommands(
+        CommandRegistry.getInstance().registerCommandsSeperately(
                 new DatabaseModifyCommand(),
                 new MooCommand(), new TeamCommand(), new TeamChatCommand(),
                 new MaintenanceCommand(), new MotdCommand(),

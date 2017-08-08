@@ -86,6 +86,20 @@ public final class MooCache {
     }
 
     /**
+     * Deletes all maps
+     */
+    public void delete(){
+        if(!initialized) return;
+        groupMap.deleteAsync();
+        uniqueIdPlayerMap.deleteAsync();
+        nameUniqueIdMap.deleteAsync();
+        configMap.deleteAsync();
+        serverMap.deleteAsync();
+
+        initialized = false;
+    }
+
+    /**
      * Gets something from the config map
      *
      * @param type The type

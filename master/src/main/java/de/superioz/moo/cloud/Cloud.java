@@ -1,6 +1,7 @@
 package de.superioz.moo.cloud;
 
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
+import de.superioz.moo.api.cache.MooCache;
 import de.superioz.moo.api.console.CommandTerminal;
 import de.superioz.moo.api.database.DatabaseCollection;
 import de.superioz.moo.api.database.DatabaseConnection;
@@ -126,6 +127,7 @@ public class Cloud implements EventListener {
 
         getLogger().info("Stopping cloud ..");
         moduleRegistry.disableAll();
+        MooCache.getInstance().delete();
         executors.shutdownNow();
 
         this.commandTerminal.stop();
