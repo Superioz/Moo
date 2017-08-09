@@ -76,7 +76,9 @@ public class ModuleRegistry {
         if(service != null) {
             service.execute(() -> {
                 for(Module m : getModules()) {
-                    while(!m.isEnabled()){
+                    while(true){
+                        if(m.isEnabled() || m.getErrorReason() != null) break;
+
                         try {
                             Thread.sleep(5);
                         }

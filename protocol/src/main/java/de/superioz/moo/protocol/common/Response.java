@@ -80,7 +80,7 @@ public class Response {
      */
     public void checkState() throws MooInputException {
         if(status.isCritically()) {
-            throw new IllegalStateException("Received packets with critically state: " + status);
+            throw new IllegalStateException("Received critical state: " + status);
         }
         if(!isOk()) throw new MooInputException(this);
     }

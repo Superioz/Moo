@@ -5,9 +5,9 @@ import de.superioz.moo.api.database.DatabaseType;
 import de.superioz.moo.api.database.object.Group;
 import de.superioz.moo.api.event.EventHandler;
 import de.superioz.moo.api.event.EventListener;
+import de.superioz.moo.cloud.Cloud;
 import de.superioz.moo.cloud.events.CloudStartedEvent;
 import de.superioz.moo.protocol.common.Queries;
-import de.superioz.moo.protocol.exception.MooInputException;
 
 public class CloudStartedListener implements EventListener {
 
@@ -20,7 +20,8 @@ public class CloudStartedListener implements EventListener {
                 MooCache.getInstance().getGroupMap().fastPutAsync(group.name, group);
             });
         }
-        catch(MooInputException e) {
+        catch(Exception e) {
+            Cloud.getInstance().getLogger().debug("Couldn't load groups. It seems the database/cache is not available.");
             // MHH WEIRD
         }
     }
