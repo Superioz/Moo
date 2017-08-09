@@ -49,12 +49,13 @@ public class MooPlayerJoinedProxyListener implements EventListener {
         int proxyId = Cloud.getInstance().getClientManager().get(clientAddress).getId();
         data.setCurrentServer(serverId);
         data.setCurrentProxy(proxyId);
+
+        // adds player to moo proxy
         Cloud.getInstance().getMooProxy().add(data, clientAddress);
 
         // set new proxy and server into database
         CloudCollections.PLAYER.set(data.uuid, data,
-                DbQueryUnbaked.newInstance(DbModifier.PLAYER_SERVER, serverId)
-                        .append(DbModifier.PLAYER_PROXY, proxyId), true);
+                DbQueryUnbaked.newInstance(DbModifier.PLAYER_PROXY, proxyId), true);
 
         // update moo cache (user count and playerData)
         MooCache.getInstance().getConfigMap().fastPutAsync(MooConfigType.PLAYER_COUNT.getKey(),

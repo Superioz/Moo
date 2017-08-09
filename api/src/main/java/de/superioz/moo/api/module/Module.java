@@ -9,7 +9,6 @@ import lombok.Setter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import java.util.function.Consumer;
 
@@ -88,11 +87,13 @@ public abstract class Module {
      */
     public <M extends Module> M waitFor() {
         if(future == null) return (M) this;
-        try {
-            return (M) future.get();
-        }
-        catch(InterruptedException | ExecutionException e) {
-            //
+        synchronized(this) {
+            try {
+                wait(3000L);
+            }
+            catch(InterruptedException e) {
+                e.printStackTrace();
+            }
         }
         return (M) this;
     }

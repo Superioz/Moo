@@ -7,6 +7,7 @@ import de.superioz.moo.api.database.object.PlayerData;
 import de.superioz.moo.api.event.EventHandler;
 import de.superioz.moo.api.event.EventListener;
 import de.superioz.moo.api.event.EventPriority;
+import de.superioz.moo.cloud.Cloud;
 import de.superioz.moo.cloud.database.CloudCollections;
 import de.superioz.moo.cloud.events.MooPlayerConnectedServerEvent;
 import de.superioz.moo.protocol.common.ResponseStatus;
@@ -29,6 +30,10 @@ public class MooPlayerConnectedServerListener implements EventListener {
         // otherwise change currentServer
         player.currentServer = packet.meta;
         packet.respond(ResponseStatus.OK);
+
+        // update Moo proxy
+        Cloud.getInstance().getMooProxy().getPlayerMap().put(player.uuid, player);
+        Cloud.getInstance().getMooProxy().getPlayerNameMap().put(player.lastName, player);
 
         // update data of player in database and cache
         CloudCollections.PLAYER.set(data.uuid, data,

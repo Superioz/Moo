@@ -42,10 +42,11 @@ public class GroupPermission {
         this.rawPerm = perm;
         if(perm.equals("*")) {
             allStar = true;
+            star = true;
         }
         else {
             proxied = perm.startsWith("b:");
-            star = perm.startsWith("*:");
+            star = perm.startsWith("*:") || perm.equals("*");
             perm = perm.substring(2, perm.length());
             negative = perm.startsWith("-");
             if(negative) perm = perm.substring(1, perm.length());

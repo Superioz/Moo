@@ -49,6 +49,7 @@ public class ListenerModule extends Module {
                 // player stuff
                 new PacketPlayerStateListener(),
                 new PacketPlayerInfoListener(),
+                new PacketPlayerKickListener(),
                 new PacketPlayerMessageListener(),
                 new PacketPlayerPunishListener(),
                 new PacketServerInfoUpdateListener()

@@ -8,6 +8,7 @@ import de.superioz.moo.protocol.common.Response;
 import de.superioz.moo.protocol.packet.AbstractPacket;
 import de.superioz.moo.protocol.common.ResponseStatus;
 import de.superioz.moo.protocol.packets.*;
+import lombok.Getter;
 
 import java.net.InetSocketAddress;
 import java.util.Collection;
@@ -19,6 +20,7 @@ import java.util.function.Consumer;
 /**
  * Representation of the proxy where all clients are connected to
  */
+@Getter
 public final class MooProxy {
 
     private final Map<UUID, PlayerData> playerMap = new HashMap<>();
@@ -63,7 +65,7 @@ public final class MooProxy {
      * @param amount   The amount of servers to start
      */
     public void requestServer(String type, boolean autoSave, int amount, Consumer<AbstractPacket> callback) {
-        MooClient bestDaemon = netServer.getHub().getBestDaemon();
+        MooClient bestDaemon = netServer.getClientManager().getBestDaemon();
         if(bestDaemon == null) {
             callback.accept(new PacketRespond(ResponseStatus.NOT_FOUND));
             return;
@@ -81,7 +83,7 @@ public final class MooProxy {
      * @param callback The callback
      */
     public void requestServerShutdown(String host, int port, Consumer<AbstractPacket> callback) {
-        UnmodifiableList<MooClient> daemonClients = netServer.getHub().getDaemonClients();
+        UnmodifiableList<MooClient> daemonClients = netServer.getClientManager().getDaemonClients();
         MooClient daemon = null;
         for(MooClient client : daemonClients) {
             if(client.getHost().equals(host)) {
@@ -96,15 +98,6 @@ public final class MooProxy {
         }
 
         PacketMessenger.create().target(daemon).send(new PacketServerRequestShutdown(host, port), callback);
-    }
-
-    /**
-     * Oh no captain the ship is sinking!
-     *
-     * @param address The address
-     */
-    public void serverIsGoingDown(InetSocketAddress address) {
-        playerServerMap.values().removeIf(address::equals);
     }
 
     /**
@@ -176,7 +169,7 @@ public final class MooProxy {
      */
     public MooClient getClient(PlayerData player) {
         InetSocketAddress address = playerServerMap.get(player.uuid);
-        return netServer.getHub().get(address);
+        return netServer.getClientManager().get(address);
     }
 
     /**
@@ -188,7 +181,7 @@ public final class MooProxy {
      */
     public void sendMessage(PlayerData player, PacketPlayerMessage packet, Consumer<Response> callback) {
         InetSocketAddress address = playerServerMap.get(player.uuid);
-        MooClient client = netServer.getHub().get(address);
+        MooClient client = netServer.getClientManager().get(address);
 
         if(callback != null) {
             PacketMessenger.message(packet, callback, client);

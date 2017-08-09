@@ -470,6 +470,22 @@ public final class StringUtil {
     }
 
     /**
+     * Returns the sequence appended given times
+     *
+     * @param sequence The string sequence to be repeated
+     * @param times    How often to be repeated
+     * @return The result
+     */
+    public static String repeat(String sequence, int times) {
+        StringBuilder builder = new StringBuilder("");
+
+        for(int i = 0; i < times; i++) {
+            builder.append(sequence);
+        }
+        return builder.toString();
+    }
+
+    /**
      * Find matches in string from regex as filter
      *
      * @param regex  The regex
@@ -515,16 +531,6 @@ public final class StringUtil {
 
     public static String getJsonKey(String key) {
         return "\"" + key + "\": ";
-    }
-
-    /**
-     * Checks if the string is a bollean
-     *
-     * @param s The string
-     * @return The result
-     */
-    public static boolean isBoolean(String s) {
-        return s.equalsIgnoreCase("true") || s.equalsIgnoreCase("false");
     }
 
 }

@@ -38,7 +38,7 @@ public class NetworkServer extends AbstractNetworkInstance {
     private final ChannelGroup connectedClients = new DefaultChannelGroup(GlobalEventExecutor.INSTANCE);
     private ServerBootstrap bootstrap;
     private HostWhitelist whitelist;
-    private ClientManager hub;
+    private ClientManager clientManager;
 
     private JsonConfig config;
 
@@ -51,7 +51,7 @@ public class NetworkServer extends AbstractNetworkInstance {
         whitelist.load();
 
         // get hub
-        hub = new ClientManager(this);
+        clientManager = new ClientManager(this);
 
         // register adapter
         super.registerEventAdapter(new NetworkEventAdapter() {
@@ -82,10 +82,10 @@ public class NetworkServer extends AbstractNetworkInstance {
             @Override
             public void onChannelInactive(Channel channel) {
                 InetSocketAddress remoteAddress = (InetSocketAddress) channel.remoteAddress();
-                MooClient client = getHub().get(remoteAddress);
+                MooClient client = getClientManager().get(remoteAddress);
                 connectedClients.remove(channel);
 
-                getHub().remove(remoteAddress);
+                getClientManager().remove(remoteAddress);
 
                 if(client == null){
                     getLogger().warning(ConsoleColor.DARK_RED + "Client shouldn't be null. (Address: " + remoteAddress + ")");
@@ -159,7 +159,7 @@ public class NetworkServer extends AbstractNetworkInstance {
     }
 
     public void sendPacket(AbstractPacket packet, ClientType type, Consumer<AbstractPacket>... callbacks) {
-        super.sendPacket(packet, getHub().getClients(type), callbacks);
+        super.sendPacket(packet, getClientManager().getClients(type), callbacks);
     }
 
     /**

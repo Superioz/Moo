@@ -49,7 +49,7 @@ public class NetworkBus {
             NetworkServer server = (NetworkServer) handle;
 
             if(channel != null
-                    && !server.getHub().contains((InetSocketAddress) channel.remoteAddress())) {
+                    && !server.getClientManager().contains((InetSocketAddress) channel.remoteAddress())) {
                 packet.respond(new PacketRespond(ResponseStatus.FORBIDDEN));
                 return;
             }

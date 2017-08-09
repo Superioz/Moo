@@ -76,7 +76,7 @@ public class Cloud implements EventListener {
      * so the cloud processes are split in different logical threads
      */
     public void start() {
-        getLogger().info("Starting cloud v" + getVersion() + " .. (From " + Paths.get("").toAbsolutePath() + ")");
+        getLogger().info("** Starting cloud v" + getVersion() + " .. (From " + Paths.get("").toAbsolutePath() + ") **");
         this.moduleRegistry = new ModuleRegistry(logger);
         moduleRegistry.setService(executors);
 
@@ -94,7 +94,7 @@ public class Cloud implements EventListener {
         });
         this.databaseModule = moduleRegistry.register(new DatabaseModule(getConfig()));
         this.nettyModule = moduleRegistry.register(new NettyModule(getConfig()));
-        this.mooProxy = new MooProxy(getServer());
+        this.nettyModule.waitForAsync(module -> Cloud.this.mooProxy = new MooProxy(getServer()));
 
         // send module summary
         getLogger().info("Finished initializing modules.");
@@ -177,7 +177,7 @@ public class Cloud implements EventListener {
     }
 
     public ClientManager getClientManager() {
-        return getServer() == null ? null : getServer().getHub();
+        return getServer() == null ? null : getServer().getClientManager();
     }
 
     public DatabaseConnection getDatabaseConnection() {
