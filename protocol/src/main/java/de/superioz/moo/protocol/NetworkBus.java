@@ -30,7 +30,13 @@ public class NetworkBus {
         this.handle = handle;
     }
 
-    public void processIn(Channel channel, AbstractPacket packet) {
+    /**
+     * Processes the packet (first step after receiving)
+     *
+     * @param channel The channel who sent the packet
+     * @param packet  The packet which was sent
+     */
+    public synchronized void processIn(Channel channel, AbstractPacket packet) {
         // call request/response system
         // Also the packets request/response system
         //UUID packetQuid = packet.getQueryUid();
@@ -89,14 +95,23 @@ public class NetworkBus {
         PacketAdapting.getInstance().execute(packet);
     }
 
-    public void processOut(Channel channel, AbstractPacket packet, Consumer<AbstractPacket>... callbacks) {
+    /**
+     * Processes the packet (last step before sending)
+     *
+     * @param channel   The channel to send the packet to
+     * @param packet    The packet to be sent
+     * @param callbacks Callback after receiving a respond
+     */
+    public synchronized void processOut(Channel channel, AbstractPacket packet, Consumer<AbstractPacket>... callbacks) {
         if(channel == null) {
             return;
         }
 
         // send time and identifier
         packet.setStamp(System.currentTimeMillis());
-        if(packet.getQueryUid() == null) packet.setQueryUid(UUID.nameUUIDFromBytes(("Time:" + System.nanoTime()).getBytes(Charsets.UTF_8)));
+        if(packet.getQueryUid() == null) {
+            packet.setQueryUid(UUID.nameUUIDFromBytes(("Time:" + System.nanoTime()).getBytes(Charsets.UTF_8)));
+        }
         channel.writeAndFlush(packet);
 
         // callbacks

@@ -51,7 +51,6 @@ public final class PacketMessenger {
      *
      * @param packet   The packet to be sent
      * @param channels The channels to the packet be sent to
-     * @see #transfer(Channel, AbstractPacket, Class, Consumer[])
      * @see #transfer(AbstractPacket, Class, Consumer[])
      */
     public static <P extends AbstractPacket> void message(P packet, Channel... channels) {
@@ -76,6 +75,7 @@ public final class PacketMessenger {
 
     /**
      * Similar to {@link #message(AbstractPacket, Channel...)} but with awaiting a response
+     *  <b>ASYNC METHOD</b>
      *
      * @param packet   The packet to be sent
      * @param consumer The consumer if a response comes back
@@ -99,32 +99,6 @@ public final class PacketMessenger {
 
     public static <P extends AbstractPacket> void message(P packet, Consumer<Response> consumer) {
         PacketMessenger.create().send(packet, consumer);
-    }
-
-    /**
-     * Sends a packet to the given channel with awaiting a response. Uses this class to achieve that<br>
-     *
-     * @param channel            The netty channel
-     * @param packet             The packet to be sent
-     * @param responseScopeClass The response scope class
-     * @param consumers          The consumers of the response
-     * @param <R>                The response type
-     * @return The response
-     */
-    public static <R, P extends AbstractPacket> R transfer(Channel channel, P packet, Class<? extends AbstractPacket> responseScopeClass, Consumer<R>... consumers) {
-        return PacketMessenger.create().target(channel).responseScope(responseScopeClass).sync().send(packet, consumers);
-    }
-
-    public static <R, P extends AbstractPacket> R transfer(Channel channel, P packet, ResponseScope scope, Consumer<R>... consumers) {
-        return PacketMessenger.create().target(channel).responseScope(scope).sync().send(packet, consumers);
-    }
-
-    public static <R, P extends AbstractPacket> R transfer(Channel channel, P packet, Consumer<R>... consumers) {
-        return PacketMessenger.create().target(channel).sync().send(packet, consumers);
-    }
-
-    public static <R, P extends AbstractPacket> R transferToResponse(Channel channel, P packet, Consumer<R>... consumers) {
-        return PacketMessenger.create().target(channel).responseScope(ResponseScope.RESPONSE).sync().send(packet, consumers);
     }
 
     /**
@@ -154,7 +128,6 @@ public final class PacketMessenger {
 
     /**
      * Sends a packet to the currently connected client with awaiting a response. Uses this class to achieve that<br>
-     * Similar to {@link #transfer(Channel, AbstractPacket, Class, Consumer[])} but without the channel<br>
      *     <b>SYNC METHOD</b>
      *
      * @param packet             The packet

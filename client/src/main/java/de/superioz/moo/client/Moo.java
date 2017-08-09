@@ -101,7 +101,7 @@ public class Moo {
     @Setter
     private Logger logger;
 
-    @Setter private boolean activated = true;
+    @Setter private boolean enabled = true;
     @Setter private boolean autoReconnect = true;
 
     /**
@@ -136,7 +136,7 @@ public class Moo {
      *
      * @param r The runnable
      */
-    public void executeAsync(Runnable r) {
+    public void runAsync(Runnable r) {
         executors.execute(r);
     }
 
@@ -147,7 +147,7 @@ public class Moo {
      * @param <V> The type of result
      * @return The result
      */
-    public <V> V executeAsync(Callable<V> r) {
+    public <V> V runAsync(Callable<V> r) {
         Future<V> future = executors.submit(r);
 
         try {
@@ -169,7 +169,7 @@ public class Moo {
      * @param port The port
      */
     public void connect(String clientName, ClientType clientType, String host, int port) {
-        if(!isActivated()) return;
+        if(!isEnabled()) return;
         getLogger().info("Initialising cloud-connection ..");
 
         this.clientName = clientName;
@@ -218,11 +218,22 @@ public class Moo {
 
     /**
      * Checks if the client is connected
+     * (thats just the simply connection state, after that the client needs to be authorized)
      *
      * @return The result
      */
     public boolean isConnected() {
         return client != null && client.isConnected();
+    }
+
+    /**
+     * Checks if the client is authenticated (happens after connecting)
+     *
+     * @return The result
+     * @see #isConnected()
+     */
+    public boolean isAuthenticated() {
+        return client != null && client.isAuthenticated();
     }
 
     /**
@@ -233,9 +244,36 @@ public class Moo {
      */
     public boolean check() {
         if(instance == null) throw new MooInitializationException();
-        return isActivated();
+        return isEnabled();
     }
 
+    /**
+     * Waiting for the client to be authenticated
+     */
+    public void waitForAuthentication() {
+        while(!isAuthenticated()){
+            try {
+                Thread.sleep(5L);
+            }
+            catch(InterruptedException e) {
+                //
+            }
+        }
+    }
+
+    /**
+     * Simply waiting for the client to get disconnected
+     */
+    public void waitForShutdown(){
+        while(isConnected()){
+            try {
+                Thread.sleep(25L);
+            }
+            catch(InterruptedException e) {
+                //
+            }
+        }
+    }
 
     /*
     ============================================
@@ -263,7 +301,7 @@ public class Moo {
         // check for cloud activation
         if(config.isLoaded()) {
             try {
-                Moo.getInstance().setActivated(config.get(CLOUD_ACTIVATION_CONFIG));
+                Moo.getInstance().setEnabled(config.get(CLOUD_ACTIVATION_CONFIG));
             }
             catch(InvalidConfigException ex) {
                 // do nothing, true is default anyway

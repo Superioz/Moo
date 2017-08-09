@@ -32,7 +32,7 @@ public class ProxyPlayerLoginListener implements Listener {
      */
     private void onLoginAsync(LoginEvent event) {
         // if the cloud is not activated then just skip this event
-        if(!Moo.getInstance().isActivated()) {
+        if(!Moo.getInstance().isEnabled()) {
             event.completeIntent(Thunder.getInstance());
             return;
         }

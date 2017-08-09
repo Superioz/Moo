@@ -1,12 +1,12 @@
 package de.superioz.moo.protocol.packet;
 
+import de.superioz.moo.api.utils.ReflectionUtil;
+import de.superioz.moo.protocol.AbstractNetworkInstance;
+import de.superioz.moo.protocol.exception.BadPacketException;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ByteToMessageDecoder;
 import lombok.Setter;
-import de.superioz.moo.api.utils.ReflectionUtil;
-import de.superioz.moo.protocol.AbstractNetworkInstance;
-import de.superioz.moo.protocol.exception.BadPacketException;
 
 import java.util.List;
 import java.util.UUID;

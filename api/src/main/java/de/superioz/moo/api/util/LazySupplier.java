@@ -22,7 +22,7 @@ public class LazySupplier<T> {
         synchronized(this) {
             object = t;
             empty = false;
-            this.notify();
+            this.notifyAll();
         }
     }
 

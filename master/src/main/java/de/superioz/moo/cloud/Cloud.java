@@ -94,7 +94,10 @@ public class Cloud implements EventListener {
         });
         this.databaseModule = moduleRegistry.register(new DatabaseModule(getConfig()));
         this.nettyModule = moduleRegistry.register(new NettyModule(getConfig()));
-        this.nettyModule.waitForAsync(module -> Cloud.this.mooProxy = new MooProxy(getServer()));
+        this.nettyModule.waitForAsync(module -> {
+            Cloud.this.mooProxy = new MooProxy(getServer());
+            executors.execute(serverInfoCheckTask = new ServerInfoCheckTask(10 * 1000, 20 * 1000));
+        });
 
         // send module summary
         getLogger().info("Finished initializing modules.");
@@ -116,7 +119,6 @@ public class Cloud implements EventListener {
                 //
             }
         });
-        this.executors.execute(serverInfoCheckTask = new ServerInfoCheckTask(10 * 1000, 20 * 1000));
     }
 
     /**

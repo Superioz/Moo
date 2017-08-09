@@ -19,7 +19,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.function.Consumer;
 
-public class MooCommand {
+public class MooThunderCommand {
 
     /**
      * Checks if the connection to the cloud has been activated/deactivated
@@ -28,7 +28,7 @@ public class MooCommand {
      * @return Result
      */
     private boolean checkMoo(CommandContext context) {
-        boolean activated = Moo.getInstance().isActivated();
+        boolean activated = Moo.getInstance().isEnabled();
 
         if(!activated) {
             context.sendMessage("&4The connection to the cloud has been deactivated in the config. " +
@@ -38,7 +38,7 @@ public class MooCommand {
     }
 
     @RunAsynchronous
-    @Command(label = "moo",
+    @Command(label = "mthunder",
             permission = "network.moo",
             usage = "[subCommand]")
     public void onCommand(BungeeCommandContext context, ParamSet args) {

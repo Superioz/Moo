@@ -2,10 +2,6 @@ package de.superioz.moo.protocol;
 
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
-import de.superioz.moo.protocol.server.MooClient;
-import io.netty.channel.Channel;
-import io.netty.channel.EventLoopGroup;
-import lombok.Getter;
 import de.superioz.moo.api.event.EventExecutor;
 import de.superioz.moo.api.event.EventHandler;
 import de.superioz.moo.api.event.EventListener;
@@ -14,6 +10,10 @@ import de.superioz.moo.protocol.common.PacketMessenger;
 import de.superioz.moo.protocol.events.PacketQueueEvent;
 import de.superioz.moo.protocol.packet.AbstractPacket;
 import de.superioz.moo.protocol.packet.PacketRegistry;
+import de.superioz.moo.protocol.server.MooClient;
+import io.netty.channel.Channel;
+import io.netty.channel.EventLoopGroup;
+import lombok.Getter;
 
 import java.util.ArrayList;
 import java.util.List;
