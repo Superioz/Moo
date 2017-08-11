@@ -30,8 +30,10 @@ public abstract class MinecraftCommandContext<T> extends CommandContext<T> {
         if(receiver == null || receiver.isEmpty()) {
             receiver = Collections.singletonList(getCommandSender());
         }
-        MessageComponent c = ChatUtil.getEventMessage(component, eventables);
-        sendComponent(c.toTextComponent(), receiver);
+        if(eventables.length != 0) {
+            component = ChatUtil.getEventMessage(component, eventables);
+        }
+        sendComponent(component.toTextComponent(), receiver);
     }
 
     public void sendEventMessage(MessageComponent component, ClickEvent.Action clickAction, boolean condition, T... receiver) {
@@ -66,7 +68,7 @@ public abstract class MinecraftCommandContext<T> extends CommandContext<T> {
         sendEventMessage(ChatUtil.getEventMessage(message, clickAction), Arrays.asList(receiver));
     }
 
-    public void sendEventMessage(String message, boolean condition,  T... receiver) {
+    public void sendEventMessage(String message, boolean condition, T... receiver) {
         sendEventMessage(ChatUtil.getEventMessage(message, condition), Arrays.asList(receiver));
     }
 
