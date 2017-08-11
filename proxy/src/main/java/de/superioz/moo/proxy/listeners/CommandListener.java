@@ -131,7 +131,7 @@ public class CommandListener extends CommandEventAdapter<CommandSender> implemen
         // send the command help
         // if the instance has children show a list of subcommands
         if(instance.hasChildren()) {
-            MessageFormatSender formatSender = context.getFormatSender(LanguageManager.get("help-command-not-leaf-entry"));
+            MessageFormatSender formatSender = context.getFormatSender(LanguageManager.get("help-command-leaf-entry"));
             ChatColor[] gradient = ChatUtil.GRADIENT_BLUE;
 
             for(CommandInstance children : instance.getChildrens()) {
@@ -148,13 +148,15 @@ public class CommandListener extends CommandEventAdapter<CommandSender> implemen
                     coloredPath.add(color + wholePath.get(i));
                 }
 
-                formatSender.add(() -> context.sendEventMessage(StringUtil.format(formatSender.getFormat(),
-                        String.join(" ", coloredPath) + " &7" + children.getUsage().getBase(),
-                        "/" + suggestUsage, suggestUsage)));
+                formatSender.add(() -> {
+                    context.sendEventMessage(StringUtil.format(formatSender.getFormat(), s -> LanguageManager.get(s),
+                            String.join(" ", coloredPath) + " &7" + children.getUsage().getBase(),
+                            suggestUsage, suggestUsage));
+                });
             }
 
             DisplayFormats.sendList(context,
-                    LanguageManager.get("help-command-not-leaf-header", instance.getLabel()),
+                    LanguageManager.get("help-command-leaf-header", instance.getLabel()),
                     formatSender);
         }
         // if the instance has NO children show a detailed command info
@@ -184,6 +186,7 @@ public class CommandListener extends CommandEventAdapter<CommandSender> implemen
             if(hasParent) {
                 context.sendMessage(LanguageManager.get("help-command-leaf-parent", instance.getParentName()));
             }
+
             context.sendEventMessage(
                     LanguageManager.get("help-command-leaf-flags", flags.size(), String.join("\n", flags)),
                     flags.size() > 0

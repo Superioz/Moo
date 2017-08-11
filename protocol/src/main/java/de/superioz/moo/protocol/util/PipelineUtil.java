@@ -36,8 +36,7 @@ public class PipelineUtil {
             epoll = Epoll.isAvailable();
 
             if(!epoll) {
-                System.err.println("Despite being on Unix epoll is not working, falling back to NIO: ");
-                Epoll.unavailabilityCause().printStackTrace();
+                System.err.println("Despite being on Unix epoll is not working, falling back to NIO. (" + Epoll.unavailabilityCause().getMessage() + ")");
             }
         }
     }

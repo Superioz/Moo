@@ -49,10 +49,10 @@ public class ThunderPluginModule extends Module implements EventListener {
         // register commands
         CommandRegistry.getInstance().registerCommandsSeperately(
                 new DatabaseModifyCommand(),
-                new MooThunderCommand(), new TeamCommand(), new TeamChatCommand(),
+                new MooThunderCommand(), new TeamChatCommand(),
                 new MaintenanceCommand(), new MotdCommand(),
                 new GroupCommand(), new RankCommand(), new PermCommand(),
-                new BanCommand(), new PunishInfoCommand(),
+                new BanCommand(), new PunishInfoCommand(), new PunishArchiveCommand(),
                 new UnbanCommand(), new KickCommand(),
                 new WhoisCommand()
         );

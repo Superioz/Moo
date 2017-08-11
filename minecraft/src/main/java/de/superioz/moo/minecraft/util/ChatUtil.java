@@ -28,16 +28,6 @@ public class ChatUtil {
         if(eventables.length == 0) {
             component.formatAll();
         }
-        else if(eventables.length == 1) {
-            MessageEventable eventable = eventables[0];
-            ClickEvent.Action clickAction = eventable.getClickAction();
-            HoverEvent.Action hoverAction = eventable.getHoverAction();
-            boolean condition = eventable.isCondition();
-
-            for(int i = 0; i < component.getEventSize(); i++) {
-                component.formatConditioned(hoverAction, clickAction, condition);
-            }
-        }
         else {
             for(MessageEventable eventable : eventables) {
                 ClickEvent.Action clickAction = eventable.getClickAction();

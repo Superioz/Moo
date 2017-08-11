@@ -43,6 +43,7 @@ public class Cloud implements EventListener {
     private ConfigModule configModule;
     private CommandModule commandModule;
     private DatabaseModule databaseModule;
+    private RedisModule redisModule;
     private NettyModule nettyModule;
     private ListenerModule listenerModule;
 
@@ -90,7 +91,7 @@ public class Cloud implements EventListener {
             // start redis
             CustomFile customFile = new CustomFile(((ConfigModule) module).getConfig().get("redis-config"), Paths.get("configuration"));
             customFile.load(true, true);
-            moduleRegistry.register(new RedisModule(customFile.getFile(), getLogger().getBaseLogger()));
+            moduleRegistry.register(redisModule = new RedisModule(customFile.getFile(), getLogger().getBaseLogger()));
         });
         this.databaseModule = moduleRegistry.register(new DatabaseModule(getConfig()));
         this.nettyModule = moduleRegistry.register(new NettyModule(getConfig()));
@@ -100,7 +101,7 @@ public class Cloud implements EventListener {
         });
 
         // send module summary
-        getLogger().info("Finished initializing modules.");
+        getLogger().info("Finished initializing modules. Let's see how successful we were ..");
         moduleRegistry.sendModuleSummaryAsync();
 
         // commands
@@ -112,8 +113,11 @@ public class Cloud implements EventListener {
         executors.execute(() -> {
             try {
                 Thread.sleep(5 * 1000);
-                getLogger().info("Netty instances should now be able to connect successfully.");
-                started = true;
+                if(nettyModule.isEnabled()) {
+                    getLogger().info("Netty instances should now be able to connect successfully."
+                        + ((!databaseModule.isEnabled() || !redisModule.isEnabled()) ? " BUT BE CAUTIOUS - it seems the database/redis is not enabled!" : ""));
+                    started = true;
+                }
             }
             catch(InterruptedException e) {
                 //

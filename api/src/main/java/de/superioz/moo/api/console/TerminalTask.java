@@ -56,7 +56,10 @@ public class TerminalTask implements Runnable {
             }
         }
         catch(Exception e) {
-            e.printStackTrace();
+            // mostly this error happens when the console is not exited properly
+            // I only witnesses it while executing the cloud on linux and closing
+            // the console forcefully
+            System.err.println("Error while JLine Terminal! (" + e.getMessage() + ")");
         }
         finally {
             try {

@@ -42,9 +42,11 @@ public class ModuleRegistry {
      */
     public void sendModuleSummary() {
         if(logger == null) return;
-        logger.info(Strings.repeat("-", 75));
-        logger.info("Module Summary: ");
-        logger.info(" ");
+        List<String> summaryMessages = new ArrayList<>();
+
+        summaryMessages.add(Strings.repeat("-", 75));
+        summaryMessages.add("Module Summary: ");
+        summaryMessages.add(" ");
 
         // for averages
         double successCount = 0;
@@ -64,12 +66,16 @@ public class ModuleRegistry {
             String error = m.isEnabled() ? "" : " ("
                     + (m.getErrorReason() != null ? m.getErrorReason().getClass().getSimpleName() : "Not Finished Yet")
                     + ")";
-            logger.info(name + " " + state + " " + timeString);
+            summaryMessages.add(name + " " + state + " " + timeString + error);
         }
-        logger.info(" ");
-        logger.info("Success rate: " + NumberUtil.round(successCount / getModules().size() * 100, 4) + "% " +
+        summaryMessages.add(" ");
+        summaryMessages.add("Total time: " + NumberUtil.round(totalTime, 4) + "s");
+        summaryMessages.add("Success rate: " + NumberUtil.round(successCount / getModules().size() * 100, 4) + "% " +
                 "| Average time: " + NumberUtil.round(totalTime / getModules().size(), 4) + "s");
-        logger.info(Strings.repeat("-", 75));
+        summaryMessages.add(Strings.repeat("-", 75));
+
+        // send all messages
+        summaryMessages.forEach(s -> logger.info(s));
     }
 
     public void sendModuleSummaryAsync() {
@@ -241,7 +247,7 @@ public class ModuleRegistry {
             m.finished(false);
             m.setErrorReason(error);
 
-            logger.debug("Couldn't load module '" + m.getName() + "': "
+            logger.severe("Couldn't load module '" + m.getName() + "': "
                     + error.getMessage() + " (:" + error.getClass().getSimpleName() + ")");
             if(!(error instanceof InvalidConfigException)) {
                 error.printStackTrace();

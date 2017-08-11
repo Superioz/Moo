@@ -126,20 +126,9 @@ public class GroupCommand {
                 LanguageManager.get("group-info-header", groupName),
                 context.getFormatSender(entryFormat)
                         .addTranslated("group-info-entry-name", groupName)
-                        .add(() -> {
-                            context.sendEventMessage(
-                                    LanguageManager.get("group-info-entry-permissions",
-                                            "&c" + group.permissions.size(), permCommand, permCommand),
-                                    group.permissions.size() > 0
-                            );
-                        })
-                        .add(() -> {
-                            context.sendEventMessage(
-                                    LanguageManager.get("group-info-entry-parents", "&c" + group.parents.size(),
-                                            StringUtil.getListToString(group.parents, "\n", s -> "&8- &7" + s)),
-                                    group.parents.size() > 0
-                            );
-                        })
+                        .addTranslated("group-info-entry-permissions", "&c" + group.permissions.size(), permCommand, permCommand)
+                        .addTranslated("group-info-entry-parents", "&c" + group.parents.size(),
+                                StringUtil.getListToString(group.parents, "\n", s -> "&8- &7" + s))
                         .addTranslated("group-info-entry-prefix", group.prefix)
                         .addTranslated("group-info-entry-suffix", group.suffix)
                         .addTranslated("group-info-entry-color", group.color)
