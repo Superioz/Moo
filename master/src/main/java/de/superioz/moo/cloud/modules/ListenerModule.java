@@ -22,7 +22,7 @@ public class ListenerModule extends Module {
         // event listeners
         EventExecutor.getInstance().register(
                 new QueryServerListener(),
-                new MooClientConnectedListener(),
+                new MooClientConnectedListener(), new MooClientDisconnectedListener(),
                 new MooPlayerJoinedProxyListener(),
                 new MooPlayerLeftProxyListener(),
                 new MooPlayerBanListener(),

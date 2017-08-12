@@ -1,4 +1,4 @@
-package de.superioz.moo.cloud.events;
+package de.superioz.moo.protocol.events;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

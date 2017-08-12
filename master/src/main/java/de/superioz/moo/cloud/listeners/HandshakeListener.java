@@ -7,7 +7,7 @@ import de.superioz.moo.api.logging.ConsoleColor;
 import de.superioz.moo.api.util.Validation;
 import de.superioz.moo.cloud.Cloud;
 import de.superioz.moo.cloud.events.HandshakeEvent;
-import de.superioz.moo.cloud.events.MooClientConnectedEvent;
+import de.superioz.moo.protocol.events.MooClientConnectedEvent;
 import de.superioz.moo.protocol.client.ClientType;
 import de.superioz.moo.protocol.common.ResponseStatus;
 import de.superioz.moo.protocol.packets.PacketHandshake;

@@ -11,14 +11,18 @@ import de.superioz.moo.api.module.ModuleDependency;
 import de.superioz.moo.cloud.Cloud;
 import de.superioz.moo.cloud.events.CloudStartedEvent;
 import de.superioz.moo.cloud.events.HandshakeEvent;
+import de.superioz.moo.protocol.events.MooClientConnectedEvent;
 import de.superioz.moo.cloud.listeners.HandshakeListener;
 import de.superioz.moo.protocol.common.NetworkEventAdapter;
 import de.superioz.moo.protocol.events.ServerStateEvent;
 import de.superioz.moo.protocol.packet.AbstractPacket;
 import de.superioz.moo.protocol.packets.PacketHandshake;
+import de.superioz.moo.protocol.server.MooClient;
 import de.superioz.moo.protocol.server.NetworkServer;
 import io.netty.channel.Channel;
 import lombok.Getter;
+
+import java.net.InetSocketAddress;
 
 @ModuleDependency(modules = {"config"})
 @RunAsynchronous
@@ -68,6 +72,10 @@ public class NettyModule extends Module implements EventListener {
 
             @Override
             public void onChannelInactive(Channel channel) {
+                MooClient client = Cloud.getInstance().getClientManager().get((InetSocketAddress)channel.remoteAddress());
+                if(client == null) return;
+
+                EventExecutor.getInstance().execute(new MooClientConnectedEvent(client));
             }
         });
 

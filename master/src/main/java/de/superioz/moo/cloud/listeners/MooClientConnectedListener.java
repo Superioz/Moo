@@ -8,7 +8,7 @@ import de.superioz.moo.api.reaction.Reaction;
 import de.superioz.moo.api.reaction.Reactor;
 import de.superioz.moo.api.util.Validation;
 import de.superioz.moo.cloud.Cloud;
-import de.superioz.moo.cloud.events.MooClientConnectedEvent;
+import de.superioz.moo.protocol.events.MooClientConnectedEvent;
 import de.superioz.moo.protocol.client.ClientType;
 import de.superioz.moo.protocol.common.PacketMessenger;
 import de.superioz.moo.protocol.packets.MultiPacket;

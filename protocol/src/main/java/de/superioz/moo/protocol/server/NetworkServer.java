@@ -8,6 +8,7 @@ import de.superioz.moo.protocol.Protocol;
 import de.superioz.moo.protocol.client.ClientType;
 import de.superioz.moo.protocol.client.NetworkClient;
 import de.superioz.moo.protocol.common.NetworkEventAdapter;
+import de.superioz.moo.protocol.events.MooClientDisconnectEvent;
 import de.superioz.moo.protocol.util.PipelineUtil;
 import de.superioz.moo.protocol.events.ServerStateEvent;
 import de.superioz.moo.protocol.packet.AbstractPacket;
@@ -88,10 +89,14 @@ public class NetworkServer extends AbstractNetworkInstance {
                 getClientManager().remove(remoteAddress);
 
                 if(client == null){
-                    getLogger().warning(ConsoleColor.DARK_RED + "Client shouldn't be null. (Address: " + remoteAddress + ")");
+                    getLogger().warning(ConsoleColor.DARK_RED + "Client shouldn't be null at disconnecting (Address: " + remoteAddress + ")." +
+                            " This can happen if the client tried to connect but wasn't able to handshake properly (Maybe he didn't have hands?)");
                 }
-                getLogger().info(ConsoleColor.RED.toString()
-                        + client.getType() + " client disconnected [@" + remoteAddress.getAddress().getHostAddress() + "]");
+                else{
+                    getLogger().info(ConsoleColor.RED.toString()
+                            + client.getType() + " client disconnected [@" + remoteAddress.getAddress().getHostAddress() + "]");
+                    EventExecutor.getInstance().execute(new MooClientDisconnectEvent(client));
+                }
             }
         });
     }
