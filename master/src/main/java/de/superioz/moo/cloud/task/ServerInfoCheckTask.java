@@ -1,5 +1,6 @@
 package de.superioz.moo.cloud.task;
 
+import de.superioz.moo.api.cache.MooCache;
 import de.superioz.moo.api.common.MooServer;
 import de.superioz.moo.cloud.Cloud;
 import de.superioz.moo.protocol.client.ClientType;
@@ -40,6 +41,9 @@ public class ServerInfoCheckTask implements Runnable {
                     Cloud.getInstance().getLogger().debug("Server " + serverDeleted.getType()
                             + " [" + serverDeleted.getAddress().getHostName() + ":" + serverDeleted.getAddress().getPort() + "] timed out.");
                     PacketMessenger.message(new PacketServerUnregister(serverDeleted.getAddress()), ClientType.PROXY);
+
+                    // sync with redis
+                    MooCache.getInstance().getServerMap().removeAsync(uuid);
                 });
             }
 

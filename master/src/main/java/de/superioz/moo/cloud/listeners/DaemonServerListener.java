@@ -1,5 +1,6 @@
 package de.superioz.moo.cloud.listeners;
 
+import de.superioz.moo.api.cache.MooCache;
 import de.superioz.moo.api.common.MooServer;
 import de.superioz.moo.api.reaction.Reaction;
 import de.superioz.moo.cloud.Cloud;
@@ -29,8 +30,11 @@ public class DaemonServerListener implements PacketAdapter {
             Cloud.getInstance().getLogger().debug("Register server " + ip + " with type '" + packet.type + "' ..");
 
             PacketMessenger.message(new PacketServerRegister(packet.type, packet.getAddress().getHostName(), packet.port), ClientType.PROXY);
-            Cloud.getInstance().getMooProxy().getSpigotServers().put(packet.uuid,
-                    new MooServer(packet.uuid, new InetSocketAddress(packet.getAddress().getHostName(), packet.port), packet.type));
+            MooServer server = new MooServer(packet.uuid, new InetSocketAddress(packet.getAddress().getHostName(), packet.port), packet.type);
+            Cloud.getInstance().getMooProxy().getSpigotServers().put(packet.uuid, server);
+
+            // sync with redis
+            MooCache.getInstance().getServerMap().putAsync(server.getUuid(), server);
         });
 
         // daemon stopped a server
@@ -41,6 +45,9 @@ public class DaemonServerListener implements PacketAdapter {
 
                 PacketMessenger.message(new PacketServerUnregister(packet.getAddress()), ClientType.PROXY);
                 Cloud.getInstance().getMooProxy().getSpigotServers().remove(packet.uuid);
+
+                // sync with redis
+                MooCache.getInstance().getServerMap().removeAsync(packet.uuid);
             }
         });
     }
