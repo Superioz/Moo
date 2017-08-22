@@ -115,7 +115,7 @@ public class ProxyPlayerLoginListener implements Listener {
         PlayerData data = new PlayerData();
         data.uuid = player.getUniqueId();
         data.lastName = player.getName();
-        data.lastip = player.getAddress().getHostString();
+        data.lastIp = player.getAddress().getHostString();
 
         // changes the state of the player
         // if the respond was successful put the deserialized values into the proxycache

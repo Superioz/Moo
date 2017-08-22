@@ -12,7 +12,7 @@ import de.superioz.moo.api.common.RunAsynchronous;
 import de.superioz.moo.api.common.punishment.BanSubType;
 import de.superioz.moo.api.common.punishment.BanType;
 import de.superioz.moo.api.database.objects.Ban;
-import de.superioz.moo.api.database.objects.UniqueIdBuf;
+import de.superioz.moo.api.database.objects.PlayerData;
 import de.superioz.moo.api.io.LanguageManager;
 import de.superioz.moo.api.utils.StringUtil;
 import de.superioz.moo.api.utils.TimeUtil;
@@ -58,8 +58,8 @@ public class PunishInfoCommand {
         // otherwise send (not-banned)
         if(currentBan != null) {
             String banExecutorName = CommandContext.CONSOLE_NAME;
-            UniqueIdBuf banExecutor = MooQueries.getInstance().getUniqueIdBuffer(currentBan.by);
-            if(banExecutor != null) banExecutorName = banExecutor.name;
+            PlayerData banExecutor = MooQueries.getInstance().getPlayerData(currentBan.by);
+            if(banExecutor != null) banExecutorName = banExecutor.lastName;
 
             // values for formatting
             long current = System.currentTimeMillis();

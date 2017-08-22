@@ -42,7 +42,7 @@ public class ServerListener implements Listener {
         PlayerData data = new PlayerData();
         data.uuid = player.getUniqueId();
         data.lastName = player.getName();
-        data.lastip = player.getAddress().getHostString();
+        data.lastIp = player.getAddress().getHostString();
 
         // changes state
         Permissible oldPermissible = PermissionInjector.getPermissible(player);
@@ -65,7 +65,7 @@ public class ServerListener implements Listener {
         PlayerData data = new PlayerData();
         data.uuid = player.getUniqueId();
         data.lastName = player.getName();
-        data.lastip = player.getAddress().getHostString();
+        data.lastIp = player.getAddress().getHostString();
 
         // SET QUIT MESSAGE
         String playerName = MooQueries.getInstance().getGroup(player.getUniqueId()).color + player.getName();

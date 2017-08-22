@@ -1,13 +1,14 @@
 package de.superioz.moo.cloud.listeners;
 
+import com.mongodb.client.model.Filters;
 import de.superioz.moo.api.common.punishment.BanSubType;
 import de.superioz.moo.api.common.punishment.Punishmental;
 import de.superioz.moo.api.database.DbModifier;
-import de.superioz.moo.api.database.query.DbQueryUnbaked;
+import de.superioz.moo.api.database.filter.DbFilter;
 import de.superioz.moo.api.database.objects.Ban;
 import de.superioz.moo.api.database.objects.Group;
 import de.superioz.moo.api.database.objects.PlayerData;
-import de.superioz.moo.api.database.objects.UniqueIdBuf;
+import de.superioz.moo.api.database.query.DbQueryUnbaked;
 import de.superioz.moo.api.event.EventExecutor;
 import de.superioz.moo.api.event.EventHandler;
 import de.superioz.moo.api.event.EventListener;
@@ -33,12 +34,8 @@ public class MooPlayerBanListener implements EventListener {
         List<String> meta = packet.meta;
 
         // get unique id buf and check if it is valid
-        UniqueIdBuf buf = CloudCollections.UUID_BUFFER.get(data.lastName);
-        if(buf == null) {
-            packet.respond(ResponseStatus.NOK);
-            return;
-        }
-        UUID uuid = buf.uuid;
+        PlayerData fetchedData = CloudCollections.PLAYER.get(new DbFilter(Filters.eq(DbModifier.PLAYER_NAME.getFieldName(), data.lastName))).get(0);
+        UUID uuid = fetchedData.uuid;
 
         // checks meta (which should consist of the ban and the messages)
         // checks ban after checking the meta
@@ -96,9 +93,9 @@ public class MooPlayerBanListener implements EventListener {
         packet.respond(ResponseStatus.OK);
 
         // gets the player and kick him if he is online
-        PlayerData player = Cloud.getInstance().getMooProxy().getPlayer(buf.uuid);
+        PlayerData player = Cloud.getInstance().getMooProxy().getPlayer(fetchedData.uuid);
         if(player != null) {
-            Cloud.getInstance().getMooProxy().kick(player, new PacketPlayerKick(null, buf.uuid + "",
+            Cloud.getInstance().getMooProxy().kick(player, new PacketPlayerKick(null, fetchedData.uuid + "",
                     ban.apply(ban.isPermanent() ? permBanMessage : tempBanMessage)), response -> {
             });
         }

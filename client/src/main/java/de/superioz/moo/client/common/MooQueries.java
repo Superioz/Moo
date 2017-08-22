@@ -7,7 +7,6 @@ import de.superioz.moo.api.database.*;
 import de.superioz.moo.api.database.objects.Ban;
 import de.superioz.moo.api.database.objects.Group;
 import de.superioz.moo.api.database.objects.PlayerData;
-import de.superioz.moo.api.database.objects.UniqueIdBuf;
 import de.superioz.moo.api.database.query.DbQuery;
 import de.superioz.moo.api.database.query.DbQueryNode;
 import de.superioz.moo.api.database.query.DbQueryUnbaked;
@@ -119,32 +118,6 @@ public final class MooQueries {
 
     public PlayerInfo getPlayerInfo(UUID uuid) {
         return getPlayerInfo(uuid.toString());
-    }
-
-    /**
-     * Gets the uuid-buf from given playerName
-     *
-     * @param playerName The playerName
-     * @return The response
-     */
-    public UniqueIdBuf getUniqueIdBuffer(String playerName) {
-        try {
-            return Queries.get(DatabaseType.UUID_BUFFER, playerName);
-        }
-        catch(MooInputException e) {
-            throw null;
-        }
-    }
-
-    public UniqueIdBuf getUniqueIdBuffer(UUID uuid) {
-        if(uuid == null) return null;
-
-        try {
-            return Queries.get(DatabaseType.UUID_BUFFER, uuid);
-        }
-        catch(MooInputException e) {
-            throw null;
-        }
     }
 
     /**

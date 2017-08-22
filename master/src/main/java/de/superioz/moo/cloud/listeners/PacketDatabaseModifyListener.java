@@ -65,7 +65,7 @@ public class PacketDatabaseModifyListener implements PacketAdapter {
         Object primaryKey = firstNode == null ? null : firstNode.getContent();
 
         // get data from filtering
-        List<Object> data = module.getFilteredData(CloudCollections.UUID_BUFFER, filter, packet.queried, packet.limit);
+        List<Object> data = module.getFilteredData(CloudCollections.PLAYER, filter, packet.queried, packet.limit);
         Cloud.getInstance().getLogger().debug("Found data(" + data.size() + ") to " + type.name() + ": " + data);
 
         // for informing minecraft

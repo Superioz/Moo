@@ -53,7 +53,7 @@ public class WhoisCommand {
         // get rough information about the player
         String playerName = args.get(0);
         UUID uuid = data.uuid;
-        String ip = data.lastip;
+        String ip = data.lastIp;
         String rank = data.group;
         long coins = data.coins;
         int banPoints = data.banPoints;

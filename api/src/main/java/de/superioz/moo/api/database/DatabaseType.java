@@ -2,7 +2,6 @@ package de.superioz.moo.api.database;
 
 import de.superioz.moo.api.database.objects.Group;
 import de.superioz.moo.api.database.objects.PlayerData;
-import de.superioz.moo.api.database.objects.UniqueIdBuf;
 import lombok.Getter;
 import de.superioz.moo.api.database.objects.Ban;
 
@@ -15,8 +14,7 @@ public enum DatabaseType {
     PLAYER(PlayerData.class, "players"),
     GROUP(Group.class, "groups"),
     BAN(Ban.class, "bans"),
-    BAN_ARCHIVE(Ban.class, "ban-archive"),
-    UUID_BUFFER(UniqueIdBuf.class, "uuid-buffer");
+    BAN_ARCHIVE(Ban.class, "ban-archive");
 
     /**
      * The class which represents

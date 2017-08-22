@@ -2,19 +2,19 @@ package de.superioz.moo.api.database;
 
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
+import de.superioz.moo.api.cache.DatabaseCache;
 import de.superioz.moo.api.collection.FixedSizeList;
 import de.superioz.moo.api.database.filter.DbFilter;
 import de.superioz.moo.api.database.filter.DbFilterNode;
 import de.superioz.moo.api.database.object.DataArchitecture;
 import de.superioz.moo.api.database.object.DataResolver;
-import de.superioz.moo.api.database.objects.UniqueIdBuf;
+import de.superioz.moo.api.database.objects.PlayerData;
 import de.superioz.moo.api.database.query.DbQuery;
 import de.superioz.moo.api.database.query.DbQueryUnbaked;
 import de.superioz.moo.api.keyvalue.FinalValue;
+import de.superioz.moo.api.util.Validation;
 import de.superioz.moo.api.utils.ReflectionUtil;
 import lombok.Getter;
-import de.superioz.moo.api.cache.DatabaseCache;
-import de.superioz.moo.api.util.Validation;
 import org.bson.Document;
 
 import java.lang.reflect.Field;
@@ -65,13 +65,13 @@ public abstract class DatabaseCollection<K, E> {
     /**
      * Get data from a packets
      *
-     * @param uuidCache The uniqueId Cache
-     * @param filter    The filter
-     * @param queried   The queried
-     * @param limit     The limit
+     * @param playerDataCache The playerData Cache
+     * @param filter          The filter
+     * @param queried         The queried
+     * @param limit           The limit
      * @return The objects
      */
-    public List<Object> getFilteredData(DatabaseCollection<String, UniqueIdBuf> uuidCache, DbFilter filter, boolean queried, int limit) {
+    public List<Object> getFilteredData(DatabaseCollection<UUID, PlayerData> playerDataCache, DbFilter filter, boolean queried, int limit) {
         List<Object> data = limit == -1 ? new ArrayList<>() : new FixedSizeList<>(limit);
         filter = filter.replaceBinaryUniqueIds();
 
@@ -88,10 +88,10 @@ public abstract class DatabaseCollection<K, E> {
             }
             // CONVERT THE NAME INTO A UNIQUEID
             if(field.getType().equals(UUID.class) && !Validation.UNIQUEID.matches(o.toString())) {
-                UniqueIdBuf uniqueIdBuf = uuidCache.get(o.toString());
-
-                if(uniqueIdBuf != null) {
-                    o = uniqueIdBuf.uuid;
+                for(PlayerData pd : playerDataCache.getCache().asList()) {
+                    if(o.toString().equals(pd.lastName)) {
+                        o = pd.uuid;
+                    }
                 }
             }
 
@@ -261,6 +261,10 @@ public abstract class DatabaseCollection<K, E> {
 
     public List<E> get(DbFilter query, boolean queried, int limit) {
         return get(query, queried, limit, true);
+    }
+
+    public List<E> get(DbFilter query) {
+        return get(query, false, -1);
     }
 
 

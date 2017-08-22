@@ -33,7 +33,7 @@ public class PacketPlayerStateListener implements PacketAdapter {
         // check state and eventually validates uuid buf
         if(newState == PacketPlayerState.State.JOIN_PROXY
                 || newState == PacketPlayerState.State.JOIN_SERVER) {
-            CloudCollections.UUID_BUFFER.getCurrentBuf(playerData, true);
+            //
         }
         packet.data = currentData;
 

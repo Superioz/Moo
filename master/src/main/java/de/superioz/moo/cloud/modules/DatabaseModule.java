@@ -54,8 +54,7 @@ public class DatabaseModule extends Module {
                 new GroupCollection(dbConn),
                 new PlayerDataCollection(dbConn),
                 new BanCollection(dbConn),
-                new BanArchiveCollection(dbConn),
-                new UniqueIdBufCollection(dbConn)
+                new BanArchiveCollection(dbConn)
         );
         Cloud.getInstance().getLogger().debug("Finished registering database collections. (" + collectionMap.size() + ")");
     }

@@ -73,13 +73,14 @@ public class Daemon implements EventListener {
      * Starts one or multiple server with given values
      *
      * @param type        The type of the server (e.g. lobby)
+     * @param ram         Max amount of ram
      * @param autoSave    If the server should auto save or just get deleted after shutdown
      * @param amount      The amount of this type of server to start
      * @param resultOfReq The result of the request (Server started or rip)
      */
-    public void startServer(String type, boolean autoSave, int amount, Consumer<Server> resultOfReq) {
+    public void startServer(String type, String ram, boolean autoSave, int amount, Consumer<Server> resultOfReq) {
         for(int i = 0; i < amount; i++) {
-            ServerStartTask task = new ServerStartTask(type, -1, autoSave, resultOfReq);
+            ServerStartTask task = new ServerStartTask(type, -1, ram, autoSave, resultOfReq);
             Daemon.getInstance().getServer().getServerQueue().getQueue().offer(task);
         }
     }

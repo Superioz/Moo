@@ -29,7 +29,7 @@ public class ServerPacketListener implements PacketAdapter {
         Daemon.getInstance().getLogs().debug("Starting server ..");
 
         // adds given amount of server to start queue
-        Daemon.getInstance().startServer(serverType, packet.autoSave, packet.amount,
+        Daemon.getInstance().startServer(serverType, "", packet.autoSave, packet.amount,
                 server -> packet.respond(server == null
                         ? new PacketServerDone(PacketServerDone.Type.START, new UUID(0, 0), "", -1)
                         : new PacketServerDone(PacketServerDone.Type.START, server.getUuid(), server.getName(), server.getPort())));

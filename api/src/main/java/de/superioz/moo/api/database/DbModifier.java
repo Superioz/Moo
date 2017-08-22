@@ -4,7 +4,6 @@ import de.superioz.moo.api.database.object.DataResolver;
 import de.superioz.moo.api.database.objects.Ban;
 import de.superioz.moo.api.database.objects.Group;
 import de.superioz.moo.api.database.objects.PlayerData;
-import de.superioz.moo.api.database.objects.UniqueIdBuf;
 import de.superioz.moo.api.util.Validation;
 import de.superioz.moo.api.utils.ReflectionUtil;
 import lombok.Getter;
@@ -49,13 +48,7 @@ public enum DbModifier {
     PLAYER_JOINED(10, PlayerData.class),
     PLAYER_EXTRA_PERMS(11, PlayerData.class, Validation.PERMISSION),
     PLAYER_COINS(12, PlayerData.class),
-    PLAYER_BANPOINTS(13, PlayerData.class, Validation.INTEGER),
-
-    // uuid-buffer
-    UUID_BUF_NAME(0, UniqueIdBuf.class, Validation.SIMPLE_NAME),
-    UUID_BUF_UUID(1, UniqueIdBuf.class),
-    UUID_BUF_TEXTURE_VAL(2, UniqueIdBuf.class),
-    UUID_BUF_TEXTURE_SIGN(3, UniqueIdBuf.class);
+    PLAYER_BANPOINTS(13, PlayerData.class, Validation.INTEGER);
 
     /**
      * The class who inherits the fields represented by the enum

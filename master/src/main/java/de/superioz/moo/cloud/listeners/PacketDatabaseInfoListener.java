@@ -46,7 +46,7 @@ public class PacketDatabaseInfoListener implements PacketAdapter {
                 " With filter (as " + filter + ")");
 
         // get data from filtering
-        List<Object> data = module.getFilteredData(CloudCollections.UUID_BUFFER, filter, packet.queried, packet.limit);
+        List<Object> data = module.getFilteredData(CloudCollections.PLAYER, filter, packet.queried, packet.limit);
 
         // check result
         if(data.isEmpty()) {

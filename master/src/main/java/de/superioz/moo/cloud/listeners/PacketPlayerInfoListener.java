@@ -1,9 +1,10 @@
 package de.superioz.moo.cloud.listeners;
 
+import com.mongodb.client.model.Filters;
+import de.superioz.moo.api.database.DbModifier;
 import de.superioz.moo.api.database.filter.DbFilter;
 import de.superioz.moo.api.database.objects.Ban;
 import de.superioz.moo.api.database.objects.PlayerData;
-import de.superioz.moo.api.database.objects.UniqueIdBuf;
 import de.superioz.moo.api.util.SimpleSerializable;
 import de.superioz.moo.api.util.Validation;
 import de.superioz.moo.api.utils.StringUtil;
@@ -33,21 +34,14 @@ public class PacketPlayerInfoListener implements PacketAdapter {
         if(Validation.UNIQUEID.matches(id)) {
             uuid = UUID.fromString(id);
         }
-        else {
-            UniqueIdBuf buf = CloudCollections.UUID_BUFFER.get(id);
-            if(buf == null) {
-                status = ResponseStatus.NOT_FOUND;
-            }
-            else {
-                uuid = buf.uuid;
-            }
-        }
 
         // if the uuid couldn't be found or the playerData is (therefore) empty
         // just return a bad status
-        PlayerData playerData;
-        if(status != ResponseStatus.OK
-                || (playerData = CloudCollections.PLAYER.get(uuid)) == null) {
+        PlayerData playerData = CloudCollections.PLAYER.get(
+                new DbFilter(uuid instanceof UUID
+                        ? Filters.eq(DbModifier.PLAYER_UUID.getFieldName(), uuid)
+                        : Filters.eq(DbModifier.PLAYER_NAME.getFieldName(), id))).get(0);
+        if(status != ResponseStatus.OK || playerData == null) {
             packet.respond(status);
             return;
         }
