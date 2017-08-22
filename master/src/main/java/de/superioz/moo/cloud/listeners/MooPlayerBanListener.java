@@ -19,16 +19,20 @@ import de.superioz.moo.cloud.database.CloudCollections;
 import de.superioz.moo.cloud.events.MooPlayerBanEvent;
 import de.superioz.moo.cloud.events.MooPlayerPostBanEvent;
 import de.superioz.moo.protocol.common.ResponseStatus;
+import de.superioz.moo.protocol.exception.MooInputException;
 import de.superioz.moo.protocol.packets.PacketPlayerKick;
 import de.superioz.moo.protocol.packets.PacketPlayerPunish;
 
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * This class listens on the command to ban a player
+ */
 public class MooPlayerBanListener implements EventListener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
-    public void onEvent(MooPlayerBanEvent event) {
+    public void onEvent(MooPlayerBanEvent event) throws MooInputException {
         PlayerData data = event.getData();
         PacketPlayerPunish packet = event.getPacket();
         List<String> meta = packet.meta;

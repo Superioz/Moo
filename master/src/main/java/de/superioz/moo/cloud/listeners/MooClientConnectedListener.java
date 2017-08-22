@@ -19,6 +19,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
+/**
+ * This class listens on a client connecting to the cloud
+ */
 public class MooClientConnectedListener implements EventListener {
 
     private static final Pattern PREDEFINED_SERVER_PATTERN = Pattern.compile("\\w+(:\\d+)?");
@@ -54,7 +57,7 @@ public class MooClientConnectedListener implements EventListener {
                 // start predefined servers
                 // ONLY if the serverlist inside config is not empty, nor null
                 // AND ONLY IF AUTOMATIC MODE IS ACTIVATED
-                if(!(boolean)Cloud.getInstance().getConfig().get("predefined-servers.activated")){
+                if(!(boolean) Cloud.getInstance().getConfig().get("predefined-servers.activated")) {
                     return;
                 }
 

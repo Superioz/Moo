@@ -9,6 +9,9 @@ import de.superioz.moo.protocol.client.ClientType;
 import de.superioz.moo.protocol.common.PacketMessenger;
 import de.superioz.moo.protocol.packets.PacketConsoleOutput;
 
+/**
+ * This class listens on the cloud logging, to the send it to other instances
+ */
 public class MooLoggingListener implements EventListener {
 
     @EventHandler

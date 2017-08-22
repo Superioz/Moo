@@ -9,6 +9,9 @@ import de.superioz.moo.cloud.Cloud;
 import de.superioz.moo.cloud.events.CloudStartedEvent;
 import de.superioz.moo.protocol.common.Queries;
 
+/**
+ * This class listens on the start of the cloud
+ */
 public class CloudStartedListener implements EventListener {
 
     @EventHandler

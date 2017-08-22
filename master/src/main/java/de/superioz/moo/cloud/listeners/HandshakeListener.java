@@ -17,6 +17,9 @@ import io.netty.channel.Channel;
 
 import java.net.InetSocketAddress;
 
+/**
+ * This class listens on the handshake between a client this cloud
+ */
 public class HandshakeListener implements EventListener {
 
     @EventHandler

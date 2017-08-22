@@ -12,6 +12,9 @@ import de.superioz.moo.protocol.packets.*;
 
 import java.net.InetSocketAddress;
 
+/**
+ * This class listens on server status events of the daemon (starting, stopping, ..)
+ */
 public class DaemonServerListener implements PacketAdapter {
 
     @PacketHandler

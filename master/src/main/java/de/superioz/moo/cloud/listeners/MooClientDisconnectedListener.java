@@ -15,6 +15,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * This class listens on a client disconnecting from the cloud
+ */
 public class MooClientDisconnectedListener implements EventListener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
