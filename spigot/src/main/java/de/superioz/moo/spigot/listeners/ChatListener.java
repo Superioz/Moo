@@ -1,6 +1,6 @@
 package de.superioz.moo.spigot.listeners;
 
-import de.superioz.moo.api.database.object.Group;
+import de.superioz.moo.api.database.objects.Group;
 import de.superioz.moo.api.io.LanguageManager;
 import de.superioz.moo.client.common.MooQueries;
 import org.bukkit.entity.Player;

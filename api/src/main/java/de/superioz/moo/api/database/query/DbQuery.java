@@ -1,6 +1,8 @@
-package de.superioz.moo.api.database;
+package de.superioz.moo.api.database.query;
 
-import de.superioz.moo.api.database.object.PlayerData;
+import de.superioz.moo.api.database.object.DataResolver;
+import de.superioz.moo.api.database.DbModifier;
+import de.superioz.moo.api.database.objects.PlayerData;
 import de.superioz.moo.api.exceptions.InvalidArgumentException;
 import de.superioz.moo.api.keyvalue.KeyMultiValue;
 import de.superioz.moo.api.keyvalue.Keyable;

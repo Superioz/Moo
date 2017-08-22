@@ -35,8 +35,8 @@ public class Thunder extends Plugin implements EventListener {
     public void onEnable() {
         instance = this;
 
-        // initialise moo and modules
-        Moo.initialise((logs = new Loogger(getLogger())).prepareNativeStreams().enableFileLogging().getBaseLogger());
+        // initialize moo and modules
+        Moo.initialize((logs = new Loogger(getLogger())).prepareNativeStreams().enableFileLogging().getBaseLogger());
         this.pluginModule = new ThunderPluginModule();
         this.moduleRegistry = new ModuleRegistry(logs);
         this.moduleRegistry.register(pluginModule);

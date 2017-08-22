@@ -1,8 +1,8 @@
-package de.superioz.moo.api.database.object;
+package de.superioz.moo.api.database.objects;
 
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
-import de.superioz.moo.api.database.DbKey;
+import de.superioz.moo.api.database.object.DbKey;
 import de.superioz.moo.api.util.SimpleSerializable;
 import lombok.Setter;
 
@@ -30,7 +30,7 @@ public class PlayerData extends SimpleSerializable {
      * The ip the player last played with
      */
     @DbKey
-    public String lastip;
+    public String lastIp;
 
     /**
      * The {@link Group} of the player
@@ -42,7 +42,7 @@ public class PlayerData extends SimpleSerializable {
      * The {@link Group} rank of the player
      */
     @DbKey
-    public int rank;
+    public Integer rank;
 
     /**
      * The server where the player is online atm
@@ -56,7 +56,7 @@ public class PlayerData extends SimpleSerializable {
      */
     @DbKey
     @Setter
-    public int currentProxy;
+    public Integer currentProxy;
 
     /**
      * Timestamp of the last online time (Last online = Leave Time)

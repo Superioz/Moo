@@ -1,5 +1,6 @@
-package de.superioz.moo.api.database;
+package de.superioz.moo.api.database.query;
 
+import de.superioz.moo.api.database.object.DataResolver;
 import de.superioz.moo.api.utils.ReflectionUtil;
 import de.superioz.moo.api.utils.StringUtil;
 import lombok.Getter;

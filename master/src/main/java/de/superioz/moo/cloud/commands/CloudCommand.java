@@ -4,7 +4,7 @@ import de.superioz.moo.api.command.Command;
 import de.superioz.moo.api.command.context.CommandContext;
 import de.superioz.moo.api.command.param.ParamSet;
 import de.superioz.moo.api.common.MooServer;
-import de.superioz.moo.api.database.object.PlayerData;
+import de.superioz.moo.api.database.objects.PlayerData;
 import de.superioz.moo.api.event.EventListener;
 import de.superioz.moo.cloud.Cloud;
 import de.superioz.moo.protocol.common.PacketMessenger;

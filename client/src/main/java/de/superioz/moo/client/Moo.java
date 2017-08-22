@@ -9,7 +9,6 @@ import de.superioz.moo.api.event.EventListener;
 import de.superioz.moo.api.exceptions.InvalidConfigException;
 import de.superioz.moo.api.io.JsonConfig;
 import de.superioz.moo.api.io.MooConfigType;
-import de.superioz.moo.client.common.MooDatabase;
 import de.superioz.moo.client.common.MooQueries;
 import de.superioz.moo.client.exception.MooInitializationException;
 import de.superioz.moo.client.listeners.QueryClientListener;
@@ -91,11 +90,6 @@ public class Moo {
     private ClientType clientType;
 
     /**
-     * The database object of the database part of the cloud connection
-     */
-    private MooDatabase database;
-
-    /**
      * The logger of the client
      */
     @Setter
@@ -118,9 +112,9 @@ public class Moo {
 
     /**
      * Initialises the moo instance<br>
-     * It will create the {@link Moo} instance, initialise the logger and database
+     * It will create the {@link Moo} instance, initialize the logger and database
      */
-    public static void initialise(Logger logger) {
+    public static void initialize(Logger logger) {
         // create new instance
         if(instance == null) {
             getInstance();
@@ -128,7 +122,6 @@ public class Moo {
 
         // reinitialise the values
         if(logger != null) instance.logger = logger;
-        instance.database = new MooDatabase(instance);
     }
 
     /**

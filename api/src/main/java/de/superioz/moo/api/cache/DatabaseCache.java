@@ -5,7 +5,7 @@ import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 import com.mongodb.client.FindIterable;
 import de.superioz.moo.api.database.DatabaseCollection;
-import de.superioz.moo.api.database.DbFilter;
+import de.superioz.moo.api.database.filter.DbFilter;
 import lombok.Getter;
 import org.bson.Document;
 

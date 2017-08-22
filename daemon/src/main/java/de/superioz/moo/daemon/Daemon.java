@@ -97,7 +97,7 @@ public class Daemon implements EventListener {
         getInstance().getLogs().warning("*** STOPPING THE DAEMON FORCEFULLY RESULTS IN GHOST PROCESSES  ***");
         getInstance().getLogs().warning("*** IT IS RECOMMENDED TO USE THE 'STOP' COMMAND BEFORE CLOSING ***");
         getInstance().getLogs().info("Start daemon @" + System.getProperty("user.dir") + " (" + (SystemUtil.isWindows() ? "WINDOWS" : "LINUX") + ")");
-        Moo.initialise(logger);
+        Moo.initialize(logger);
 
         // load the configuration
         Daemon.getInstance().getLogs().info("Load configuration ..");
@@ -107,7 +107,7 @@ public class Daemon implements EventListener {
         Daemon.getInstance().getLogs().setDebugMode(config.get("debug"));
         logger.info("Debug Mode: " + (Daemon.getInstance().getLogs().isDebugMode() ? "ON" : "off"));
 
-        // register the commands (would be possible to do it with Moo.initialise directly, but it's not a MooPlugin, so ...)
+        // register the commands (would be possible to do it with Moo.initialize directly, but it's not a MooPlugin, so ...)
         CommandRegistry.getInstance().registerCommands(new MainCommand());
 
         // register listeners

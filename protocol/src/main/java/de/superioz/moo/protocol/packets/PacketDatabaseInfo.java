@@ -4,7 +4,7 @@ import de.superioz.moo.api.database.DatabaseCollection;
 import de.superioz.moo.protocol.packet.AbstractPacket;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
-import de.superioz.moo.api.database.DbFilter;
+import de.superioz.moo.api.database.filter.DbFilter;
 import de.superioz.moo.api.database.DatabaseType;
 import de.superioz.moo.protocol.packet.PacketBuffer;
 

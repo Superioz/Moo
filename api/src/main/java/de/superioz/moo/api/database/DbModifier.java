@@ -1,13 +1,15 @@
 package de.superioz.moo.api.database;
 
-import de.superioz.moo.api.database.object.Group;
-import de.superioz.moo.api.database.object.PlayerData;
-import de.superioz.moo.api.database.object.UniqueIdBuf;
+import de.superioz.moo.api.database.object.DataResolver;
+import de.superioz.moo.api.database.objects.Ban;
+import de.superioz.moo.api.database.objects.Group;
+import de.superioz.moo.api.database.objects.PlayerData;
+import de.superioz.moo.api.database.objects.UniqueIdBuf;
+import de.superioz.moo.api.util.Validation;
 import de.superioz.moo.api.utils.ReflectionUtil;
 import lombok.Getter;
-import de.superioz.moo.api.database.object.Ban;
-import de.superioz.moo.api.util.Validation;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -79,6 +81,17 @@ public enum DbModifier {
         for(Validation v : validations) {
             validationIds.add(v.ordinal());
         }
+    }
+
+    /**
+     * Gets the name of the field hidden behind this modifier field
+     *
+     * @return The name
+     */
+    public String getFieldName() {
+        Field field = ReflectionUtil.getFieldFromId(getId(), getWrappedClass());
+        if(field == null) return "";
+        return field.getName();
     }
 
     /**

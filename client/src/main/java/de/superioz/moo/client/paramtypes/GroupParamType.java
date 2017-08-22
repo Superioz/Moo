@@ -1,7 +1,7 @@
 package de.superioz.moo.client.paramtypes;
 
 import de.superioz.moo.api.command.param.ParamType;
-import de.superioz.moo.api.database.object.Group;
+import de.superioz.moo.api.database.objects.Group;
 import de.superioz.moo.client.common.MooQueries;
 
 public class GroupParamType extends ParamType<Group> {

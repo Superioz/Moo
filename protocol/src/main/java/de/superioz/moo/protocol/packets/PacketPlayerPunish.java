@@ -4,8 +4,8 @@ import de.superioz.moo.protocol.packet.AbstractPacket;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import de.superioz.moo.api.common.punishment.BanSubType;
-import de.superioz.moo.api.database.object.Ban;
-import de.superioz.moo.api.database.object.PlayerData;
+import de.superioz.moo.api.database.objects.Ban;
+import de.superioz.moo.api.database.objects.PlayerData;
 import de.superioz.moo.protocol.packet.PacketBuffer;
 
 import java.io.IOException;

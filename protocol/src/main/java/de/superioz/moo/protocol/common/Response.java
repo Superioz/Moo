@@ -1,9 +1,9 @@
 package de.superioz.moo.protocol.common;
 
 import lombok.Getter;
-import de.superioz.moo.api.database.DataArchitecture;
-import de.superioz.moo.api.database.DataResolver;
-import de.superioz.moo.api.database.object.PlayerData;
+import de.superioz.moo.api.database.object.DataArchitecture;
+import de.superioz.moo.api.database.object.DataResolver;
+import de.superioz.moo.api.database.objects.PlayerData;
 import de.superioz.moo.api.utils.ReflectionUtil;
 import de.superioz.moo.protocol.exception.MooInputException;
 import de.superioz.moo.protocol.packets.PacketRespond;

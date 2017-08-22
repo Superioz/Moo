@@ -1,7 +1,7 @@
 package de.superioz.moo.client.paramtypes;
 
 import de.superioz.moo.api.command.param.ParamType;
-import de.superioz.moo.api.database.object.PlayerData;
+import de.superioz.moo.api.database.objects.PlayerData;
 import de.superioz.moo.api.util.Validation;
 import de.superioz.moo.client.common.MooQueries;
 

@@ -4,7 +4,7 @@ import com.mongodb.client.MongoCollection;
 import de.superioz.moo.api.database.DatabaseCollection;
 import de.superioz.moo.api.database.DatabaseConnection;
 import de.superioz.moo.api.database.DatabaseType;
-import de.superioz.moo.api.database.DbFilter;
+import de.superioz.moo.api.database.filter.DbFilter;
 import de.superioz.moo.api.utils.StringUtil;
 import de.superioz.moo.cloud.Cloud;
 import de.superioz.moo.cloud.database.CloudCollections;

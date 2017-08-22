@@ -1,7 +1,7 @@
 package de.superioz.moo.cloud.listeners;
 
-import de.superioz.moo.api.database.object.PlayerData;
-import de.superioz.moo.api.database.object.UniqueIdBuf;
+import de.superioz.moo.api.database.objects.PlayerData;
+import de.superioz.moo.api.database.objects.UniqueIdBuf;
 import de.superioz.moo.api.event.EventExecutor;
 import de.superioz.moo.api.reaction.Reaction;
 import de.superioz.moo.api.reaction.Reactor;

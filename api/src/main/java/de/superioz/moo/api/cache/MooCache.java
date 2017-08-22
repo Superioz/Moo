@@ -1,8 +1,8 @@
 package de.superioz.moo.api.cache;
 
 import de.superioz.moo.api.common.MooServer;
-import de.superioz.moo.api.database.object.Group;
-import de.superioz.moo.api.database.object.PlayerData;
+import de.superioz.moo.api.database.objects.Group;
+import de.superioz.moo.api.database.objects.PlayerData;
 import de.superioz.moo.api.io.MooConfigType;
 import lombok.Getter;
 import org.redisson.api.*;

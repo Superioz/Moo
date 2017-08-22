@@ -1,6 +1,6 @@
 package de.superioz.moo.cloud.events;
 
-import de.superioz.moo.api.database.object.PlayerData;
+import de.superioz.moo.api.database.objects.PlayerData;
 import de.superioz.moo.protocol.packets.PacketPlayerPunish;
 
 /**

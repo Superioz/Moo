@@ -30,7 +30,6 @@ public class ThunderPluginModule extends Module implements EventListener {
 
     private JsonConfig config;
     private LanguageManager languageManager;
-    private JsonConfig redisConfig;
 
     @Override
     public String getName() {

@@ -1,10 +1,10 @@
 package de.superioz.moo.api.database;
 
-import de.superioz.moo.api.database.object.Group;
-import de.superioz.moo.api.database.object.PlayerData;
-import de.superioz.moo.api.database.object.UniqueIdBuf;
+import de.superioz.moo.api.database.objects.Group;
+import de.superioz.moo.api.database.objects.PlayerData;
+import de.superioz.moo.api.database.objects.UniqueIdBuf;
 import lombok.Getter;
-import de.superioz.moo.api.database.object.Ban;
+import de.superioz.moo.api.database.objects.Ban;
 
 /**
  * Implemented database types which are supported by the api<br>

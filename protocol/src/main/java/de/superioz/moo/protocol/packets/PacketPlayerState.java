@@ -4,7 +4,7 @@ import de.superioz.moo.protocol.packet.AbstractPacket;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import de.superioz.moo.api.database.object.PlayerData;
+import de.superioz.moo.api.database.objects.PlayerData;
 import de.superioz.moo.api.utils.ReflectionUtil;
 import de.superioz.moo.protocol.packet.PacketBuffer;
 

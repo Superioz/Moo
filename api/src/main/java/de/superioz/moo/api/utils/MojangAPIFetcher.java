@@ -1,6 +1,6 @@
 package de.superioz.moo.api.utils;
 
-import de.superioz.moo.api.database.object.UniqueIdBuf;
+import de.superioz.moo.api.database.objects.UniqueIdBuf;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.json.JSONArray;

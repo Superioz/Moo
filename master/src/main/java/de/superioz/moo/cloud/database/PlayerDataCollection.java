@@ -2,8 +2,9 @@ package de.superioz.moo.cloud.database;
 
 import de.superioz.moo.api.cache.DatabaseCache;
 import de.superioz.moo.api.database.*;
-import de.superioz.moo.api.database.object.Group;
-import de.superioz.moo.api.database.object.PlayerData;
+import de.superioz.moo.api.database.objects.Group;
+import de.superioz.moo.api.database.objects.PlayerData;
+import de.superioz.moo.api.database.query.DbQuery;
 import de.superioz.moo.cloud.database.cache.PlayerDataCache;
 
 import java.util.UUID;
@@ -56,8 +57,8 @@ public class PlayerDataCollection extends DatabaseCollection<UUID, PlayerData> {
             if(!currentData.lastName.equals(id.lastName)) {
                 updates.equate(DbModifier.PLAYER_NAME, name);
             }
-            if(!currentData.lastip.equals(id.lastip)) {
-                updates.equate(DbModifier.PLAYER_IP, id.lastip);
+            if(!currentData.lastIp.equals(id.lastIp)) {
+                updates.equate(DbModifier.PLAYER_IP, id.lastIp);
             }
             if(!CloudCollections.GROUP.has(currentData.group)) {
                 Group def = CloudCollections.GROUP.getDefault();

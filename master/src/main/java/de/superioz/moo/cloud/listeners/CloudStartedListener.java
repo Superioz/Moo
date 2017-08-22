@@ -2,7 +2,7 @@ package de.superioz.moo.cloud.listeners;
 
 import de.superioz.moo.api.cache.MooCache;
 import de.superioz.moo.api.database.DatabaseType;
-import de.superioz.moo.api.database.object.Group;
+import de.superioz.moo.api.database.objects.Group;
 import de.superioz.moo.api.event.EventHandler;
 import de.superioz.moo.api.event.EventListener;
 import de.superioz.moo.cloud.Cloud;

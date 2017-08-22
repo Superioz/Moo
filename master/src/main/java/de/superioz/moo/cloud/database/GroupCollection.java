@@ -4,7 +4,7 @@ import de.superioz.moo.api.cache.DatabaseCache;
 import de.superioz.moo.api.database.DatabaseCollection;
 import de.superioz.moo.api.database.DatabaseConnection;
 import de.superioz.moo.api.database.DatabaseType;
-import de.superioz.moo.api.database.object.Group;
+import de.superioz.moo.api.database.objects.Group;
 import de.superioz.moo.cloud.database.cache.GroupCache;
 
 import java.util.List;

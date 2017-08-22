@@ -2,7 +2,7 @@ package de.superioz.moo.protocol.server;
 
 import de.superioz.moo.api.common.MooServer;
 import de.superioz.moo.api.collection.UnmodifiableList;
-import de.superioz.moo.api.database.object.PlayerData;
+import de.superioz.moo.api.database.objects.PlayerData;
 import de.superioz.moo.protocol.common.PacketMessenger;
 import de.superioz.moo.protocol.common.Response;
 import de.superioz.moo.protocol.packet.AbstractPacket;

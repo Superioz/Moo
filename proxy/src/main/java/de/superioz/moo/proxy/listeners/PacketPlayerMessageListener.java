@@ -1,6 +1,6 @@
 package de.superioz.moo.proxy.listeners;
 
-import de.superioz.moo.api.database.object.Group;
+import de.superioz.moo.api.database.objects.Group;
 import de.superioz.moo.api.util.SpecialCharacter;
 import de.superioz.moo.api.util.Validation;
 import de.superioz.moo.client.common.MooQueries;

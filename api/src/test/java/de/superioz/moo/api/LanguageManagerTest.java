@@ -16,7 +16,7 @@ public class LanguageManagerTest {
         languageManager.load(Locale.US);
 
         System.out.println("File: " + languageManager.getFile().getName());
-        System.out.println("Message: " + LanguageManager.get("help-command-not-leaf-entry", 1, 2, 3));
+        assert LanguageManager.get("help-command-leaf-entry", 1, 2, 3).contains("{");
     }
 
 }

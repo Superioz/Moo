@@ -38,7 +38,7 @@ public class Lightning extends JavaPlugin implements EventListener {
         instance = this;
 
         // initialises moo and plugin module
-        Moo.initialise((logs = new Loogger(getLogger())).getBaseLogger());
+        Moo.initialize((logs = new Loogger(getLogger())).getBaseLogger());
         this.pluginModule = new LightningPluginModule();
         this.moduleRegistry = new ModuleRegistry(getLogs());
         this.moduleRegistry.register(pluginModule);

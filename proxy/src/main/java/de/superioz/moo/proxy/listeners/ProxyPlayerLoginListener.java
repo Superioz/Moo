@@ -2,9 +2,9 @@ package de.superioz.moo.proxy.listeners;
 
 import de.superioz.moo.api.cache.MooCache;
 import de.superioz.moo.api.common.PlayerInfo;
-import de.superioz.moo.api.database.object.Ban;
-import de.superioz.moo.api.database.object.Group;
-import de.superioz.moo.api.database.object.PlayerData;
+import de.superioz.moo.api.database.objects.Ban;
+import de.superioz.moo.api.database.objects.Group;
+import de.superioz.moo.api.database.objects.PlayerData;
 import de.superioz.moo.api.io.LanguageManager;
 import de.superioz.moo.api.io.MooConfigType;
 import de.superioz.moo.client.Moo;

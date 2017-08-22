@@ -1,4 +1,4 @@
-package de.superioz.moo.api.database;
+package de.superioz.moo.api.database.filter;
 
 import de.superioz.moo.api.utils.ReflectionUtil;
 import lombok.Getter;

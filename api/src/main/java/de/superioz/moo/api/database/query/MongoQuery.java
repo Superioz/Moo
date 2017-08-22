@@ -1,4 +1,4 @@
-package de.superioz.moo.api.database;
+package de.superioz.moo.api.database.query;
 
 import de.superioz.moo.api.keyvalue.KeyMultiValue;
 import de.superioz.moo.api.keyvalue.Keyable;

@@ -3,7 +3,7 @@ package de.superioz.moo.cloud.database;
 import de.superioz.moo.api.database.DatabaseCollection;
 import de.superioz.moo.api.database.DatabaseConnection;
 import de.superioz.moo.api.database.DatabaseType;
-import de.superioz.moo.api.database.object.Ban;
+import de.superioz.moo.api.database.objects.Ban;
 
 import java.util.UUID;
 

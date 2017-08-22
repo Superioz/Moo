@@ -10,16 +10,16 @@ import de.superioz.moo.api.command.tabcomplete.TabCompletion;
 import de.superioz.moo.api.command.tabcomplete.TabCompletor;
 import de.superioz.moo.api.common.RunAsynchronous;
 import de.superioz.moo.api.common.punishment.BanType;
-import de.superioz.moo.api.database.object.Ban;
-import de.superioz.moo.api.database.object.UniqueIdBuf;
+import de.superioz.moo.api.database.objects.Ban;
+import de.superioz.moo.api.database.objects.PlayerData;
 import de.superioz.moo.api.io.LanguageManager;
 import de.superioz.moo.api.util.Validation;
 import de.superioz.moo.api.utils.DisplayFormats;
 import de.superioz.moo.api.utils.StringUtil;
 import de.superioz.moo.api.utils.TimeUtil;
 import de.superioz.moo.client.common.MooQueries;
-import de.superioz.moo.proxy.util.BungeeTeamChat;
 import de.superioz.moo.proxy.command.BungeeCommandContext;
+import de.superioz.moo.proxy.util.BungeeTeamChat;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
@@ -81,8 +81,8 @@ public class PunishArchiveCommand {
                 LanguageManager.get("punishment-archive-list-header"), LanguageManager.get("punishment-archive-list-entry-empty"),
                 ban -> {
                     String banExecutorName = CommandContext.CONSOLE_NAME;
-                    UniqueIdBuf banExecutor = MooQueries.getInstance().getUniqueIdBuffer(ban.by);
-                    if(banExecutor != null) banExecutorName = banExecutor.name;
+                    PlayerData banExecutor = MooQueries.getInstance().getPlayerData(ban.by);
+                    if(banExecutor != null) banExecutorName = banExecutor.lastName;
 
                     String typeColor = ban.getSubType().getBanType() == BanType.GLOBAL ? "&c" : "&9";
                     String start = TimeUtil.getFormat(ban.start);

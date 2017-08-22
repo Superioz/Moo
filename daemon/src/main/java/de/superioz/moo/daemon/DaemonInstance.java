@@ -170,11 +170,12 @@ public class DaemonInstance {
      * @param type                The type of server (pattern)
      * @param host                The host (e.g. localhost)
      * @param port                The port
+     * @param ram                 The ram
      * @param autoSave            Auto-save on shutdown?
      * @param resultOfServerStart The result of the server start
      * @return The (started) server
      */
-    public Server startServer(String type, String host, int port, boolean autoSave, Consumer<Server> resultOfServerStart) throws IOException {
+    public Server startServer(String type, String host, int port, String ram, boolean autoSave, Consumer<Server> resultOfServerStart) throws IOException {
         Server server = createServer(type, autoSave);
         if(server == null) return null;
         server.setServerResult(resultOfServerStart);
@@ -186,7 +187,7 @@ public class DaemonInstance {
             return null;
         }
 
-        server.start(host, port);
+        server.start(host, port, ram);
         startedServerByUuid.put(server.getUuid(), server);
         return server;
     }

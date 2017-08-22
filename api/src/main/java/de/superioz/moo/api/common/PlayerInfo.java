@@ -1,7 +1,7 @@
 package de.superioz.moo.api.common;
 
-import de.superioz.moo.api.database.object.Ban;
-import de.superioz.moo.api.database.object.PlayerData;
+import de.superioz.moo.api.database.objects.Ban;
+import de.superioz.moo.api.database.objects.PlayerData;
 import de.superioz.moo.api.utils.ReflectionUtil;
 import de.superioz.moo.api.utils.StringUtil;
 import lombok.AllArgsConstructor;

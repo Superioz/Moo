@@ -1,5 +1,7 @@
-package de.superioz.moo.api.database;
+package de.superioz.moo.api.database.query;
 
+import de.superioz.moo.api.database.DatabaseType;
+import de.superioz.moo.api.database.DbModifier;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

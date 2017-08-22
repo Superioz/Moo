@@ -32,9 +32,6 @@ public enum RedisConfig {
      */
     SERVER_MAP;
 
-    public static final String REDIS_PATH = "redis.";
-    public static final String REDIS_CONFIG_PATH = "config.";
-
     RedisConfig() {
     }
 

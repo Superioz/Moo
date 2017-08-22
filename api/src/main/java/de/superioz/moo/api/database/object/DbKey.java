@@ -1,4 +1,4 @@
-package de.superioz.moo.api.database;
+package de.superioz.moo.api.database.object;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

@@ -30,7 +30,9 @@ import java.util.logging.Logger;
 
 /**
  * Inspired by @navopw<br>
- * Last part between the database and the program
+ * Last part between the database and the program<br>
+ * <p>
+ * If you want to build a connection use the {@link Builder}
  */
 @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
@@ -84,6 +86,10 @@ public final class DatabaseConnection {
         return this.getCollections().contains(collection);
     }
 
+    // =================================
+    // COUNT
+    // =================================
+
     /**
      * Counts object in given mongoCollection
      *
@@ -105,6 +111,32 @@ public final class DatabaseConnection {
     public long count(MongoCollection<Document> collection, Bson filter) {
         return collection.count(filter);
     }
+
+    /**
+     * Counts objects in given mongoCollection, but as dbType
+     *
+     * @param databaseType The type of the database
+     * @param callback     The callback
+     */
+    public void count(DatabaseType databaseType, Consumer<Long> callback) {
+        this.runAsynchronous(() -> callback.accept(getCollection(databaseType.getName()).count()));
+    }
+
+    public void count(DatabaseType databaseType, Bson filter, Consumer<Long> callback) {
+        this.runAsynchronous(() -> callback.accept(getCollection(databaseType.getName()).count(filter)));
+    }
+
+    public long count(DatabaseType databaseType) {
+        return getCollection(databaseType.getName()).count();
+    }
+
+    public long count(DatabaseType databaseType, Bson filter) {
+        return getCollection(databaseType.getName()).count(filter);
+    }
+
+    // =================================
+    // FIND
+    // =================================
 
     /**
      * Finds objects from mongoCollection
@@ -144,6 +176,49 @@ public final class DatabaseConnection {
     public Document findOneSync(MongoCollection<Document> collection, Bson filter) {
         return collection.find(filter).first();
     }
+
+    /**
+     * Finds objects from mongoCollection
+     *
+     * @param databaseType The databaseType
+     * @param filter       The filter (null for none)
+     * @param callback     The callback
+     */
+    public void find(DatabaseType databaseType, Bson filter, int limit, Consumer<FindIterable<Document>> callback) {
+        this.runAsynchronous(() -> {
+            if(filter != null) {
+                callback.accept(getCollection(databaseType.getName()).find(filter).limit(limit));
+            }
+            else {
+                callback.accept(getCollection(databaseType.getName()).find().limit(limit));
+            }
+        });
+    }
+
+    public void find(DatabaseType databaseType, Bson filter, Consumer<FindIterable<Document>> callback) {
+        find(getCollection(databaseType.getName()), filter, -1, callback);
+    }
+
+    public FindIterable<Document> findSync(DatabaseType databaseType, Bson filter, int limit) {
+        if(filter != null) return getCollection(databaseType.getName()).find(filter).limit(limit);
+        else return getCollection(databaseType.getName()).find();
+    }
+
+    public FindIterable<Document> findSync(DatabaseType databaseType, Bson filter) {
+        return findSync(getCollection(databaseType.getName()), filter, -1);
+    }
+
+    public void findOne(DatabaseType databaseType, Bson filter, Consumer<Document> callback) {
+        this.runAsynchronous(() -> callback.accept(this.findOneSync(getCollection(databaseType.getName()), filter)));
+    }
+
+    public Document findOneSync(DatabaseType databaseType, Bson filter) {
+        return getCollection(databaseType.getName()).find(filter).first();
+    }
+
+    // =================================
+    // UPDATE & INSERT
+    // =================================
 
     /**
      * Updates something from the mongoCollection
@@ -213,6 +288,77 @@ public final class DatabaseConnection {
     }
 
     /**
+     * Updates something from the mongoCollection
+     *
+     * @param databaseType The databaseType
+     * @param filter       The filter to search for updatable values
+     * @param document     The document
+     * @param callback     The callback
+     */
+    public void update(DatabaseType databaseType, Bson filter, Document document, Consumer<Long> callback) {
+        this.runAsynchronous(() -> callback.accept(this.updateSync(getCollection(databaseType.getName()), filter, document)));
+    }
+
+    public long updateSync(DatabaseType databaseType, Bson filter, Document document) {
+        return getCollection(databaseType.getName()).updateOne(filter, document).getModifiedCount();
+    }
+
+    public void updateMany(DatabaseType databaseType, Bson filter, Document document, Consumer<Long> callback) {
+        this.runAsynchronous(() -> callback.accept(this.updateManySync(getCollection(databaseType.getName()), filter, document)));
+    }
+
+    public long updateManySync(DatabaseType databaseType, Bson filter, Document document) {
+        return getCollection(databaseType.getName()).updateMany(filter, document).getModifiedCount();
+    }
+
+    /**
+     * Upserts something from the collection
+     *
+     * @param databaseType The databaseType
+     * @param filter       The filter
+     * @param document     The document
+     */
+    public void upsert(DatabaseType databaseType, Bson filter, Document document, Consumer<Long> callback) {
+        this.runAsynchronous(() -> callback.accept(this.upsertSync(getCollection(databaseType.getName()), filter, document)));
+    }
+
+    public long upsertSync(DatabaseType databaseType, Bson filter, Document document) {
+        UpdateResult result = getCollection(databaseType.getName()).updateOne(filter, document, new UpdateOptions().upsert(true));
+        return result.getUpsertedId() == null ? result.getModifiedCount() : 1;
+    }
+
+    public void upsertMany(DatabaseType databaseType, Bson filter, Document document, Consumer<Long> callback) {
+        this.runAsynchronous(() -> callback.accept(this.upsertManySync(getCollection(databaseType.getName()), filter, document)));
+    }
+
+    public long upsertManySync(DatabaseType databaseType, Bson filter, Document document) {
+        UpdateResult result = getCollection(databaseType.getName()).updateMany(filter, document, new UpdateOptions().upsert(true));
+        return result.getUpsertedId() == null ? result.getModifiedCount() : 1;
+    }
+
+    /**
+     * Insert new values into the collection
+     *
+     * @param databaseType The databaseType
+     * @param document     The document
+     */
+    public void insert(DatabaseType databaseType, Document document) {
+        this.runAsynchronous(() -> {
+            getCollection(databaseType.getName()).insertOne(document);
+        });
+    }
+
+    public void insertMany(DatabaseType databaseType, List<Document> documents) {
+        this.runAsynchronous(() -> {
+            getCollection(databaseType.getName()).insertMany(documents);
+        });
+    }
+
+    // =================================
+    // DELETE
+    // =================================
+
+    /**
      * Deletes objects from collection
      *
      * @param collection The collection
@@ -233,6 +379,29 @@ public final class DatabaseConnection {
 
     public long deleteManySync(MongoCollection<Document> collection, Bson filter) {
         return collection.deleteMany(filter).getDeletedCount();
+    }
+
+    /**
+     * Deletes objects from collection
+     *
+     * @param databaseType The collection
+     * @param filter       The filter
+     * @param callback     The callback
+     */
+    public void deleteOne(DatabaseType databaseType, Bson filter, Consumer<Long> callback) {
+        this.runAsynchronous(() -> callback.accept(getCollection(databaseType.getName()).deleteOne(filter).getDeletedCount()));
+    }
+
+    public long deleteOneSync(DatabaseType databaseType, Bson filter) {
+        return getCollection(databaseType.getName()).deleteOne(filter).getDeletedCount();
+    }
+
+    public void deleteMany(DatabaseType databaseType, Bson filter, Consumer<Long> callback) {
+        this.runAsynchronous(() -> callback.accept(getCollection(databaseType.getName()).deleteMany(filter).getDeletedCount()));
+    }
+
+    public long deleteManySync(DatabaseType databaseType, Bson filter) {
+        return getCollection(databaseType.getName()).deleteMany(filter).getDeletedCount();
     }
 
     /**

@@ -1,7 +1,9 @@
-package de.superioz.moo.api.database;
+package de.superioz.moo.api.database.filter;
 
 import com.mongodb.MongoClient;
 import com.mongodb.client.model.Filters;
+import de.superioz.moo.api.database.object.DataResolver;
+import de.superioz.moo.api.database.DatabaseCollection;
 import de.superioz.moo.api.exceptions.InvalidArgumentException;
 import de.superioz.moo.api.utils.ReflectionUtil;
 import de.superioz.moo.api.utils.StringUtil;

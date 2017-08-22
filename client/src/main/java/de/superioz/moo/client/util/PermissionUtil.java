@@ -1,7 +1,7 @@
 package de.superioz.moo.client.util;
 
 import de.superioz.moo.api.common.GroupPermission;
-import de.superioz.moo.api.database.object.Group;
+import de.superioz.moo.api.database.objects.Group;
 
 import java.util.*;
 

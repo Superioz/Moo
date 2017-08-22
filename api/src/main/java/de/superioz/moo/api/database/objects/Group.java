@@ -1,9 +1,9 @@
-package de.superioz.moo.api.database.object;
+package de.superioz.moo.api.database.objects;
 
 import de.superioz.moo.api.logging.ConsoleColor;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
-import de.superioz.moo.api.database.DbKey;
+import de.superioz.moo.api.database.object.DbKey;
 import de.superioz.moo.api.util.SimpleSerializable;
 import de.superioz.moo.api.util.Validation;
 

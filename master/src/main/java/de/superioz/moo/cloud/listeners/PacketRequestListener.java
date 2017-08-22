@@ -1,6 +1,6 @@
 package de.superioz.moo.cloud.listeners;
 
-import de.superioz.moo.api.database.object.PlayerData;
+import de.superioz.moo.api.database.objects.PlayerData;
 import de.superioz.moo.api.reaction.Reaction;
 import de.superioz.moo.api.util.Validation;
 import de.superioz.moo.cloud.Cloud;

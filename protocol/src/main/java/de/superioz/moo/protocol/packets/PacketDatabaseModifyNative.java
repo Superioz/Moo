@@ -2,8 +2,8 @@ package de.superioz.moo.protocol.packets;
 
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
-import de.superioz.moo.api.database.DbFilter;
-import de.superioz.moo.api.database.DbQuery;
+import de.superioz.moo.api.database.filter.DbFilter;
+import de.superioz.moo.api.database.query.DbQuery;
 import de.superioz.moo.api.utils.ReflectionUtil;
 import de.superioz.moo.protocol.packet.AbstractPacket;
 import de.superioz.moo.api.database.DatabaseModifyType;

@@ -25,6 +25,7 @@ public class Server extends ServerPattern {
 
     public static final int DEFAULT_PORT = 25565;
     public static final String DEFAULT_HOST = "127.0.0.1";
+    public static final String DEFAULT_RAM = "512M";
     private static final String STOP_COMMAND = "stop\n";
 
     private Process process;
@@ -36,6 +37,7 @@ public class Server extends ServerPattern {
 
     private int port = DEFAULT_PORT;
     private String host = DEFAULT_HOST;
+    private String ram = DEFAULT_RAM;
     private boolean online = false;
 
     @Setter
@@ -72,10 +74,11 @@ public class Server extends ServerPattern {
      *
      * @param host The host
      * @param port The port
+     * @param ram  The ram
      */
-    public void start(String host, int port) {
+    public void start(String host, int port, String ram) {
         getExecutors().execute(() -> {
-            boolean r = Server.this.run(host, port);
+            boolean r = Server.this.run(host, port, ram);
 
             if(!r) return;
             try {
@@ -122,7 +125,7 @@ public class Server extends ServerPattern {
     }
 
     public void start(int port) {
-        this.start(DEFAULT_HOST, port);
+        this.start(DEFAULT_HOST, port, DEFAULT_RAM);
     }
 
     /**
@@ -131,9 +134,10 @@ public class Server extends ServerPattern {
      *
      * @param host The host
      * @param port The port
+     * @param ram  The ram
      * @return The result
      */
-    private boolean run(String host, int port) {
+    private boolean run(String host, int port, String ram) {
         try {
             PacketMessenger.message(new PacketServerAttempt(PacketServerAttempt.Type.START, getUuid()));
         }
@@ -149,11 +153,13 @@ public class Server extends ServerPattern {
         }
         this.host = host;
         this.port = port;
+        this.ram = ram;
 
         List<String> parameter = new ArrayList<>();
         parameter.add(getStartFile().getAbsolutePath());
         if(port != DEFAULT_PORT) parameter.addAll(Arrays.asList("-p", port + ""));
         if(!host.equals(DEFAULT_HOST)) parameter.addAll(Arrays.asList("-h", host));
+        if(ram.isEmpty()) parameter.add("-Xmx" + ram);
 
         ProcessBuilder builder = new ProcessBuilder(parameter);
         builder.directory(getFolder());
@@ -202,7 +208,7 @@ public class Server extends ServerPattern {
     }
 
     private boolean run(int port) {
-        return run(DEFAULT_HOST, port);
+        return run(DEFAULT_HOST, port, DEFAULT_RAM);
     }
 
     /**

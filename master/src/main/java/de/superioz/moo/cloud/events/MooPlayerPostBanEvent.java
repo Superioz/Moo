@@ -1,8 +1,8 @@
 package de.superioz.moo.cloud.events;
 
 import lombok.Getter;
-import de.superioz.moo.api.database.object.Ban;
-import de.superioz.moo.api.database.object.PlayerData;
+import de.superioz.moo.api.database.objects.Ban;
+import de.superioz.moo.api.database.objects.PlayerData;
 import de.superioz.moo.protocol.packets.PacketPlayerPunish;
 
 /**

@@ -2,7 +2,7 @@ package de.superioz.moo.cloud.database.cache;
 
 
 import de.superioz.moo.api.cache.DatabaseCache;
-import de.superioz.moo.api.database.object.PlayerData;
+import de.superioz.moo.api.database.objects.PlayerData;
 
 import java.util.UUID;
 

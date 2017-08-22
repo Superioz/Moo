@@ -2,55 +2,68 @@ package de.superioz.moo.redis;
 
 import org.junit.jupiter.api.Test;
 import org.redisson.Redisson;
-import org.redisson.api.RList;
-import org.redisson.api.RMap;
-import org.redisson.api.RedissonClient;
+import org.redisson.api.*;
 import org.redisson.config.Config;
 
 public class RedisTest {
 
     @Test
-    public void connectingToRedisWorks() {
+    void connectingToRedisWorks() {
         Config config = new Config();
         config.useSingleServer().setAddress("http://127.0.0.1:6379");
 
         RedissonClient client = Redisson.create(config);
         RList<String> list = client.getList("myList");
-        System.out.println("List Before(" + list.size() + "): " + list);
+        int sizeBefore = list.size();
         changeList(config);
-        System.out.println("List After(" + list.size() + "): " + list);
+        assert list.size() > sizeBefore;
     }
 
-    private void changeList(Config config) {
+    void changeList(Config config) {
         RedissonClient client2 = Redisson.create(config);
         client2.getList("myList").add("foo");
     }
 
     @Test
-    public void mapsSpeed() {
+    void mapsLocalCache() {
         Config config = new Config();
         config.useSingleServer().setAddress("http://127.0.0.1:6379");
         RedissonClient client = Redisson.create(config);
-        
-        RMap<String, Integer> map = client.getMap("myMap");
 
-        long timeStamp1 = System.currentTimeMillis();
-        System.out.println("Before Put");
-        map.put("test", 15);
-        System.out.println("After Put (" + (System.currentTimeMillis() - timeStamp1) + "ms)");
+        LocalCachedMapOptions options = LocalCachedMapOptions.defaults().maxIdle(5 * 1000).timeToLive(5 * 1000);
+        RLocalCachedMap<String, Integer> map = client.getLocalCachedMap("myMap", options);
 
-        long timeStamp2 = System.currentTimeMillis();
-        System.out.println("Before Get");
-        System.out.println("Get: " + map.get("test"));
-        System.out.println("After Get (" + (System.currentTimeMillis() - timeStamp2) + "ms)");
+        map.put("key", 20);
+        new Thread(this::mapsLocalCache2).start();
 
-        changeMap(config);
-        System.out.println("After change: " + map.get("test"));
+        try {
+            Thread.sleep(1000);
+        }
+        catch(InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        System.out.println("SET");
+        map.put("key", 25);
     }
 
-    private void changeMap(Config config) {
-        RedissonClient client2 = Redisson.create(config);
-        client2.getMap("myMap").fastPut("test", 18);
+    void mapsLocalCache2() {
+        Config config = new Config();
+        config.useSingleServer().setAddress("http://127.0.0.1:6379");
+        RedissonClient client = Redisson.create(config);
+
+        LocalCachedMapOptions options = LocalCachedMapOptions.defaults().maxIdle(10 * 1000).timeToLive(10 * 1000);
+        RLocalCachedMap<String, Integer> map = client.getLocalCachedMap("myMap", options);
+
+        System.out.println("KEY: " + map.get("key"));
+
+        try {
+            Thread.sleep(2000);
+        }
+        catch(InterruptedException e) {
+            e.printStackTrace();
+        }
+        assert map.get("key") == 25;
     }
 
 

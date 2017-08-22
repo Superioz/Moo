@@ -37,8 +37,8 @@ public class Manager extends Application {
     public void start(Stage stage) {
         instance = this;
 
-        // initialise moo logger
-        Moo.initialise(logger);
+        // initialize moo logger
+        Moo.initialize(logger);
 
         // get root pane
         Pane root = null;

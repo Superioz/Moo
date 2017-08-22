@@ -1,6 +1,6 @@
 package de.superioz.moo.spigot.listeners;
 
-import de.superioz.moo.api.database.object.PlayerData;
+import de.superioz.moo.api.database.objects.PlayerData;
 import de.superioz.moo.api.io.LanguageManager;
 import de.superioz.moo.client.Moo;
 import de.superioz.moo.client.common.MooQueries;

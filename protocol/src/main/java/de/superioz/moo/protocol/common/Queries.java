@@ -1,8 +1,12 @@
 package de.superioz.moo.protocol.common;
 
 import de.superioz.moo.api.database.*;
-import de.superioz.moo.api.database.object.Group;
-import de.superioz.moo.api.database.object.PlayerData;
+import de.superioz.moo.api.database.filter.DbFilter;
+import de.superioz.moo.api.database.objects.Group;
+import de.superioz.moo.api.database.objects.PlayerData;
+import de.superioz.moo.api.database.query.DbQuery;
+import de.superioz.moo.api.database.query.DbQueryNode;
+import de.superioz.moo.api.database.query.DbQueryUnbaked;
 import de.superioz.moo.protocol.packet.AbstractPacket;
 import de.superioz.moo.protocol.packets.*;
 import lombok.AccessLevel;
