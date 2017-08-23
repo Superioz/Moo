@@ -4,7 +4,7 @@ import de.superioz.moo.api.database.objects.PlayerData;
 import de.superioz.moo.api.event.EventExecutor;
 import de.superioz.moo.api.reaction.Reaction;
 import de.superioz.moo.api.reaction.Reactor;
-import de.superioz.moo.cloud.database.CloudCollections;
+import de.superioz.moo.cloud.database.DatabaseCollections;
 import de.superioz.moo.cloud.events.MooPlayerConnectedServerEvent;
 import de.superioz.moo.cloud.events.MooPlayerJoinedProxyEvent;
 import de.superioz.moo.cloud.events.MooPlayerJoinedServerEvent;
@@ -21,10 +21,10 @@ public class PacketPlayerStateListener implements PacketAdapter {
         PlayerData playerData = packet.data;
         PacketPlayerState.State newState = packet.state;
 
-        // get current data from player
+        // list current data from player
         // check if the data is valid
         // otherwise update the data of the packets for the events
-        PlayerData currentData = CloudCollections.PLAYER.getCurrentData(playerData, true);
+        PlayerData currentData = DatabaseCollections.PLAYER.getCurrentData(playerData, true);
         if(currentData == null) {
             packet.respond(ResponseStatus.NOK);
             return;

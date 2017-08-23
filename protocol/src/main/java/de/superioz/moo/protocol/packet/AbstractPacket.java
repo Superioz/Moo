@@ -196,7 +196,7 @@ public abstract class AbstractPacket {
             keyFieldMap.put(spl[0].replace("\"", ""), spl[1].replace("\"", ""));
         }
 
-        // get the new instance
+        // list the new instance
         P object = (P) ReflectionUtil.getInstance(pClass);
         if(object == null) return null;
 

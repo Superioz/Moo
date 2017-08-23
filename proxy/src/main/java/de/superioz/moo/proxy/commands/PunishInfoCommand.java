@@ -44,7 +44,7 @@ public class PunishInfoCommand {
         PlayerInfo playerInfo = args.get(0, PlayerInfo.class);
         context.invalidArgument(playerInfo == null, LanguageManager.get("player-doesnt-exist", args.get(0)));
 
-        // get current ban/mute
+        // list current ban/mute
         Ban currentBan = playerInfo.getCurrentBan();
 
         // if he is not banned and muted
@@ -54,7 +54,7 @@ public class PunishInfoCommand {
         }
         context.sendMessage(LanguageManager.get("punishment-header", playerInfo.getName()));
 
-        // if the current ban is not null get the executor and send info
+        // if the current ban is not null list the executor and send info
         // otherwise send (not-banned)
         if(currentBan != null) {
             String banExecutorName = CommandContext.CONSOLE_NAME;

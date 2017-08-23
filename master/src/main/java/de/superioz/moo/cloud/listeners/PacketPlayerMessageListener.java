@@ -25,7 +25,7 @@ public class PacketPlayerMessageListener implements PacketAdapter {
         Reaction.react(privateMessage, () -> {
             String id = packet.meta;
 
-            // get player from id
+            // list player from id
             // if the player
             PlayerData player = Validation.UNIQUEID.matches(id)
                     ? Cloud.getInstance().getMooProxy().getPlayer(UUID.fromString(id))

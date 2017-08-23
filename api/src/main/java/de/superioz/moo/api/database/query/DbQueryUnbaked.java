@@ -49,7 +49,7 @@ public class DbQueryUnbaked {
     /**
      * Adds a new modifier to the modifiers list
      *
-     * @param modifier The modifier to get the field id and validation from
+     * @param modifier The modifier to list the field id and validation from
      * @param type     The type of operation
      * @param object   The object to apply the operation to
      * @return This

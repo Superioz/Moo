@@ -78,7 +78,7 @@ public final class MooCache {
     public void initialize(RedisConnection connection) {
         this.redisClient = connection.getClient();
 
-        // get redis maps by fetching the keys out of the config
+        // list redis maps by fetching the keys out of the config
         this.groupMap = redisClient.getLocalCachedMap(RedisConfig.GROUP_MAP.getKey(), DEFAULT_OPTIONS);
         this.uniqueIdPlayerMap = redisClient.getLocalCachedMap(RedisConfig.PLAYER_DATA_MAP.getKey(), DEFAULT_OPTIONS);
         this.nameUniqueIdMap = redisClient.getLocalCachedMap(RedisConfig.PLAYER_ID_MAP.getKey(), DEFAULT_OPTIONS);
@@ -91,7 +91,7 @@ public final class MooCache {
 
     /**
      * Deletes all maps. We could do this with a {@link RBatch}, but is it really worth it for so
-     * few maps? Secondly, we would've to get the maps again before deleting them via a batch, so we
+     * few maps? Secondly, we would've to list the maps again before deleting them via a batch, so we
      * just don't use it.
      */
     public void delete(){

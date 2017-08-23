@@ -46,7 +46,7 @@ public class MooThunderCommand {
 
         if(!checkMoo(context)) return;
 
-        // get status from connection
+        // list status from connection
         context.sendMessage("&7Connection status: " + (connected ? "&aONLINE" : "&8Offline"));
         if(connected) {
             context.sendMessage("&7Cloud-Communication-System &bMoo &7v&f"

@@ -59,7 +59,7 @@ public class TabCompleteEvent implements Event, Cancellable {
         // the current buffer (where the cursor is)
         this.currentBuffer = parameter.get(argumentsSize - 1);
 
-        // get every argument before current cursor index
+        // list every argument before current cursor index
         List<String> before = new ArrayList<>();
         if(argumentsSize != 1) {
             for(int i = 0; i < argumentsSize - 1; i++) {

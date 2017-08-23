@@ -10,7 +10,7 @@ import java.io.IOException;
 
 /**
  * This packet is for sending config information across the network<br>
- * This is used to either change the cloud's config or to get information from
+ * This is used to either change the cloud's config or to list information from
  * the cloud's config or to inform other instances about changes.
  *
  * @see MooConfigType

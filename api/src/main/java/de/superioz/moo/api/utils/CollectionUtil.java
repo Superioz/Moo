@@ -60,7 +60,7 @@ public final class CollectionUtil {
      * boundaries this method will either use the first index or the last index.<br>
      *
      * @param eList      The element's list
-     * @param index      The index to get the entry from
+     * @param index      The index to list the entry from
      * @param defaultVal If the value would be null
      * @param <E>        The element's type
      * @return The element (or null if the list is empty)

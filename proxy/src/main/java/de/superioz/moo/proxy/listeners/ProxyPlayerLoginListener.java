@@ -50,7 +50,7 @@ public class ProxyPlayerLoginListener implements Listener {
         PendingConnection connection = event.getConnection();
         UUID uuid = connection.getUniqueId();
 
-        // get player info
+        // list player info
         // check if the player is banned or whatever
         // also archive bans if the ban ran out
         // ...
@@ -76,7 +76,7 @@ public class ProxyPlayerLoginListener implements Listener {
             }
         }
 
-        // get group for checking the maintenance bypassability
+        // list group for checking the maintenance bypassability
         Group group = MooQueries.getInstance().getGroup(playerInfo.getData().group);
         boolean maintenanceBypass = group.rank >= (int) MooCache.getInstance().getConfigEntry(MooConfigType.MAINTENANCE_RANK);
 

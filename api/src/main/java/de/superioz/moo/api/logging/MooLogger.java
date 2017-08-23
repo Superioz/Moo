@@ -35,7 +35,7 @@ public class MooLogger extends Logger {
         super(name, null);
         super.setLevel(Level.ALL);
 
-        // get jline console
+        // list jline console
         try {
             reader = new ConsoleReader();
             reader.setExpandEvents(false);

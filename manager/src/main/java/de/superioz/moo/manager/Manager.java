@@ -40,7 +40,7 @@ public class Manager extends Application {
         // initialize moo logger
         Moo.initialize(logger);
 
-        // get root pane
+        // list root pane
         Pane root = null;
         try {
             root = FXMLLoader.load(getClass().getResource("/main.fxml"));

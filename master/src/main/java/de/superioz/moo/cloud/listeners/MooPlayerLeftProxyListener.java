@@ -9,7 +9,7 @@ import de.superioz.moo.api.event.EventListener;
 import de.superioz.moo.api.event.EventPriority;
 import de.superioz.moo.api.io.MooConfigType;
 import de.superioz.moo.cloud.Cloud;
-import de.superioz.moo.cloud.database.CloudCollections;
+import de.superioz.moo.cloud.database.DatabaseCollections;
 import de.superioz.moo.cloud.events.MooPlayerLeftProxyEvent;
 import de.superioz.moo.protocol.common.ResponseStatus;
 import de.superioz.moo.protocol.packets.PacketPlayerState;
@@ -24,7 +24,7 @@ public class MooPlayerLeftProxyListener implements EventListener {
         InetSocketAddress clientAddress = event.getClientAddress();
         PacketPlayerState packet = event.getPacket();
 
-        // get the current times
+        // list the current times
         long current = System.currentTimeMillis();
         long joined = data.joined;
 
@@ -46,7 +46,7 @@ public class MooPlayerLeftProxyListener implements EventListener {
                 .equate(DbModifier.PLAYER_TOTAL_ONLINE, totalTime)
                 .equate(DbModifier.PLAYER_JOINED, 0L)
                 .equate(DbModifier.PLAYER_PROXY, -1);
-        CloudCollections.PLAYER.set(data.uuid, data, query, true);
+        DatabaseCollections.PLAYER.set(data.uuid, data, query, true);
 
         // removes player from moo proxy
         Cloud.getInstance().getMooProxy().remove(data.uuid, data.lastName);

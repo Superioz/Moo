@@ -6,7 +6,7 @@ import de.superioz.moo.cloud.Cloud;
 /**
  * Wrapper class for every database collection defined as {@link de.superioz.moo.api.database.DatabaseCollection}
  */
-public final class CloudCollections {
+public final class DatabaseCollections {
 
     public static final BanCollection BAN;
     public static final BanArchiveCollection BAN_ARCHIVE;

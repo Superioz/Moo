@@ -35,7 +35,7 @@ public class ServerStartQueueTask implements Runnable {
                 continue;
             }
 
-            // wait for other server to get finished
+            // wait for other server to list finished
             int maxWaitTime = 0;
             while(task.getServer() == null || !task.getServer().isOnline()){
                 if(maxWaitTime >= MAX_WAIT_COUNT) break;

@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Wrapper class of every information we can get from a player
+ * Wrapper class of every information we can list from a player
  */
 @AllArgsConstructor
 @Getter

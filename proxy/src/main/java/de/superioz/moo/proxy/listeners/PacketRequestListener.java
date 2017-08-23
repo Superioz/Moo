@@ -20,7 +20,7 @@ public class PacketRequestListener implements PacketAdapter {
 
         // requesting a player's ping
         if(type == PacketRequest.Type.PING) {
-            // get the player from the metadata of the packet
+            // list the player from the metadata of the packet
             // if player is null then
             ProxiedPlayer player = Validation.UNIQUEID.matches(meta)
                     ? ProxyServer.getInstance().getPlayer(UUID.fromString(meta))

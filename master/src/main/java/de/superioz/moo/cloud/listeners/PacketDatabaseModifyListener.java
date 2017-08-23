@@ -15,7 +15,7 @@ import de.superioz.moo.api.reaction.Reaction;
 import de.superioz.moo.api.utils.ReflectionUtil;
 import de.superioz.moo.api.utils.StringUtil;
 import de.superioz.moo.cloud.Cloud;
-import de.superioz.moo.cloud.database.CloudCollections;
+import de.superioz.moo.cloud.database.DatabaseCollections;
 import de.superioz.moo.protocol.client.ClientType;
 import de.superioz.moo.protocol.common.PacketMessenger;
 import de.superioz.moo.protocol.common.ResponseStatus;
@@ -55,7 +55,7 @@ public class PacketDatabaseModifyListener implements PacketAdapter {
             return;
         }
 
-        // get collection
+        // list collection
         DatabaseCollection module = Cloud.getInstance().getDatabaseCollection(dbType);
         Cloud.getInstance().getLogger().debug("Attempting to modify " + dbType.name() + " modules .. (" + type.name() + ")." +
                 " With filter (as " + filter + ") and query (as " + updates + ")");
@@ -64,8 +64,8 @@ public class PacketDatabaseModifyListener implements PacketAdapter {
         DbFilterNode firstNode = realFilter.getKey(0, module.getWrappedClass());
         Object primaryKey = firstNode == null ? null : firstNode.getContent();
 
-        // get data from filtering
-        List<Object> data = module.getFilteredData(CloudCollections.PLAYER, filter, packet.queried, packet.limit);
+        // list data from filtering
+        List<Object> data = module.getFilteredData(DatabaseCollections.PLAYER, filter, packet.queried, packet.limit);
         Cloud.getInstance().getLogger().debug("Found data(" + data.size() + ") to " + type.name() + ": " + data);
 
         // for informing minecraft
@@ -181,14 +181,14 @@ public class PacketDatabaseModifyListener implements PacketAdapter {
             return;
         }
 
-        // get values
+        // list values
         String database = packet.databaseName;
         DbFilter filter = packet.filter;
         DatabaseModifyType type = packet.type;
         DbQuery updates = packet.updates;
         DatabaseConnection databaseConnection = Cloud.getInstance().getDatabaseConnection();
 
-        // get collection
+        // list collection
         MongoCollection<Document> collection = databaseConnection.getCollection(database);
         if(collection == null) {
             packet.respond(ResponseStatus.BAD_REQUEST);
@@ -198,7 +198,7 @@ public class PacketDatabaseModifyListener implements PacketAdapter {
         Cloud.getInstance().getLogger().debug("Attempting to modify " + database + " database .. (" + type.name() + ")." +
                 " With filter (as " + filter + ") and query (as " + updates + ")");
 
-        // get to-edit data
+        // list to-edit data
         List<Document> data = databaseConnection.findSync(collection, filter.toBson(), packet.limit).into(new ArrayList<>());
 
         Cloud.getInstance().getLogger().debug("Found documents(" + data.size() + ") to " + type.name() + ".");

@@ -242,7 +242,7 @@ public final class StringUtil {
         // if there are no replacements, just return the text
         if(replacements.length == 0) return text;
 
-        // get all placeholders from the text inside a HashSet (no duplicates)
+        // list all placeholders from the text inside a HashSet (no duplicates)
         // after getting the placeholders put them into a list (for sorting)
         // order them after this system: {0}, {1} first and then the others chronologically
         LinkedHashSet<String> placeHoldersSet = new LinkedHashSet<>();

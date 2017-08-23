@@ -162,7 +162,7 @@ public class Response {
                 e = ReflectionUtil.deserialize(msg, eClass);
             }
             else {
-                // get the document from the message
+                // list the document from the message
                 // create object from this
                 Document document = Document.parse(msg);
 

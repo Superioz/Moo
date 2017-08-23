@@ -79,10 +79,10 @@ public class GroupCommand {
 
     @Command(label = LIST_COMMAND, parent = LABEL, usage = "[page]", flags = {"h"})
     public void list(BungeeCommandContext context, ParamSet args) {
-        // get the page
+        // list the page
         int page = args.getInt(0, 0);
 
-        // get the ordered pageable list and check page
+        // list the ordered pageable list and check page
         // if flag 'h' exists order the groups after the rank in descending order
         PageableList<Group> pageableList = new PageableList<>(MooQueries.getInstance().listGroups(),
                 (Comparator<Group>) (o1, o2) -> args.hasFlag("h")
@@ -143,7 +143,7 @@ public class GroupCommand {
         Group group = args.get(0, Group.class);
         context.invalidArgument(group == null, LanguageManager.get("group-doesnt-exist", groupName));
 
-        // get updates (for modification)
+        // list updates (for modification)
         String rawParam = args.get(1);
         DbQuery updates = DbQuery.fromParameter(Group.class, rawParam);
 

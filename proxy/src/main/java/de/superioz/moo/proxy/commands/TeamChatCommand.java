@@ -19,11 +19,11 @@ public class TeamChatCommand {
         boolean colored = true;
         boolean formatted = true;
 
-        // get sender's name
+        // list sender's name
         // and the permission of color/format
         String sender = BungeeTeamChat.getInstance().getColoredName(context.getCommandSender());
 
-        // get team chat format (either the message or blank format)
+        // list team chat format (either the message or blank format)
         // if flag r (=raw) exists ^
         String formattedMessage = args.hasFlag("r")
                 ? LanguageManager.get("teamchat-format", "/tc ", message)

@@ -7,7 +7,7 @@ import de.superioz.moo.api.database.DatabaseType;
 import de.superioz.moo.api.database.filter.DbFilter;
 import de.superioz.moo.api.utils.StringUtil;
 import de.superioz.moo.cloud.Cloud;
-import de.superioz.moo.cloud.database.CloudCollections;
+import de.superioz.moo.cloud.database.DatabaseCollections;
 import de.superioz.moo.protocol.common.ResponseStatus;
 import de.superioz.moo.protocol.packet.PacketAdapter;
 import de.superioz.moo.protocol.packet.PacketHandler;
@@ -30,7 +30,7 @@ public class PacketDatabaseInfoListener implements PacketAdapter {
             return;
         }
 
-        // get values
+        // list values
         DatabaseType type = packet.databaseType;
         DbFilter filter = packet.filter;
 
@@ -40,13 +40,13 @@ public class PacketDatabaseInfoListener implements PacketAdapter {
             return;
         }
 
-        // get the database collection
+        // list the database collection
         DatabaseCollection module = Cloud.getInstance().getDatabaseCollection(type);
         Cloud.getInstance().getLogger().debug("Attempting to fetch data from modules .. (" + type.name() + ")." +
                 " With filter (as " + filter + ")");
 
-        // get data from filtering
-        List<Object> data = module.getFilteredData(CloudCollections.PLAYER, filter, packet.queried, packet.limit);
+        // list data from filtering
+        List<Object> data = module.getFilteredData(DatabaseCollections.PLAYER, filter, packet.queried, packet.limit);
 
         // check result
         if(data.isEmpty()) {
@@ -64,7 +64,7 @@ public class PacketDatabaseInfoListener implements PacketAdapter {
             return;
         }
 
-        // get values
+        // list values
         String database = packet.databaseName;
         DbFilter filter = packet.filter;
         DatabaseConnection databaseConnection = Cloud.getInstance().getDatabaseConnection();
@@ -75,7 +75,7 @@ public class PacketDatabaseInfoListener implements PacketAdapter {
             return;
         }
 
-        // get collection
+        // list collection
         MongoCollection<Document> collection = databaseConnection.getCollection(database);
         if(collection == null) {
             packet.respond(ResponseStatus.BAD_REQUEST);

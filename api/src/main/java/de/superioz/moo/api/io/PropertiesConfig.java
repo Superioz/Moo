@@ -30,7 +30,7 @@ public class PropertiesConfig extends Properties {
     /**
      * Gets a property from the config
      *
-     * @param key          The key to get the property
+     * @param key          The key to list the property
      * @param replacements The replacements
      * @return The object (formatted)
      */

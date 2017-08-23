@@ -206,7 +206,7 @@ public class CommandRegistry extends Registry<String, CommandInstance> {
             Map<Method, Object> commandMethods = new HashMap<>();
             List<CommandInstance> roots = new ArrayList<>();
 
-            // get all methods that are commandable
+            // list all methods that are commandable
             for(Object o : objects) {
                 for(Method m : o.getClass().getDeclaredMethods()) {
                     if(!checkMethod(m)) continue;
@@ -214,7 +214,7 @@ public class CommandRegistry extends Registry<String, CommandInstance> {
                 }
             }
 
-            // get all commands
+            // list all commands
             for(Method m : commandMethods.keySet()) {
                 CommandInstance instance = new CommandInstance(commandMethods.get(m), m);
                 if(instance.getCommandType() == CommandType.ROOT) roots.add(instance);
@@ -258,7 +258,7 @@ public class CommandRegistry extends Registry<String, CommandInstance> {
          * @param objects  The classes object's
          */
         private static void initSpecialMethods(Map<String, CommandInstance> commands, Object... objects) {
-            // get all methods that are tabcompletable
+            // list all methods that are tabcompletable
             for(Object o : objects) {
                 for(Method m : o.getClass().getDeclaredMethods()) {
                     if(checkTabCompleteMethod(m)) {

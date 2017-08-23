@@ -32,7 +32,7 @@ public class CacheCommand {
 
     @Command(label = "cachelist", usage = "<database>")
     public void onCacheList(CommandContext context, ParamSet args) {
-        // get the database
+        // list the database
         DatabaseType type = args.getEnum(0, DatabaseType.class);
         context.invalidArgument(type == null, true, "This type doesn't exist!");
 

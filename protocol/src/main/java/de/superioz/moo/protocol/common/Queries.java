@@ -24,9 +24,10 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * Class for easier sending packets to either the currently connected network instance
- * or to another one
+ * or to another one. If you execute these methods in the cloud the packets will be automatically
+ * intercepted to be processed inside the cloud.
  * <br>
- * If you want to specifically get some groups ({@link Group}) data, then
+ * If you want to specifically list some groups ({@link Group}) data, then
  * use another class, this class is only for abstract data fetching/modifying etc.
  * <br>
  * Similar to a {@link PacketMessenger} for only {@link PacketDatabaseModify}, {@link PacketDatabaseInfo}, ...

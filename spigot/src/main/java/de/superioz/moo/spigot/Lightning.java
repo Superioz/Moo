@@ -49,7 +49,7 @@ public class Lightning extends JavaPlugin implements EventListener {
             moduleRegistry.register(new RedisModule(customFile.getFile(), getLogger()));
         });
 
-        // get config
+        // list config
         logs.setDebugMode(pluginModule.getConfig().get("debug"));
         logs.info("Debug Mode is " + (logs.isDebugMode() ? "ON" : "off"));
 

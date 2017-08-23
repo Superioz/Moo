@@ -341,7 +341,7 @@ public class CommandInstance {
      * @return The result
      */
     public <T> boolean execute(CommandContext<T> context, String[] args) {
-        // get command instance atg last argument (subcommands)
+        // list command instance atg last argument (subcommands)
         final PreCommandEvent[] event = new PreCommandEvent[1];
         Pair<CommandInstance, String[]> command = getInstance(args, commandInstance -> {
             event[0] = new PreCommandEvent<>(context, commandInstance);

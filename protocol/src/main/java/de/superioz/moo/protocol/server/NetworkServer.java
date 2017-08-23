@@ -47,11 +47,11 @@ public class NetworkServer extends AbstractNetworkInstance {
         super(host, port, logger);
         this.config = config;
 
-        // get whitelist
+        // list whitelist
         whitelist = new HostWhitelist(this);
         whitelist.load();
 
-        // get hub
+        // list hub
         clientManager = new ClientManager(this);
 
         // register adapter

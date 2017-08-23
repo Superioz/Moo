@@ -52,7 +52,7 @@ public class RankCommand {
 
     @Command(label = RANK_LABEL, usage = "<player> [group]", flags = {"s"})
     public void onRankCommand(BungeeCommandContext context, ParamSet args) {
-        // get player and therefore his group
+        // list player and therefore his group
         PlayerData playerData = args.get(0, PlayerData.class);
         context.invalidArgument(playerData == null, LanguageManager.get("player-doesnt-exist", args.get(0)));
         Group group = MooQueries.getInstance().getGroup(playerData.group);
@@ -88,11 +88,11 @@ public class RankCommand {
 
     @Command(label = UPRANK_LABEL, usage = "<player>", flags = {"s"})
     public void onUprankCommand(BungeeCommandContext context, ParamSet args) {
-        // get player and therefore his group
+        // list player and therefore his group
         PlayerData playerData = args.get(0, PlayerData.class);
         context.invalidArgument(playerData == null, LanguageManager.get("player-doesnt-exist", args.get(0)));
 
-        // get new group through shifting steps
+        // list new group through shifting steps
         int steps = args.hasFlag("s") ? args.getFlag("s").getInt(0, 1) : 1;
         Group newGroup = MooQueries.getInstance().getGroup(playerData, steps, true);
 
@@ -102,11 +102,11 @@ public class RankCommand {
 
     @Command(label = DOWNRANK_LABEL, usage = "<player>", flags = {"s"})
     public void onDownrankCommand(BungeeCommandContext context, ParamSet args) {
-        // get player and therefore his group
+        // list player and therefore his group
         PlayerData playerData = args.get(0, PlayerData.class);
         context.invalidArgument(playerData == null, LanguageManager.get("player-doesnt-exist", args.get(0)));
 
-        // get new group through shifting steps
+        // list new group through shifting steps
         int steps = args.hasFlag("s") ? args.getFlag("s").getInt(0, 1) : 1;
         Group newGroup = MooQueries.getInstance().getGroup(playerData, steps, false);
 

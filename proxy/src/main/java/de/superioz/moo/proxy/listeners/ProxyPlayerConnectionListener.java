@@ -36,7 +36,7 @@ public class ProxyPlayerConnectionListener implements Listener {
             return;
         }
 
-        // get lobby with fewest player online
+        // list lobby with fewest player online
         ServerInfo lobbyFewest = null;
         int fewestPlayer = -1;
         for(ServerInfo serverInfo : l) {
@@ -61,7 +61,7 @@ public class ProxyPlayerConnectionListener implements Listener {
     private void onServerConnectedAsync(ServerConnectedEvent event) {
         ProxiedPlayer player = event.getPlayer();
 
-        // get playerdata for updating state
+        // list playerdata for updating state
         PlayerData data = new PlayerData();
         data.uuid = player.getUniqueId();
         data.lastName = player.getName();
@@ -93,7 +93,7 @@ public class ProxyPlayerConnectionListener implements Listener {
     private void onPlayerDisconnectAsync(PlayerDisconnectEvent event) {
         ProxiedPlayer player = event.getPlayer();
 
-        // get playerdata for updating state
+        // list playerdata for updating state
         PlayerData data = new PlayerData();
         data.uuid = player.getUniqueId();
         data.lastName = player.getName();

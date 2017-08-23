@@ -23,7 +23,7 @@ public class PacketConfigListener implements PacketAdapter {
         Object newData = meta;
         String key = type.getKey();
 
-        // get the config key and new data
+        // list the config key and new data
         // special types
         if(type == MooConfigType.MAINTENANCE) {
             newData = meta.equalsIgnoreCase(true + "");

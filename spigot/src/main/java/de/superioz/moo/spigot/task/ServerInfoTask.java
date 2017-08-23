@@ -22,7 +22,7 @@ public class ServerInfoTask implements Runnable {
     @Override
     public void run() {
         while(true){
-            // get server info
+            // list server info
             Server server = Lightning.getInstance().getServer();
             String motd = server.getMotd();
             List<String> players = new ArrayList<>();

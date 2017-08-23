@@ -74,12 +74,12 @@ public class DatabaseModifyCommand {
     public void dbmodify(CommandContext context, ParamSet set) {
         Queries queries = Queries.newInstance();
 
-        // get the database
+        // list the database
         DatabaseType type = set.getEnum(0, DatabaseType.class);
         if(type == null) queries.scope(set.get(0));
         else queries.scope(type);
 
-        // get the filter
+        // list the filter
         String rawFilter = set.get(1);
         DbFilter filter = DbFilter.fromParameter(type == null ? null : type.getWrappedClass(), rawFilter);
         queries.filter(filter);
@@ -91,7 +91,7 @@ public class DatabaseModifyCommand {
             queries.limit(limit);
         }
 
-        // get the updates
+        // list the updates
         String rawUpdates = set.get(2);
         Class<?> updateClass = type == null ? null : type.getWrappedClass();
         DbQuery query = DbQuery.fromParameter(updateClass, rawUpdates);

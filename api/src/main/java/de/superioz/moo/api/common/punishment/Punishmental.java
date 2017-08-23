@@ -37,7 +37,7 @@ public class Punishmental {
         if(banSubTypes != null && !banSubTypes.isEmpty()) {
             banTypeMap.clear();
 
-            // get ban sub types
+            // list ban sub types
             for(int i = 0; i < banSubTypes.size(); i++) {
                 BanSubType subType = new BanSubType(banSubTypes.get(i), i);
                 if(subType.getName() != null) banTypeMap.add(subType);
@@ -182,7 +182,7 @@ public class Punishmental {
         if((oldBanPoints >= FATAL_POINTS && banPoints >= FATAL_POINTS)
                 || newPoints > MAX_POINTS) return MAX_POINTS + 1;
 
-        // get next ban step (always round up)
+        // list next ban step (always round up)
         int nextStep = 0;
         for(int d : POINT_CONSTANTS) {
             if(d > newPoints) {

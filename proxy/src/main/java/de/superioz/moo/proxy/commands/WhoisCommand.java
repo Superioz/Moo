@@ -46,11 +46,11 @@ public class WhoisCommand {
         PlayerInfo playerInfo = args.get(0, PlayerInfo.class);
         context.invalidArgument(playerInfo == null, LanguageManager.get("player-doesnt-exist", args.get(0)));
 
-        // get current informations
+        // list current informations
         Ban currentBan = playerInfo.getCurrentBan();
         PlayerData data = playerInfo.getData();
 
-        // get rough information about the player
+        // list rough information about the player
         String playerName = args.get(0);
         UUID uuid = data.uuid;
         String ip = data.lastIp;
@@ -58,7 +58,7 @@ public class WhoisCommand {
         long coins = data.coins;
         int banPoints = data.banPoints;
 
-        // get online status
+        // list online status
         String firstOnline = TimeUtil.getFormat(data.firstOnline);
         String totalOnline = data.totalOnline == null ? "0" : TimeUnit.MILLISECONDS.toHours(data.totalOnline) + "h";
         String currentServer = data.currentServer;

@@ -15,7 +15,7 @@ import de.superioz.moo.api.event.EventListener;
 import de.superioz.moo.api.event.EventPriority;
 import de.superioz.moo.api.utils.ReflectionUtil;
 import de.superioz.moo.cloud.Cloud;
-import de.superioz.moo.cloud.database.CloudCollections;
+import de.superioz.moo.cloud.database.DatabaseCollections;
 import de.superioz.moo.cloud.events.MooPlayerBanEvent;
 import de.superioz.moo.cloud.events.MooPlayerPostBanEvent;
 import de.superioz.moo.protocol.common.ResponseStatus;
@@ -37,8 +37,8 @@ public class MooPlayerBanListener implements EventListener {
         PacketPlayerPunish packet = event.getPacket();
         List<String> meta = packet.meta;
 
-        // get unique id buf and check if it is valid
-        PlayerData fetchedData = CloudCollections.PLAYER.get(new DbFilter(Filters.eq(DbModifier.PLAYER_NAME.getFieldName(), data.lastName))).get(0);
+        // list unique id buf and check if it is valid
+        PlayerData fetchedData = DatabaseCollections.PLAYER.get(new DbFilter(Filters.eq(DbModifier.PLAYER_NAME.getFieldName(), data.lastName)));
         UUID uuid = fetchedData.uuid;
 
         // checks meta (which should consist of the ban and the messages)
@@ -52,7 +52,7 @@ public class MooPlayerBanListener implements EventListener {
         String permBanMessage = meta.get(2);
 
         // checks if the player is banned
-        Ban banBefore = CloudCollections.BAN.get(uuid);
+        Ban banBefore = DatabaseCollections.BAN.get(uuid);
         if(banBefore != null) {
             packet.respond(ResponseStatus.CONFLICT);
             return;
@@ -65,12 +65,12 @@ public class MooPlayerBanListener implements EventListener {
         // checks if the executor is allowed to ban the target
         // and send FORBIDDEN if he isn't
         if(ban.by != null) {
-            PlayerData executor = CloudCollections.PLAYER.get(ban.by);
-            PlayerData target = CloudCollections.PLAYER.get(ban.banned);
+            PlayerData executor = DatabaseCollections.PLAYER.get(ban.by);
+            PlayerData target = DatabaseCollections.PLAYER.get(ban.banned);
 
             if(executor != null && target != null) {
-                Group executorGroup = CloudCollections.GROUP.get(executor.group);
-                Group targetGroup = CloudCollections.GROUP.get(target.group);
+                Group executorGroup = DatabaseCollections.GROUP.get(executor.group);
+                Group targetGroup = DatabaseCollections.GROUP.get(target.group);
 
                 if(!(executorGroup == null || targetGroup == null || executorGroup.rank > targetGroup.rank)) {
                     packet.respond(ResponseStatus.FORBIDDEN);
@@ -89,11 +89,11 @@ public class MooPlayerBanListener implements EventListener {
 
         // ban the player and if it isn't successful then respond error
         // update the ban points of the player
-        if(!CloudCollections.BAN.set(uuid, ban, true)) {
+        if(!DatabaseCollections.BAN.set(uuid, ban)) {
             packet.respond(ResponseStatus.NOK);
             return;
         }
-        CloudCollections.PLAYER.set(data.uuid, data, DbQueryUnbaked.newInstance(DbModifier.PLAYER_BANPOINTS, data.banPoints), true);
+        DatabaseCollections.PLAYER.set(data.uuid, data, DbQueryUnbaked.newInstance(DbModifier.PLAYER_BANPOINTS, data.banPoints));
         packet.respond(ResponseStatus.OK);
 
         // gets the player and kick him if he is online

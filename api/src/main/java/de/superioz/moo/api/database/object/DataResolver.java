@@ -309,7 +309,7 @@ public class DataResolver {
      * Gets the field where the dbKey-name is equals str
      *
      * @param str The string
-     * @param c   The class to get the field from
+     * @param c   The class to list the field from
      * @return The field
      */
     public static Field getField(String str, Class<?> c) {

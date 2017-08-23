@@ -53,7 +53,7 @@ public class PunishArchiveCommand {
         // if live fetching is enabled don't cache the list
         boolean liveFetching = args.hasFlag("l");
 
-        // get the ban archive of the given player
+        // list the ban archive of the given player
         // if not banned display error message
         List<Ban> banArchiveList = null;
         if(!liveFetching) {
@@ -71,7 +71,7 @@ public class PunishArchiveCommand {
         // display archive at given page
         PageableList<Ban> pageableList = new PageableList<>(banArchiveList);
 
-        // get page
+        // list page
         int page = args.getInt(0, 0);
 
         // sends the list

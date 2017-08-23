@@ -24,7 +24,7 @@ public class MooPlayerConnectedServerListener implements EventListener {
         PlayerData data = event.getData();
         PacketPlayerState packet = event.getPacket();
 
-        // get the player and check if exists
+        // list the player and check if exists
         PlayerData player = MooCache.getInstance().getUniqueIdPlayerMap().get(data.uuid);
         if(player == null) {
             packet.respond(ResponseStatus.NOT_FOUND);

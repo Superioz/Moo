@@ -370,7 +370,7 @@ public final class MooQueries {
         if(data == null) return false;
         String groupName = data.group;
 
-        // get the group out of the cache
+        // list the group out of the cache
         // if the group doesnt exist create a "default" group
         Group group = MooCache.getInstance().getGroupMap().get(groupName);
         if(group == null) {

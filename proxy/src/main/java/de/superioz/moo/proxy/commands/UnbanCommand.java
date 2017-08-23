@@ -47,11 +47,11 @@ public class UnbanCommand {
         context.invalidArgument(data == null, LanguageManager.get("player-doesnt-exist", args.get(0)));
         String playerName = args.get(0);
 
-        // get ban
+        // list ban
         Ban ban = MooQueries.getInstance().getBan(data.uuid);
         context.invalidArgument(ban == null, LanguageManager.get("unban-player-isnt-banned", playerName));
 
-        // get the reason (optional)
+        // list the reason (optional)
         String reason = args.getString(1, "");
 
         // unban and if unsuccessful then send message

@@ -16,7 +16,7 @@ public class ProxyPingListener implements Listener {
     public void onPing(ProxyPingEvent event) {
         ServerPing ping = event.getResponse();
 
-        // get values for proxyping from config
+        // list values for proxyping from config
         int maxPlayers = (int) MooCache.getInstance().getConfigEntry(MooConfigType.MAX_PLAYERS);
         int playerCount = (int) MooCache.getInstance().getConfigEntry(MooConfigType.PLAYER_COUNT);
         boolean maintenance = MooCache.getInstance().getConfigEntry(MooConfigType.MAINTENANCE).equals(true + "");

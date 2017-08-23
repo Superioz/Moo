@@ -14,7 +14,7 @@ public final class PermissionUtil {
      * Gets all permissions from given base (parents from groups)
      *
      * @param base   The base
-     * @param groups The list of groups to get all parents
+     * @param groups The list of groups to list all parents
      * @return The listOfString
      */
     public static Set<String> getAllPermissions(Group base, Collection<Group> groups) {

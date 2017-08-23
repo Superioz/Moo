@@ -40,7 +40,7 @@ public abstract class GenericParameterSet {
     private List<String> rawParameter;
 
     /**
-     * The parameter index to get parameter without using an explicit index<br>
+     * The parameter index to list parameter without using an explicit index<br>
      * Will be increased after every use
      */
     private int paramIndex = 0;
@@ -346,7 +346,7 @@ public abstract class GenericParameterSet {
         if(s == null) return null;
         Enum[] enums = enumClass.getEnumConstants();
 
-        // if the string is an integer get the enum directly
+        // if the string is an integer list the enum directly
         if(Validation.INTEGER.matches(s)) {
             int i = Integer.parseInt(s);
 

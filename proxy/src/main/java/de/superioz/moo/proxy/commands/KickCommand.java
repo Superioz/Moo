@@ -40,7 +40,7 @@ public class KickCommand {
         String playerName = args.get(0);
         context.invalidArgument(!Validation.PLAYERNAME.matches(playerName), LanguageManager.get("invalid-player-name"));
 
-        // get kickor
+        // list kickor
         PlayerData executor = null;
         if(!context.isConsole()) {
             ProxiedPlayer player = (ProxiedPlayer) context.getCommandSender();

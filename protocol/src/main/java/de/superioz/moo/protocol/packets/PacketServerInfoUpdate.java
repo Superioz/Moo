@@ -11,7 +11,7 @@ import java.net.InetSocketAddress;
 /**
  * This packet is for sending server information to the cloud.
  * This is neccessary if the cloud wants to accept server during the offline time
- * of the proxy, so that the proxy can receive every started server to get registered after it
+ * of the proxy, so that the proxy can receive every started server to list registered after it
  * starts again.
  */
 @NoArgsConstructor

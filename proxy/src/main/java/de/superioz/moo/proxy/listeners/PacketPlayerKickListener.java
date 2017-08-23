@@ -23,7 +23,7 @@ public class PacketPlayerKickListener implements PacketAdapter {
         String id = packet.id;
         String message = packet.message;
 
-        // get the proxied player from id
+        // list the proxied player from id
         // if player not found then return bad response
         ProxiedPlayer player = Validation.UNIQUEID.matches(id)
                 ? ProxyServer.getInstance().getPlayer(UUID.fromString(id))
@@ -33,7 +33,7 @@ public class PacketPlayerKickListener implements PacketAdapter {
             return;
         }
 
-        // get the playerData from deserializen "from"
+        // list the playerData from deserializen "from"
         // because we want to check if he is allowed
         PlayerData data;
         if(!from.isEmpty()) {

@@ -117,7 +117,7 @@ public final class ReflectionUtil {
     }
 
     /**
-     * A method to get a class object from a serialized string
+     * A method to list a class object from a serialized string
      *
      * @param serializedString The serialized string
      * @param tClass           The class of the type

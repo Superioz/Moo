@@ -259,7 +259,7 @@ public abstract class CommandContext<T> {
         usage = (highlighted ? "§7" : "") + usage + command.getPath().replace(".", " ");
         usage += " " + command.getUsage().getBase();
 
-        // get current arg
+        // list current arg
         String currentArg = getCurrentUsageArg(current);
         usage = usage.replace(currentArg, "§c" + currentArg + "§7");
 

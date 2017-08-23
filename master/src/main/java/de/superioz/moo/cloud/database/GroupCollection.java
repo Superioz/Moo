@@ -39,7 +39,7 @@ public class GroupCollection extends DatabaseCollection<String, Group> {
         }
         if(def != null) return def;
         else {
-            // get the default group
+            // list the default group
             def = get("default");
             if(def == null) {
                 def = new Group();

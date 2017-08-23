@@ -35,7 +35,7 @@ public class BanSubType {
         this.name = split[0];
         String[] split0 = split[1].split(";");
 
-        // get duration
+        // list duration
         Pair<Integer, TimeUnit> timeDuration = TimeUtil.getTime(split0[0]);
         this.duration = timeDuration.getKey();
         this.timeUnit = timeDuration.getValue();

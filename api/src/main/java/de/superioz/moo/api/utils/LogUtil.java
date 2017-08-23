@@ -64,7 +64,7 @@ public final class LogUtil {
             String[] spl = fileName.split("-");
             if(spl.length < 3) continue;
 
-            // get the foldername (e.g. October, 2016)
+            // list the foldername (e.g. October, 2016)
             String folderName = "";
             try {
                 int monthId = Integer.parseInt(spl[1]);

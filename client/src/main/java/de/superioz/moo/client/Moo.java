@@ -255,7 +255,7 @@ public class Moo {
     }
 
     /**
-     * Simply waiting for the client to get disconnected
+     * Simply waiting for the client to list disconnected
      */
     public void waitForShutdown(){
         while(isConnected()){

@@ -77,7 +77,7 @@ public class BanCommand {
             return;
         }
 
-        // get the ban reason
+        // list the ban reason
         // if null = rip (or invalid ban reason)
         BanReason banReason = Punishmental.getInstance().getBanReason(args.get(1));
         context.invalidArgument(banReason == null || banReason.getType() == BanType.CHAT,
@@ -103,13 +103,13 @@ public class BanCommand {
             return;
         }
 
-        // get the ban reason
+        // list the ban reason
         // if null = rip (or invalid ban reason)
         BanReason banReason = Punishmental.getInstance().getBanReason(args.get(1));
         context.invalidArgument(banReason == null || banReason.getType() == BanType.CHAT,
                 LanguageManager.get("ban-invalid-reason", args.get(1)));
 
-        // get duration
+        // list duration
         List<String> rawDurations = args.getRange(2);
         long duration = 0L;
         for(String rawDuration : rawDurations) {

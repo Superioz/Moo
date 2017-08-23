@@ -99,7 +99,7 @@ public abstract class DatabaseCollection<K, E> {
             if(e != null) data.add(e);
         }
         else {
-            data.addAll(this.get(filter, queried, limit));
+            data.addAll(this.list(filter, queried, limit));
         }
 
         return data;
@@ -223,6 +223,12 @@ public abstract class DatabaseCollection<K, E> {
         return getCache().get(key);
     }
 
+    public E get(DbFilter query){
+        List<E> l = list(query);
+        if(l == null || l.isEmpty()) return null;
+        return l.get(0);
+    }
+
     /**
      * Get objects from the cache/database
      *
@@ -231,7 +237,7 @@ public abstract class DatabaseCollection<K, E> {
      * @param limit   Limit of objects
      * @return The list of elements
      */
-    public List<E> get(DbFilter query, boolean queried, int limit, boolean cached) {
+    public List<E> list(DbFilter query, boolean queried, int limit, boolean cached) {
         List<E> l = limit == -1 ? new ArrayList<>() : new FixedSizeList<>(limit);
 
         try {
@@ -259,12 +265,12 @@ public abstract class DatabaseCollection<K, E> {
         return l;
     }
 
-    public List<E> get(DbFilter query, boolean queried, int limit) {
-        return get(query, queried, limit, true);
+    public List<E> list(DbFilter query, boolean queried, int limit) {
+        return list(query, queried, limit, true);
     }
 
-    public List<E> get(DbFilter query) {
-        return get(query, false, -1);
+    public List<E> list(DbFilter query) {
+        return list(query, false, -1);
     }
 
 
@@ -292,8 +298,16 @@ public abstract class DatabaseCollection<K, E> {
         return set(key, element, query.bake(getWrappedClass()).toDocument(), force);
     }
 
+    public boolean set(K key, E element, DbQueryUnbaked query) {
+        return set(key, element, query.bake(getWrappedClass()).toDocument(), true);
+    }
+
     public boolean set(K key, E element, boolean force) {
         return set(key, element, DbQuery.fromObject(element).toMongoQuery().build(), force);
+    }
+
+    public boolean set(K key, E element) {
+        return set(key, element, DbQuery.fromObject(element).toMongoQuery().build(), true);
     }
 
     /**
@@ -323,7 +337,7 @@ public abstract class DatabaseCollection<K, E> {
     /**
      * Removes something from the cache (& the database) per filter
      *
-     * @param filter    The filter to get the data to be removed
+     * @param filter    The filter to list the data to be removed
      * @param force     Force the update onto the database, too?
      * @param onElement Consumer on every key-value pair removed
      * @return The result

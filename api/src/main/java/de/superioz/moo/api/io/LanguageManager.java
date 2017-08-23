@@ -63,7 +63,7 @@ public class LanguageManager {
         if(!fileName.endsWith(".properties")) fileName += ".properties";
         this.file = new File(getFolder(), fileName);
 
-        // get and load properties
+        // list and load properties
         if(handle != null) {
             handle.init(file);
         }

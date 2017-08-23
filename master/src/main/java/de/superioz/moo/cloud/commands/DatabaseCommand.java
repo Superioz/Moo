@@ -88,12 +88,12 @@ public class DatabaseCommand {
     public void dbmodify(CommandContext context, ParamSet set) {
         Queries queries = Queries.newInstance();
 
-        // get the database
+        // list the database
         DatabaseType type = set.getEnum(0, DatabaseType.class);
         if(type == null) queries.scope(set.get(0));
         else queries.scope(type);
 
-        // get the filter
+        // list the filter
         String rawFilter = set.get(1);
         DbFilter filter = DbFilter.fromParameter(type == null ? null : type.getWrappedClass(), rawFilter);
         queries.filter(filter);
@@ -105,7 +105,7 @@ public class DatabaseCommand {
             queries.limit(limit);
         }
 
-        // get the updates
+        // list the updates
         String rawUpdates = set.get(2);
         Class<?> updateClass = type == null ? null : type.getWrappedClass();
         DbQuery query = DbQuery.fromParameter(updateClass, rawUpdates);
@@ -125,12 +125,12 @@ public class DatabaseCommand {
     public void dbinfo(CommandContext context, ParamSet args) {
         Queries queries = Queries.newInstance();
 
-        // get the database
+        // list the database
         DatabaseType type = args.getEnum(0, DatabaseType.class);
         if(type == null) queries.scope(args.get(0));
         else queries.scope(type);
 
-        // get the filter
+        // list the filter
         String rawFilter = args.get(1);
         DbFilter filter = DbFilter.fromParameter(type == null ? null : type.getWrappedClass(), rawFilter);
         queries.filter(filter);
@@ -145,7 +145,7 @@ public class DatabaseCommand {
         context.sendMessage(StringUtil.format("Retrieve database entries for {0} ... (Filtersize: {1})",
                 queries.getDatabase(), queries.getFilter().getSize()));
 
-        // get response
+        // list response
         String k = args.get(0) + ":" + rawFilter;
         Response response = (Response) context.get(k);
         if(response == null) {
@@ -194,7 +194,7 @@ public class DatabaseCommand {
     public void dbcount(CommandContext context, ParamSet args) {
         Queries queries = Queries.newInstance();
 
-        // get the database
+        // list the database
         DatabaseType type = args.getEnum(0, DatabaseType.class);
         if(type == null) queries.scope(args.get(0));
         else queries.scope(type);
@@ -215,7 +215,7 @@ public class DatabaseCommand {
     public void dblist(CommandContext context, ParamSet args) {
         Queries queries = Queries.newInstance();
 
-        // get the database
+        // list the database
         DatabaseType type = args.getEnum(0, DatabaseType.class);
         if(type == null) queries.scope(args.get(0));
         else queries.scope(type);
@@ -224,7 +224,7 @@ public class DatabaseCommand {
 
         context.sendMessage(StringUtil.format("List entries of {0} ...", queries.getDatabase()));
 
-        // get response
+        // list response
         String k = args.get(0);
         Response response = (Response) context.get(k);
         if(response == null) {
@@ -274,12 +274,12 @@ public class DatabaseCommand {
     public void dbdelete(CommandContext context, ParamSet set) {
         Queries queries = Queries.newInstance();
 
-        // get the database
+        // list the database
         DatabaseType type = set.getEnum(0, DatabaseType.class);
         if(type == null) queries.scope(set.get(0));
         else queries.scope(type);
 
-        // get the filter
+        // list the filter
         String rawFilter = set.get(1);
         DbFilter filter = DbFilter.fromParameter(type == null ? null : type.getWrappedClass(), rawFilter);
         queries.filter(filter);
@@ -306,7 +306,7 @@ public class DatabaseCommand {
     public void dbcreate(CommandContext context, ParamSet args) {
         Queries queries = Queries.newInstance();
 
-        // get the database
+        // list the database
         DatabaseType type = args.getEnum(0, DatabaseType.class);
         if(type == null) queries.scope(args.get(0));
         else queries.scope(type);

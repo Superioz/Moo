@@ -76,10 +76,10 @@ public class PermCommand {
 
     @Command(label = LIST_COMMAND, parent = LABEL, usage = "[page]", flags = {"g", "p", "s", "b"})
     public void list(BungeeCommandContext context, ParamSet args) {
-        // get permissions (either from group or player)
+        // list permissions (either from group or player)
         HashSet<String> permissions = getPermissions(context, args, "g", "p").getValue();
 
-        // get group permissions out of strings
+        // list group permissions out of strings
         List<GroupPermission> groupPermissions = new ArrayList<>();
         permissions.forEach(s -> {
             if(args.hasFlag("s") && !s.startsWith("s")) return;
@@ -87,7 +87,7 @@ public class PermCommand {
             groupPermissions.add(new GroupPermission(s));
         });
 
-        // get pageable list for the permissions
+        // list pageable list for the permissions
         int page = args.getInt(0, 0);
         PageableList<GroupPermission> pageableList = new PageableList<>(groupPermissions, 10,
                 (Comparator<GroupPermission>) (o1, o2) -> o1.getRawPerm().compareTo(o2.getRawPerm()));
@@ -100,7 +100,7 @@ public class PermCommand {
                 LanguageManager.get("permission-list-empty"),
                 LanguageManager.get("permission-list-header"),
                 LanguageManager.get("permission-list-entry-empty"), groupPermission -> {
-                    // get prefix for the permission (indicates the workspace)
+                    // list prefix for the permission (indicates the workspace)
                     String prefix = groupPermission.isProxied() ? "&bb" : (groupPermission.isStar() ? "&9*" : "&es");
 
                     context.sendMessage(LanguageManager.format(entryFormat, prefix,
@@ -108,7 +108,7 @@ public class PermCommand {
                                     .replace("*", "&9*&7")
                                     .replace("-", "&c-&7")));
                 }, () -> {
-                    // get the command to see the next page
+                    // list the command to see the next page
                     String command = "/perm list " + (page + 1) + " " + (args.hasFlag("g")
                             ? args.getFlag("g").getRawCommandline() : args.hasFlag("p")
                             ? args.getFlag("p").getRawCommandline() : "");
@@ -122,13 +122,13 @@ public class PermCommand {
 
     @Command(label = ADD_COMMAND, parent = LABEL, usage = "<permission>", flags = {"g", "p"})
     public void add(BungeeCommandContext context, ParamSet args) {
-        // get permissions (either from group or player)
+        // list permissions (either from group or player)
         Pair<Object, HashSet<String>> permissions = getPermissions(context, args, "g", "p");
         HashSet<String> permissionsValues = permissions.getValue();
         Object primKey = permissions.getKey();
 
 
-        // get permissions from arguments to be added
+        // list permissions from arguments to be added
         String rawArg = args.get(0);
         List<String> argPermissions = StringUtil.find(Validation.PERMISSION.getRawRegex(), rawArg);
         context.invalidArgument(argPermissions.isEmpty(), LanguageManager.get("permission-format-invalid"));
@@ -157,12 +157,12 @@ public class PermCommand {
 
     @Command(label = REMOVE_COMMAND, parent = LABEL, usage = "<permission>", flags = {"g", "p"})
     public void remove(BungeeCommandContext context, ParamSet args) {
-        // get permissions (either from group or player)
+        // list permissions (either from group or player)
         Pair<Object, HashSet<String>> permissions = getPermissions(context, args, "g", "p");
         HashSet<String> permissionsValues = permissions.getValue();
         Object primKey = permissions.getKey();
 
-        // get permissions from arguments to be removed
+        // list permissions from arguments to be removed
         String rawArg = args.get(0);
         List<String> argPermissions = StringUtil.find(Validation.PERMISSION.getRawRegex(), rawArg);
         context.invalidArgument(argPermissions.isEmpty(), LanguageManager.get("permission-format-invalid"));
@@ -191,7 +191,7 @@ public class PermCommand {
 
     @Command(label = CLEAR_COMMAND, parent = LABEL, flags = {"g", "p"})
     public void clear(BungeeCommandContext context, ParamSet args) {
-        // get permissions (either from group or player)
+        // list permissions (either from group or player)
         Pair<Object, HashSet<String>> permissions = getPermissions(context, args, "g", "p");
         HashSet<String> permissionsValues = permissions.getValue();
         Object primKey = permissions.getKey();

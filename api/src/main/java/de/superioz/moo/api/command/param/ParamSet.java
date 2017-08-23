@@ -38,7 +38,7 @@ public class ParamSet extends GenericParameterSet {
         if(baseParameter.size() >= 1 && baseParameter.get(0).isEmpty()) baseParameter.remove(0);
         this.command = commandInstance;
 
-        // get flags
+        // list flags
         int lastIndex = -1;
         CommandFlag flag = null;
         for(int i = 0; i < baseParameter.size(); i++) {
@@ -61,7 +61,7 @@ public class ParamSet extends GenericParameterSet {
             }
         }
 
-        // get parameter
+        // list parameter
         this.setParameter(baseParameter);
         if(lastIndex != -1) this.setParameter(baseParameter.subList(0, lastIndex));
     }

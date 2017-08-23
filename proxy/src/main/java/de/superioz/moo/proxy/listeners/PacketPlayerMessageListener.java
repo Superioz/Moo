@@ -31,7 +31,7 @@ public class PacketPlayerMessageListener implements PacketAdapter {
 
         // if the type is private
         if(type == PacketPlayerMessage.Type.PRIVATE) {
-            // get player from meta
+            // list player from meta
             // if null return bad response
             ProxiedPlayer player = Validation.UNIQUEID.matches(meta)
                     ? ProxyServer.getInstance().getPlayer(UUID.fromString(meta))

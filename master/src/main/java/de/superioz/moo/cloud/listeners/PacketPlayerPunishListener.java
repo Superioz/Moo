@@ -8,7 +8,7 @@ import de.superioz.moo.api.event.EventExecutor;
 import de.superioz.moo.api.reaction.Reaction;
 import de.superioz.moo.api.reaction.Reactor;
 import de.superioz.moo.api.util.Validation;
-import de.superioz.moo.cloud.database.CloudCollections;
+import de.superioz.moo.cloud.database.DatabaseCollections;
 import de.superioz.moo.cloud.events.MooPlayerBanEvent;
 import de.superioz.moo.cloud.events.MooPlayerKickEvent;
 import de.superioz.moo.protocol.common.ResponseStatus;
@@ -24,10 +24,10 @@ public class PacketPlayerPunishListener implements PacketAdapter {
     public void onPlayerPunish(PacketPlayerPunish packet) {
         String target = packet.target;
 
-        // get the playerData
+        // list the playerData
         PlayerData data = Validation.UNIQUEID.matches(target)
-                ? CloudCollections.PLAYER.get(UUID.fromString(target))
-                : CloudCollections.PLAYER.get(new DbFilter(Filters.eq(DbModifier.PLAYER_NAME.getFieldName(), target))).get(0);
+                ? DatabaseCollections.PLAYER.get(UUID.fromString(target))
+                : DatabaseCollections.PLAYER.list(new DbFilter(Filters.eq(DbModifier.PLAYER_NAME.getFieldName(), target))).get(0);
 
         // if the data is null
         if(data == null) {
