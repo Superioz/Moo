@@ -4,7 +4,7 @@ import de.superioz.moo.api.cache.MooCache;
 import de.superioz.moo.api.event.EventHandler;
 import de.superioz.moo.api.event.EventListener;
 import de.superioz.moo.api.event.EventPriority;
-import de.superioz.moo.api.io.MooConfigType;
+import de.superioz.moo.api.config.MooConfigType;
 import de.superioz.moo.cloud.Cloud;
 import de.superioz.moo.protocol.client.ClientType;
 import de.superioz.moo.protocol.events.MooClientDisconnectEvent;

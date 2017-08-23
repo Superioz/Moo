@@ -1,4 +1,4 @@
-package de.superioz.moo.cloud.listeners;
+package de.superioz.moo.cloud.listeners.player;
 
 import de.superioz.moo.api.database.objects.PlayerData;
 import de.superioz.moo.api.event.EventHandler;
@@ -9,6 +9,9 @@ import de.superioz.moo.cloud.events.MooPlayerKickEvent;
 import de.superioz.moo.protocol.common.ResponseStatus;
 import de.superioz.moo.protocol.packets.PacketPlayerPunish;
 
+/**
+ * This class handles the player kick
+ */
 public class MooPlayerKickListener implements EventListener {
 
     @EventHandler(priority = EventPriority.HIGHEST)

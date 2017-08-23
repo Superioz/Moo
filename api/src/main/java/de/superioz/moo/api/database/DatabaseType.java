@@ -14,7 +14,9 @@ public enum DatabaseType {
     PLAYER(PlayerData.class, "players"),
     GROUP(Group.class, "groups"),
     BAN(Ban.class, "bans"),
-    BAN_ARCHIVE(Ban.class, "ban-archive");
+    BAN_ARCHIVE(Ban.class, "ban-archive"),
+    CONFIG(null, "config")
+    ;
 
     /**
      * The class which represents

@@ -1,7 +1,7 @@
-package de.superioz.moo.cloud.listeners;
+package de.superioz.moo.cloud.listeners.player;
 
 import com.mongodb.client.model.Filters;
-import de.superioz.moo.api.common.punishment.BanSubType;
+import de.superioz.moo.api.common.punishment.BanCategory;
 import de.superioz.moo.api.common.punishment.Punishmental;
 import de.superioz.moo.api.database.DbModifier;
 import de.superioz.moo.api.database.filter.DbFilter;
@@ -80,7 +80,7 @@ public class MooPlayerBanListener implements EventListener {
         }
 
         // calculate the duration of the ban if the duration wasn't set before
-        BanSubType reason = ban.getSubType();
+        BanCategory reason = ban.getSubType();
         int banPoints = data.banPoints == null ? 0 : data.banPoints;
         int newBanPoints = Punishmental.calculateBanPoints(banPoints, reason);
         ban.banPoints = newBanPoints;

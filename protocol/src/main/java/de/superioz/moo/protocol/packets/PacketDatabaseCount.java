@@ -22,9 +22,9 @@ public class PacketDatabaseCount extends AbstractPacket {
     public DatabaseType databaseType;
 
     /**
-     * The mode of the counting (0 = as number; >0 = as list)
+     * The mode of the counting
      */
-    public int mode;
+    public CountType countType;
 
     /**
      * Limit of the operation
@@ -34,14 +34,22 @@ public class PacketDatabaseCount extends AbstractPacket {
     @Override
     public void read(PacketBuffer buf) throws IOException {
         this.databaseType = buf.readEnumValue(DatabaseType.class);
-        this.mode = buf.readVarInt();
+        this.countType = buf.readEnumValue(CountType.class);
         this.limit = buf.readVarInt();
     }
 
     @Override
     public void write(PacketBuffer buf) throws IOException {
         buf.writeEnumValue(databaseType);
-        buf.writeVarInt(mode);
+        buf.writeEnumValue(countType);
         buf.writeVarInt(limit);
     }
+
+    public enum CountType {
+
+        NUMBER,
+        LIST
+
+    }
+
 }

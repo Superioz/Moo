@@ -9,7 +9,7 @@ import de.superioz.moo.api.command.tabcomplete.TabCompletion;
 import de.superioz.moo.api.command.tabcomplete.TabCompletor;
 import de.superioz.moo.api.common.PlayerInfo;
 import de.superioz.moo.api.common.RunAsynchronous;
-import de.superioz.moo.api.common.punishment.BanSubType;
+import de.superioz.moo.api.common.punishment.BanCategory;
 import de.superioz.moo.api.common.punishment.BanType;
 import de.superioz.moo.api.database.objects.Ban;
 import de.superioz.moo.api.database.objects.PlayerData;
@@ -64,7 +64,7 @@ public class PunishInfoCommand {
             // values for formatting
             long current = System.currentTimeMillis();
             String start = TimeUtil.getFormat(currentBan.start);
-            BanSubType subType = currentBan.getSubType();
+            BanCategory subType = currentBan.getSubType();
             String typeColor = subType.getBanType() == BanType.GLOBAL ? "&c" : "&9";
             String end = TimeUtil.getFormat(current + currentBan.duration);
 

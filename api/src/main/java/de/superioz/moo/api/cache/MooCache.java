@@ -3,7 +3,7 @@ package de.superioz.moo.api.cache;
 import de.superioz.moo.api.common.MooServer;
 import de.superioz.moo.api.database.objects.Group;
 import de.superioz.moo.api.database.objects.PlayerData;
-import de.superioz.moo.api.io.MooConfigType;
+import de.superioz.moo.api.config.MooConfigType;
 import lombok.Getter;
 import org.redisson.api.*;
 
@@ -26,7 +26,7 @@ public final class MooCache {
     // because we don't want to go cacheless and 3s cached is better than 0s D:
     // AND this is just for the default redis caches, so do not worry
     private static final LocalCachedMapOptions DEFAULT_OPTIONS = LocalCachedMapOptions.defaults()
-            .timeToLive(3, TimeUnit.SECONDS).maxIdle(3, TimeUnit.SECONDS);
+            .timeToLive(10, TimeUnit.SECONDS).maxIdle(10, TimeUnit.SECONDS);
     private static MooCache instance;
     private boolean initialized = false;
 

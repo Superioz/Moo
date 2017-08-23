@@ -1,0 +1,33 @@
+package de.superioz.moo.cloud.listeners.packet;
+
+import de.superioz.moo.api.config.MooConfigType;
+import de.superioz.moo.cloud.Cloud;
+import de.superioz.moo.protocol.packet.PacketAdapter;
+import de.superioz.moo.protocol.packet.PacketHandler;
+import de.superioz.moo.protocol.packets.PacketConfig;
+import de.superioz.moo.protocol.packets.PacketRespond;
+
+/**
+ * This class listens on the config packet which edits something from the config
+ */
+public class PacketConfigListener implements PacketAdapter {
+
+    @PacketHandler
+    public void onConfig(PacketConfig packet) {
+        MooConfigType type = packet.type;
+        String meta = packet.meta;
+
+        // set data into config
+        Cloud.getInstance().getMooConfig().set(type, meta);
+
+        // respond to the packet
+        // after the con
+        packet.respond(new PacketRespond(true));
+        /*if(result) {
+            // the packet config is only for trigger an event, so
+            // that the redis cache doesn't need to be checked every x seconds
+            PacketMessenger.message(packet.deepCopy(), ClientType.PROXY);
+        }*/
+    }
+
+}

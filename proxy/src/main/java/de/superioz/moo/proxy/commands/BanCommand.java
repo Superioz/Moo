@@ -9,8 +9,8 @@ import de.superioz.moo.api.command.param.ParamSet;
 import de.superioz.moo.api.command.tabcomplete.TabCompletion;
 import de.superioz.moo.api.command.tabcomplete.TabCompletor;
 import de.superioz.moo.api.common.RunAsynchronous;
-import de.superioz.moo.api.common.punishment.BanReason;
 import de.superioz.moo.api.common.punishment.BanSubType;
+import de.superioz.moo.api.common.punishment.BanCategory;
 import de.superioz.moo.api.common.punishment.BanType;
 import de.superioz.moo.api.common.punishment.Punishmental;
 import de.superioz.moo.api.io.LanguageManager;
@@ -44,7 +44,7 @@ public class BanCommand {
                         StringUtil.getListToString(Punishmental.getInstance().getBanReasons()
                                         .stream().filter(banReason -> banReason.getType() == BanType.GLOBAL)
                                         .collect(Collectors.toList()),
-                                ", ", BanReason::getName))
+                                ", ", BanSubType::getName))
         ));
 
         // time unit
@@ -79,7 +79,7 @@ public class BanCommand {
 
         // list the ban reason
         // if null = rip (or invalid ban reason)
-        BanReason banReason = Punishmental.getInstance().getBanReason(args.get(1));
+        BanSubType banReason = Punishmental.getInstance().getBanReason(args.get(1));
         context.invalidArgument(banReason == null || banReason.getType() == BanType.CHAT,
                 LanguageManager.get("ban-invalid-reason", args.get(1)));
 
@@ -105,7 +105,7 @@ public class BanCommand {
 
         // list the ban reason
         // if null = rip (or invalid ban reason)
-        BanReason banReason = Punishmental.getInstance().getBanReason(args.get(1));
+        BanSubType banReason = Punishmental.getInstance().getBanReason(args.get(1));
         context.invalidArgument(banReason == null || banReason.getType() == BanType.CHAT,
                 LanguageManager.get("ban-invalid-reason", args.get(1)));
 
@@ -135,7 +135,7 @@ public class BanCommand {
      * @param duration   The duration (or null for automatic)
      */
     private void executeBan(CommandContext<CommandSender> context,
-                            String target, BanSubType banSubType, String reason, Long duration) {
+                            String target, BanCategory banSubType, String reason, Long duration) {
         context.sendMessage(LanguageManager.get("ban-load"));
         ResponseStatus status = MooQueries.getInstance().ban(
                 context.isConsole() ? null : ((ProxiedPlayer) context.getCommandSender()).getUniqueId(),

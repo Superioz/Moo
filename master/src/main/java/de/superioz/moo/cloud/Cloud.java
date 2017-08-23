@@ -2,6 +2,7 @@ package de.superioz.moo.cloud;
 
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import de.superioz.moo.api.cache.MooCache;
+import de.superioz.moo.api.config.MooConfig;
 import de.superioz.moo.api.console.CommandTerminal;
 import de.superioz.moo.api.database.DatabaseCollection;
 import de.superioz.moo.api.database.DatabaseConnection;
@@ -20,6 +21,7 @@ import de.superioz.moo.protocol.server.MooProxy;
 import de.superioz.moo.protocol.server.NetworkServer;
 import jline.console.ConsoleReader;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.nio.file.Paths;
 import java.util.concurrent.ExecutorService;
@@ -37,6 +39,8 @@ public class Cloud implements EventListener {
             new ThreadFactoryBuilder().setNameFormat("cloud-pool-%d").build());
     private ConsoleReader reader;
     private MooProxy mooProxy;
+    @Setter
+    private MooConfig mooConfig;
     private CommandTerminal commandTerminal;
 
     private ModuleRegistry moduleRegistry;
@@ -57,7 +61,6 @@ public class Cloud implements EventListener {
      */
     public static void main(String[] args) {
         Cloud cloud = new Cloud();
-
         cloud.start();
     }
 

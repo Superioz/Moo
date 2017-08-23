@@ -1,4 +1,4 @@
-package de.superioz.moo.cloud.listeners;
+package de.superioz.moo.cloud.listeners.player;
 
 import de.superioz.moo.api.cache.MooCache;
 import de.superioz.moo.api.database.DbModifier;
@@ -7,7 +7,7 @@ import de.superioz.moo.api.database.objects.PlayerData;
 import de.superioz.moo.api.event.EventHandler;
 import de.superioz.moo.api.event.EventListener;
 import de.superioz.moo.api.event.EventPriority;
-import de.superioz.moo.api.io.MooConfigType;
+import de.superioz.moo.api.config.MooConfigType;
 import de.superioz.moo.cloud.Cloud;
 import de.superioz.moo.cloud.database.DatabaseCollections;
 import de.superioz.moo.cloud.events.MooPlayerLeftProxyEvent;

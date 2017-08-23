@@ -6,7 +6,7 @@ import de.superioz.moo.api.database.objects.Ban;
 import de.superioz.moo.api.database.objects.Group;
 import de.superioz.moo.api.database.objects.PlayerData;
 import de.superioz.moo.api.io.LanguageManager;
-import de.superioz.moo.api.io.MooConfigType;
+import de.superioz.moo.api.config.MooConfigType;
 import de.superioz.moo.client.Moo;
 import de.superioz.moo.client.common.MooQueries;
 import de.superioz.moo.protocol.exception.MooOutputException;

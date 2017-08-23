@@ -1,4 +1,4 @@
-package de.superioz.moo.cloud.listeners;
+package de.superioz.moo.cloud.listeners.player;
 
 import de.superioz.moo.api.cache.MooCache;
 import de.superioz.moo.api.database.DatabaseType;

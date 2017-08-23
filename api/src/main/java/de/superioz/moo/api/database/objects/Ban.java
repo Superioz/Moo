@@ -4,7 +4,7 @@ import de.superioz.moo.api.util.SimpleSerializable;
 import de.superioz.moo.api.utils.TimeUtil;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
-import de.superioz.moo.api.common.punishment.BanSubType;
+import de.superioz.moo.api.common.punishment.BanCategory;
 import de.superioz.moo.api.common.punishment.Punishmental;
 import de.superioz.moo.api.database.object.DbKey;
 
@@ -40,7 +40,7 @@ public class Ban extends SimpleSerializable {
     public Long duration;
 
     /**
-     * Id of the {@link BanSubType}
+     * Id of the {@link BanCategory}
      */
     @DbKey
     public Integer subTypeId;
@@ -59,9 +59,9 @@ public class Ban extends SimpleSerializable {
     @DbKey
     public Integer banPoints;
 
-    private BanSubType subType;
+    private BanCategory subType;
 
-    public Ban(UUID by, BanSubType subType, String reason) {
+    public Ban(UUID by, BanCategory subType, String reason) {
         this.by = by;
         this.subTypeId = subType.getId();
         this.subType = subType;
@@ -69,7 +69,7 @@ public class Ban extends SimpleSerializable {
         this.subType = subType;
     }
 
-    public Ban(UUID by, BanSubType subType, String reason, long duration) {
+    public Ban(UUID by, BanCategory subType, String reason, long duration) {
         this(by, subType, reason);
         this.duration = duration;
     }
@@ -112,7 +112,7 @@ public class Ban extends SimpleSerializable {
      *
      * @return The object
      */
-    public BanSubType getSubType() {
+    public BanCategory getSubType() {
         if(subType != null) return subType;
         return (subType = Punishmental.getInstance().getSubType(subTypeId));
     }

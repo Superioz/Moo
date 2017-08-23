@@ -1,6 +1,6 @@
 package de.superioz.moo.protocol.packets;
 
-import de.superioz.moo.api.io.MooConfigType;
+import de.superioz.moo.api.config.MooConfigType;
 import de.superioz.moo.protocol.packet.AbstractPacket;
 import de.superioz.moo.protocol.packet.PacketBuffer;
 import lombok.AllArgsConstructor;

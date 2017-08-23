@@ -47,7 +47,7 @@ public final class Queries {
     private int limit = -1;
     private DatabaseModifyType modifyType;
 
-    private int countMode = -1;
+    private PacketDatabaseCount.CountType countType = null;
 
     /**
      * Queries given packet with firing the {@link QueryEvent}
@@ -169,7 +169,7 @@ public final class Queries {
      * @throws MooInputException If the response isn't OK
      */
     public static <E> List<E> list(DatabaseType type, Class<E> eClass) throws MooInputException {
-        Response response = Queries.newInstance(type).count(true).execute();
+        Response response = Queries.newInstance(type).count(PacketDatabaseCount.CountType.LIST).execute();
         if(response == null) {
             return null;
         }
@@ -186,7 +186,7 @@ public final class Queries {
      * @throws MooInputException If the response isn't OK
      */
     public static <E> List<E> list(String databaseName, Class<E> eClass) throws MooInputException {
-        Response response = Queries.newInstance(databaseName).count(true).execute();
+        Response response = Queries.newInstance(databaseName).count(PacketDatabaseCount.CountType.LIST).execute();
         if(response == null) {
             return null;
         }
@@ -319,11 +319,11 @@ public final class Queries {
     /**
      * Determines that this query is for counting the database's entries
      *
-     * @param asList As list would return a list of objects otherwise only a number
+     * @param countType As list would return a list of objects otherwise only a number
      * @return This
      */
-    public Queries count(boolean asList) {
-        this.countMode = asList ? 1 : 0;
+    public Queries count(PacketDatabaseCount.CountType countType) {
+        this.countType = countType;
         return this;
     }
 
@@ -543,7 +543,7 @@ public final class Queries {
         QueryEvent event = Queries.queryPacket(toPacket());
 
         if(event.isCancelled()) {
-            if(event.getCancelReason() != null){
+            if(event.getCancelReason() != null) {
                 try {
                     throw event.getCancelReason();
                 }
@@ -565,8 +565,8 @@ public final class Queries {
      * @return The packet
      */
     public AbstractPacket toPacket() {
-        if(countMode != -1) {
-            return new PacketDatabaseCount(databaseType, countMode, limit);
+        if(countType != null) {
+            return new PacketDatabaseCount(databaseType, countType, limit);
         }
 
         boolean info = modifyType == null;

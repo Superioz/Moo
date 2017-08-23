@@ -1,4 +1,4 @@
-package de.superioz.moo.cloud.listeners;
+package de.superioz.moo.cloud.listeners.packet;
 
 import de.superioz.moo.api.database.objects.PlayerData;
 import de.superioz.moo.api.reaction.Reaction;
@@ -13,6 +13,9 @@ import de.superioz.moo.protocol.packets.PacketPlayerMessage;
 
 import java.util.UUID;
 
+/**
+ * This class listens to the PacketPlayerMessage (sending a player a private/global message)
+ */
 public class PacketPlayerMessageListener implements PacketAdapter {
 
     @PacketHandler
@@ -30,7 +33,7 @@ public class PacketPlayerMessageListener implements PacketAdapter {
             PlayerData player = Validation.UNIQUEID.matches(id)
                     ? Cloud.getInstance().getMooProxy().getPlayer(UUID.fromString(id))
                     : Cloud.getInstance().getMooProxy().getPlayer(id);
-            if(player == null){
+            if(player == null) {
                 packet.respond(ResponseStatus.NOT_FOUND);
             }
 

@@ -229,7 +229,13 @@ public final class DatabaseConnection {
      * @param callback   The callback
      */
     public void update(MongoCollection<Document> collection, Bson filter, Document document, Consumer<Long> callback) {
-        this.runAsynchronous(() -> callback.accept(this.updateSync(collection, filter, document)));
+        this.runAsynchronous(() -> {
+            long l = this.updateSync(collection, filter, document);
+
+            if(callback != null) {
+                callback.accept(l);
+            }
+        });
     }
 
     public long updateSync(MongoCollection<Document> collection, Bson filter, Document document) {
@@ -252,7 +258,13 @@ public final class DatabaseConnection {
      * @param document   The document
      */
     public void upsert(MongoCollection<Document> collection, Bson filter, Document document, Consumer<Long> callback) {
-        this.runAsynchronous(() -> callback.accept(this.upsertSync(collection, filter, document)));
+        this.runAsynchronous(() -> {
+            long l = this.upsertSync(collection, filter, document);
+
+            if(callback != null) {
+                callback.accept(l);
+            }
+        });
     }
 
     public long upsertSync(MongoCollection<Document> collection, Bson filter, Document document) {
@@ -296,7 +308,13 @@ public final class DatabaseConnection {
      * @param callback     The callback
      */
     public void update(DatabaseType databaseType, Bson filter, Document document, Consumer<Long> callback) {
-        this.runAsynchronous(() -> callback.accept(this.updateSync(getCollection(databaseType.getName()), filter, document)));
+        this.runAsynchronous(() -> {
+            long l = this.updateSync(getCollection(databaseType.getName()), filter, document);
+
+            if(callback != null) {
+                callback.accept(l);
+            }
+        });
     }
 
     public long updateSync(DatabaseType databaseType, Bson filter, Document document) {
@@ -317,9 +335,16 @@ public final class DatabaseConnection {
      * @param databaseType The databaseType
      * @param filter       The filter
      * @param document     The document
+     * @param callback     The callback
      */
     public void upsert(DatabaseType databaseType, Bson filter, Document document, Consumer<Long> callback) {
-        this.runAsynchronous(() -> callback.accept(this.upsertSync(getCollection(databaseType.getName()), filter, document)));
+        this.runAsynchronous(() -> {
+            long l = this.upsertSync(getCollection(databaseType.getName()), filter, document);
+
+            if(callback != null) {
+                callback.accept(l);
+            }
+        });
     }
 
     public long upsertSync(DatabaseType databaseType, Bson filter, Document document) {

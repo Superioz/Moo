@@ -3,7 +3,7 @@ package de.superioz.moo.protocol.packets;
 import de.superioz.moo.protocol.packet.AbstractPacket;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import de.superioz.moo.api.common.punishment.BanSubType;
+import de.superioz.moo.api.common.punishment.BanCategory;
 import de.superioz.moo.api.database.objects.Ban;
 import de.superioz.moo.api.database.objects.PlayerData;
 import de.superioz.moo.protocol.packet.PacketBuffer;
@@ -28,17 +28,6 @@ public class PacketPlayerPunish extends AbstractPacket {
     }
 
     /**
-     * Constructor for a kick punishment
-     *
-     * @param executor The executor (null if console; uuid if player)
-     * @param target   The target
-     * @param message  The message
-     */
-    public PacketPlayerPunish(UUID executor, String target, String message) {
-        this(executor + "", target, Type.KICK, Collections.singletonList(message));
-    }
-
-    /**
      * Constructor for a ban punishment
      *
      * @param executor       The executor (null if console; uuid if player)
@@ -48,14 +37,14 @@ public class PacketPlayerPunish extends AbstractPacket {
      * @param banTempMessage The format of the temp ban message (temporary ban)
      * @param banPermMessage The format of the perm ban message (permanent ban)
      */
-    public PacketPlayerPunish(UUID executor, String target, BanSubType banSubType, String reason,
+    public PacketPlayerPunish(UUID executor, String target, BanCategory banSubType, String reason,
                               String banTempMessage, String banPermMessage) {
         this(executor + "", target, Type.BAN, Arrays.asList(
                 new Ban(executor, banSubType, reason).toString(), banTempMessage, banPermMessage)
         );
     }
 
-    public PacketPlayerPunish(UUID executor, String target, BanSubType banSubType, String reason,
+    public PacketPlayerPunish(UUID executor, String target, BanCategory banSubType, String reason,
                               long duration, String banTempMessage, String banPermMessage) {
         this(executor + "", target, Type.BAN, Arrays.asList(
                 new Ban(executor, banSubType, reason, duration).toString(), banTempMessage, banPermMessage)
@@ -84,7 +73,6 @@ public class PacketPlayerPunish extends AbstractPacket {
      */
     public enum Type {
 
-        KICK,
         BAN,
         UNKNOWN
 

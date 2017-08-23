@@ -2,7 +2,7 @@ package de.superioz.moo.client.common;
 
 import de.superioz.moo.api.cache.MooCache;
 import de.superioz.moo.api.common.PlayerInfo;
-import de.superioz.moo.api.common.punishment.BanSubType;
+import de.superioz.moo.api.common.punishment.BanCategory;
 import de.superioz.moo.api.database.*;
 import de.superioz.moo.api.database.objects.Ban;
 import de.superioz.moo.api.database.objects.Group;
@@ -335,14 +335,14 @@ public final class MooQueries {
      * @param permMessagePattern The message pattern for a perm ban
      * @return The respond
      */
-    public ResponseStatus ban(UUID executor, String target, BanSubType banSubType, String reason,
+    public ResponseStatus ban(UUID executor, String target, BanCategory banSubType, String reason,
                               String tempMessagePattern, String permMessagePattern) {
         return PacketMessenger.transferToResponse(
                 new PacketPlayerPunish(executor, target, banSubType, reason, tempMessagePattern, permMessagePattern)
         ).getStatus();
     }
 
-    public ResponseStatus ban(UUID executor, String target, BanSubType banSubType, String reason, Long duration,
+    public ResponseStatus ban(UUID executor, String target, BanCategory banSubType, String reason, Long duration,
                               String tempMessagePattern, String permMessagePattern) {
         return PacketMessenger.transferToResponse(
                 new PacketPlayerPunish(executor, target, banSubType, reason, duration, tempMessagePattern, permMessagePattern)

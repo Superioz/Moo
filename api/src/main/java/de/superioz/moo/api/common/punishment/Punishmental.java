@@ -2,7 +2,7 @@ package de.superioz.moo.api.common.punishment;
 
 import de.superioz.moo.api.cache.MooCache;
 import de.superioz.moo.api.collection.MultiMap;
-import de.superioz.moo.api.io.MooConfigType;
+import de.superioz.moo.api.config.MooConfigType;
 import de.superioz.moo.api.utils.CollectionUtil;
 
 import java.util.ArrayList;
@@ -24,7 +24,7 @@ public class Punishmental {
     /**
      * the map of ban types and the child reasons from the config
      */
-    private MultiMap<BanSubType, BanReason> banTypeMap = new MultiMap<>();
+    private MultiMap<BanCategory, BanSubType> banTypeMap = new MultiMap<>();
 
     /**
      * Initialises the {@link #banTypeMap} by using the given strings (Most likely are they from the cloud config)
@@ -39,7 +39,7 @@ public class Punishmental {
 
             // list ban sub types
             for(int i = 0; i < banSubTypes.size(); i++) {
-                BanSubType subType = new BanSubType(banSubTypes.get(i), i);
+                BanCategory subType = new BanCategory(banSubTypes.get(i), i);
                 if(subType.getName() != null) banTypeMap.add(subType);
             }
         }
@@ -49,7 +49,7 @@ public class Punishmental {
 
             // loop through ban reasons
             banReasons.forEach(s -> {
-                BanReason reason = new BanReason(s);
+                BanSubType reason = new BanSubType(s);
                 reason.init(banTypeMap);
                 if(reason.getBanSubTypeStr() != null && !banTypeMap.containsValue(reason)) {
                     banTypeMap.add(reason.getBanSubType(), reason);
@@ -64,8 +64,8 @@ public class Punishmental {
     public void init() {
         if(!MooCache.getInstance().isInitialized()) return;
         this.init(
-                (List<String>)MooCache.getInstance().getConfigMap().get(MooConfigType.PUNISHMENT_SUBTYPES.getKey()),
-                (List<String>)MooCache.getInstance().getConfigMap().get(MooConfigType.PUNISHMENT_REASONS.getKey())
+                (List<String>)MooCache.getInstance().getConfigMap().get(MooConfigType.PUNISHMENT_CATEGORIES.getKey()),
+                (List<String>)MooCache.getInstance().getConfigMap().get(MooConfigType.PUNISHMENT_SUBTYPES.getKey())
         );
     }
 
@@ -75,7 +75,7 @@ public class Punishmental {
      * @param i The index
      * @return The ban sub type
      */
-    public BanSubType getSubType(int i) {
+    public BanCategory getSubType(int i) {
         return CollectionUtil.getEntrySafely(new ArrayList<>(banTypeMap.keySet()), i, null);
     }
 
@@ -85,8 +85,8 @@ public class Punishmental {
      * @param s The name of the subtype
      * @return The ban subtype
      */
-    public BanSubType getSubType(String s) {
-        for(BanSubType type : banTypeMap.keySet()) {
+    public BanCategory getSubType(String s) {
+        for(BanCategory type : banTypeMap.keySet()) {
             if(s != null && type.getName().equalsIgnoreCase(s)) return type;
         }
         return null;
@@ -98,11 +98,11 @@ public class Punishmental {
      * @param s The string
      * @return The ban reason object
      */
-    public BanReason getBanReason(String s) {
+    public BanSubType getBanReason(String s) {
         if(s == null) return null;
 
-        for(Set<BanReason> reasons : banTypeMap.values()) {
-            for(BanReason reason : reasons) {
+        for(Set<BanSubType> reasons : banTypeMap.values()) {
+            for(BanSubType reason : reasons) {
                 if(reason.getName().equalsIgnoreCase(s)) {
                     return reason;
                 }
@@ -111,8 +111,8 @@ public class Punishmental {
         return null;
     }
 
-    public List<BanReason> getBanReasons() {
-        List<BanReason> reasons = new ArrayList<>();
+    public List<BanSubType> getBanReasons() {
+        List<BanSubType> reasons = new ArrayList<>();
         banTypeMap.values().forEach(reasons::addAll);
         return reasons;
     }
@@ -162,7 +162,7 @@ public class Punishmental {
         return (int) (unit.toHours(val) / 6);
     }
 
-    public static int getBanPoints(BanSubType reason) {
+    public static int getBanPoints(BanCategory reason) {
         return getBanPoints(reason.getDuration(), reason.getTimeUnit());
     }
 
@@ -173,7 +173,7 @@ public class Punishmental {
      * @param reason       The ban reason
      * @return The ban points
      */
-    public static int calculateBanPoints(int oldBanPoints, BanSubType reason) {
+    public static int calculateBanPoints(int oldBanPoints, BanCategory reason) {
         int banPoints = getBanPoints(reason);
         int sumPoints = oldBanPoints + banPoints;
         int newPoints = oldBanPoints == 0 ? sumPoints : sumPoints + (sumPoints * (banPoints / (MAX_POINTS / 100)) / 100);

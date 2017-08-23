@@ -196,6 +196,10 @@ public class DbQuery {
         return this.add(new DbQueryNode(k, type, key.getValidationIds(), object));
     }
 
+    public DbQuery add(String key, DbQueryNode.Type type, Object object) {
+        return this.add(new DbQueryNode(key, type, new ArrayList<>(), object));
+    }
+
     /**
      * Similar to {@link #add(DbModifier, DbQueryNode.Type, Object)} but without passing type over
      *
@@ -204,6 +208,10 @@ public class DbQuery {
      * @return This
      */
     public DbQuery equate(DbModifier key, Object value) {
+        return add(key, DbQueryNode.Type.EQUATE, value);
+    }
+
+    public DbQuery equate(String key, Object value) {
         return add(key, DbQueryNode.Type.EQUATE, value);
     }
 
@@ -218,6 +226,10 @@ public class DbQuery {
         return add(key, DbQueryNode.Type.APPEND, value);
     }
 
+    public DbQuery append(String key, Object value) {
+        return add(key, DbQueryNode.Type.APPEND, value);
+    }
+
     /**
      * Similar to {@link #add(DbModifier, DbQueryNode.Type, Object)} but without passing type over
      *
@@ -226,6 +238,10 @@ public class DbQuery {
      * @return This
      */
     public DbQuery subtract(DbModifier key, Object value) {
+        return add(key, DbQueryNode.Type.SUBTRACT, value);
+    }
+
+    public DbQuery subtract(String key, Object value) {
         return add(key, DbQueryNode.Type.SUBTRACT, value);
     }
 

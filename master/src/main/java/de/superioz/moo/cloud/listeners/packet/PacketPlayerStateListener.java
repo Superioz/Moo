@@ -1,4 +1,4 @@
-package de.superioz.moo.cloud.listeners;
+package de.superioz.moo.cloud.listeners.packet;
 
 import de.superioz.moo.api.database.objects.PlayerData;
 import de.superioz.moo.api.event.EventExecutor;

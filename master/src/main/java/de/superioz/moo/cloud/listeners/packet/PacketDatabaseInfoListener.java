@@ -1,4 +1,4 @@
-package de.superioz.moo.cloud.listeners;
+package de.superioz.moo.cloud.listeners.packet;
 
 import com.mongodb.client.MongoCollection;
 import de.superioz.moo.api.database.DatabaseCollection;

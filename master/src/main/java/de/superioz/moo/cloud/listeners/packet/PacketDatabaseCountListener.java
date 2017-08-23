@@ -1,9 +1,10 @@
-package de.superioz.moo.cloud.listeners;
+package de.superioz.moo.cloud.listeners.packet;
 
 import com.mongodb.client.FindIterable;
 import de.superioz.moo.api.database.DatabaseCollection;
 import de.superioz.moo.api.database.DatabaseType;
 import de.superioz.moo.api.reaction.Reaction;
+import de.superioz.moo.api.reaction.Reactor;
 import de.superioz.moo.api.utils.StringUtil;
 import de.superioz.moo.cloud.Cloud;
 import de.superioz.moo.protocol.common.ResponseStatus;
@@ -16,6 +17,9 @@ import org.bson.Document;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * This class listens to a DatabaseCount which counts the entries of a database collection
+ */
 public class PacketDatabaseCountListener implements PacketAdapter {
 
     @PacketHandler
@@ -26,7 +30,7 @@ public class PacketDatabaseCountListener implements PacketAdapter {
             return;
         }
         DatabaseType type = packet.databaseType;
-        int mode = packet.mode;
+        PacketDatabaseCount.CountType mode = packet.countType;
 
         // gets the database collection and if the database collection is not found
         // throw a critically response status
@@ -37,22 +41,27 @@ public class PacketDatabaseCountListener implements PacketAdapter {
         }
 
         // just count the entries and return an integer
-        boolean countMode = mode == 0;
-        Reaction.react(countMode, () -> {
-            packet.respond(new PacketRespond(type.name().toLowerCase(), module.count(null) + "", ResponseStatus.OK));
+        Reaction.react(mode, new Reactor<PacketDatabaseCount.CountType>(PacketDatabaseCount.CountType.NUMBER) {
+            @Override
+            public void invoke() {
+                packet.respond(new PacketRespond(type.name().toLowerCase(), module.count(null) + "", ResponseStatus.OK));
+            }
         });
 
         // list entries from collection
-        Reaction.react(!countMode, () -> {
-            FindIterable<Document> documents = module.fetch(null, packet.limit);
-            List<Object> l = new ArrayList<>();
+        Reaction.react(mode, new Reactor<PacketDatabaseCount.CountType>(PacketDatabaseCount.CountType.LIST) {
+            @Override
+            public void invoke() {
+                FindIterable<Document> documents = module.fetch(null, packet.limit);
+                List<Object> l = new ArrayList<>();
 
-            for(Document d : documents) {
-                Object o = module.convert(d);
-                l.add(o);
+                for(Document d : documents) {
+                    Object o = module.convert(d);
+                    l.add(o);
+                }
+
+                packet.respond(new PacketRespond(type.name().toLowerCase(), StringUtil.toStringList(l), ResponseStatus.OK));
             }
-
-            packet.respond(new PacketRespond(type.name().toLowerCase(), StringUtil.toStringList(l), ResponseStatus.OK));
         });
     }
 

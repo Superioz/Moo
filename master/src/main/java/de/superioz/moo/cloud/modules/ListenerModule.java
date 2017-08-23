@@ -4,6 +4,8 @@ import de.superioz.moo.api.event.EventExecutor;
 import de.superioz.moo.api.module.Module;
 import de.superioz.moo.cloud.Cloud;
 import de.superioz.moo.cloud.listeners.*;
+import de.superioz.moo.cloud.listeners.packet.*;
+import de.superioz.moo.cloud.listeners.player.*;
 import de.superioz.moo.protocol.packet.PacketAdapting;
 import lombok.Getter;
 
@@ -44,7 +46,7 @@ public class ListenerModule extends Module {
                 new PacketConsoleInputListener(),
                 // database stuff
                 new PacketDatabaseInfoListener(),
-                new PacketDatabaseModifyListener(),
+                new PacketDatabaseModifyListener(), new PacketDatabaseModifyNativeListener(),
                 new PacketDatabaseCountListener(),
                 // player stuff
                 new PacketPlayerStateListener(),

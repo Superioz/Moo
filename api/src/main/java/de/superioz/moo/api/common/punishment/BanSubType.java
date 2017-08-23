@@ -1,49 +1,55 @@
 package de.superioz.moo.api.common.punishment;
 
-import de.superioz.moo.api.util.Validation;
-import de.superioz.moo.api.utils.TimeUtil;
-import javafx.util.Pair;
+import de.superioz.moo.api.collection.MultiMap;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
 
 @Getter
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 public class BanSubType {
 
-    public static final Pattern REGEX = Pattern.compile("[a-z\\-]*:(" + Validation.TIME.getRawRegex() + ")(;[a-z]*)?");
-
-    private String rawString;
+    public static final Pattern REGEX = Pattern.compile("[a-z\\-]*(:[a-z\\-]*)");
 
     private String name;
-    private int duration;
-    private TimeUnit timeUnit;
-    private BanType banType;
+    private String banSubTypeStr;
+    private BanCategory banSubType;
 
-    private int id;
-
-    public BanSubType(String s, int id) {
+    public BanSubType(String s) {
         if(!REGEX.matcher(s).matches()) return;
-        this.rawString = s;
-        this.id = id;
 
         String[] split = s.split(":");
         this.name = split[0];
-        String[] split0 = split[1].split(";");
+        this.banSubTypeStr = split[1];
+    }
 
-        // list duration
-        Pair<Integer, TimeUnit> timeDuration = TimeUtil.getTime(split0[0]);
-        this.duration = timeDuration.getKey();
-        this.timeUnit = timeDuration.getValue();
+    /**
+     * Initialises the ban reason by checking for the ban sub type
+     * inside the map and putting this inside there
+     *
+     * @param banTypes The bantypes map
+     */
+    public void init(MultiMap<BanCategory, BanSubType> banTypes) {
+        if(banSubTypeStr == null) return;
+        for(BanCategory type : banTypes.keySet()) {
+            if(banSubTypeStr.equalsIgnoreCase(type.getName())) {
+                this.banSubType = type;
+                banTypes.add(type, this);
+                break;
+            }
+        }
+    }
 
-        // banType
-        this.banType = split0.length > 1
-                ? split0[1].equalsIgnoreCase(BanType.CHAT.name())
-                ? BanType.CHAT : BanType.GLOBAL : BanType.GLOBAL;
+    /**
+     * Gets the ban type of the reason
+     *
+     * @return The type object
+     */
+    public BanType getType() {
+        return getBanSubType().getBanType();
     }
 
 }

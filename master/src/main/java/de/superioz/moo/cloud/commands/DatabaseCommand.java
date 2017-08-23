@@ -22,6 +22,7 @@ import de.superioz.moo.api.utils.ReflectionUtil;
 import de.superioz.moo.api.utils.StringUtil;
 import de.superioz.moo.protocol.common.Queries;
 import de.superioz.moo.protocol.common.Response;
+import de.superioz.moo.protocol.packets.PacketDatabaseCount;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -198,7 +199,7 @@ public class DatabaseCommand {
         DatabaseType type = args.getEnum(0, DatabaseType.class);
         if(type == null) queries.scope(args.get(0));
         else queries.scope(type);
-        queries.count(false);
+        queries.count(PacketDatabaseCount.CountType.NUMBER);
 
         context.sendMessage(StringUtil.format("Retrieve database's entry count of {0} ...", queries.getDatabase()));
 
@@ -219,7 +220,7 @@ public class DatabaseCommand {
         DatabaseType type = args.getEnum(0, DatabaseType.class);
         if(type == null) queries.scope(args.get(0));
         else queries.scope(type);
-        queries.count(true);
+        queries.count(PacketDatabaseCount.CountType.LIST);
         queries.limit(args.hasFlag("l") ? args.getFlag("l").getInt(0, -1) : -1);
 
         context.sendMessage(StringUtil.format("List entries of {0} ...", queries.getDatabase()));

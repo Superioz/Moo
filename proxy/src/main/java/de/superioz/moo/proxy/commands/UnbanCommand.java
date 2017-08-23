@@ -8,7 +8,7 @@ import de.superioz.moo.api.command.param.ParamSet;
 import de.superioz.moo.api.command.tabcomplete.TabCompletion;
 import de.superioz.moo.api.command.tabcomplete.TabCompletor;
 import de.superioz.moo.api.common.RunAsynchronous;
-import de.superioz.moo.api.common.punishment.BanSubType;
+import de.superioz.moo.api.common.punishment.BanCategory;
 import de.superioz.moo.api.common.punishment.BanType;
 import de.superioz.moo.api.database.objects.Ban;
 import de.superioz.moo.api.database.objects.PlayerData;
@@ -62,7 +62,7 @@ public class UnbanCommand {
         if(BungeeTeamChat.getInstance().canTeamchat(context.getCommandSender())) {
             String target = BungeeTeamChat.getInstance().getColor(ban.banned) + playerName;
 
-            BanSubType banSubType = ban.getSubType();
+            BanCategory banSubType = ban.getSubType();
             String executor = BungeeTeamChat.getInstance().getColoredName(context.getCommandSender());
             String typeColor = banSubType.getBanType() == BanType.GLOBAL ? "&c" : "&9";
             String start = TimeUtil.getFormat(ban.start);

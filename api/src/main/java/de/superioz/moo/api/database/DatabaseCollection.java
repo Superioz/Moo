@@ -63,7 +63,8 @@ public abstract class DatabaseCollection<K, E> {
     }
 
     /**
-     * Get data from a packets
+     * Get data for packetmodify and packetinfo, where eventually the playername needs to be converted
+     * to a uuid. This is the only purpose: Getting information out of the database + converting the playername (if exists)
      *
      * @param playerDataCache The playerData Cache
      * @param filter          The filter
@@ -223,7 +224,7 @@ public abstract class DatabaseCollection<K, E> {
         return getCache().get(key);
     }
 
-    public E get(DbFilter query){
+    public E get(DbFilter query) {
         List<E> l = list(query);
         if(l == null || l.isEmpty()) return null;
         return l.get(0);

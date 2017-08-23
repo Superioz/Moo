@@ -48,7 +48,10 @@ public enum DbModifier {
     PLAYER_JOINED(10, PlayerData.class),
     PLAYER_EXTRA_PERMS(11, PlayerData.class, Validation.PERMISSION),
     PLAYER_COINS(12, PlayerData.class),
-    PLAYER_BANPOINTS(13, PlayerData.class, Validation.INTEGER);
+    PLAYER_BANPOINTS(13, PlayerData.class, Validation.INTEGER),
+
+    // config (no specific class)
+    CONFIG_CATEGORY("category");
 
     /**
      * The class who inherits the fields represented by the enum
@@ -60,6 +63,11 @@ public enum DbModifier {
      * The id of the field
      */
     private int fieldId;
+
+    /**
+     * The name of the field
+     */
+    private String fieldName;
 
     /**
      * Ids of the {@link Validation}'s for the value inside the field
@@ -76,15 +84,21 @@ public enum DbModifier {
         }
     }
 
+    DbModifier(String fieldName) {
+        this.fieldName = fieldName;
+    }
+
     /**
      * Gets the name of the field hidden behind this modifier field
      *
      * @return The name
      */
     public String getFieldName() {
+        if(fieldName != null) return fieldName;
+
         Field field = ReflectionUtil.getFieldFromId(getId(), getWrappedClass());
         if(field == null) return "";
-        return field.getName();
+        return (fieldName = field.getName());
     }
 
     /**

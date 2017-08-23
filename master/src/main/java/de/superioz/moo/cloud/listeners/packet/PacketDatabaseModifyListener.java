@@ -1,9 +1,10 @@
-package de.superioz.moo.cloud.listeners;
+package de.superioz.moo.cloud.listeners.packet;
 
-import com.mongodb.client.MongoCollection;
 import de.superioz.moo.api.cache.MooCache;
 import de.superioz.moo.api.collection.MultiMap;
-import de.superioz.moo.api.database.*;
+import de.superioz.moo.api.database.DatabaseCollection;
+import de.superioz.moo.api.database.DatabaseModifyType;
+import de.superioz.moo.api.database.DatabaseType;
 import de.superioz.moo.api.database.filter.DbFilter;
 import de.superioz.moo.api.database.filter.DbFilterNode;
 import de.superioz.moo.api.database.objects.Group;
@@ -23,15 +24,17 @@ import de.superioz.moo.protocol.packet.AbstractPacket;
 import de.superioz.moo.protocol.packet.PacketAdapter;
 import de.superioz.moo.protocol.packet.PacketHandler;
 import de.superioz.moo.protocol.packets.PacketDatabaseModify;
-import de.superioz.moo.protocol.packets.PacketDatabaseModifyNative;
 import de.superioz.moo.protocol.packets.PacketRequest;
-import org.bson.Document;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
+/**
+ * This class listens to PacketDatabaseModify
+ *
+ * @see PacketDatabaseModify
+ */
 public class PacketDatabaseModifyListener implements PacketAdapter {
 
     @PacketHandler
@@ -57,8 +60,6 @@ public class PacketDatabaseModifyListener implements PacketAdapter {
 
         // list collection
         DatabaseCollection module = Cloud.getInstance().getDatabaseCollection(dbType);
-        Cloud.getInstance().getLogger().debug("Attempting to modify " + dbType.name() + " modules .. (" + type.name() + ")." +
-                " With filter (as " + filter + ") and query (as " + updates + ")");
 
         // primary key of the filter
         DbFilterNode firstNode = realFilter.getKey(0, module.getWrappedClass());
@@ -66,7 +67,6 @@ public class PacketDatabaseModifyListener implements PacketAdapter {
 
         // list data from filtering
         List<Object> data = module.getFilteredData(DatabaseCollections.PLAYER, filter, packet.queried, packet.limit);
-        Cloud.getInstance().getLogger().debug("Found data(" + data.size() + ") to " + type.name() + ": " + data);
 
         // for informing minecraft
         FinalValue<Boolean> result = new FinalValue<>(true);
@@ -138,122 +138,51 @@ public class PacketDatabaseModifyListener implements PacketAdapter {
             // the id of every data found
             // and the result value
             Object id;
-            boolean result0 = true;
+            boolean subResult = true;
 
             // loop through data to modify
-            for(Object o : data) {
-                if(o == null) continue;
-                id = ReflectionUtil.getFieldObject(0, o);
-                MongoQuery query = updates.toMongoQuery(o);
+            for(Object subData : data) {
+                if(subData == null) continue;
+
+                // get primary key of subdata
+                id = ReflectionUtil.getFieldObject(0, subData);
+                MongoQuery query = updates.toMongoQuery(subData);
 
                 // apply updates to raw object
-                updates.apply(o, false, false);
+                updates.apply(subData, false, false);
 
                 if(updates.has(0)) {
                     // he want to edit the primary key
                     // set to the module with id and modified object / query
-                    result0 = module.set(id, updates.get(0).getValue(), o, query.build(), true);
+                    subResult = module.set(id, updates.get(0).getValue(), subData, query.build(), true);
 
-                    updatedData.add(DatabaseModifyType.MODIFY_PRIMARY, StringUtil.join(id, o));
+                    updatedData.add(DatabaseModifyType.MODIFY_PRIMARY, StringUtil.join(id, subData));
                 }
                 else {
                     // set to the module with id and modified object / query
-                    result0 = module.set(id, o, query.build(), true);
+                    subResult = module.set(id, subData, query.build(), true);
 
                     // add to updated data
-                    updatedData.add(DatabaseModifyType.MODIFY, o);
+                    updatedData.add(DatabaseModifyType.MODIFY, subData);
                 }
             }
 
             // informs the minecraft servers about the update
-            result.set(result0);
+            result.set(subResult);
         });
 
-        // informs the minecraft servers about the update
+        // updates the REDIS CACHE data
         updateData(packet, updatedData, dbType, result.get());
     }
 
-    @PacketHandler
-    public void onDatabaseModifyRaw(PacketDatabaseModifyNative packet) {
-        // checks if the database is connected
-        if(!Cloud.getInstance().getDatabaseConnection().isConnected()) {
-            packet.respond(ResponseStatus.NO_DATABASE);
-            return;
-        }
-
-        // list values
-        String database = packet.databaseName;
-        DbFilter filter = packet.filter;
-        DatabaseModifyType type = packet.type;
-        DbQuery updates = packet.updates;
-        DatabaseConnection databaseConnection = Cloud.getInstance().getDatabaseConnection();
-
-        // list collection
-        MongoCollection<Document> collection = databaseConnection.getCollection(database);
-        if(collection == null) {
-            packet.respond(ResponseStatus.BAD_REQUEST);
-            return;
-        }
-
-        Cloud.getInstance().getLogger().debug("Attempting to modify " + database + " database .. (" + type.name() + ")." +
-                " With filter (as " + filter + ") and query (as " + updates + ")");
-
-        // list to-edit data
-        List<Document> data = databaseConnection.findSync(collection, filter.toBson(), packet.limit).into(new ArrayList<>());
-
-        Cloud.getInstance().getLogger().debug("Found documents(" + data.size() + ") to " + type.name() + ".");
-
-        // create some data
-        Reaction.react(type, DatabaseModifyType.CREATE, () -> {
-            // data already exist
-            if(data.isEmpty()) {
-                packet.respond(ResponseStatus.CONFLICT);
-                return;
-            }
-
-            databaseConnection.insert(collection, updates.toMongoQuery().build());
-        });
-
-        // delete found data
-        Reaction.react(type, DatabaseModifyType.DELETE, () -> {
-            // data doesn't exist
-            if(!data.isEmpty()) {
-                packet.respond(ResponseStatus.NOT_FOUND);
-                return;
-            }
-
-            long l = databaseConnection.deleteManySync(collection, filter.toBson());
-            if(l == 0) {
-                // couldn't delete data
-                packet.respond(ResponseStatus.NOK);
-            }
-        });
-
-        // modify found data
-        Reaction.react(type, DatabaseModifyType.MODIFY, () -> {
-            // data doesn't exist
-            if(!data.isEmpty()) {
-                packet.respond(ResponseStatus.NOT_FOUND);
-                return;
-            }
-
-            long l = databaseConnection.updateManySync(collection, filter.toBson(), updates.toMongoQuery().build());
-            if(l == 0) {
-                // couldn't update data
-                packet.respond(ResponseStatus.NOK);
-            }
-        });
-        packet.respond(ResponseStatus.OK);
-    }
-
     /**
-     * Informs all server about the update
-     * The modType (0 = create; 1 = delete; 2 = edit; 3 = edit primkey)
+     * Gets every updated data and informs the cache about the updated-
      *
      * @param request       The packets (request)
      * @param type          The type (Group, Player, ..)
      * @param data          The data (e.g. the key or the new data)
      * @param processResult Result (success or not?)
+     * @see #updateData(DatabaseModifyType, String, DatabaseType)
      */
     private void updateData(AbstractPacket request, MultiMap<DatabaseModifyType, Object> data, DatabaseType type, boolean processResult) {
         // update info
@@ -273,7 +202,8 @@ public class PacketDatabaseModifyListener implements PacketAdapter {
     }
 
     /**
-     * Updates the data inside the cache
+     * Similar to {@link #updateData(AbstractPacket, MultiMap, DatabaseType, boolean)} but with only subdata not a whole set
+     * of updates.
      *
      * @param modifyType The modify type
      * @param data       The data

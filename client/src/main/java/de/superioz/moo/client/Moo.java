@@ -8,7 +8,7 @@ import de.superioz.moo.api.event.EventExecutor;
 import de.superioz.moo.api.event.EventListener;
 import de.superioz.moo.api.exceptions.InvalidConfigException;
 import de.superioz.moo.api.io.JsonConfig;
-import de.superioz.moo.api.io.MooConfigType;
+import de.superioz.moo.api.config.MooConfigType;
 import de.superioz.moo.client.common.MooQueries;
 import de.superioz.moo.client.exception.MooInitializationException;
 import de.superioz.moo.client.listeners.QueryClientListener;

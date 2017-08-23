@@ -1,4 +1,4 @@
-package de.superioz.moo.cloud.listeners;
+package de.superioz.moo.cloud.listeners.packet;
 
 import de.superioz.moo.api.common.MooServer;
 import de.superioz.moo.cloud.Cloud;
