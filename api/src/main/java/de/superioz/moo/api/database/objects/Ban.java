@@ -5,7 +5,7 @@ import de.superioz.moo.api.utils.TimeUtil;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import de.superioz.moo.api.common.punishment.BanCategory;
-import de.superioz.moo.api.common.punishment.Punishmental;
+import de.superioz.moo.api.common.punishment.PunishmentManager;
 import de.superioz.moo.api.database.object.DbKey;
 
 import java.text.MessageFormat;
@@ -114,7 +114,7 @@ public class Ban extends SimpleSerializable {
      */
     public BanCategory getSubType() {
         if(subType != null) return subType;
-        return (subType = Punishmental.getInstance().getSubType(subTypeId));
+        return (subType = PunishmentManager.getInstance().getSubType(subTypeId));
     }
 
 }

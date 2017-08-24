@@ -12,11 +12,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Wrapper class of every information we can list from a player
+ * Wrapper class of every database information we can get from a player
+ * (ban and data)
+ *
+ * @see PlayerData
+ * @see Ban
  */
 @AllArgsConstructor
 @Getter
-public class PlayerInfo {
+public class PlayerProfile {
 
     /**
      * The playerdata from the database
@@ -49,7 +53,7 @@ public class PlayerInfo {
      * @param packetData The packets data
      * @return The playerInfo object
      */
-    public static PlayerInfo fromPacketData(List<String> packetData) {
+    public static PlayerProfile fromPacketData(List<String> packetData) {
         // player data
         PlayerData data = null;
         String playerDataString = packetData.get(0);
@@ -72,7 +76,7 @@ public class PlayerInfo {
                 archivedBans.add(ReflectionUtil.deserialize(s, Ban.class));
             }
         }
-        return new PlayerInfo(data, ban, archivedBans);
+        return new PlayerProfile(data, ban, archivedBans);
     }
 
 }

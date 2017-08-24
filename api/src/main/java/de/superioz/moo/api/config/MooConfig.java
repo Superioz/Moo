@@ -2,6 +2,7 @@ package de.superioz.moo.api.config;
 
 import com.mongodb.client.model.Filters;
 import de.superioz.moo.api.cache.MooCache;
+import de.superioz.moo.api.common.punishment.PunishmentManager;
 import de.superioz.moo.api.database.DatabaseConnection;
 import de.superioz.moo.api.database.DatabaseType;
 import de.superioz.moo.api.database.DbModifier;
@@ -15,6 +16,17 @@ public final class MooConfig {
 
     public MooConfig(DatabaseConnection connection) {
         this.connection = connection;
+    }
+
+    /**
+     * Gets a config value out of the cache
+     *
+     * @param key The key
+     * @param <E> The elementtype
+     * @return The value as E
+     */
+    public <E> E get(String key) {
+        return (E) MooCache.getInstance().getConfigMap().get(key);
     }
 
     /**
@@ -38,6 +50,7 @@ public final class MooConfig {
      */
     public void load() {
         for(MooConfigCategory category : MooConfigCategory.values()) {
+            if(category == MooConfigCategory.NONE) continue;
             String databaseKey = category.getName();
 
             // fine the document with given key
@@ -46,23 +59,30 @@ public final class MooConfig {
                     // create the document with default values
                     Document defaultDocument = new Document();
 
-                    for(MooConfigType configType : MooConfigType.values()) {
+                    defaultDocument.put(DbModifier.CONFIG_CATEGORY.getFieldName(), databaseKey);
+                    for(MooConfigType configType : MooConfigType.getConfigTypes(category)) {
                         defaultDocument.put(configType.getKey(), configType.getDefaultValue());
                     }
 
                     connection.insert(DatabaseType.CONFIG, defaultDocument);
-                    load(defaultDocument);
+                    load(category, defaultDocument);
                     return;
                 }
 
                 // otherwise get all the values
-                load(document);
+                load(category, document);
             });
         }
+
+        // init PunishmentManager
+        PunishmentManager.getInstance().init(
+                get(MooConfigType.PUNISHMENT_CATEGORIES.getKey()),
+                get(MooConfigType.PUNISHMENT_SUBTYPES.getKey())
+        );
     }
 
-    private void load(Document document) {
-        for(MooConfigType configType : MooConfigType.values()) {
+    private void load(MooConfigCategory category, Document document) {
+        for(MooConfigType configType : MooConfigType.getConfigTypes(category)) {
             Object val = document.get(configType.getKey());
 
             if(val == null) return;

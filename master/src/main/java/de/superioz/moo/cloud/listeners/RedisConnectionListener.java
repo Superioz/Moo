@@ -1,10 +1,8 @@
 package de.superioz.moo.cloud.listeners;
 
-import de.superioz.moo.api.config.MooConfig;
 import de.superioz.moo.api.event.EventHandler;
 import de.superioz.moo.api.event.EventListener;
 import de.superioz.moo.api.events.RedisConnectionEvent;
-import de.superioz.moo.cloud.Cloud;
 
 /**
  * This class listens on the cloud being connected to redis
@@ -19,9 +17,7 @@ public class RedisConnectionListener implements EventListener {
             return;
         }
 
-        // if the cloud connected to redis we want to set config information into the cache
-        Cloud.getInstance().setMooConfig(new MooConfig(Cloud.getInstance().getDatabaseConnection()));
-        Cloud.getInstance().getMooConfig().load();
+        // erm, dunno?
     }
 
 }

@@ -12,18 +12,21 @@ import de.superioz.moo.cloud.database.DatabaseCollections;
 import de.superioz.moo.protocol.common.ResponseStatus;
 import de.superioz.moo.protocol.packet.PacketAdapter;
 import de.superioz.moo.protocol.packet.PacketHandler;
-import de.superioz.moo.protocol.packets.PacketPlayerInfo;
+import de.superioz.moo.protocol.packets.PacketPlayerProfile;
 import de.superioz.moo.protocol.packets.PacketRespond;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-//TODO
-public class PacketPlayerInfoListener implements PacketAdapter {
+/**
+ * This class listens on the PacketPlayerProfile, a class to get all ban and data information
+ * of one player
+ */
+public class PacketPlayerProfileListener implements PacketAdapter {
 
     @PacketHandler
-    public void onPlayerInfo(PacketPlayerInfo packet) throws Exception {
+    public void onPlayerInfo(PacketPlayerProfile packet) throws Exception {
         String id = packet.id;
         UUID uuid = null;
 
@@ -47,17 +50,19 @@ public class PacketPlayerInfoListener implements PacketAdapter {
             return;
         }
 
-        // respond
+        // respond which is a list of the data
+        // 0 = playerData, 1 = currentBan, 2 = archivedBans
         List<String> respond = new ArrayList<>();
+
+        // 0; get the playerData
         respond.add(playerData.toString());
 
-        // list the current ban
+        // 1; list the current ban
         Ban ban = DatabaseCollections.BAN.get(uuid);
         respond.add(ban != null ? ban.toString() : "");
 
-        // list former bans
-        List<Ban> archivedBans =
-                DatabaseCollections.BAN_ARCHIVE.list(DbFilter.fromPrimKey(Ban.class, uuid), false, -1);
+        // 2; list former bans
+        List<Ban> archivedBans = DatabaseCollections.BAN_ARCHIVE.list(DbFilter.fromPrimKey(Ban.class, uuid));
         respond.add((archivedBans != null && !archivedBans.isEmpty())
                 ? StringUtil.getListToString(archivedBans, StringUtil.SEPERATOR_2, SimpleSerializable::toString)
                 : "");

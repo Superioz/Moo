@@ -36,6 +36,7 @@ public class Manager extends Application {
     @Override
     public void start(Stage stage) {
         instance = this;
+        //stage.getIcons().add(new Image("/moo_logo.png"));
 
         // initialize moo logger
         Moo.initialize(logger);

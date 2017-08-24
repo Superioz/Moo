@@ -1,13 +1,13 @@
 package de.superioz.moo.client.paramtypes;
 
 import de.superioz.moo.api.command.param.ParamType;
-import de.superioz.moo.api.common.PlayerInfo;
+import de.superioz.moo.api.common.PlayerProfile;
 import de.superioz.moo.api.util.Validation;
 import de.superioz.moo.client.common.MooQueries;
 
 import java.util.UUID;
 
-public class PlayerInfoParamType extends ParamType<PlayerInfo> {
+public class PlayerInfoParamType extends ParamType<PlayerProfile> {
 
     @Override
     public String label() {
@@ -15,15 +15,15 @@ public class PlayerInfoParamType extends ParamType<PlayerInfo> {
     }
 
     @Override
-    public PlayerInfo resolve(String s) {
+    public PlayerProfile resolve(String s) {
         return Validation.UNIQUEID.matches(s)
-                ? MooQueries.getInstance().getPlayerInfo(UUID.fromString(s))
-                : MooQueries.getInstance().getPlayerInfo(s);
+                ? MooQueries.getInstance().getPlayerProfile(UUID.fromString(s))
+                : MooQueries.getInstance().getPlayerProfile(s);
     }
 
     @Override
-    public Class<PlayerInfo> typeClass() {
-        return PlayerInfo.class;
+    public Class<PlayerProfile> typeClass() {
+        return PlayerProfile.class;
     }
 
     @Override

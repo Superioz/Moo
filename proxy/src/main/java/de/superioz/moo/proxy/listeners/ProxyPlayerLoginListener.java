@@ -1,7 +1,7 @@
 package de.superioz.moo.proxy.listeners;
 
 import de.superioz.moo.api.cache.MooCache;
-import de.superioz.moo.api.common.PlayerInfo;
+import de.superioz.moo.api.common.PlayerProfile;
 import de.superioz.moo.api.database.objects.Ban;
 import de.superioz.moo.api.database.objects.Group;
 import de.superioz.moo.api.database.objects.PlayerData;
@@ -54,7 +54,7 @@ public class ProxyPlayerLoginListener implements Listener {
         // check if the player is banned or whatever
         // also archive bans if the ban ran out
         // ...
-        PlayerInfo playerInfo = MooQueries.getInstance().getPlayerInfo(uuid);
+        PlayerProfile playerInfo = MooQueries.getInstance().getPlayerProfile(uuid);
         if(playerInfo == null) {
             event.completeIntent(Thunder.getInstance());
             return;

@@ -33,6 +33,7 @@ public class ListenerModule extends Module {
                 new MooPlayerConnectedServerListener(),
                 new MooPlayerJoinedServerListener(),
                 new MooLoggingListener(),
+                new DatabaseConnectionListener(),
                 new RedisConnectionListener(),
                 new CloudStartedListener()
         );
@@ -50,7 +51,7 @@ public class ListenerModule extends Module {
                 new PacketDatabaseCountListener(),
                 // player stuff
                 new PacketPlayerStateListener(),
-                new PacketPlayerInfoListener(),
+                new PacketPlayerProfileListener(),
                 new PacketPlayerKickListener(),
                 new PacketPlayerMessageListener(),
                 new PacketPlayerPunishListener(),

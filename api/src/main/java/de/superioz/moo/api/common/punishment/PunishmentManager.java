@@ -10,13 +10,13 @@ import java.util.List;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
-public class Punishmental {
+public class PunishmentManager {
 
-    private static Punishmental instance;
+    private static PunishmentManager instance;
 
-    public static synchronized Punishmental getInstance() {
+    public static synchronized PunishmentManager getInstance() {
         if(instance == null) {
-            instance = new Punishmental();
+            instance = new PunishmentManager();
         }
         return instance;
     }
@@ -29,26 +29,26 @@ public class Punishmental {
     /**
      * Initialises the {@link #banTypeMap} by using the given strings (Most likely are they from the cloud config)
      *
-     * @param banSubTypes The string of the ban subtypes list
-     * @param banReasons  The string of the ban reasons list
+     * @param banCategories The string of the ban categories list
+     * @param banSubTypes   The string of the ban subTypes list
      */
-    public void init(List<String> banSubTypes, List<String> banReasons) {
+    public void init(List<String> banCategories, List<String> banSubTypes) {
         // add bansubtypes to the map
-        if(banSubTypes != null && !banSubTypes.isEmpty()) {
+        if(banCategories != null && !banCategories.isEmpty()) {
             banTypeMap.clear();
 
             // list ban sub types
-            for(int i = 0; i < banSubTypes.size(); i++) {
-                BanCategory subType = new BanCategory(banSubTypes.get(i), i);
+            for(int i = 0; i < banCategories.size(); i++) {
+                BanCategory subType = new BanCategory(banCategories.get(i), i);
                 if(subType.getName() != null) banTypeMap.add(subType);
             }
         }
 
         // then add the reasons to the bansubtypes
-        if(banReasons != null && !banReasons.isEmpty()) {
+        if(banSubTypes != null && !banSubTypes.isEmpty()) {
 
             // loop through ban reasons
-            banReasons.forEach(s -> {
+            banSubTypes.forEach(s -> {
                 BanSubType reason = new BanSubType(s);
                 reason.init(banTypeMap);
                 if(reason.getBanSubTypeStr() != null && !banTypeMap.containsValue(reason)) {
@@ -64,8 +64,8 @@ public class Punishmental {
     public void init() {
         if(!MooCache.getInstance().isInitialized()) return;
         this.init(
-                (List<String>)MooCache.getInstance().getConfigMap().get(MooConfigType.PUNISHMENT_CATEGORIES.getKey()),
-                (List<String>)MooCache.getInstance().getConfigMap().get(MooConfigType.PUNISHMENT_SUBTYPES.getKey())
+                (List<String>) MooCache.getInstance().getConfigMap().get(MooConfigType.PUNISHMENT_CATEGORIES.getKey()),
+                (List<String>) MooCache.getInstance().getConfigMap().get(MooConfigType.PUNISHMENT_SUBTYPES.getKey())
         );
     }
 

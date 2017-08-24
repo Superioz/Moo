@@ -1,6 +1,6 @@
 package de.superioz.moo.protocol.packets;
 
-import de.superioz.moo.api.common.PlayerInfo;
+import de.superioz.moo.api.common.PlayerProfile;
 import de.superioz.moo.protocol.packet.AbstractPacket;
 import de.superioz.moo.protocol.packet.PacketBuffer;
 import lombok.AllArgsConstructor;
@@ -11,11 +11,11 @@ import java.io.IOException;
 /**
  * This packet is for receiving all informations about one player.<br>
  *
- * @see PlayerInfo
+ * @see PlayerProfile
  */
 @NoArgsConstructor
 @AllArgsConstructor
-public class PacketPlayerInfo extends AbstractPacket {
+public class PacketPlayerProfile extends AbstractPacket {
 
     public String id;
 

@@ -7,7 +7,7 @@ import de.superioz.moo.api.command.help.ArgumentHelper;
 import de.superioz.moo.api.command.param.ParamSet;
 import de.superioz.moo.api.command.tabcomplete.TabCompletion;
 import de.superioz.moo.api.command.tabcomplete.TabCompletor;
-import de.superioz.moo.api.common.PlayerInfo;
+import de.superioz.moo.api.common.PlayerProfile;
 import de.superioz.moo.api.common.RunAsynchronous;
 import de.superioz.moo.api.common.punishment.BanCategory;
 import de.superioz.moo.api.common.punishment.BanType;
@@ -41,7 +41,7 @@ public class PunishInfoCommand {
 
     @Command(label = LABEL, usage = "<player>")
     public void onCommand(BungeeCommandContext context, ParamSet args) {
-        PlayerInfo playerInfo = args.get(0, PlayerInfo.class);
+        PlayerProfile playerInfo = args.get(0, PlayerProfile.class);
         context.invalidArgument(playerInfo == null, LanguageManager.get("player-doesnt-exist", args.get(0)));
 
         // list current ban/mute

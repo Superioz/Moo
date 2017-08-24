@@ -2,7 +2,7 @@ package de.superioz.moo.cloud.listeners.player;
 
 import com.mongodb.client.model.Filters;
 import de.superioz.moo.api.common.punishment.BanCategory;
-import de.superioz.moo.api.common.punishment.Punishmental;
+import de.superioz.moo.api.common.punishment.PunishmentManager;
 import de.superioz.moo.api.database.DbModifier;
 import de.superioz.moo.api.database.filter.DbFilter;
 import de.superioz.moo.api.database.objects.Ban;
@@ -13,17 +13,15 @@ import de.superioz.moo.api.event.EventExecutor;
 import de.superioz.moo.api.event.EventHandler;
 import de.superioz.moo.api.event.EventListener;
 import de.superioz.moo.api.event.EventPriority;
-import de.superioz.moo.api.utils.ReflectionUtil;
 import de.superioz.moo.cloud.Cloud;
 import de.superioz.moo.cloud.database.DatabaseCollections;
 import de.superioz.moo.cloud.events.MooPlayerBanEvent;
 import de.superioz.moo.cloud.events.MooPlayerPostBanEvent;
 import de.superioz.moo.protocol.common.ResponseStatus;
 import de.superioz.moo.protocol.exception.MooInputException;
+import de.superioz.moo.protocol.packets.PacketPlayerBan;
 import de.superioz.moo.protocol.packets.PacketPlayerKick;
-import de.superioz.moo.protocol.packets.PacketPlayerPunish;
 
-import java.util.List;
 import java.util.UUID;
 
 /**
@@ -34,22 +32,20 @@ public class MooPlayerBanListener implements EventListener {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onEvent(MooPlayerBanEvent event) throws MooInputException {
         PlayerData data = event.getData();
-        PacketPlayerPunish packet = event.getPacket();
-        List<String> meta = packet.meta;
+        PacketPlayerBan packet = event.getPacket();
+        Ban ban = packet.ban;
 
         // list unique id buf and check if it is valid
         PlayerData fetchedData = DatabaseCollections.PLAYER.get(new DbFilter(Filters.eq(DbModifier.PLAYER_NAME.getFieldName(), data.lastName)));
         UUID uuid = fetchedData.uuid;
 
-        // checks meta (which should consist of the ban and the messages)
-        // checks ban after checking the meta
-        Ban ban;
-        if(meta.size() != 3 || (ban = ReflectionUtil.deserialize(meta.get(0), Ban.class)) == null) {
+        // checks ban
+        if(ban == null) {
             packet.respond(ResponseStatus.BAD_REQUEST);
             return;
         }
-        String tempBanMessage = meta.get(1);
-        String permBanMessage = meta.get(2);
+        String tempBanMessage = packet.banTempMessage;
+        String permBanMessage = packet.banPermMessage;
 
         // checks if the player is banned
         Ban banBefore = DatabaseCollections.BAN.get(uuid);
@@ -82,9 +78,9 @@ public class MooPlayerBanListener implements EventListener {
         // calculate the duration of the ban if the duration wasn't set before
         BanCategory reason = ban.getSubType();
         int banPoints = data.banPoints == null ? 0 : data.banPoints;
-        int newBanPoints = Punishmental.calculateBanPoints(banPoints, reason);
+        int newBanPoints = PunishmentManager.calculateBanPoints(banPoints, reason);
         ban.banPoints = newBanPoints;
-        if(ban.duration == 0) ban.duration = Punishmental.calculateDuration(newBanPoints);
+        if(ban.duration == 0) ban.duration = PunishmentManager.calculateDuration(newBanPoints);
         data.banPoints = newBanPoints;
 
         // ban the player and if it isn't successful then respond error

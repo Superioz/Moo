@@ -1,6 +1,6 @@
 package de.superioz.moo.client;
 
-import de.superioz.moo.api.common.punishment.Punishmental;
+import de.superioz.moo.api.common.punishment.PunishmentManager;
 import de.superioz.moo.api.event.EventExecutor;
 import de.superioz.moo.client.events.CloudConnectedEvent;
 import de.superioz.moo.client.events.CloudDisconnectedEvent;
@@ -55,7 +55,7 @@ public class MooNetworkAdapter implements NetworkEventAdapter {
                         EventExecutor.getInstance().execute(new CloudConnectedEvent(response.getStatus()));
 
                         // initialize punishmental
-                        Punishmental.getInstance().init();
+                        PunishmentManager.getInstance().init();
 
                         // set authenticated
                         moo.getClient().setAuthenticated(response.isOk());

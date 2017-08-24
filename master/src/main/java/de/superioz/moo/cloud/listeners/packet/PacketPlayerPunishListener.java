@@ -5,15 +5,13 @@ import de.superioz.moo.api.database.DbModifier;
 import de.superioz.moo.api.database.filter.DbFilter;
 import de.superioz.moo.api.database.objects.PlayerData;
 import de.superioz.moo.api.event.EventExecutor;
-import de.superioz.moo.api.reaction.Reaction;
-import de.superioz.moo.api.reaction.Reactor;
 import de.superioz.moo.api.util.Validation;
 import de.superioz.moo.cloud.database.DatabaseCollections;
 import de.superioz.moo.cloud.events.MooPlayerBanEvent;
 import de.superioz.moo.protocol.common.ResponseStatus;
 import de.superioz.moo.protocol.packet.PacketAdapter;
 import de.superioz.moo.protocol.packet.PacketHandler;
-import de.superioz.moo.protocol.packets.PacketPlayerPunish;
+import de.superioz.moo.protocol.packets.PacketPlayerBan;
 
 import java.util.UUID;
 
@@ -23,7 +21,7 @@ import java.util.UUID;
 public class PacketPlayerPunishListener implements PacketAdapter {
 
     @PacketHandler
-    public void onPlayerPunish(PacketPlayerPunish packet) {
+    public void onPlayerPunish(PacketPlayerBan packet) {
         String target = packet.target;
 
         // list the playerData
@@ -38,14 +36,7 @@ public class PacketPlayerPunishListener implements PacketAdapter {
         }
 
         // fire specific event
-        Reaction.react(packet.type,
-                new Reactor<PacketPlayerPunish.Type>(PacketPlayerPunish.Type.BAN) {
-                    @Override
-                    public void invoke() {
-                        // the player needs to be banned
-                        EventExecutor.getInstance().execute(new MooPlayerBanEvent(packet, data));
-                    }
-                });
+        EventExecutor.getInstance().execute(new MooPlayerBanEvent(packet, data));
     }
 
 }

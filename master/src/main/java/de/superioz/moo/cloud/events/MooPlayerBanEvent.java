@@ -1,14 +1,15 @@
 package de.superioz.moo.cloud.events;
 
 import de.superioz.moo.api.database.objects.PlayerData;
-import de.superioz.moo.protocol.packets.PacketPlayerPunish;
+import de.superioz.moo.protocol.events.PunishmentEvent;
+import de.superioz.moo.protocol.packets.PacketPlayerBan;
 
 /**
  * Event when the player gets banned
  */
-public class MooPlayerBanEvent extends PacketPlayerPunish.Event {
+public class MooPlayerBanEvent extends PunishmentEvent {
 
-    public MooPlayerBanEvent(PacketPlayerPunish packet, PlayerData data) {
+    public MooPlayerBanEvent(PacketPlayerBan packet, PlayerData data) {
         super(packet, data);
     }
 

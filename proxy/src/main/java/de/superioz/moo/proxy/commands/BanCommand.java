@@ -12,7 +12,7 @@ import de.superioz.moo.api.common.RunAsynchronous;
 import de.superioz.moo.api.common.punishment.BanSubType;
 import de.superioz.moo.api.common.punishment.BanCategory;
 import de.superioz.moo.api.common.punishment.BanType;
-import de.superioz.moo.api.common.punishment.Punishmental;
+import de.superioz.moo.api.common.punishment.PunishmentManager;
 import de.superioz.moo.api.io.LanguageManager;
 import de.superioz.moo.api.util.Validation;
 import de.superioz.moo.api.utils.StringUtil;
@@ -41,7 +41,7 @@ public class BanCommand {
     public void onArgumentHelp(ArgumentHelper helper) {
         helper.react(1, Collections.singletonList(
                 LanguageManager.get("available-reasons",
-                        StringUtil.getListToString(Punishmental.getInstance().getBanReasons()
+                        StringUtil.getListToString(PunishmentManager.getInstance().getBanReasons()
                                         .stream().filter(banReason -> banReason.getType() == BanType.GLOBAL)
                                         .collect(Collectors.toList()),
                                 ", ", BanSubType::getName))
@@ -79,7 +79,7 @@ public class BanCommand {
 
         // list the ban reason
         // if null = rip (or invalid ban reason)
-        BanSubType banReason = Punishmental.getInstance().getBanReason(args.get(1));
+        BanSubType banReason = PunishmentManager.getInstance().getBanReason(args.get(1));
         context.invalidArgument(banReason == null || banReason.getType() == BanType.CHAT,
                 LanguageManager.get("ban-invalid-reason", args.get(1)));
 
@@ -105,7 +105,7 @@ public class BanCommand {
 
         // list the ban reason
         // if null = rip (or invalid ban reason)
-        BanSubType banReason = Punishmental.getInstance().getBanReason(args.get(1));
+        BanSubType banReason = PunishmentManager.getInstance().getBanReason(args.get(1));
         context.invalidArgument(banReason == null || banReason.getType() == BanType.CHAT,
                 LanguageManager.get("ban-invalid-reason", args.get(1)));
 

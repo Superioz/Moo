@@ -1,7 +1,7 @@
 package de.superioz.moo.client.common;
 
 import de.superioz.moo.api.cache.MooCache;
-import de.superioz.moo.api.common.PlayerInfo;
+import de.superioz.moo.api.common.PlayerProfile;
 import de.superioz.moo.api.common.punishment.BanCategory;
 import de.superioz.moo.api.database.*;
 import de.superioz.moo.api.database.objects.Ban;
@@ -97,11 +97,11 @@ public final class MooQueries {
      * @param playername The name
      * @return The respond
      */
-    public PlayerInfo getPlayerInfo(String playername) {
+    public PlayerProfile getPlayerProfile(String playername) {
         try {
-            Response response = PacketMessenger.transferToResponse(new PacketPlayerInfo(playername));
+            Response response = PacketMessenger.transferToResponse(new PacketPlayerProfile(playername));
             response.checkState();
-            PlayerInfo info = PlayerInfo.fromPacketData(response.getMessageAsList());
+            PlayerProfile info = PlayerProfile.fromPacketData(response.getMessageAsList());
 
             if(info != null) {
                 if(info.getCurrentBan() == null) {
@@ -116,8 +116,8 @@ public final class MooQueries {
         }
     }
 
-    public PlayerInfo getPlayerInfo(UUID uuid) {
-        return getPlayerInfo(uuid.toString());
+    public PlayerProfile getPlayerProfile(UUID uuid) {
+        return getPlayerProfile(uuid.toString());
     }
 
     /**
@@ -338,14 +338,14 @@ public final class MooQueries {
     public ResponseStatus ban(UUID executor, String target, BanCategory banSubType, String reason,
                               String tempMessagePattern, String permMessagePattern) {
         return PacketMessenger.transferToResponse(
-                new PacketPlayerPunish(executor, target, banSubType, reason, tempMessagePattern, permMessagePattern)
+                new PacketPlayerBan(executor, target, banSubType, reason, tempMessagePattern, permMessagePattern)
         ).getStatus();
     }
 
     public ResponseStatus ban(UUID executor, String target, BanCategory banSubType, String reason, Long duration,
                               String tempMessagePattern, String permMessagePattern) {
         return PacketMessenger.transferToResponse(
-                new PacketPlayerPunish(executor, target, banSubType, reason, duration, tempMessagePattern, permMessagePattern)
+                new PacketPlayerBan(executor, target, banSubType, reason, duration, tempMessagePattern, permMessagePattern)
         ).getStatus();
     }
 

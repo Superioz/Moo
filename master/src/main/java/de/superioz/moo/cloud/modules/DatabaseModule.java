@@ -3,17 +3,23 @@ package de.superioz.moo.cloud.modules;
 import de.superioz.moo.api.database.DatabaseCollection;
 import de.superioz.moo.api.database.DatabaseConnection;
 import de.superioz.moo.api.database.DatabaseType;
+import de.superioz.moo.api.event.EventExecutor;
 import de.superioz.moo.api.io.JsonConfig;
+import de.superioz.moo.api.logging.Loogger;
 import de.superioz.moo.api.module.Module;
 import de.superioz.moo.api.module.ModuleDependency;
 import de.superioz.moo.cloud.Cloud;
-import de.superioz.moo.cloud.database.*;
+import de.superioz.moo.cloud.database.BanArchiveCollection;
+import de.superioz.moo.cloud.database.BanCollection;
+import de.superioz.moo.cloud.database.GroupCollection;
+import de.superioz.moo.cloud.database.PlayerDataCollection;
+import de.superioz.moo.cloud.events.DatabaseConnectionEvent;
 import lombok.Getter;
 
 import java.util.HashMap;
 import java.util.Map;
 
-@ModuleDependency(modules = {"config"})
+@ModuleDependency(modules = {"config", "redis"})
 @Getter
 public class DatabaseModule extends Module {
 
@@ -21,8 +27,11 @@ public class DatabaseModule extends Module {
     private DatabaseConnection dbConn;
     private JsonConfig config;
 
-    public DatabaseModule(JsonConfig config) {
+    private Loogger logger;
+
+    public DatabaseModule(JsonConfig config, Loogger logger) {
         this.config = config;
+        this.logger = logger;
     }
 
     @Override
@@ -40,23 +49,28 @@ public class DatabaseModule extends Module {
                 .password(config.get("database.password"))
                 .build();
 
-        // connects
-        Cloud.getInstance().getLogger().info("Connecting to database .. [" + dbConn.getHost() + ":" + dbConn.getPort() + "]" +
+        // connects to the database
+        // and list collection for connection check
+        getLogger().info("Connecting to database .. [" + dbConn.getHost() + ":" + dbConn.getPort() + "]" +
                 "{user: '" + dbConn.getUser() + "', pw: '" + dbConn.getPassword() + "', db: '" + dbConn.getDatabase() + "'}");
         dbConn.connect(dbWorker -> {
             int size = dbWorker.getCollections().size();
             Cloud.getInstance().getLogger().info("Connected to database! [" + dbWorker.getUser() + ":" + dbWorker.getDatabase() + "@" + dbWorker.getHost() + "]");
             Cloud.getInstance().getLogger().debug("Collections (" + size + "): " + dbWorker.getCollections());
+
+            EventExecutor.getInstance().execute(new DatabaseConnectionEvent(dbConn, true));
         });
 
-        Cloud.getInstance().getLogger().debug("Registering database collections ..");
+        // register database modules
+        getLogger().debug("Registering database collections ..");
         this.registerDatabaseCollections(
                 new GroupCollection(dbConn),
                 new PlayerDataCollection(dbConn),
                 new BanCollection(dbConn),
                 new BanArchiveCollection(dbConn)
         );
-        Cloud.getInstance().getLogger().debug("Finished registering database collections. (" + collectionMap.size() + ")");
+        getLogger().debug("Finished registering database collections. (" + collectionMap.size() + ")");
+
     }
 
     @Override

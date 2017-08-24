@@ -12,7 +12,8 @@ import org.bukkit.plugin.Plugin;
 import java.util.*;
 
 /**
- * Created on 12.11.2016.
+ * This class will be injected into the player class to handle
+ * permission events
  */
 public class CustomPermissible extends PermissibleBase {
 
@@ -77,8 +78,7 @@ public class CustomPermissible extends PermissibleBase {
         String name = inName.toLowerCase();
 
         if(isPermissionSet(name)) {
-            boolean b = PermissionUtil.hasPermission(inName, false, MooCache.getInstance().getPlayerPermissionMap().get(uniqueId));
-            return b;
+            return PermissionUtil.hasPermission(inName, false, MooCache.getInstance().getPlayerPermissionMap().get(uniqueId));
         }
         else {
             Permission perm = Bukkit.getServer().getPluginManager().getPermission(name);

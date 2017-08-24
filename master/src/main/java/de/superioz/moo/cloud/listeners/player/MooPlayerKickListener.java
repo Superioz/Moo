@@ -7,7 +7,7 @@ import de.superioz.moo.api.event.EventPriority;
 import de.superioz.moo.cloud.Cloud;
 import de.superioz.moo.cloud.events.MooPlayerKickEvent;
 import de.superioz.moo.protocol.common.ResponseStatus;
-import de.superioz.moo.protocol.packets.PacketPlayerPunish;
+import de.superioz.moo.protocol.packets.PacketPlayerBan;
 
 /**
  * This class handles the player kick
@@ -16,7 +16,7 @@ public class MooPlayerKickListener implements EventListener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onEvent(MooPlayerKickEvent event) {
-        PacketPlayerPunish packet = event.getPacket();
+        PacketPlayerBan packet = event.getPacket();
 
         // gets the player from given id
         // if the player cannot be found, than just return a bad status

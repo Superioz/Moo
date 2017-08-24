@@ -1,6 +1,5 @@
 package de.superioz.moo.cloud.modules;
 
-import de.superioz.moo.api.common.punishment.Punishmental;
 import de.superioz.moo.api.io.JsonConfig;
 import de.superioz.moo.api.module.Module;
 import de.superioz.moo.cloud.Cloud;
@@ -43,9 +42,6 @@ public class ConfigModule extends Module {
                 Cloud.getInstance().getLogger().debug("-" + key + " has value '" + (val.toString().replace("\n", "\\n")) + "'");
             }
         });
-        Punishmental.getInstance().init(
-                config.get("minecraft.punishment-subtypes"),
-                config.get("minecraft.punishment-reasons"));
     }
 
     @Override

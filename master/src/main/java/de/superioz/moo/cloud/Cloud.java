@@ -37,12 +37,15 @@ public class Cloud implements EventListener {
 
     private final ExecutorService executors = Executors.newCachedThreadPool(
             new ThreadFactoryBuilder().setNameFormat("cloud-pool-%d").build());
-    private ConsoleReader reader;
     private MooProxy mooProxy;
     @Setter
     private MooConfig mooConfig;
+
+    // console
+    private ConsoleReader reader;
     private CommandTerminal commandTerminal;
 
+    // modules
     private ModuleRegistry moduleRegistry;
     private ConfigModule configModule;
     private CommandModule commandModule;
@@ -96,7 +99,7 @@ public class Cloud implements EventListener {
             customFile.load(true, true);
             moduleRegistry.register(redisModule = new RedisModule(customFile.getFile(), getLogger().getBaseLogger()));
         });
-        this.databaseModule = moduleRegistry.register(new DatabaseModule(getConfig()));
+        this.databaseModule = moduleRegistry.register(new DatabaseModule(getConfig(), getLogger()));
         this.nettyModule = moduleRegistry.register(new NettyModule(getConfig()));
         this.nettyModule.waitForAsync(module -> {
             Cloud.this.mooProxy = new MooProxy(getServer());
