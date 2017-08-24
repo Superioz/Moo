@@ -63,7 +63,7 @@ public class ThunderPluginModule extends Module implements EventListener {
                 },
                 new CommandListener(),
                 new PacketPlayerKickListener(), new PacketPlayerMessageListener(),
-                new PacketRequestListener(), new PacketConfigListener(),
+                new PacketRequestListener(), new PacketConfigListener(), new PacketUpdatePermissionListener(),
                 new PermissionListener(), new ProxyPingListener(),
                 new ProxyPlayerLoginListener(), new ProxyPlayerConnectionListener(),
                 new ServerRegisterChangeListener()

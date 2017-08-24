@@ -23,6 +23,7 @@ public enum Protocol {
     PLAYER_PUNISH(PacketPlayerBan.class),
     CONFIG(PacketConfig.class),
     REQUEST(PacketRequest.class),
+    UPDATE_PERMISSION(PacketUpdatePermission.class),
     SERVER_RAM_USAGE(PacketRamUsage.class),
     SERVER_REQUEST(PacketServerRequest.class),
     SERVER_REQUEST_SHUTDOWN(PacketServerRequestShutdown.class),

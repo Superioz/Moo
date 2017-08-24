@@ -24,7 +24,7 @@ import de.superioz.moo.protocol.packet.AbstractPacket;
 import de.superioz.moo.protocol.packet.PacketAdapter;
 import de.superioz.moo.protocol.packet.PacketHandler;
 import de.superioz.moo.protocol.packets.PacketDatabaseModify;
-import de.superioz.moo.protocol.packets.PacketRequest;
+import de.superioz.moo.protocol.packets.PacketUpdatePermission;
 
 import java.util.List;
 import java.util.Set;
@@ -172,19 +172,20 @@ public class PacketDatabaseModifyListener implements PacketAdapter {
         });
 
         // updates the REDIS CACHE data
-        updateData(packet, updatedData, dbType, result.get());
+        updateData(packet, primaryKey, updatedData, dbType, result.get());
     }
 
     /**
      * Gets every updated data and informs the cache about the updated-
      *
      * @param request       The packets (request)
+     * @param key           The key
      * @param type          The type (Group, Player, ..)
      * @param data          The data (e.g. the key or the new data)
      * @param processResult Result (success or not?)
      * @see #updateData(DatabaseModifyType, String, DatabaseType)
      */
-    private void updateData(AbstractPacket request, MultiMap<DatabaseModifyType, Object> data, DatabaseType type, boolean processResult) {
+    private void updateData(AbstractPacket request, Object key, MultiMap<DatabaseModifyType, Object> data, DatabaseType type, boolean processResult) {
         // update info
         boolean updateDataResult = false;
         for(DatabaseModifyType modifyType : data.keySet()) {
@@ -197,12 +198,12 @@ public class PacketDatabaseModifyListener implements PacketAdapter {
         // trigger update permissions
         request.respond(processResult ? ResponseStatus.OK : ResponseStatus.NOK);
         if(processResult && updateDataResult) {
-            PacketMessenger.message(new PacketRequest(PacketRequest.Type.UPDATE_PERM), ClientType.PROXY, ClientType.SERVER);
+            PacketMessenger.message(new PacketUpdatePermission(type, key + ""), ClientType.PROXY);
         }
     }
 
     /**
-     * Similar to {@link #updateData(AbstractPacket, MultiMap, DatabaseType, boolean)} but with only subdata not a whole set
+     * Similar to {@link #updateData(AbstractPacket, Object, MultiMap, DatabaseType, boolean)} but with only subdata not a whole set
      * of updates.
      *
      * @param modifyType The modify type

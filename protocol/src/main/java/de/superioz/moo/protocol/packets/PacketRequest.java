@@ -43,8 +43,7 @@ public class PacketRequest extends AbstractPacket {
 
     public enum Type {
 
-        PING,
-        UPDATE_PERM
+        PING
 
     }
 

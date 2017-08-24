@@ -79,12 +79,12 @@ public final class MooCache {
         this.redisClient = connection.getClient();
 
         // list redis maps by fetching the keys out of the config
-        this.groupMap = redisClient.getLocalCachedMap(RedisConfig.GROUP_MAP.getKey(), LocalCachedMapOptions.defaults());
-        this.uniqueIdPlayerMap = redisClient.getLocalCachedMap(RedisConfig.PLAYER_DATA_MAP.getKey(), LocalCachedMapOptions.defaults());
-        this.nameUniqueIdMap = redisClient.getLocalCachedMap(RedisConfig.PLAYER_ID_MAP.getKey(), LocalCachedMapOptions.defaults());
+        this.groupMap = redisClient.getLocalCachedMap(RedisConfig.GROUP_MAP.getKey(), DEFAULT_OPTIONS);
+        this.uniqueIdPlayerMap = redisClient.getLocalCachedMap(RedisConfig.PLAYER_DATA_MAP.getKey(), DEFAULT_OPTIONS);
+        this.nameUniqueIdMap = redisClient.getLocalCachedMap(RedisConfig.PLAYER_ID_MAP.getKey(), DEFAULT_OPTIONS);
         this.playerPermissionMap = redisClient.getLocalCachedMap(RedisConfig.PLAYER_PERMISSION_MAP.getKey(), DEFAULT_OPTIONS);
-        this.configMap = redisClient.getLocalCachedMap(RedisConfig.CONFIG_MAP.getKey(), LocalCachedMapOptions.defaults());
-        this.serverMap = redisClient.getLocalCachedMap(RedisConfig.SERVER_MAP.getKey(), LocalCachedMapOptions.defaults());
+        this.configMap = redisClient.getLocalCachedMap(RedisConfig.CONFIG_MAP.getKey(), DEFAULT_OPTIONS);
+        this.serverMap = redisClient.getLocalCachedMap(RedisConfig.SERVER_MAP.getKey(), DEFAULT_OPTIONS);
 
         this.initialized = true;
     }
