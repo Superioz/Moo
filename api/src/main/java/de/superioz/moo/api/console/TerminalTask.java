@@ -1,6 +1,5 @@
 package de.superioz.moo.api.console;
 
-import de.superioz.moo.api.utils.SystemUtil;
 import jline.Terminal;
 import jline.TerminalFactory;
 import jline.console.ConsoleReader;
@@ -41,8 +40,7 @@ public class TerminalTask implements Runnable {
     public void run() {
         try {
             //TerminalFactory.registerFlavor(TerminalFactory.Flavor.WINDOWS, UnsupportedTerminal.class);
-            Terminal terminal = TerminalFactory.getFlavor(SystemUtil.isWindows()
-                    ? TerminalFactory.Flavor.WINDOWS : TerminalFactory.Flavor.UNIX);
+            Terminal terminal = TerminalFactory.get();
             terminal.setEchoEnabled(true);
 
             // set prompt and tab completion

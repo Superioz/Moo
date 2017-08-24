@@ -16,7 +16,8 @@ public class CloudStartedListener implements EventListener {
 
     @EventHandler
     public void onCloudStarted(CloudStartedEvent event) {
-        // AND we want to put the groups into the cache :)
+        // aight.
+        // load groups
         try {
             Queries.list(DatabaseType.GROUP, Group.class).forEach(group -> {
                 if(group == null) return;

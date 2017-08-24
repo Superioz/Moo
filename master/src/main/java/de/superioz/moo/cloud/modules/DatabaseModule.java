@@ -76,7 +76,7 @@ public class DatabaseModule extends Module {
     @Override
     protected void onDisable() {
         collectionMap.clear();
-        dbConn.disconnect();
+        if(dbConn != null) dbConn.disconnect();
     }
 
     /**

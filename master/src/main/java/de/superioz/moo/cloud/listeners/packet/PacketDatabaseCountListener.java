@@ -25,7 +25,7 @@ public class PacketDatabaseCountListener implements PacketAdapter {
     @PacketHandler
     public void onDatabaseCount(PacketDatabaseCount packet) {
         // checks if the database is connected
-        if(!Cloud.getInstance().getDatabaseConnection().isConnected()) {
+        if(!Cloud.getInstance().isDatabaseConnected()) {
             packet.respond(ResponseStatus.NO_DATABASE);
             return;
         }

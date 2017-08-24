@@ -57,6 +57,7 @@ public class Loogger {
             ((MooLogger) baseLogger).close();
         }
         AnsiConsole.systemUninstall();
+        executor.shutdownNow();
     }
 
     /**

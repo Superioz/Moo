@@ -40,7 +40,7 @@ public class PacketDatabaseModifyListener implements PacketAdapter {
     @PacketHandler
     public void onDatabaseModify(PacketDatabaseModify packet) {
         // checks if the database is connected
-        if(!Cloud.getInstance().getDatabaseConnection().isConnected()) {
+        if(!Cloud.getInstance().isDatabaseConnected()) {
             packet.respond(ResponseStatus.NO_DATABASE);
             return;
         }

@@ -23,7 +23,12 @@ public class CloudCommand implements EventListener {
      */
     @Command(label = "end")
     public void end(CommandContext context, ParamSet set) {
-        Cloud.getInstance().stop();
+        try {
+            Cloud.getInstance().stop();
+        }
+        catch(Exception e) {
+            System.exit(0);
+        }
     }
 
     /**

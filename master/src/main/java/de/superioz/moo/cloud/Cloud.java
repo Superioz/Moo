@@ -142,7 +142,8 @@ public class Cloud implements EventListener {
         moduleRegistry.disableAll();
         executors.shutdownNow();
 
-        this.commandTerminal.stop();
+        // console
+        commandTerminal.stop();
         logger.disable();
 
         System.exit(0);
@@ -194,6 +195,10 @@ public class Cloud implements EventListener {
 
     public DatabaseConnection getDatabaseConnection() {
         return databaseModule.getDbConn();
+    }
+
+    public boolean isDatabaseConnected() {
+        return databaseModule.getDbConn() != null && databaseModule.getDbConn().isConnected();
     }
 
 }

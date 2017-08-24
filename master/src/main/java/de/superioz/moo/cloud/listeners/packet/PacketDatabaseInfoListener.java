@@ -25,7 +25,7 @@ public class PacketDatabaseInfoListener implements PacketAdapter {
     @PacketHandler
     public void onDatabaseInfo(PacketDatabaseInfo packet) {
         // checks if the database is connected
-        if(!Cloud.getInstance().getDatabaseConnection().isConnected()) {
+        if(!Cloud.getInstance().isDatabaseConnected()) {
             packet.respond(ResponseStatus.NO_DATABASE);
             return;
         }
@@ -59,7 +59,7 @@ public class PacketDatabaseInfoListener implements PacketAdapter {
     @PacketHandler
     public void onDatabaseInfoRaw(PacketDatabaseInfoNative packet) {
         // checks if the database is connected
-        if(!Cloud.getInstance().getDatabaseConnection().isConnected()) {
+        if(!Cloud.getInstance().isDatabaseConnected()) {
             packet.respond(ResponseStatus.NO_DATABASE);
             return;
         }
