@@ -4,7 +4,6 @@ import de.superioz.moo.api.database.objects.PlayerData;
 import de.superioz.moo.api.io.LanguageManager;
 import de.superioz.moo.client.Moo;
 import de.superioz.moo.client.common.MooQueries;
-import de.superioz.moo.protocol.exception.MooOutputException;
 import de.superioz.moo.protocol.packets.PacketPlayerState;
 import de.superioz.moo.spigot.common.CustomPermissible;
 import de.superioz.moo.spigot.common.PermissionInjector;
@@ -19,22 +18,13 @@ import org.bukkit.permissions.Permissible;
 
 public class ServerListener implements Listener {
 
-    @EventHandler(priority = EventPriority.NORMAL)
-    public void onJoin(PlayerJoinEvent event) {
-        try {
-            onJoin02(event);
-        }
-        catch(MooOutputException e) {
-            e.printStackTrace();
-        }
-    }
-
     /**
      * When the player joins the server
      * <p>
      * SERVER JOIN
      */
-    private void onJoin02(PlayerJoinEvent event) {
+    @EventHandler(priority = EventPriority.HIGHEST)
+    public void onJoin(PlayerJoinEvent event) {
         if(!Moo.getInstance().isConnected()) return;
         event.setJoinMessage(null);
         Player player = event.getPlayer();
@@ -57,7 +47,7 @@ public class ServerListener implements Listener {
         });
     }
 
-    @EventHandler(priority = EventPriority.NORMAL)
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void onLeave(PlayerQuitEvent event) {
         if(!Moo.getInstance().isConnected()) return;
         Player player = event.getPlayer();

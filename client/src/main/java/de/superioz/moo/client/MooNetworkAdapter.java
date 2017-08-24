@@ -53,8 +53,8 @@ public class MooNetworkAdapter implements NetworkEventAdapter {
 
             // the packet to be sent
             PacketHandshake packetHandshake = moo.getClientType() == ClientType.SERVER
-                    ? new PacketHandshake(moo.getClientName(), moo.getClientType())
-                    : new PacketHandshake(moo.getClientName(), moo.getClientType(), moo.getSubPort());
+                    ? new PacketHandshake(moo.getClientName(), moo.getClientType(), moo.getSubPort())
+                    : new PacketHandshake(moo.getClientName(), moo.getClientType());
 
             // send packet NOW
             PacketMessenger.transferToResponse(packetHandshake,

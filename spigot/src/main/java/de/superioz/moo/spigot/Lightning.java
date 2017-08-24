@@ -8,6 +8,7 @@ import de.superioz.moo.api.module.ModuleRegistry;
 import de.superioz.moo.api.modules.RedisModule;
 import de.superioz.moo.client.Moo;
 import lombok.Getter;
+import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.nio.file.Paths;
@@ -48,6 +49,9 @@ public class Lightning extends JavaPlugin implements EventListener {
             customFile.load(true, true);
             moduleRegistry.register(new RedisModule(customFile.getFile(), getLogger()));
         });
+
+        //
+        Moo.getInstance().setSubPort(Bukkit.getPort());
 
         // list config
         logs.setDebugMode(pluginModule.getConfig().get("debug"));

@@ -9,7 +9,7 @@ public class MooPlayerJoinedServerListener implements EventListener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onEvent(MooPlayerJoinedServerEvent event) {
-        //
+
     }
 
 }

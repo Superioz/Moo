@@ -56,7 +56,7 @@ public class MooThunderCommand {
     }
 
     @RunAsynchronous
-    @Command(label = "connect", parent = "moo")
+    @Command(label = "connect", parent = "mthunder")
     public void connect(BungeeCommandContext context, ParamSet args) {
         if(!checkMoo(context)) return;
 
@@ -70,7 +70,7 @@ public class MooThunderCommand {
     }
 
     @RunAsynchronous
-    @Command(label = "disconnect", parent = "moo")
+    @Command(label = "disconnect", parent = "mthunder")
     public void disconnect(BungeeCommandContext context, ParamSet args) {
         if(!checkMoo(context)) return;
 
@@ -84,7 +84,7 @@ public class MooThunderCommand {
     }
 
     @RunAsynchronous
-    @Command(label = "listserver", parent = "moo", flags = {"r[raw]"})
+    @Command(label = "listserver", parent = "mthunder", flags = {"r"})
     public void listserver(BungeeCommandContext context, ParamSet args) {
         Map<String, ServerInfo> serverMap = ProxyServer.getInstance().getServers();
 
@@ -121,7 +121,7 @@ public class MooThunderCommand {
     }
 
     @RunAsynchronous
-    @Command(label = "reqserver", parent = "moo", usage = "<type> [amount]", flags = "s")
+    @Command(label = "reqserver", parent = "mthunder", usage = "<type> [amount]", flags = "s")
     public void reqserver(BungeeCommandContext context, ParamSet args) {
         String type = args.get(0);
         int amount = args.getInt(1, 1);
@@ -144,7 +144,7 @@ public class MooThunderCommand {
     }
 
     @RunAsynchronous
-    @Command(label = "reqshutdown", parent = "moo", usage = "<host> <port>")
+    @Command(label = "reqshutdown", parent = "mthunder", usage = "<host> <port>")
     public void reqshutdown(BungeeCommandContext context, ParamSet args) {
         String host = args.get(0);
         int port = args.getInt(1, -1);

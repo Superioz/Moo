@@ -1,9 +1,9 @@
 package de.superioz.moo.api.cache;
 
 import de.superioz.moo.api.common.MooServer;
+import de.superioz.moo.api.config.MooConfigType;
 import de.superioz.moo.api.database.objects.Group;
 import de.superioz.moo.api.database.objects.PlayerData;
-import de.superioz.moo.api.config.MooConfigType;
 import lombok.Getter;
 import org.redisson.api.*;
 
@@ -79,9 +79,9 @@ public final class MooCache {
         this.redisClient = connection.getClient();
 
         // list redis maps by fetching the keys out of the config
-        this.groupMap = redisClient.getLocalCachedMap(RedisConfig.GROUP_MAP.getKey(), DEFAULT_OPTIONS);
-        this.uniqueIdPlayerMap = redisClient.getLocalCachedMap(RedisConfig.PLAYER_DATA_MAP.getKey(), DEFAULT_OPTIONS);
-        this.nameUniqueIdMap = redisClient.getLocalCachedMap(RedisConfig.PLAYER_ID_MAP.getKey(), DEFAULT_OPTIONS);
+        this.groupMap = redisClient.getLocalCachedMap(RedisConfig.GROUP_MAP.getKey(), LocalCachedMapOptions.defaults());
+        this.uniqueIdPlayerMap = redisClient.getLocalCachedMap(RedisConfig.PLAYER_DATA_MAP.getKey(), LocalCachedMapOptions.defaults());
+        this.nameUniqueIdMap = redisClient.getLocalCachedMap(RedisConfig.PLAYER_ID_MAP.getKey(), LocalCachedMapOptions.defaults());
         this.playerPermissionMap = redisClient.getLocalCachedMap(RedisConfig.PLAYER_PERMISSION_MAP.getKey(), DEFAULT_OPTIONS);
         this.configMap = redisClient.getLocalCachedMap(RedisConfig.CONFIG_MAP.getKey(), LocalCachedMapOptions.defaults());
         this.serverMap = redisClient.getLocalCachedMap(RedisConfig.SERVER_MAP.getKey(), LocalCachedMapOptions.defaults());
@@ -94,7 +94,7 @@ public final class MooCache {
      * few maps? Secondly, we would've to list the maps again before deleting them via a batch, so we
      * just don't use it.
      */
-    public void delete(){
+    public void delete() {
         if(!initialized) return;
         groupMap.deleteAsync();
         uniqueIdPlayerMap.deleteAsync();
@@ -118,11 +118,5 @@ public final class MooCache {
     public RFuture<Object> getConfigEntryAsync(MooConfigType type) {
         return configMap.getAsync(type.name().toLowerCase());
     }
-
-    /*
-    ============================================
-    SPECIAL METHODS
-    ============================================
-     */
 
 }

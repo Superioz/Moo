@@ -33,11 +33,7 @@ public class PacketPlayerStateListener implements PacketAdapter {
             return;
         }
 
-        // check state and eventually validates uuid buf
-        if(newState == PacketPlayerState.State.JOIN_PROXY
-                || newState == PacketPlayerState.State.JOIN_SERVER) {
-            //
-        }
+        // // check state and eventually validates uuid buf
         packet.data = currentData;
 
         // reacts to the state of the player
@@ -82,10 +78,6 @@ public class PacketPlayerStateListener implements PacketAdapter {
                     }
                 }
         );
-        if(packet.isResponded()) return;
-
-        // send respond
-        packet.respond(ResponseStatus.fromCondition(currentData != null));
     }
 
 }

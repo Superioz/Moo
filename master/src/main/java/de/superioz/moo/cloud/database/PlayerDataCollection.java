@@ -48,6 +48,7 @@ public class PlayerDataCollection extends DatabaseCollection<UUID, PlayerData> {
             id.firstOnline = System.currentTimeMillis();
             id.totalOnline = 0L;
             id.coins = 0L;
+            id.banPoints = 0;
 
             set(uuid, id, true);
             currentData = id;

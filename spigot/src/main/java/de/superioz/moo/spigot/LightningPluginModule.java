@@ -53,7 +53,6 @@ public class LightningPluginModule extends Module implements EventListener {
 
         // connect to cloud
         if(config.isLoaded()) {
-            Moo.getInstance().setSubPort(Bukkit.getPort());
             Moo.getInstance().connect(config.get("group-id"), ClientType.SERVER, config.get("cloud-ip"), config.get("cloud-port"));
         }
     }

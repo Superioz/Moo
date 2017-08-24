@@ -62,6 +62,11 @@ public final class MooQueries {
         changePlayerState(data, state, "", callback);
     }
 
+    public void changePlayerState(PlayerData data, PacketPlayerState.State state) {
+        changePlayerState(data, state, "", response -> {
+        });
+    }
+
     /**
      * Gets playerData from given playerName
      *
@@ -393,7 +398,7 @@ public final class MooQueries {
 
         List<String> permissions = new ArrayList<>(data.extraPerms);
         permissions.addAll(PermissionUtil.getAllPermissions(group, MooCache.getInstance().getGroupMap().values()));
-        MooCache.getInstance().getPlayerPermissionMap().put(data.uuid, permissions);
+        MooCache.getInstance().getPlayerPermissionMap().putAsync(data.uuid, permissions);
         return true;
     }
 

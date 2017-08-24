@@ -1,21 +1,14 @@
 package de.superioz.moo.proxy.listeners;
 
-import de.superioz.moo.api.cache.MooCache;
-import de.superioz.moo.api.common.PlayerProfile;
-import de.superioz.moo.api.database.objects.Ban;
-import de.superioz.moo.api.database.objects.Group;
 import de.superioz.moo.api.database.objects.PlayerData;
 import de.superioz.moo.api.io.LanguageManager;
-import de.superioz.moo.api.config.MooConfigType;
 import de.superioz.moo.client.Moo;
 import de.superioz.moo.client.common.MooQueries;
 import de.superioz.moo.protocol.exception.MooOutputException;
 import de.superioz.moo.protocol.packets.PacketPlayerState;
 import de.superioz.moo.proxy.Thunder;
 import net.md_5.bungee.api.connection.PendingConnection;
-import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.event.LoginEvent;
-import net.md_5.bungee.api.event.PostLoginEvent;
 import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.api.plugin.Plugin;
 import net.md_5.bungee.event.EventHandler;
@@ -32,7 +25,7 @@ public class ProxyPlayerLoginListener implements Listener {
      */
     private void onLoginAsync(LoginEvent event) {
         // if the cloud is not activated then just skip this event
-        if(!Moo.getInstance().isEnabled()) {
+        if(!Moo.getInstance().isEnabled() || !Moo.getInstance().isConnected()) {
             event.completeIntent(Thunder.getInstance());
             return;
         }
@@ -50,42 +43,22 @@ public class ProxyPlayerLoginListener implements Listener {
         PendingConnection connection = event.getConnection();
         UUID uuid = connection.getUniqueId();
 
-        // list player info
-        // check if the player is banned or whatever
-        // also archive bans if the ban ran out
-        // ...
-        PlayerProfile playerInfo = MooQueries.getInstance().getPlayerProfile(uuid);
-        if(playerInfo == null) {
-            event.completeIntent(Thunder.getInstance());
-            return;
-        }
+        // create playerdata with every important information
+        PlayerData data = new PlayerData();
+        data.uuid = connection.getUniqueId();
+        data.lastName = connection.getName();
+        data.lastIp = connection.getAddress().getHostString();
 
-        // checks if the player is banned
-        // if ban ran out archive it otherwise cancel login
-        Ban ban = playerInfo.getCurrentBan();
-        if(ban != null) {
-            long stamp = ban.start + ban.duration;
-            if(ban.duration != -1 && stamp < System.currentTimeMillis()) {
-                // ban ran out; please archive it
-                MooQueries.getInstance().archiveBan(ban);
-            }
-            else {
-                // ban is active
-                event.setCancelReason(ban.apply(LanguageManager.get(ban.isPermanent() ? "ban-message-perm" : "ban-message-temp")));
-                event.setCancelled(true);
-            }
-        }
+        // check can join
+        Thunder.getInstance().checkPlayerProfileBeforeLogin(uuid, event);
 
-        // list group for checking the maintenance bypassability
-        Group group = MooQueries.getInstance().getGroup(playerInfo.getData().group);
-        boolean maintenanceBypass = group.rank >= (int) MooCache.getInstance().getConfigEntry(MooConfigType.MAINTENANCE_RANK);
-
-        // if maintenance mode is active and the player is not allowed to bypass it
-        if(MooCache.getInstance().getConfigEntry(MooConfigType.MAINTENANCE).equals(true + "") && !maintenanceBypass) {
-            event.setCancelReason(LanguageManager.get("currently-in-maintenance"));
-            event.setCancelled(true);
-        }
+        // complete
         event.completeIntent(Thunder.getInstance());
+
+        // change player state for current server, proxy, ..
+        MooQueries.getInstance().changePlayerState(data, PacketPlayerState.State.JOIN_PROXY, response -> {
+            MooQueries.getInstance().updatePermission(data.uuid);
+        });
     }
 
     @EventHandler
@@ -96,42 +69,6 @@ public class ProxyPlayerLoginListener implements Listener {
         Thunder.getInstance().getProxy().getScheduler().runAsync(Thunder.getInstance(), () -> {
             try {
                 onLoginAsync(event);
-            }
-            catch(MooOutputException e) {
-                e.printStackTrace();
-            }
-        });
-    }
-
-    /**
-     * Before the login event of the player
-     *
-     * @param event The event
-     */
-    private void onPostLoginAsync(PostLoginEvent event) {
-        ProxiedPlayer player = event.getPlayer();
-
-        // create playerdata with every important information
-        PlayerData data = new PlayerData();
-        data.uuid = player.getUniqueId();
-        data.lastName = player.getName();
-        data.lastIp = player.getAddress().getHostString();
-
-        // changes the state of the player
-        // if the respond was successful put the deserialized values into the proxycache
-        MooQueries.getInstance().changePlayerState(data, PacketPlayerState.State.JOIN_PROXY, response -> {
-            if(response.isOk()) {
-                // only update the permission, the rest has been updated before
-                MooQueries.getInstance().updatePermission(data.uuid);
-            }
-        });
-    }
-
-    @EventHandler
-    public void onPostLogin(PostLoginEvent event) {
-        Thunder.getInstance().getProxy().getScheduler().runAsync(Thunder.getInstance(), () -> {
-            try {
-                onPostLoginAsync(event);
             }
             catch(MooOutputException e) {
                 e.printStackTrace();

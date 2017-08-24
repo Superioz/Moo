@@ -86,7 +86,7 @@ public final class MooProxy {
 
         // register in maps
         typeSpigotServerMap.add(type, server);
-        spigotServers.add(server);
+        spigotServerMap.put(server.getUuid(), server);
 
         // put in cache REDIS
         MooCache.getInstance().getServerMap().putAsync(server.getUuid(), server);
@@ -100,6 +100,7 @@ public final class MooProxy {
      */
     public void unregisterServer(MooClient client) {
         MooServer server = getServer(client.getAddress());
+        if(server == null) return;
 
         typeSpigotServerMap.delete(client.getName(), server);
         spigotServerMap.remove(server.getUuid());

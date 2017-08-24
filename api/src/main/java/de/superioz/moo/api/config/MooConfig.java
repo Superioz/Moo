@@ -50,7 +50,10 @@ public final class MooConfig {
      */
     public void load() {
         for(MooConfigCategory category : MooConfigCategory.values()) {
-            if(category == MooConfigCategory.NONE) continue;
+            if(category == MooConfigCategory.NONE) {
+                load(category, null);
+                continue;
+            }
             String databaseKey = category.getName();
 
             // fine the document with given key
@@ -83,7 +86,7 @@ public final class MooConfig {
 
     private void load(MooConfigCategory category, Document document) {
         for(MooConfigType configType : MooConfigType.getConfigTypes(category)) {
-            Object val = document.get(configType.getKey());
+            Object val = document != null ? document.get(configType.getKey()) : configType.getDefaultValue();
 
             if(val == null) return;
             MooCache.getInstance().getConfigMap().fastPutAsync(configType.getKey(), val);

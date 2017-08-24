@@ -26,7 +26,7 @@ import java.util.UUID;
 public class PacketPlayerProfileListener implements PacketAdapter {
 
     @PacketHandler
-    public void onPlayerInfo(PacketPlayerProfile packet) throws Exception {
+    public void onPlayerProfile(PacketPlayerProfile packet) throws Exception {
         String id = packet.id;
         UUID uuid = null;
 
@@ -41,10 +41,10 @@ public class PacketPlayerProfileListener implements PacketAdapter {
 
         // if the uuid couldn't be found or the playerData is (therefore) empty
         // just return a bad status
-        PlayerData playerData = DatabaseCollections.PLAYER.list(
+        PlayerData playerData = DatabaseCollections.PLAYER.get(
                 new DbFilter(uuid instanceof UUID
                         ? Filters.eq(DbModifier.PLAYER_UUID.getFieldName(), uuid)
-                        : Filters.eq(DbModifier.PLAYER_NAME.getFieldName(), id))).get(0);
+                        : Filters.eq(DbModifier.PLAYER_NAME.getFieldName(), id)));
         if(status != ResponseStatus.OK || playerData == null) {
             packet.respond(status);
             return;

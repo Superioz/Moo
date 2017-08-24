@@ -1,20 +1,29 @@
 package de.superioz.moo.proxy;
 
+import de.superioz.moo.api.cache.MooCache;
+import de.superioz.moo.api.common.PlayerProfile;
+import de.superioz.moo.api.config.MooConfigType;
+import de.superioz.moo.api.database.objects.Ban;
+import de.superioz.moo.api.database.objects.Group;
 import de.superioz.moo.api.event.EventListener;
 import de.superioz.moo.api.io.CustomFile;
+import de.superioz.moo.api.io.LanguageManager;
 import de.superioz.moo.api.logging.Loogger;
 import de.superioz.moo.api.module.ModuleRegistry;
 import de.superioz.moo.api.modules.RedisModule;
 import de.superioz.moo.client.Moo;
+import de.superioz.moo.client.common.MooQueries;
 import lombok.Getter;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.config.ServerInfo;
+import net.md_5.bungee.api.event.LoginEvent;
 import net.md_5.bungee.api.plugin.Plugin;
 
 import java.net.InetSocketAddress;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import java.util.regex.Pattern;
 
 @Getter
@@ -136,6 +145,50 @@ public class Thunder extends Plugin implements EventListener {
             ProxyServer.getInstance().getServers().remove(info.getName());
         }
         return info;
+    }
+
+    /**
+     * Checks given uuid (gets the playerProfile) if the player can join.
+     *
+     * @param uuid  The uniqueid of the player
+     * @param event The event to be cancelled if he can't
+     */
+    public void checkPlayerProfileBeforeLogin(UUID uuid, LoginEvent event) {
+        // list player info
+        // check if the player is banned or whatever
+        // also archive bans if the ban ran out
+        // ...
+        PlayerProfile playerProfile = MooQueries.getInstance().getPlayerProfile(uuid);
+        if(playerProfile == null) {
+            event.completeIntent(Thunder.getInstance());
+            return;
+        }
+
+        // checks if the player is banned
+        // if ban ran out archive it otherwise cancel login
+        Ban ban = playerProfile.getCurrentBan();
+        if(ban != null) {
+            long stamp = ban.start + ban.duration;
+            if(ban.duration != -1 && stamp < System.currentTimeMillis()) {
+                // ban ran out; please archive it
+                MooQueries.getInstance().archiveBan(ban);
+            }
+            else {
+                // ban is active
+                event.setCancelReason(ban.apply(LanguageManager.get(ban.isPermanent() ? "ban-message-perm" : "ban-message-temp")));
+                event.setCancelled(true);
+            }
+        }
+
+        // list group for checking the maintenance bypassability
+        Group group = MooQueries.getInstance().getGroup(playerProfile.getData().group);
+        boolean maintenanceBypass = group.rank >= (int) MooCache.getInstance().getConfigEntry(MooConfigType.MAINTENANCE_RANK);
+
+        // if maintenance mode is active and the player is not allowed to bypass it
+        if(MooCache.getInstance().getConfigEntry(MooConfigType.MAINTENANCE).equals(true + "") && !maintenanceBypass) {
+            event.setCancelReason(LanguageManager.get("currently-in-maintenance"));
+            event.setCancelled(true);
+        }
     }
 
 }

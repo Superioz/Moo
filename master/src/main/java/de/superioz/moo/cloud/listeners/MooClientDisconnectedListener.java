@@ -31,10 +31,9 @@ public class MooClientDisconnectedListener implements EventListener {
         if(client.getType() == ClientType.PROXY) {
             List<UUID> toRemove = new ArrayList<>();
             for(UUID uuid : Cloud.getInstance().getMooProxy().getPlayerServerMap().keySet()) {
-                InetSocketAddress address = Cloud.getInstance().getMooProxy().getPlayerServerMap().get(uuid);
-                if(address.equals(client.getAddress())) toRemove.add(uuid);
+                InetSocketAddress proxyAddress = Cloud.getInstance().getMooProxy().getPlayerServerMap().get(uuid);
+                if(proxyAddress.equals(client.getAddress())) toRemove.add(uuid);
             }
-
             toRemove.forEach(uuid -> Cloud.getInstance().getMooProxy().getPlayerServerMap().remove(uuid));
 
             // update player count
