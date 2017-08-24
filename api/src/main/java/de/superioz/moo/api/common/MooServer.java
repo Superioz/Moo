@@ -3,6 +3,7 @@ package de.superioz.moo.api.common;
 import lombok.Getter;
 
 import java.net.InetSocketAddress;
+import java.nio.charset.Charset;
 import java.util.UUID;
 
 /**
@@ -28,6 +29,11 @@ public class MooServer {
     private String type;
 
     /**
+     * The id of the server (e.g.: 1 for lobby-1)
+     */
+    private int id;
+
+    /**
      * Current motd of the server
      */
     private String motd;
@@ -47,10 +53,11 @@ public class MooServer {
      */
     private long lastUpdate = -1;
 
-    public MooServer(UUID uuid, InetSocketAddress address, String type) {
-        this.uuid = uuid;
+    public MooServer(int id, InetSocketAddress address, String type) {
+        this.id = id;
         this.address = address;
         this.type = type;
+        this.uuid = UUID.nameUUIDFromBytes((type + "#" + id).getBytes(Charset.forName("UTF-8")));
     }
 
     /**

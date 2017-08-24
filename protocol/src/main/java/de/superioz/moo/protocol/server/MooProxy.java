@@ -1,20 +1,19 @@
 package de.superioz.moo.protocol.server;
 
-import de.superioz.moo.api.common.MooServer;
+import de.superioz.moo.api.cache.MooCache;
+import de.superioz.moo.api.collection.MultiMap;
 import de.superioz.moo.api.collection.UnmodifiableList;
+import de.superioz.moo.api.common.MooServer;
 import de.superioz.moo.api.database.objects.PlayerData;
 import de.superioz.moo.protocol.common.PacketMessenger;
 import de.superioz.moo.protocol.common.Response;
-import de.superioz.moo.protocol.packet.AbstractPacket;
 import de.superioz.moo.protocol.common.ResponseStatus;
+import de.superioz.moo.protocol.packet.AbstractPacket;
 import de.superioz.moo.protocol.packets.*;
 import lombok.Getter;
 
 import java.net.InetSocketAddress;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 import java.util.function.Consumer;
 
 /**
@@ -27,7 +26,10 @@ public final class MooProxy {
     private final Map<String, PlayerData> playerNameMap = new HashMap<>();
     private final Map<UUID, InetSocketAddress> playerServerMap = new HashMap<>();
 
+    private static final int DEFAULT_SERVER_ID = 1;
     private final Map<UUID, MooServer> spigotServerMap = new HashMap<>();
+    private final MultiMap<String, MooServer> typeSpigotServerMap = new MultiMap<>();
+    private final Set<Integer> usedServerIds = new HashSet<>();
 
     private NetworkServer netServer;
 
@@ -55,6 +57,55 @@ public final class MooProxy {
             if(server.getAddress().equals(address)) return server;
         }
         return null;
+    }
+
+    /**
+     * Registers a server if the client (spigot server) connects to the cloud
+     *
+     * @param client The connected client
+     * @return The server which has been registered
+     */
+    public MooServer registerServer(MooClient client) {
+        String type = client.getName();
+
+        // get id for server
+        // searches for empty space (e.g.: 1, 3, 4 -> would return 2)
+        int id = DEFAULT_SERVER_ID;
+        Set<MooServer> spigotServers = typeSpigotServerMap.get(type);
+        if(spigotServers != null && !spigotServers.isEmpty()) {
+            List<Integer> usedIds = new ArrayList<>(spigotServers.size());
+            spigotServers.forEach(server -> usedIds.add(server.getId()));
+
+            while(usedIds.contains(id)){
+                id++;
+            }
+        }
+
+        // build MooServer
+        MooServer server = new MooServer(id, client.getAddress(), type);
+
+        // register in maps
+        typeSpigotServerMap.add(type, server);
+        spigotServers.add(server);
+
+        // put in cache REDIS
+        MooCache.getInstance().getServerMap().putAsync(server.getUuid(), server);
+        return server;
+    }
+
+    /**
+     * Unregisters a moo client (spigot server) after it disconnected from the cloud
+     *
+     * @param client The client
+     */
+    public void unregisterServer(MooClient client) {
+        MooServer server = getServer(client.getAddress());
+
+        typeSpigotServerMap.delete(client.getName(), server);
+        spigotServerMap.remove(server.getUuid());
+
+        // sync with redis
+        MooCache.getInstance().getServerMap().removeAsync(server.getUuid());
     }
 
     /**

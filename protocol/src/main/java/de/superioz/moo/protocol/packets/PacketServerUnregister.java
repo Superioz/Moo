@@ -12,6 +12,9 @@ import java.net.InetSocketAddress;
 @NoArgsConstructor
 public class PacketServerUnregister extends AbstractPacket {
 
+    /**
+     * The address of the server to be unregistered
+     */
     public InetSocketAddress address;
 
     @Override

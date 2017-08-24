@@ -14,8 +14,19 @@ import java.io.IOException;
 @NoArgsConstructor
 public class PacketServerRegister extends AbstractPacket {
 
+    /**
+     * The type of the server
+     */
     public String type;
+
+    /**
+     * The host of the server
+     */
     public String host;
+
+    /**
+     * The port of the server
+     */
     public int port;
 
     @Override

@@ -14,6 +14,9 @@ import de.superioz.moo.protocol.packet.PacketAdapter;
 import de.superioz.moo.protocol.packet.PacketHandler;
 import de.superioz.moo.protocol.packets.PacketPlayerState;
 
+/**
+ * This class listens on player state
+ */
 public class PacketPlayerStateListener implements PacketAdapter {
 
     @PacketHandler

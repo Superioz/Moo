@@ -5,11 +5,9 @@ import de.superioz.moo.daemon.common.Server;
 import de.superioz.moo.protocol.common.ResponseStatus;
 import de.superioz.moo.protocol.packet.PacketAdapter;
 import de.superioz.moo.protocol.packet.PacketHandler;
-import de.superioz.moo.protocol.packets.PacketServerDone;
+import de.superioz.moo.protocol.packets.PacketRespond;
 import de.superioz.moo.protocol.packets.PacketServerRequest;
 import de.superioz.moo.protocol.packets.PacketServerRequestShutdown;
-
-import java.util.UUID;
 
 public class ServerPacketListener implements PacketAdapter {
 
@@ -30,9 +28,12 @@ public class ServerPacketListener implements PacketAdapter {
 
         // adds given amount of server to start queue
         Daemon.getInstance().startServer(serverType, "", packet.autoSave, packet.amount,
-                server -> packet.respond(server == null
-                        ? new PacketServerDone(PacketServerDone.Type.START, new UUID(0, 0), "", -1)
-                        : new PacketServerDone(PacketServerDone.Type.START, server.getUuid(), server.getName(), server.getPort())));
+                server -> {
+                    packet.respond(server == null
+                            ? new PacketRespond(ResponseStatus.NOK)
+                            : new PacketRespond(ResponseStatus.OK));
+                }
+        );
     }
 
     @PacketHandler

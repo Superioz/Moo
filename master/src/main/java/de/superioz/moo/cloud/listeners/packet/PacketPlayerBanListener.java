@@ -16,12 +16,12 @@ import de.superioz.moo.protocol.packets.PacketPlayerBan;
 import java.util.UUID;
 
 /**
- *
+ * This class listens to the PacketPlayerBan
  */
-public class PacketPlayerPunishListener implements PacketAdapter {
+public class PacketPlayerBanListener implements PacketAdapter {
 
     @PacketHandler
-    public void onPlayerPunish(PacketPlayerBan packet) {
+    public void onPlayerBan(PacketPlayerBan packet) {
         String target = packet.target;
 
         // list the playerData

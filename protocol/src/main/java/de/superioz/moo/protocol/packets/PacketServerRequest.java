@@ -14,8 +14,19 @@ import java.io.IOException;
 @AllArgsConstructor
 public class PacketServerRequest extends AbstractPacket {
 
+    /**
+     * The type of the server
+     */
     public String type;
+
+    /**
+     * Does the server autoSave? Otherwise everything will be resetted
+     */
     public boolean autoSave;
+
+    /**
+     * The amount of servers to be started
+     */
     public int amount;
 
     @Override

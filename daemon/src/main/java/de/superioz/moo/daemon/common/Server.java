@@ -7,7 +7,6 @@ import de.superioz.moo.daemon.util.ThreadableValue;
 import de.superioz.moo.protocol.common.PacketMessenger;
 import de.superioz.moo.protocol.exception.MooOutputException;
 import de.superioz.moo.protocol.packets.PacketServerAttempt;
-import de.superioz.moo.protocol.packets.PacketServerDone;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -113,14 +112,6 @@ public class Server extends ServerPattern {
             catch(IOException e) {
                 Daemon.getInstance().getLogs().debug("Couldn't delete server folder " + getFolder().getName() + "!");
             }
-
-            //
-            try {
-                PacketMessenger.message(new PacketServerDone(PacketServerDone.Type.SHUTDOWN, getUuid(), getName(), getPort()));
-            }
-            catch(MooOutputException e) {
-                //
-            }
         });
     }
 
@@ -190,7 +181,7 @@ public class Server extends ServerPattern {
                 //
                 try {
                     if(serverResult == null) {
-                        PacketMessenger.message(new PacketServerDone(PacketServerDone.Type.START, getUuid(), getName(), getPort()));
+                        // Wut?
                     }
                     else {
                         serverResult.accept(this);

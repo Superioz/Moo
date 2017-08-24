@@ -90,6 +90,12 @@ public class Moo {
     private ClientType clientType;
 
     /**
+     * The subport. Either -1 or the port of the spigot server
+     */
+    @Setter
+    private int subPort = -1;
+
+    /**
      * The logger of the client
      */
     @Setter
@@ -120,7 +126,7 @@ public class Moo {
             getInstance();
         }
 
-        // reinitialise the values
+        // reinitialize the values
         if(logger != null) instance.logger = logger;
     }
 

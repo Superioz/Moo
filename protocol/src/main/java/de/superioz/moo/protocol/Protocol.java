@@ -27,7 +27,6 @@ public enum Protocol {
     SERVER_REQUEST(PacketServerRequest.class),
     SERVER_REQUEST_SHUTDOWN(PacketServerRequestShutdown.class),
     SERVER_ATTEMPT(PacketServerAttempt.class),
-    SERVER_DONE(PacketServerDone.class),
     SERVER_REGISTER(PacketServerRegister.class),
     SERVER_UNREGISTER(PacketServerUnregister.class),
     CONSOLE_OUTPUT(PacketConsoleOutput.class),

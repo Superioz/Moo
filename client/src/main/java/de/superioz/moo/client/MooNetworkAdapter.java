@@ -4,6 +4,7 @@ import de.superioz.moo.api.common.punishment.PunishmentManager;
 import de.superioz.moo.api.event.EventExecutor;
 import de.superioz.moo.client.events.CloudConnectedEvent;
 import de.superioz.moo.client.events.CloudDisconnectedEvent;
+import de.superioz.moo.protocol.client.ClientType;
 import de.superioz.moo.protocol.common.NetworkEventAdapter;
 import de.superioz.moo.protocol.common.PacketMessenger;
 import de.superioz.moo.protocol.common.Response;
@@ -50,7 +51,13 @@ public class MooNetworkAdapter implements NetworkEventAdapter {
                 e.printStackTrace();
             }
 
-            PacketMessenger.transferToResponse(new PacketHandshake(moo.getClientName(), moo.getClientType()),
+            // the packet to be sent
+            PacketHandshake packetHandshake = moo.getClientType() == ClientType.SERVER
+                    ? new PacketHandshake(moo.getClientName(), moo.getClientType())
+                    : new PacketHandshake(moo.getClientName(), moo.getClientType(), moo.getSubPort());
+
+            // send packet NOW
+            PacketMessenger.transferToResponse(packetHandshake,
                     (Consumer<Response>) response -> {
                         EventExecutor.getInstance().execute(new CloudConnectedEvent(response.getStatus()));
 

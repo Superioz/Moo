@@ -57,7 +57,7 @@ public class HandshakeListener implements EventListener {
         // Add client
         MooClient client = new MooClient(packet.identifier,
                 remoteAddress.getAddress().getHostAddress(),
-                remoteAddress.getPort(), packet.type, channel);
+                remoteAddress.getPort(), packet.subPort, packet.type, channel);
         client.setId(Cloud.getInstance().getClientManager().add(client));
 
         // fire event of client connection

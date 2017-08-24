@@ -24,7 +24,8 @@ public class PlayerDataCollection extends DatabaseCollection<UUID, PlayerData> {
     }
 
     /**
-     * Get the currentData
+     * Get the currentData, and set default values if not exists<br>
+     * If update, then update name/ip/.. if different from before
      *
      * @param id The data to identify
      * @return The playerData

@@ -24,9 +24,14 @@ public class MooClient {
     private String host;
 
     /**
-     * The port of the client (e.g.: 25565)
+     * The port of the client (e.g.: 4314) (NETTY)
      */
     private int port;
+
+    /**
+     * The subport of the client (e.g.: 25565) (SPIGOT)
+     */
+    private int subPort = -1;
 
     /**
      * The type of the client (e.g.: {@link ClientType#SERVER})
@@ -44,10 +49,11 @@ public class MooClient {
     @Setter
     private int id;
 
-    public MooClient(String name, String host, int port, ClientType type, Channel channel) {
+    public MooClient(String name, String host, int port, int subPort, ClientType type, Channel channel) {
         this.name = name;
         this.host = host;
         this.port = port;
+        this.subPort = subPort;
         this.type = type;
         this.channel = channel;
     }

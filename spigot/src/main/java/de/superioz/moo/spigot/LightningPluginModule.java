@@ -22,7 +22,6 @@ public class LightningPluginModule extends Module implements EventListener {
 
     private JsonConfig config;
     private LanguageManager languageManager;
-    private JsonConfig redisConfig;
 
     private ServerInfoTask serverInfoTask;
 
@@ -54,13 +53,14 @@ public class LightningPluginModule extends Module implements EventListener {
 
         // connect to cloud
         if(config.isLoaded()) {
-            Moo.getInstance().connect(config.get("server-name"), ClientType.SERVER, config.get("cloud-ip"), config.get("cloud-port"));
+            Moo.getInstance().setSubPort(Bukkit.getPort());
+            Moo.getInstance().connect(config.get("group-id"), ClientType.SERVER, config.get("cloud-ip"), config.get("cloud-port"));
         }
     }
 
     @Override
     protected void onDisable() {
-
+        // we do not need to send information that we are down, either the Daemon/Cloud does that for us, or the server just timeouts
     }
 
     @EventHandler

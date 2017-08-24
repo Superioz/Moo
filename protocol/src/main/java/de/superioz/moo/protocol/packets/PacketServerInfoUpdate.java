@@ -18,9 +18,24 @@ import java.net.InetSocketAddress;
 @AllArgsConstructor
 public class PacketServerInfoUpdate extends AbstractPacket {
 
+    /**
+     * The address of the server
+     */
     public InetSocketAddress serverAddress;
+
+    /**
+     * The current motd of the server
+     */
     public String motd;
+
+    /**
+     * The current players online on this server
+     */
     public int onlinePlayers;
+
+    /**
+     * The maximum of players of this server
+     */
     public int maxPlayers;
 
     @Override
