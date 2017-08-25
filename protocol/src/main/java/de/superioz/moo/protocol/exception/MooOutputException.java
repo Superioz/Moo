@@ -1,5 +1,6 @@
 package de.superioz.moo.protocol.exception;
 
+import de.superioz.moo.api.utils.StringUtil;
 import lombok.Getter;
 
 /**
@@ -12,8 +13,8 @@ public class MooOutputException extends RuntimeException {
     @Getter
     private Type type;
 
-    public MooOutputException(MooOutputException.Type type) {
-        super(type.getMessage());
+    public MooOutputException(MooOutputException.Type type, Object... replacements) {
+        super(StringUtil.format(type.getMessage(), replacements));
         this.type = type;
     }
 
@@ -23,7 +24,7 @@ public class MooOutputException extends RuntimeException {
     public enum Type {
 
         CONNECTION_FAILED,
-        WRONG_THREAD("You have to execute packet operations asynchronous!");
+        WRONG_THREAD("You have to execute packet operations asynchronous! ({0})");
 
         @Getter
         private String message;

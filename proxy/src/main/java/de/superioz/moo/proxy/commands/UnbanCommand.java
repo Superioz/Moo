@@ -44,7 +44,7 @@ public class UnbanCommand {
     @Command(label = LABEL, usage = "<player> [reason]")
     public void onCommand(BungeeCommandContext context, ParamSet args) {
         PlayerData data = args.get(0, PlayerData.class);
-        context.invalidArgument(data == null, LanguageManager.get("player-doesnt-exist", args.get(0)));
+        context.invalidArgument(data == null, LanguageManager.get("error-player-doesnt-exist", args.get(0)));
         String playerName = args.get(0);
 
         // list ban

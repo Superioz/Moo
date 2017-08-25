@@ -92,7 +92,7 @@ public class PermCommand {
         PageableList<GroupPermission> pageableList = new PageableList<>(groupPermissions, 10,
                 (Comparator<GroupPermission>) (o1, o2) -> o1.getRawPerm().compareTo(o2.getRawPerm()));
         context.invalidArgument(pageableList.isEmpty(), LanguageManager.get("permission-list-empty"));
-        context.invalidArgument(!pageableList.checkPage(page), LanguageManager.get("page-doesnt-exist", page));
+        context.invalidArgument(!pageableList.checkPage(page), LanguageManager.get("error-page-doesnt-exist", page));
 
         // sends the pageable list with page as list format
         String entryFormat = LanguageManager.get("permission-list-entry");

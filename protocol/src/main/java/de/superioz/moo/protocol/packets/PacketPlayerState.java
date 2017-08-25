@@ -61,6 +61,11 @@ public class PacketPlayerState extends AbstractPacket {
     public enum State {
 
         /**
+         * Login proxy?
+         */
+        LOGIN_PROXY,
+
+        /**
          * Player joined a proxy (bungeecord) server and is therefore online
          */
         JOIN_PROXY,

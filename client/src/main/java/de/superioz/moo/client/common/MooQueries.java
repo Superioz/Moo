@@ -99,24 +99,24 @@ public final class MooQueries {
     /**
      * Information about player
      *
-     * @param playername The name
+     * @param key The key (name | uuid)
      * @return The respond
      */
-    public PlayerProfile getPlayerProfile(String playername) {
+    public PlayerProfile getPlayerProfile(String key) {
         try {
-            Response response = PacketMessenger.transferToResponse(new PacketPlayerProfile(playername));
+            Response response = PacketMessenger.transferToResponse(new PacketPlayerProfile(key));
             response.checkState();
             PlayerProfile info = PlayerProfile.fromPacketData(response.getMessageAsList());
 
             if(info != null) {
                 if(info.getCurrentBan() == null) {
                     if(!checkBan(info.getCurrentBan())) info.setCurrentBan(null);
-
                 }
             }
             return info;
         }
         catch(Exception ex) {
+            ex.printStackTrace();
             return null;
         }
     }
@@ -421,6 +421,8 @@ public final class MooQueries {
      * @return The group
      */
     public Group getGroup(String groupName) {
+        if(groupName == null) return null;
+
         if(MooCache.getInstance().getGroupMap().size() > 0) {
             return MooCache.getInstance().getGroupMap().get(groupName);
         }

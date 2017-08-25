@@ -38,7 +38,7 @@ public class KickCommand {
     @Command(label = LABEL, usage = "<player> [reason]")
     public void onCommand(BungeeCommandContext context, ParamSet args) {
         String playerName = args.get(0);
-        context.invalidArgument(!Validation.PLAYERNAME.matches(playerName), LanguageManager.get("invalid-player-name"));
+        context.invalidArgument(!Validation.PLAYERNAME.matches(playerName), LanguageManager.get("error-invalid-player-name"));
 
         // list kickor
         PlayerData executor = null;

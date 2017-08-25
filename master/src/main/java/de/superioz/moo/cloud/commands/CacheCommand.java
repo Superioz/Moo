@@ -46,4 +46,32 @@ public class CacheCommand {
         }
     }
 
+    @Command(label = "cacheflush", usage = "[database]")
+    public void onFlushCache(CommandContext context, ParamSet args) {
+        // list the database
+        DatabaseType type = args.getEnum(0, DatabaseType.class);
+
+        // player wants to flush every cache
+        if(type == null) {
+            for(DatabaseType dbType : DatabaseType.values()) {
+                try {
+                    DatabaseCollection collection = Cloud.getInstance().getDatabaseCollection(dbType);
+                    if(!collection.isCacheable()) continue;
+                    collection.getCache().clear();
+                }catch(NullPointerException e){
+                    //
+                }
+            }
+            context.sendMessage("Flushed every database cache.");
+            return;
+        }
+
+        DatabaseCollection collection = Cloud.getInstance().getDatabaseCollection(type);
+        context.invalidArgument(!collection.isCacheable(), "This collection is not cachable!");
+        DatabaseCache cache = collection.getCache();
+        cache.clear();
+
+        context.sendMessage("Flushed database cache '" + type.name() + "'.");
+    }
+
 }

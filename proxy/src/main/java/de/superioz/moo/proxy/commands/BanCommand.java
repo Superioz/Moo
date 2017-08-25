@@ -68,7 +68,7 @@ public class BanCommand {
 
         // checks if the playerName is invalid
         if(!Validation.PLAYERNAME.matches(playerName)) {
-            context.sendMessage(LanguageManager.get("invalid-player-name", playerName));
+            context.sendMessage(LanguageManager.get("error-invalid-player-name", playerName));
             return;
         }
         // he wants to ban himself ?!
@@ -94,7 +94,7 @@ public class BanCommand {
 
         // checks if the playerName is invalid
         if(!Validation.PLAYERNAME.matches(playerName)) {
-            context.sendMessage(LanguageManager.get("invalid-player-name", playerName));
+            context.sendMessage(LanguageManager.get("error-invalid-player-name", playerName));
             return;
         }
         // he wants to ban himself ?!
@@ -143,7 +143,7 @@ public class BanCommand {
                 LanguageManager.get("ban-message-temp"),
                 LanguageManager.get("ban-message-perm")
         );
-        context.invalidArgument(status == ResponseStatus.NOT_FOUND, LanguageManager.get("player-doesnt-exist", target));
+        context.invalidArgument(status == ResponseStatus.NOT_FOUND, LanguageManager.get("error-player-doesnt-exist", target));
         context.invalidArgument(status == ResponseStatus.FORBIDDEN, LanguageManager.get("ban-not-allowed-to", target));
         context.invalidArgument(status == ResponseStatus.CONFLICT, LanguageManager.get("ban-player-already-banned", target));
 

@@ -93,7 +93,7 @@ public class CommandListener extends CommandEventAdapter<CommandSender> implemen
             InvalidCommandUsageException e = (InvalidCommandUsageException) exception;
 
             if(e.getType() == InvalidCommandUsageException.Type.NOT_ALLOWED) {
-                context.sendMessage(LanguageManager.get("not-allowed-execute-command"));
+                context.sendMessage(LanguageManager.get("error-not-allowed-execute-command"));
                 return;
             }
 
@@ -104,7 +104,7 @@ public class CommandListener extends CommandEventAdapter<CommandSender> implemen
         else if(exception instanceof MooOutputException) {
             MooOutputException e = (MooOutputException) exception;
             if(e.getType() == MooOutputException.Type.CONNECTION_FAILED) {
-                context.sendMessage(LanguageManager.get("no-moo-connection"));
+                context.sendMessage(LanguageManager.get("error-no-moo-connection"));
             }
             else {
                 context.sendMessage(e.getMessage());

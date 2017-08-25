@@ -16,6 +16,7 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.permissions.Permissible;
 
+//TODO DUDE
 public class ServerListener implements Listener {
 
     /**
@@ -39,12 +40,12 @@ public class ServerListener implements Listener {
         CustomPermissible customPermissible = new CustomPermissible(player, data.uuid, oldPermissible);
         PermissionInjector.inject(player, customPermissible);
 
+        MooQueries.getInstance().changePlayerState(data, PacketPlayerState.State.JOIN_SERVER, response -> {
+        });
+
         // SET JOIN MESSAGE
         String playerName = MooQueries.getInstance().getGroup(player.getUniqueId()).color + player.getName();
         Bukkit.getServer().broadcastMessage(LanguageManager.get("join-message-pattern", playerName));
-
-        MooQueries.getInstance().changePlayerState(data, PacketPlayerState.State.JOIN_SERVER, response -> {
-        });
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)

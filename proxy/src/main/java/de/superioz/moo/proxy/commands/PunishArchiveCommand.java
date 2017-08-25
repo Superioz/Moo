@@ -48,7 +48,7 @@ public class PunishArchiveCommand {
     @Command(label = LABEL, usage = "<player> [page]", flags = "l")
     public void onCommand(BungeeCommandContext context, ParamSet args) {
         String playerName = args.get(0);
-        context.invalidArgument(!Validation.PLAYERNAME.matches(playerName), LanguageManager.get("invalid-player-name", playerName));
+        context.invalidArgument(!Validation.PLAYERNAME.matches(playerName), LanguageManager.get("error-invalid-player-name", playerName));
 
         // if live fetching is enabled don't cache the list
         boolean liveFetching = args.hasFlag("l");

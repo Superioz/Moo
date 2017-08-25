@@ -159,6 +159,7 @@ public class Thunder extends Plugin implements EventListener {
         // also archive bans if the ban ran out
         // ...
         PlayerProfile playerProfile = MooQueries.getInstance().getPlayerProfile(uuid);
+        System.out.println("UUID: " + uuid);
         if(playerProfile == null) {
             event.completeIntent(Thunder.getInstance());
             return;
@@ -186,7 +187,7 @@ public class Thunder extends Plugin implements EventListener {
 
         // if maintenance mode is active and the player is not allowed to bypass it
         if(MooCache.getInstance().getConfigEntry(MooConfigType.MAINTENANCE).equals(true + "") && !maintenanceBypass) {
-            event.setCancelReason(LanguageManager.get("currently-in-maintenance"));
+            event.setCancelReason(LanguageManager.get("error-currently-in-maintenance"));
             event.setCancelled(true);
         }
     }

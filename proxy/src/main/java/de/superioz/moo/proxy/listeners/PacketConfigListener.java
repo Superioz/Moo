@@ -23,7 +23,7 @@ public class PacketConfigListener implements PacketAdapter {
 
             ProxyServer.getInstance().getPlayers().forEach(player -> {
                 if(MooQueries.getInstance().getPlayerData(player.getUniqueId()).rank < minRank) {
-                    player.disconnect(LanguageManager.get("currently-in-maintenance"));
+                    player.disconnect(LanguageManager.get("error-currently-in-maintenance"));
                 }
             });
         }

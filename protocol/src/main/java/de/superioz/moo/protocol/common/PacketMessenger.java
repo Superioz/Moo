@@ -304,7 +304,7 @@ public final class PacketMessenger {
      * @param <R>       The type of response
      * @return The response or null
      */
-    public <R> R send(AbstractPacket packet, Consumer<R>... consumers) {
+    public synchronized <R> R send(AbstractPacket packet, Consumer<R>... consumers) {
         // automatically copying packet for forwarding
         if(packet.getStamp() != -1) {
             packet = packet.deepCopy();

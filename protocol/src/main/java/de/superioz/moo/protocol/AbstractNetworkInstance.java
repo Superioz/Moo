@@ -102,7 +102,7 @@ public abstract class AbstractNetworkInstance implements EventListener {
      *
      * @param adapterConsumer The consumer of the adapter
      */
-    public void callEvent(Consumer<NetworkEventAdapter> adapterConsumer) {
+    public synchronized void callEvent(Consumer<NetworkEventAdapter> adapterConsumer) {
         eventAdapters.forEach(adapterConsumer);
     }
 

@@ -50,6 +50,13 @@ public class DatabaseCache<K, V> {
     }
 
     /**
+     * Clears the cache
+     */
+    public void clear() {
+        wrapped.invalidateAll();
+    }
+
+    /**
      * Gets the size of the wrapped cache
      *
      * @return The size as long

@@ -54,7 +54,7 @@ public class RankCommand {
     public void onRankCommand(BungeeCommandContext context, ParamSet args) {
         // list player and therefore his group
         PlayerData playerData = args.get(0, PlayerData.class);
-        context.invalidArgument(playerData == null, LanguageManager.get("player-doesnt-exist", args.get(0)));
+        context.invalidArgument(playerData == null, LanguageManager.get("error-player-doesnt-exist", args.get(0)));
         Group group = MooQueries.getInstance().getGroup(playerData.group);
 
         // the new group to be set
@@ -90,7 +90,7 @@ public class RankCommand {
     public void onUprankCommand(BungeeCommandContext context, ParamSet args) {
         // list player and therefore his group
         PlayerData playerData = args.get(0, PlayerData.class);
-        context.invalidArgument(playerData == null, LanguageManager.get("player-doesnt-exist", args.get(0)));
+        context.invalidArgument(playerData == null, LanguageManager.get("error-player-doesnt-exist", args.get(0)));
 
         // list new group through shifting steps
         int steps = args.hasFlag("s") ? args.getFlag("s").getInt(0, 1) : 1;
@@ -104,7 +104,7 @@ public class RankCommand {
     public void onDownrankCommand(BungeeCommandContext context, ParamSet args) {
         // list player and therefore his group
         PlayerData playerData = args.get(0, PlayerData.class);
-        context.invalidArgument(playerData == null, LanguageManager.get("player-doesnt-exist", args.get(0)));
+        context.invalidArgument(playerData == null, LanguageManager.get("error-player-doesnt-exist", args.get(0)));
 
         // list new group through shifting steps
         int steps = args.hasFlag("s") ? args.getFlag("s").getInt(0, 1) : 1;

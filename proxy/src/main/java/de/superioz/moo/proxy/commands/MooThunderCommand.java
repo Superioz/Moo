@@ -83,8 +83,7 @@ public class MooThunderCommand {
         Moo.getInstance().disconnect();
     }
 
-    @RunAsynchronous
-    @Command(label = "listserver", parent = "mthunder", flags = {"r"})
+    @Command(label = "listserver", parent = "mthunder", flags = {"r[raw]"})
     public void listserver(BungeeCommandContext context, ParamSet args) {
         Map<String, ServerInfo> serverMap = ProxyServer.getInstance().getServers();
 

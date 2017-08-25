@@ -89,7 +89,7 @@ public class GroupCommand {
                         ? o1.rank.compareTo(o2.rank) * -1
                         : o1.name.compareTo(o2.name));
         context.invalidArgument(pageableList.isEmpty(), LanguageManager.get("group-list-empty"));
-        context.invalidArgument(!pageableList.checkPage(page), LanguageManager.get("page-doesnt-exist", page));
+        context.invalidArgument(!pageableList.checkPage(page), LanguageManager.get("error-page-doesnt-exist", page));
 
         // sends the pageable list with page as list format
         String entryFormat = LanguageManager.get("group-list-entry");

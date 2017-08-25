@@ -36,7 +36,7 @@ public final class EventExecutor implements EventListener {
      *
      * @param event The events
      */
-    public <E extends Event> boolean execute(E event) {
+    public synchronized <E extends Event> boolean execute(E event) {
         EventUtil.execute(event, EXECUTOR_SERVICE, getHandler(event));
         return !(event instanceof Cancellable) || !((Cancellable) event).isCancelled();
     }

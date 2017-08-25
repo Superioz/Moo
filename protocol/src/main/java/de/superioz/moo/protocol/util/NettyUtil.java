@@ -10,8 +10,10 @@ public class NettyUtil {
     public static void checkAsyncTask() {
         Thread currentThread = Thread.currentThread();
         if(currentThread.getName().equals("main")
-                || currentThread.getName().startsWith("nioEventLoopGroup")) {
-            throw new MooOutputException(MooOutputException.Type.WRONG_THREAD);
+                // I decided to allow the nioEventLoopGroup as "async", but be cautious it could block
+                // netty sending/receiving packets
+                /*|| currentThread.getName().startsWith("nioEventLoopGroup")*/) {
+            throw new MooOutputException(MooOutputException.Type.WRONG_THREAD, currentThread.getName());
         }
     }
 

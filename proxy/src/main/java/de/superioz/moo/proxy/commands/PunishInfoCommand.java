@@ -42,7 +42,7 @@ public class PunishInfoCommand {
     @Command(label = LABEL, usage = "<player>")
     public void onCommand(BungeeCommandContext context, ParamSet args) {
         PlayerProfile playerInfo = args.get(0, PlayerProfile.class);
-        context.invalidArgument(playerInfo == null, LanguageManager.get("player-doesnt-exist", args.get(0)));
+        context.invalidArgument(playerInfo == null, LanguageManager.get("error-player-doesnt-exist", args.get(0)));
 
         // list current ban/mute
         Ban currentBan = playerInfo.getCurrentBan();

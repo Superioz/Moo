@@ -4,6 +4,7 @@ import de.superioz.moo.api.common.MooServer;
 import de.superioz.moo.api.event.EventHandler;
 import de.superioz.moo.api.event.EventListener;
 import de.superioz.moo.api.event.EventPriority;
+import de.superioz.moo.api.logging.ConsoleColor;
 import de.superioz.moo.api.util.Validation;
 import de.superioz.moo.cloud.Cloud;
 import de.superioz.moo.protocol.client.ClientType;
@@ -27,6 +28,11 @@ public class MooClientConnectedListener implements EventListener {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onClientConnected(MooClientConnectedEvent event) {
         MooClient client = event.getClient();
+        if(Cloud.getInstance().getMooProxy() == null){
+            Cloud.getInstance().getLogger().severe(ConsoleColor.RED
+                    + "Couldn't accept client because the MooProxy didn't initialize properly!");
+            return;
+        }
 
         // BUNGEE BUNGEE BUNGEE oh a proxy connects to the server
         if(client.getType() == ClientType.PROXY) {

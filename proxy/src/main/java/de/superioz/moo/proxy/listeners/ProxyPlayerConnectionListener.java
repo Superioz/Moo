@@ -68,9 +68,8 @@ public class ProxyPlayerConnectionListener implements Listener {
         data.lastIp = player.getAddress().getHostString();
 
         // changes the state of the player
-        MooQueries.getInstance().changePlayerState(data, PacketPlayerState.State.CONNECT_SERVER,
-                event.getServer().getInfo().getName(), response -> {
-                });
+        MooQueries.getInstance().changePlayerState(data, PacketPlayerState.State.CONNECT_SERVER, event.getServer().getInfo().getName(), response -> {
+        });
     }
 
     @EventHandler
@@ -103,6 +102,7 @@ public class ProxyPlayerConnectionListener implements Listener {
         MooQueries.getInstance().changePlayerState(data, PacketPlayerState.State.LEAVE_PROXY, response -> {
             if(response.isOk()) {
                 try {
+                    // we wait 1s because the player has to leave properly
                     Thread.sleep(1000L);
                 }
                 catch(InterruptedException e) {
