@@ -1,6 +1,7 @@
 package de.superioz.moo.protocol;
 
 import com.google.common.base.Charsets;
+import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import de.superioz.moo.protocol.common.ResponseStatus;
 import de.superioz.moo.protocol.packet.AbstractPacket;
 import de.superioz.moo.protocol.packet.PacketAdapting;
@@ -16,6 +17,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.function.Consumer;
 
 /**
@@ -25,6 +28,10 @@ public class NetworkBus {
 
     @Getter
     private AbstractNetworkInstance handle;
+
+    @Getter
+    private ExecutorService executors
+            = Executors.newCachedThreadPool(new ThreadFactoryBuilder().setNameFormat("networkbus-pool-%d").build());
 
     public NetworkBus(AbstractNetworkInstance handle) {
         this.handle = handle;
@@ -64,10 +71,12 @@ public class NetworkBus {
         // call handler event
         handle.callEvent(adapter -> adapter.onPacketReceive(packet));
 
+        // handle callbacks
         if(handle.getCallbacks().asMap().containsKey(packet.getQueryUid())) {
             List<Consumer<AbstractPacket>> callbacks = handle.getCallbacks().getIfPresent(packet.getQueryUid());
             if(callbacks != null) {
-                callbacks.forEach(consumer -> consumer.accept(packet));
+                // found callbacks for this packet, execute them ..
+                executors.execute(() -> callbacks.forEach(consumer -> consumer.accept(packet)));
             }
         }
 

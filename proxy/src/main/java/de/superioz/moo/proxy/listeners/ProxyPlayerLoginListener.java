@@ -15,7 +15,6 @@ import net.md_5.bungee.event.EventHandler;
 
 import java.util.UUID;
 
-//TODO WTF is happeniong
 public class ProxyPlayerLoginListener implements Listener {
 
     @EventHandler
@@ -26,6 +25,7 @@ public class ProxyPlayerLoginListener implements Listener {
         System.out.println("0. INTENT: " + event.getIntents());
         Thunder.getInstance().getProxy().getScheduler().runAsync(Thunder.getInstance(), () -> {
             try {
+                System.out.println("CURRENT THREAD: " + Thread.currentThread().getName());
                 onLoginAsync(event);
             }
             catch(MooOutputException e) {
@@ -46,7 +46,6 @@ public class ProxyPlayerLoginListener implements Listener {
             event.completeIntent(Thunder.getInstance());
             return;
         }
-        System.out.println("1. INTENT: " + event.getIntents());
 
         // if the cloud is activated
         // checks if the client is connected to the cloud
@@ -56,7 +55,6 @@ public class ProxyPlayerLoginListener implements Listener {
             event.completeIntent(Thunder.getInstance());
             return;
         }
-        System.out.println("2. INTENT: " + event.getIntents());
 
         // values from the event
         PendingConnection connection = event.getConnection();
@@ -70,7 +68,6 @@ public class ProxyPlayerLoginListener implements Listener {
 
         // changes state
         MooQueries.getInstance().changePlayerState(data, PacketPlayerState.State.LOGIN_PROXY, response -> {
-            System.out.println("3. INTENT: " + event.getIntents());
 
             // check can join
             Thunder.getInstance().checkPlayerProfileBeforeLogin(uuid, event);
@@ -79,8 +76,6 @@ public class ProxyPlayerLoginListener implements Listener {
             if(!event.getIntents().contains(Thunder.getInstance())){
                 return;
             }
-
-            System.out.println("4. INTENT: " + event.getIntents());
 
             // change player state for current server, proxy, ..
             MooQueries.getInstance().changePlayerState(data, PacketPlayerState.State.JOIN_PROXY, response2 -> {

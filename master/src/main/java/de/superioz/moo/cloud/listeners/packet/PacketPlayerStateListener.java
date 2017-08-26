@@ -48,7 +48,6 @@ public class PacketPlayerStateListener implements PacketAdapter {
                 , new Reactor<PacketPlayerState.State>(PacketPlayerState.State.JOIN_PROXY) {
                     @Override
                     public void invoke() {
-                        System.out.println("* JOIN PROXY");
                         // 1. sets the time when the player joined
                         // 2. check maintenance status
                         // 3. sets the server/proxy he is now online (meta=serverId)(hub#address=proxyId)
@@ -62,7 +61,6 @@ public class PacketPlayerStateListener implements PacketAdapter {
                 , new Reactor<PacketPlayerState.State>(PacketPlayerState.State.LEAVE_PROXY) {
                     @Override
                     public void invoke() {
-                        System.out.println("**** LEAVE PROXY ****");
                         // 1. calculates the time he was online
                         // 2. removes the server he was online on
                         // 3. change the user count
@@ -73,7 +71,6 @@ public class PacketPlayerStateListener implements PacketAdapter {
                 , new Reactor<PacketPlayerState.State>(PacketPlayerState.State.JOIN_SERVER) {
                     @Override
                     public void invoke() {
-                        System.out.println("*** JOIN SERVER ***");
                         // awaits playerdata and group as respond (ProxyCache)
                         EventExecutor.getInstance().execute(new MooPlayerJoinedServerEvent(packet));
                     }
@@ -82,7 +79,6 @@ public class PacketPlayerStateListener implements PacketAdapter {
                 , new Reactor<PacketPlayerState.State>(PacketPlayerState.State.CONNECT_SERVER) {
                     @Override
                     public void invoke() {
-                        System.out.println("** CONNECT SERVER **");
                         // only set new current server to player
                         EventExecutor.getInstance().execute(new MooPlayerConnectedServerEvent(packet));
                     }

@@ -40,6 +40,7 @@ public class PlayerDataCollection extends DatabaseCollection<UUID, PlayerData> {
 
         PlayerData currentData = get(uuid);
         if(currentData == null) {
+            // if the data not exists, we are gonna create the default profile for the player
             Group def = DatabaseCollections.GROUP.getDefault();
             id.group = def.name;
             id.rank = def.rank;
