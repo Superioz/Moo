@@ -24,6 +24,7 @@ public enum Validation {
             + "|([0-9a-f]{1,4}:){7}([0-9a-f]){1,4}|"
             + "((http://|https://)?(www.)?(([a-zA-Z0-9-]){2,}\\.){1,4}([a-zA-Z]){2,6}(/([a-zA-Z-_/\\.0-9#:?=&;,]*)?)?)"),
     TIME("[0-9]*[dhms]"),
+    RAM("[0-9]*(K|M){1}")
     ;
 
     private String regex;

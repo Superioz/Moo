@@ -2,6 +2,7 @@ package de.superioz.moo.api.database;
 
 import de.superioz.moo.api.database.objects.Group;
 import de.superioz.moo.api.database.objects.PlayerData;
+import de.superioz.moo.api.database.objects.ServerPattern;
 import lombok.Getter;
 import de.superioz.moo.api.database.objects.Ban;
 
@@ -15,7 +16,8 @@ public enum DatabaseType {
     GROUP(Group.class, "groups"),
     BAN(Ban.class, "bans"),
     BAN_ARCHIVE(Ban.class, "ban-archive"),
-    CONFIG(null, "config")
+    CLOUD_CONFIG(null, "config"),
+    CLOUD_PATTERNS(ServerPattern.class, "patterns")
     ;
 
     /**

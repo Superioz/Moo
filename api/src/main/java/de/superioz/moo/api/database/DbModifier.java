@@ -4,6 +4,7 @@ import de.superioz.moo.api.database.object.DataResolver;
 import de.superioz.moo.api.database.objects.Ban;
 import de.superioz.moo.api.database.objects.Group;
 import de.superioz.moo.api.database.objects.PlayerData;
+import de.superioz.moo.api.database.objects.ServerPattern;
 import de.superioz.moo.api.util.Validation;
 import de.superioz.moo.api.utils.ReflectionUtil;
 import lombok.Getter;
@@ -49,6 +50,13 @@ public enum DbModifier {
     PLAYER_EXTRA_PERMS(11, PlayerData.class, Validation.PERMISSION),
     PLAYER_COINS(12, PlayerData.class),
     PLAYER_BANPOINTS(13, PlayerData.class, Validation.INTEGER),
+
+    PATTERN_NAME(0, ServerPattern.class, Validation.SIMPLE_NAME),
+    PATTERN_TYPE(0, ServerPattern.class, Validation.NORMAL_STRING),
+    PATTERN_PRIORITY(0, ServerPattern.class, Validation.INTEGER),
+    PATTERN_MIN(0, ServerPattern.class, Validation.INTEGER),
+    PATTERN_MAX(0, ServerPattern.class, Validation.INTEGER),
+    PATTERN_RAM(0, ServerPattern.class, Validation.RAM),
 
     // config (no specific class)
     CONFIG_CATEGORY("category");

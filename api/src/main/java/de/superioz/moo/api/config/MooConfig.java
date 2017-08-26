@@ -37,7 +37,7 @@ public final class MooConfig {
      */
     public void set(MooConfigType type, String val) {
         Object castedVal = ReflectionUtil.safeCast(val);
-        connection.upsert(DatabaseType.CONFIG, Filters.eq(DbModifier.CONFIG_CATEGORY.getFieldName(), type.getCategory().getName()),
+        connection.upsert(DatabaseType.CLOUD_CONFIG, Filters.eq(DbModifier.CONFIG_CATEGORY.getFieldName(), type.getCategory().getName()),
                 new DbQuery().equate(type.getKey(), castedVal).toDocument(), aLong -> {
                 });
 
@@ -57,7 +57,7 @@ public final class MooConfig {
             String databaseKey = category.getName();
 
             // fine the document with given key
-            connection.findOne(DatabaseType.CONFIG, Filters.eq(DbModifier.CONFIG_CATEGORY.getFieldName(), databaseKey), document -> {
+            connection.findOne(DatabaseType.CLOUD_CONFIG, Filters.eq(DbModifier.CONFIG_CATEGORY.getFieldName(), databaseKey), document -> {
                 if(document == null) {
                     // create the document with default values
                     Document defaultDocument = new Document();
@@ -67,7 +67,7 @@ public final class MooConfig {
                         defaultDocument.put(configType.getKey(), configType.getDefaultValue());
                     }
 
-                    connection.insert(DatabaseType.CONFIG, defaultDocument);
+                    connection.insert(DatabaseType.CLOUD_CONFIG, defaultDocument);
                     load(category, defaultDocument);
                     return;
                 }

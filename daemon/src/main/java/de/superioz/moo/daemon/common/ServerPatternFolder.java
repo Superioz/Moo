@@ -9,13 +9,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Getter
-public class ServerPattern {
+public class ServerPatternFolder {
 
     protected File folder;
     protected File startFile;
     protected String name;
 
-    public ServerPattern(File folder, String startFileName) {
+    public ServerPatternFolder(File folder, String startFileName) {
         this.folder = folder;
 
         String fName = folder.getName();
@@ -29,7 +29,7 @@ public class ServerPattern {
         this.startFile = new File(folder, startFileName + "." + (SystemUtil.isWindows() ? "bat" : "sh"));
     }
 
-    public ServerPattern(File folder) {
+    public ServerPatternFolder(File folder) {
         this(folder, "start");
     }
 
@@ -40,13 +40,13 @@ public class ServerPattern {
      * @param startFileName Name of the to-start-server file
      * @return The list of pattern objects
      */
-    public static List<ServerPattern> from(File folder, String startFileName) {
-        List<ServerPattern> patterns = new ArrayList<>();
+    public static List<ServerPatternFolder> from(File folder, String startFileName) {
+        List<ServerPatternFolder> patterns = new ArrayList<>();
         File[] content;
         if(!folder.exists() || (content = folder.listFiles()) == null) return patterns;
         for(File f : content) {
             if(f.isDirectory()) {
-                patterns.add(new ServerPattern(f, startFileName));
+                patterns.add(new ServerPatternFolder(f, startFileName));
             }
         }
         return patterns;
