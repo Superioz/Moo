@@ -12,7 +12,7 @@ import de.superioz.moo.api.command.CommandRegistry;
 import de.superioz.moo.api.command.context.CommandContext;
 import de.superioz.moo.api.event.EventListener;
 import de.superioz.moo.api.logging.ConsoleColor;
-import de.superioz.moo.api.logging.Loogger;
+import de.superioz.moo.api.logging.ExtendedLogger;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -35,7 +35,7 @@ public class CommandTerminal implements EventListener {
      * The logger
      */
     @Getter
-    private Loogger logs;
+    private ExtendedLogger logs;
 
     /**
      * The terminal task
@@ -51,7 +51,7 @@ public class CommandTerminal implements EventListener {
      * @param commandable Should commands directly be passed over
      * @param reader      The console reader for the jline implementation
      */
-    public void start(boolean commandable, Loogger logs, ConsoleReader reader) {
+    public void start(boolean commandable, ExtendedLogger logs, ConsoleReader reader) {
         if(initialised) return;
         this.logs = logs;
 

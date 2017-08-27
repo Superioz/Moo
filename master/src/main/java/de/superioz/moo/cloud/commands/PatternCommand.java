@@ -25,7 +25,7 @@ public class PatternCommand {
                 StringUtil.format("&7Available subcommands: {{0}&7}",
                         StringUtil.getListToString(helper.getContext().getCommand().getChildrens(), ", ",
                                 CommandInstance::getLabel))
-                )
+                ), "pattern"
         );
     }
 

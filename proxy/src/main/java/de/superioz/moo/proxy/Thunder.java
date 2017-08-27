@@ -8,7 +8,7 @@ import de.superioz.moo.api.database.objects.Group;
 import de.superioz.moo.api.event.EventListener;
 import de.superioz.moo.api.io.CustomFile;
 import de.superioz.moo.api.io.LanguageManager;
-import de.superioz.moo.api.logging.Loogger;
+import de.superioz.moo.api.logging.ExtendedLogger;
 import de.superioz.moo.api.module.ModuleRegistry;
 import de.superioz.moo.api.modules.RedisModule;
 import de.superioz.moo.client.Moo;
@@ -35,7 +35,7 @@ public class Thunder extends Plugin implements EventListener {
 
     @Getter
     private static Thunder instance;
-    private Loogger logs;
+    private ExtendedLogger logs;
 
     private ModuleRegistry moduleRegistry;
     private ThunderPluginModule pluginModule;
@@ -45,7 +45,7 @@ public class Thunder extends Plugin implements EventListener {
         instance = this;
 
         // initialize moo and modules
-        Moo.initialize((logs = new Loogger(getLogger())).prepareNativeStreams().enableFileLogging().getBaseLogger());
+        Moo.initialize((logs = new ExtendedLogger(getLogger())).prepareNativeStreams().enableFileLogging().getBaseLogger());
         this.pluginModule = new ThunderPluginModule();
         this.moduleRegistry = new ModuleRegistry(logs);
         this.moduleRegistry.register(pluginModule);

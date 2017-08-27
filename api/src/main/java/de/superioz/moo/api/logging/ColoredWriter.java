@@ -56,9 +56,12 @@ public class ColoredWriter extends Handler {
      * @param s The message (can contain colors)
      */
     public void print(String s) {
+        // colorize the message
+        s = ConsoleColor.translateAlternateColorCodes('&', s);
         for(ConsoleColor color : colors) {
             s = s.replaceAll("(?i)" + color.toString(), replacementByColor.get(color));
         }
+
         try {
             console.print(Ansi.ansi().eraseLine(Ansi.Erase.ALL).toString() + ConsoleReader.RESET_LINE + s + Ansi.ansi().reset().toString());
             console.drawLine();

@@ -2,7 +2,8 @@ package de.superioz.moo.api.module;
 
 import com.google.common.base.Strings;
 import de.superioz.moo.api.exceptions.InvalidConfigException;
-import de.superioz.moo.api.logging.Loogger;
+import de.superioz.moo.api.logging.ConsoleColor;
+import de.superioz.moo.api.logging.ExtendedLogger;
 import de.superioz.moo.api.utils.NumberUtil;
 import de.superioz.moo.api.utils.StringUtil;
 import lombok.Getter;
@@ -31,9 +32,9 @@ public class ModuleRegistry {
     private ExecutorService service;
 
     @Getter
-    private Loogger logger;
+    private ExtendedLogger logger;
 
-    public ModuleRegistry(Loogger logger) {
+    public ModuleRegistry(ExtendedLogger logger) {
         this.logger = logger;
     }
 
@@ -54,24 +55,34 @@ public class ModuleRegistry {
 
         for(Module m : getModules()) {
             String name = Strings.padEnd(m.getName() + " ", 25, '.');
-            String state = m.isEnabled() ? "SUCCESS" : "FAILURE";
+            String state = (m.isEnabled() ? ConsoleColor.GREEN + "SUCCESS" : ConsoleColor.RED + "FAILURE") + ConsoleColor.RESET;
             double time = (double) m.getEnableTime() / 1000;
 
             // averages
             if(m.isEnabled()) successCount++;
             totalTime += time;
 
-            String timeString = "[ " + Strings.padStart(StringUtil.applyDecimalLength(time, 3),
-                    6, ' ') + " s]";
-            String error = m.isEnabled() ? "" : " ("
-                    + (m.getErrorReason() != null ? m.getErrorReason().getClass().getSimpleName() : "Not Finished Yet")
-                    + ")";
+            String timeString = "[ " + Strings.padStart(StringUtil.applyDecimalLength(time, 3), 6, ' ') + " s]";
+            String error = m.isEnabled() ? "" : " (" + (m.getErrorReason() != null ? m.getErrorReason().getClass().getSimpleName() : "Not Finished Yet") + ")";
             summaryMessages.add(name + " " + state + " " + timeString + error);
         }
         summaryMessages.add(" ");
-        summaryMessages.add("Total time: " + NumberUtil.round(totalTime, 4) + "s");
-        summaryMessages.add("Success rate: " + NumberUtil.round(successCount / getModules().size() * 100, 4) + "% " +
-                "| Average time: " + NumberUtil.round(totalTime / getModules().size(), 4) + "s");
+
+        String totalTimeString = NumberUtil.round(totalTime, 4);
+        summaryMessages.add("Total time: " + totalTimeString + "s");
+
+        // success
+        double successRate = successCount / getModules().size() * 100;
+        String successRateString = (successRate <= 25 ? ConsoleColor.DARK_RED
+                : successRate <= 50 ? ConsoleColor.RED
+                : successRate <= 75 ? ConsoleColor.GOLD
+                : successRate <= 99 ? ConsoleColor.YELLOW
+                : ConsoleColor.GREEN
+        ) + NumberUtil.round(successRate, 4) + ConsoleColor.RESET;
+
+        // time and footer
+        String averageTimeString = NumberUtil.round(totalTime / getModules().size(), 4);
+        summaryMessages.add("Success rate: " + successRateString + "% " + "| Average time: " + averageTimeString + "s");
         summaryMessages.add(Strings.repeat("-", 75));
 
         // send all messages

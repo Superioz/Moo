@@ -28,7 +28,7 @@ import java.util.logging.Logger;
  * <p>
  * If you are using this for a custom program I recommend to use the {@link MooLogger} because it supports colors and jline!
  */
-public class Loogger {
+public class ExtendedLogger {
 
     public static final Formatter DEFAULT_FORMATTING = new ConciseFormatter();
     private static final String LOG_FILE = "latest.log";
@@ -44,7 +44,7 @@ public class Loogger {
     @Getter
     private boolean fileLogging = false;
 
-    public Loogger(Logger baseLogger) {
+    public ExtendedLogger(Logger baseLogger) {
         AnsiConsole.systemInstall();
         this.baseLogger = baseLogger;
     }
@@ -68,7 +68,7 @@ public class Loogger {
      *
      * @return This
      */
-    public Loogger prepareNativeStreams() {
+    public ExtendedLogger prepareNativeStreams() {
         System.setErr(new PrintStream(new LoggingOutputStream(getBaseLogger(), Level.SEVERE), true));
         System.setOut(new PrintStream(new LoggingOutputStream(getBaseLogger(), Level.INFO), true));
         return this;
@@ -76,11 +76,11 @@ public class Loogger {
 
     /**
      * Enables the file logging which will automatically logs everything from the console inside a file called latest.logging<br>
-     * Before every handler creation {@link Loogger#clean(String)} will be called (to clean up the logs folder)
+     * Before every handler creation {@link ExtendedLogger#clean(String)} will be called (to clean up the logs folder)
      *
      * @return This
      */
-    public Loogger enableFileLogging() {
+    public ExtendedLogger enableFileLogging() {
         if(fileLogging || baseLogger == null) return this;
         this.checkFolder();
         String path = LOG_FOLDER + "/" + LOG_FILE;
@@ -183,6 +183,13 @@ public class Loogger {
             LogUtil.sortCompressedLogs(folder, LOG_FOLDER);
         });
         return r;
+    }
+
+    /**
+     * Prepares the message
+     */
+    public void prepareMessage() {
+
     }
 
     /**

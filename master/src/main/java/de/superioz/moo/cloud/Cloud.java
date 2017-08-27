@@ -10,7 +10,7 @@ import de.superioz.moo.api.database.DatabaseType;
 import de.superioz.moo.api.event.EventListener;
 import de.superioz.moo.api.io.CustomFile;
 import de.superioz.moo.api.io.JsonConfig;
-import de.superioz.moo.api.logging.Loogger;
+import de.superioz.moo.api.logging.ExtendedLogger;
 import de.superioz.moo.api.logging.MooLogger;
 import de.superioz.moo.api.module.ModuleRegistry;
 import de.superioz.moo.api.modules.RedisModule;
@@ -33,7 +33,7 @@ public class Cloud implements EventListener {
     @Getter
     private static Cloud instance;
     @Getter
-    private Loogger logger;
+    private ExtendedLogger logger;
 
     private final ExecutorService executors = Executors.newCachedThreadPool(
             new ThreadFactoryBuilder().setNameFormat("cloud-pool-%d").build());
@@ -73,7 +73,7 @@ public class Cloud implements EventListener {
         // initialises the console things
         MooLogger logger = new MooLogger("Moo");
         reader = logger.getReader();
-        this.logger = new Loogger(logger).enableFileLogging();
+        this.logger = new ExtendedLogger(logger).enableFileLogging();
         this.logger.prepareNativeStreams();
     }
 
@@ -164,10 +164,15 @@ public class Cloud implements EventListener {
      * @param type The type
      * @return The collection
      */
-    public <T extends DatabaseCollection> T getDatabaseCollection(DatabaseType type) {
+    public <T extends DatabaseCollection> T getDatabaseCollection(DatabaseModule module, DatabaseType type) {
+        if(getDatabaseModule() == null) this.databaseModule = module;
         Object coll = getDatabaseModule().getCollection(type);
         if(coll == null) throw new NullPointerException("Couldn't find database collection for " + type);
         return (T) coll;
+    }
+
+    public <T extends DatabaseCollection> T getDatabaseCollection(DatabaseType type) {
+        return getDatabaseCollection(null, type);
     }
 
     /**

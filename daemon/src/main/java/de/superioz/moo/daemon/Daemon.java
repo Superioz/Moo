@@ -6,7 +6,7 @@ import de.superioz.moo.api.event.EventExecutor;
 import de.superioz.moo.api.event.EventHandler;
 import de.superioz.moo.api.event.EventListener;
 import de.superioz.moo.api.io.JsonConfig;
-import de.superioz.moo.api.logging.Loogger;
+import de.superioz.moo.api.logging.ExtendedLogger;
 import de.superioz.moo.api.logging.MooLogger;
 import de.superioz.moo.api.utils.SystemUtil;
 import de.superioz.moo.client.Moo;
@@ -47,7 +47,7 @@ public class Daemon implements EventListener {
     @Setter(value = AccessLevel.PRIVATE)
     public JsonConfig config;
     @Setter(value = AccessLevel.PRIVATE)
-    public Loogger logs;
+    public ExtendedLogger logs;
 
     /**
      * Checks if the daemon is connected, easily by checking if the Moo instance is connected
@@ -93,7 +93,7 @@ public class Daemon implements EventListener {
      */
     public static void main(String[] args) {
         MooLogger logger = new MooLogger("Daemon");
-        getInstance().setLogs(new Loogger(logger));
+        getInstance().setLogs(new ExtendedLogger(logger));
         getInstance().getLogs().enableFileLogging().prepareNativeStreams();
 
         getInstance().getLogs().warning("*** STOPPING THE DAEMON FORCEFULLY RESULTS IN GHOST PROCESSES  ***");

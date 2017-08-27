@@ -4,10 +4,7 @@ import de.superioz.moo.api.command.CommandRegistry;
 import de.superioz.moo.api.event.EventExecutor;
 import de.superioz.moo.api.module.Module;
 import de.superioz.moo.cloud.Cloud;
-import de.superioz.moo.cloud.commands.CacheCommand;
-import de.superioz.moo.cloud.commands.CloudCommand;
-import de.superioz.moo.cloud.commands.DaemonCommand;
-import de.superioz.moo.cloud.commands.DatabaseCommand;
+import de.superioz.moo.cloud.commands.*;
 
 public class CommandModule extends Module {
 
@@ -22,7 +19,7 @@ public class CommandModule extends Module {
         EventExecutor.getInstance().register(new CloudCommand());
         CommandRegistry.getInstance().registerCommandsSeperately(new CloudCommand(),
                 new DatabaseCommand(),
-                new CacheCommand(),
+                new CacheCommand(), new PatternCommand(),
                 new DaemonCommand());
         Cloud.getInstance().getLogger().debug("Commands registered.");
     }
