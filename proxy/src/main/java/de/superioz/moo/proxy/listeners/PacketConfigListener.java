@@ -22,7 +22,7 @@ public class PacketConfigListener implements PacketAdapter {
             int minRank = (int) MooCache.getInstance().getConfigEntry(MooConfigType.MAINTENANCE_RANK);
 
             ProxyServer.getInstance().getPlayers().forEach(player -> {
-                if(MooQueries.getInstance().getPlayerData(player.getUniqueId()).rank < minRank) {
+                if(MooQueries.getInstance().getPlayerData(player.getUniqueId()).getRank() < minRank) {
                     player.disconnect(LanguageManager.get("error-currently-in-maintenance"));
                 }
             });

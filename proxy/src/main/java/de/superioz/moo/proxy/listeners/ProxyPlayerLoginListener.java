@@ -22,10 +22,8 @@ public class ProxyPlayerLoginListener implements Listener {
         if(event.isCancelled()) return;
 
         event.registerIntent(Thunder.getInstance());
-        System.out.println("0. INTENT: " + event.getIntents());
         Thunder.getInstance().getProxy().getScheduler().runAsync(Thunder.getInstance(), () -> {
             try {
-                System.out.println("CURRENT THREAD: " + Thread.currentThread().getName());
                 onLoginAsync(event);
             }
             catch(MooOutputException e) {
@@ -62,9 +60,9 @@ public class ProxyPlayerLoginListener implements Listener {
 
         // create playerdata with every important information
         PlayerData data = new PlayerData();
-        data.uuid = connection.getUniqueId();
-        data.lastName = connection.getName();
-        data.lastIp = connection.getAddress().getHostString();
+        data.setUuid(connection.getUniqueId());
+        data.setLastName(connection.getName());
+        data.setLastIp(connection.getAddress().getHostString());
 
         // changes state
         MooQueries.getInstance().changePlayerState(data, PacketPlayerState.State.LOGIN_PROXY, response -> {
@@ -79,7 +77,7 @@ public class ProxyPlayerLoginListener implements Listener {
 
             // change player state for current server, proxy, ..
             MooQueries.getInstance().changePlayerState(data, PacketPlayerState.State.JOIN_PROXY, response2 -> {
-                MooQueries.getInstance().updatePermission(data.uuid);
+                MooQueries.getInstance().updatePermission(data.getUuid());
             });
 
             // complete

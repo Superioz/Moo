@@ -33,6 +33,7 @@ public enum Protocol {
     CONSOLE_OUTPUT(PacketConsoleOutput.class),
     CONSOLE_INPUT(PacketConsoleInput.class),
     SERVER_INFO_UPDATE(PacketServerInfoUpdate.class),
+    PATTERN_STATE(PacketPatternState.class)
     ;
 
     public static final int PROTOCOL_VERSION = values().length + 42;

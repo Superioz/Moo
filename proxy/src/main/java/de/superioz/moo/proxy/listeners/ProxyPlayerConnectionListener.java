@@ -63,9 +63,9 @@ public class ProxyPlayerConnectionListener implements Listener {
 
         // list playerdata for updating state
         PlayerData data = new PlayerData();
-        data.uuid = player.getUniqueId();
-        data.lastName = player.getName();
-        data.lastIp = player.getAddress().getHostString();
+        data.setUuid(player.getUniqueId());
+        data.setLastName(player.getName());
+        data.setLastIp(player.getAddress().getHostString());
 
         // changes the state of the player
         MooQueries.getInstance().changePlayerState(data, PacketPlayerState.State.CONNECT_SERVER, event.getServer().getInfo().getName(), response -> {
@@ -94,9 +94,9 @@ public class ProxyPlayerConnectionListener implements Listener {
 
         // list playerdata for updating state
         PlayerData data = new PlayerData();
-        data.uuid = player.getUniqueId();
-        data.lastName = player.getName();
-        data.lastIp = player.getAddress().getHostString();
+        data.setUuid(player.getUniqueId());
+        data.setLastName(player.getName());
+        data.setLastIp(player.getAddress().getHostString());
 
         // changes the player's state; removes player data
         MooQueries.getInstance().changePlayerState(data, PacketPlayerState.State.LEAVE_PROXY, response -> {
@@ -110,9 +110,9 @@ public class ProxyPlayerConnectionListener implements Listener {
                 }
 
                 // removes data of player after 1s
-                MooCache.getInstance().getPlayerPermissionMap().removeAsync(data.uuid);
-                MooCache.getInstance().getUniqueIdPlayerMap().removeAsync(data.uuid);
-                MooCache.getInstance().getNameUniqueIdMap().removeAsync(data.lastName);
+                MooCache.getInstance().getPlayerPermissionMap().removeAsync(data.getUuid());
+                MooCache.getInstance().getUniqueIdPlayerMap().removeAsync(data.getUuid());
+                MooCache.getInstance().getNameUniqueIdMap().removeAsync(data.getLastName());
             }
         });
     }

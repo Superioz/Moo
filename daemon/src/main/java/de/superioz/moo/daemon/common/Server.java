@@ -20,7 +20,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.function.Consumer;
 
 @Getter
-public class Server extends ServerPatternFolder {
+public class Server extends ServerFolder {
 
     public static final int DEFAULT_PORT = 25565;
     public static final String DEFAULT_HOST = "127.0.0.1";

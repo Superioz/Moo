@@ -44,7 +44,7 @@ public class PlayerProfile {
      * @return The name as string
      */
     public String getName() {
-        return data == null ? "" : data.lastName;
+        return data == null ? "" : data.getLastName();
     }
 
     /**

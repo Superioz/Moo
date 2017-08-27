@@ -52,19 +52,19 @@ public class WhoisCommand {
 
         // list rough information about the player
         String playerName = args.get(0);
-        UUID uuid = data.uuid;
-        String ip = data.lastIp;
-        String rank = data.group;
-        long coins = data.coins;
-        int banPoints = data.banPoints;
+        UUID uuid = data.getUuid();
+        String ip = data.getLastIp();
+        String rank = data.getGroup();
+        long coins = data.getCoins();
+        int banPoints = data.getBanPoints();
 
         // list online status
-        String firstOnline = TimeUtil.getFormat(data.firstOnline);
-        String totalOnline = data.totalOnline == null ? "0" : TimeUnit.MILLISECONDS.toHours(data.totalOnline) + "h";
-        String currentServer = data.currentServer;
-        int currentProxy = data.currentProxy;
+        String firstOnline = TimeUtil.getFormat(data.getFirstOnline());
+        String totalOnline = data.getTotalOnline() == null ? "0" : TimeUnit.MILLISECONDS.toHours(data.getTotalOnline()) + "h";
+        String currentServer = data.getCurrentServer();
+        int currentProxy = data.getCurrentProxy();
         long onlineSince = TimeUnit.MILLISECONDS.toMinutes(data.getCurrentOnline());
-        String offlineSince = TimeUtil.getFormat(data.lastOnline);
+        String offlineSince = TimeUtil.getFormat(data.getLastOnline());
         List onlineStatus = currentProxy == -1
                 ? Arrays.asList(true, offlineSince)
                 : Arrays.asList(false, currentServer, currentProxy, onlineSince);

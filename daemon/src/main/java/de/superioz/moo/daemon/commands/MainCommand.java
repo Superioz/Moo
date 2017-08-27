@@ -8,7 +8,7 @@ import de.superioz.moo.api.utils.StringUtil;
 import de.superioz.moo.client.Moo;
 import de.superioz.moo.daemon.Daemon;
 import de.superioz.moo.daemon.common.Server;
-import de.superioz.moo.daemon.common.ServerPatternFolder;
+import de.superioz.moo.daemon.common.ServerFolder;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -19,7 +19,7 @@ public class MainCommand {
     @Command(label = "pattern")
     public void pattern(CommandContext context, ParamSet args) {
         Daemon.getInstance().getLogs().info("Patterns (" + Daemon.getInstance().getServer().getPatternByName().size() + "):");
-        for(ServerPatternFolder pattern : Daemon.getInstance().getServer().getPatternByName().values()) {
+        for(ServerFolder pattern : Daemon.getInstance().getServer().getPatternByName().values()) {
             List<String> plugins = new ArrayList<>();
             pattern.getPlugins().forEach(file -> plugins.add(Files.getNameWithoutExtension(file.getPath())));
             List<String> worlds = new ArrayList<>();

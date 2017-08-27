@@ -8,9 +8,14 @@ import de.superioz.moo.api.command.help.ArgumentHelper;
 import de.superioz.moo.api.command.param.ParamSet;
 import de.superioz.moo.api.command.tabcomplete.TabCompletion;
 import de.superioz.moo.api.command.tabcomplete.TabCompletor;
+import de.superioz.moo.api.database.objects.ServerPattern;
+import de.superioz.moo.api.util.Validation;
 import de.superioz.moo.api.utils.StringUtil;
+import de.superioz.moo.cloud.common.PatternManager;
+import de.superioz.moo.cloud.database.DatabaseCollections;
 
 import java.util.Collections;
+import java.util.List;
 
 public class PatternCommand {
 
@@ -29,28 +34,72 @@ public class PatternCommand {
         completor.reactSubCommands("pattern");
     }
 
-    @Command(label = "pattern")
+    @Command(label = "pattern", usage = "<subcommand>")
     public void onCommand(CommandContext context, ParamSet args) {
+        // ..
+    }
 
+    @Command(label = "list", parent = "pattern")
+    public void list(CommandContext context, ParamSet args) {
+        List<ServerPattern> patterns = DatabaseCollections.PATTERN.list();
+        context.invalidArgument(patterns.isEmpty(), "&cNo pattern found.");
+
+        context.sendMessage("Patterns (" + patterns.size() + "):");
+        patterns.forEach(pattern -> context.sendMessage("Pattern '" + pattern.getName() + "': {" + pattern + "}"));
     }
 
     @Command(label = "info", parent = "pattern", usage = "<name>")
     public void info(CommandContext context, ParamSet args) {
+        String name = args.get(0);
+        ServerPattern pattern = DatabaseCollections.PATTERN.get(name);
+        context.invalidArgument(pattern == null, "&cThis pattern does not exist! (" + name + ")");
 
+        context.sendMessage("Pattern '" + name + "': {" + pattern + "}");
     }
 
-    @Command(label = "create", parent = "pattern", usage = "<name> <type> <priority> <min> <max> <ram>")
+    @Command(label = "create", parent = "pattern", usage = "<name> [type] [priority] [min] [max] [ram]")
     public void create(CommandContext context, ParamSet args) {
+        String name = args.get(0);
+        ServerPattern pattern = DatabaseCollections.PATTERN.get(name);
+        context.invalidArgument(pattern != null, "&cThis pattern already exists! (" + name + ")");
+        context.invalidArgument(!Validation.SIMPLE_NAME.matches(name), "&cWrong name format! (" + Validation.SIMPLE_NAME.getRawRegex() + ")");
 
+        ServerPattern newPattern = new ServerPattern(name,
+                args.getString(1, ServerPattern.DEFAULT_TYPE, Validation.SIMPLE_NAME::matches),
+                args.getInt(2, ServerPattern.DEFAULT_PRIORITY),
+                args.getInt(3, ServerPattern.DEFAULT_MIN),
+                args.getInt(4, ServerPattern.DEFAULT_MAX),
+                args.getString(5, ServerPattern.DEFAULT_RAM, Validation.RAM::matches)
+        );
+        context.invalidArgument(!PatternManager.getInstance().createPattern(newPattern), "&cCouldn't create pattern!");
+        context.sendMessage("&aCreated pattern successfully.");
     }
 
     @Command(label = "delete", parent = "pattern", usage = "<name>")
     public void delete(CommandContext context, ParamSet args) {
+        String name = args.get(0);
+        ServerPattern pattern = DatabaseCollections.PATTERN.get(name);
+        context.invalidArgument(pattern == null, "&cThis pattern does not exist! (" + name + ")");
+
+        context.invalidArgument(!PatternManager.getInstance().deletePattern(pattern), "&cCouldn't delete pattern!");
+        context.sendMessage("&aDeleted patter successfully.");
+    }
+
+    @Command(label = "modify", parent = "pattern", usage = "<name> <updates>")
+    public void modify(CommandContext context, ParamSet args) {
+        String name = args.get(0);
+        ServerPattern pattern = DatabaseCollections.PATTERN.get(name);
+        context.invalidArgument(pattern == null, "&cThis pattern does not exist! (" + name + ")");
+
 
     }
 
     @Command(label = "check", parent = "pattern", usage = "<name>")
     public void check(CommandContext context, ParamSet args) {
+        String name = args.get(0);
+        ServerPattern pattern = DatabaseCollections.PATTERN.get(name);
+        context.invalidArgument(pattern == null, "&cThis pattern does not exist! (" + name + ")");
+
 
     }
 

@@ -30,7 +30,12 @@ public enum RedisConfig {
     /**
      * @see MooCache#serverMap
      */
-    SERVER_MAP;
+    SERVER_MAP,
+
+    /**
+     * @see MooCache#patternMap
+     */
+    PATTERN_MAP;
 
     RedisConfig() {
     }

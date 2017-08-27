@@ -120,7 +120,8 @@ public class CloudCommand implements EventListener {
 
         List<String> l = new ArrayList<>();
         if(!(players.size() > 30)) {
-            players.forEach(player -> l.add(player.lastName + "[" + player.uuid + "] @ '" + player.currentServer + "'[#" + player.currentProxy + "]"));
+            players.forEach(player -> l.add(player.getLastName() + "[" + player.getUuid() + "] @ '"
+                    + player.getCurrentServer() + "'[#" + player.getCurrentProxy() + "]"));
         }
 
         context.sendMessage("Players (" + players.size() + "): " + (l.size() == 0 ? "Nothing to display!" : "\n\t- " + String.join("\n\t- ", l)));

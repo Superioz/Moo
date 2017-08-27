@@ -221,7 +221,7 @@ public class PacketDatabaseModifyListener implements PacketAdapter {
             }
             else if(modifyType == DatabaseModifyType.CREATE || modifyType == DatabaseModifyType.MODIFY) {
                 Group group = ReflectionUtil.deserialize(data, Group.class);
-                MooCache.getInstance().getGroupMap().fastPut(group.name, group);
+                MooCache.getInstance().getGroupMap().fastPut(group.getName(), group);
 
                 // GROUP HAS BEEN UPDATED
                 if(modifyType == DatabaseModifyType.CREATE) {
@@ -234,7 +234,7 @@ public class PacketDatabaseModifyListener implements PacketAdapter {
                 Group group = ReflectionUtil.deserialize(l.get(1), Group.class);
 
                 MooCache.getInstance().getGroupMap().remove((String) id);
-                MooCache.getInstance().getGroupMap().fastPut(group.name, group);
+                MooCache.getInstance().getGroupMap().fastPut(group.getName(), group);
 
                 return true;
             }
@@ -247,7 +247,7 @@ public class PacketDatabaseModifyListener implements PacketAdapter {
             }
             else if(modifyType == DatabaseModifyType.CREATE || modifyType == DatabaseModifyType.MODIFY) {
                 PlayerData playerData = ReflectionUtil.deserialize(data, PlayerData.class);
-                MooCache.getInstance().getUniqueIdPlayerMap().fastPut(playerData.uuid, playerData);
+                MooCache.getInstance().getUniqueIdPlayerMap().fastPut(playerData.getUuid(), playerData);
 
                 // UPDATE PERMISSIONS IF EDITED
                 if(modifyType == DatabaseModifyType.MODIFY) {

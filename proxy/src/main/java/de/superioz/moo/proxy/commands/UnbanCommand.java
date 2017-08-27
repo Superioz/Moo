@@ -48,7 +48,7 @@ public class UnbanCommand {
         String playerName = args.get(0);
 
         // list ban
-        Ban ban = MooQueries.getInstance().getBan(data.uuid);
+        Ban ban = MooQueries.getInstance().getBan(data.getUuid());
         context.invalidArgument(ban == null, LanguageManager.get("unban-player-isnt-banned", playerName));
 
         // list the reason (optional)
@@ -60,13 +60,13 @@ public class UnbanCommand {
 
         // send teamchat message or only direct to him
         if(BungeeTeamChat.getInstance().canTeamchat(context.getCommandSender())) {
-            String target = BungeeTeamChat.getInstance().getColor(ban.banned) + playerName;
+            String target = BungeeTeamChat.getInstance().getColor(ban.getBanned()) + playerName;
 
             BanCategory banSubType = ban.getSubType();
             String executor = BungeeTeamChat.getInstance().getColoredName(context.getCommandSender());
             String typeColor = banSubType.getBanType() == BanType.GLOBAL ? "&c" : "&9";
-            String start = TimeUtil.getFormat(ban.start);
-            String end = TimeUtil.getFormat(ban.start + ban.duration);
+            String start = TimeUtil.getFormat(ban.getStart());
+            String end = TimeUtil.getFormat(ban.getStart() + ban.getDuration());
 
             BungeeTeamChat.getInstance().send(
                     LanguageManager.get("unban-successful-team",

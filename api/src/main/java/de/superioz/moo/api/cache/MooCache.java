@@ -4,6 +4,7 @@ import de.superioz.moo.api.common.MooServer;
 import de.superioz.moo.api.config.MooConfigType;
 import de.superioz.moo.api.database.objects.Group;
 import de.superioz.moo.api.database.objects.PlayerData;
+import de.superioz.moo.api.database.objects.ServerPattern;
 import lombok.Getter;
 import org.redisson.api.*;
 
@@ -68,6 +69,11 @@ public final class MooCache {
     private RLocalCachedMap<UUID, MooServer> serverMap;
 
     /**
+     * This map stores the serverPattern behind their name as key
+     */
+    private RLocalCachedMap<String, ServerPattern> patternMap;
+
+    /**
      * The client of the redis connection
      */
     private RedissonClient redisClient;
@@ -85,6 +91,7 @@ public final class MooCache {
         this.playerPermissionMap = redisClient.getLocalCachedMap(RedisConfig.PLAYER_PERMISSION_MAP.getKey(), DEFAULT_OPTIONS);
         this.configMap = redisClient.getLocalCachedMap(RedisConfig.CONFIG_MAP.getKey(), DEFAULT_OPTIONS);
         this.serverMap = redisClient.getLocalCachedMap(RedisConfig.SERVER_MAP.getKey(), DEFAULT_OPTIONS);
+        this.patternMap = redisClient.getLocalCachedMap(RedisConfig.PATTERN_MAP.getKey(), DEFAULT_OPTIONS);
 
         this.initialized = true;
     }

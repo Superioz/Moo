@@ -1,7 +1,10 @@
 package de.superioz.moo.cloud.database;
 
 import de.superioz.moo.api.cache.DatabaseCache;
-import de.superioz.moo.api.database.*;
+import de.superioz.moo.api.database.DatabaseCollection;
+import de.superioz.moo.api.database.DatabaseConnection;
+import de.superioz.moo.api.database.DatabaseType;
+import de.superioz.moo.api.database.DbModifier;
 import de.superioz.moo.api.database.objects.Group;
 import de.superioz.moo.api.database.objects.PlayerData;
 import de.superioz.moo.api.database.query.DbQuery;
@@ -32,8 +35,8 @@ public class PlayerDataCollection extends DatabaseCollection<UUID, PlayerData> {
      */
     public PlayerData getCurrentData(PlayerData id, boolean update) {
         if(id == null) return null;
-        UUID uuid = id.uuid;
-        String name = id.lastName;
+        UUID uuid = id.getUuid();
+        String name = id.getLastName();
 
         // fail
         if(uuid == null) return null;
@@ -42,14 +45,14 @@ public class PlayerDataCollection extends DatabaseCollection<UUID, PlayerData> {
         if(currentData == null) {
             // if the data not exists, we are gonna create the default profile for the player
             Group def = DatabaseCollections.GROUP.getDefault();
-            id.group = def.name;
-            id.rank = def.rank;
-            id.lastOnline = 0L;
-            id.joined = System.currentTimeMillis();
-            id.firstOnline = System.currentTimeMillis();
-            id.totalOnline = 0L;
-            id.coins = 0L;
-            id.banPoints = 0;
+            id.setGroup(def.getName());
+            id.setRank(def.getRank());
+            id.setLastOnline(0L);
+            id.setJoined(System.currentTimeMillis());
+            id.setFirstOnline(System.currentTimeMillis());
+            id.setTotalOnline(0L);
+            id.setCoins(0L);
+            id.setBanPoints(0);
 
             set(uuid, id, true);
             currentData = id;
@@ -57,16 +60,16 @@ public class PlayerDataCollection extends DatabaseCollection<UUID, PlayerData> {
         else if(update) {
             DbQuery updates = new DbQuery(currentData.getClass());
 
-            if(!currentData.lastName.equals(id.lastName)) {
+            if(!currentData.getLastName().equals(id.getLastName())) {
                 updates.equate(DbModifier.PLAYER_NAME, name);
             }
-            if(!currentData.lastIp.equals(id.lastIp)) {
-                updates.equate(DbModifier.PLAYER_IP, id.lastIp);
+            if(!currentData.getLastIp().equals(id.getLastIp())) {
+                updates.equate(DbModifier.PLAYER_IP, id.getLastIp());
             }
-            if(!DatabaseCollections.GROUP.has(currentData.group)) {
+            if(!DatabaseCollections.GROUP.has(currentData.getGroup())) {
                 Group def = DatabaseCollections.GROUP.getDefault();
-                updates.equate(DbModifier.PLAYER_GROUP, def.name).equate(DbModifier.PLAYER_RANK, def.rank);
-                currentData.group = def.name;
+                updates.equate(DbModifier.PLAYER_GROUP, def.getName()).equate(DbModifier.PLAYER_RANK, def.getRank());
+                currentData.setGroup(def.getName());
             }
 
             set(uuid, currentData, updates.toMongoQuery().build(), true);

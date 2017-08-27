@@ -1,6 +1,7 @@
 package de.superioz.moo.api.database.objects;
 
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import de.superioz.moo.api.database.object.DbKey;
 import de.superioz.moo.api.util.SimpleSerializable;
@@ -12,93 +13,95 @@ import java.util.UUID;
 
 @NoArgsConstructor
 @AllArgsConstructor
+@Getter
+@Setter
 public class PlayerData extends SimpleSerializable {
 
     /**
      * The uuid of the player
      */
     @DbKey
-    public UUID uuid;
+    private UUID uuid;
 
     /**
      * The name the player last played with
      */
     @DbKey
-    public String lastName;
+    private String lastName;
 
     /**
      * The ip the player last played with
      */
     @DbKey
-    public String lastIp;
+    private String lastIp;
 
     /**
      * The {@link Group} of the player
      */
     @DbKey
-    public String group;
+    private String group;
 
     /**
      * The {@link Group} rank of the player
      */
     @DbKey
-    public Integer rank;
+    private Integer rank;
 
     /**
      * The server where the player is online atm
      */
     @DbKey
     @Setter
-    public String currentServer;
+    private String currentServer;
 
     /**
      * The proxy where the player has connected to
      */
     @DbKey
     @Setter
-    public Integer currentProxy;
+    private Integer currentProxy;
 
     /**
      * Timestamp of the last online time (Last online = Leave Time)
      */
     @DbKey
-    public Long lastOnline;
+    private Long lastOnline;
 
     /**
      * Timestamp of the first online time
      */
     @DbKey
-    public Long firstOnline;
+    private Long firstOnline;
 
     /**
      * Total online time of the player (in ms)
      */
     @DbKey
-    public Long totalOnline;
+    private Long totalOnline;
 
     /**
      * Timestamp when the player joined the server (0 = not online)
      */
     @DbKey
-    public Long joined;
+    private Long joined;
 
     /**
      * Extra permissions of the player. Additional to {@link Group#permissions}
      */
     @DbKey
-    public List<String> extraPerms = new ArrayList<>();
+    private List<String> extraPerms = new ArrayList<>();
 
     /**
      * Coins amount of the player
      */
     @DbKey
-    public Long coins;
+    private Long coins;
 
     /**
      * Ban points amount of the player
      */
     @DbKey
-    public Integer banPoints;
+    private Integer banPoints;
 
     /**
      * Gets the time the player is currently online

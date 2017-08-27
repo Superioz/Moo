@@ -57,7 +57,7 @@ public class PermCommand {
         ), LABEL);
 
         completor.react("g", StringUtil.getStringList(
-                MooQueries.getInstance().listGroups(), group -> group.name
+                MooQueries.getInstance().listGroups(), Group::getName
         ), LIST_COMMAND, ADD_COMMAND, REMOVE_COMMAND, CLEAR_COMMAND);
 
         completor.react("p", StringUtil.getStringList(
@@ -227,19 +227,19 @@ public class PermCommand {
         if(args.hasFlag(groupFlag)) {
             CommandFlag flag = args.getFlag(groupFlag);
             Group group = flag.get(0, Group.class);
-            context.invalidArgument(group == null || group.name == null, LanguageManager.get("group-doesnt-exist", flag.get(0)));
+            context.invalidArgument(group == null || group.getName() == null, LanguageManager.get("group-doesnt-exist", flag.get(0)));
 
-            permissions = new HashSet<>(group.permissions);
-            primKey = group.name;
+            permissions = new HashSet<>(group.getPermissions());
+            primKey = group.getName();
         }
         // permissions from player
         else if(args.hasFlag(playerFlag)) {
             CommandFlag flag = args.getFlag(playerFlag);
             PlayerData playerData = flag.get(0, PlayerData.class);
-            context.invalidArgument(playerData == null || playerData.uuid == null, LanguageManager.get("", flag.get(0)));
+            context.invalidArgument(playerData == null || playerData.getUuid() == null, LanguageManager.get("", flag.get(0)));
 
             permissions = MooQueries.getInstance().getPlayerPermissions(playerData, true);
-            primKey = playerData.uuid;
+            primKey = playerData.getUuid();
         }
         // permissions from command sender
         else {

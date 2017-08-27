@@ -37,7 +37,7 @@ public class BungeeTeamChat extends TeamChat<CommandSender, ResponseStatus> {
             Group group = MooQueries.getInstance().getGroup(player.getUniqueId());
 
             return group != null
-                    && group.rank >= (Integer) Thunder.getInstance().getPluginModule().getConfig().get(TeamChat.RANK_KEY);
+                    && group.getRank() >= (Integer) Thunder.getInstance().getPluginModule().getConfig().get(TeamChat.RANK_KEY);
         }
         return false;
     }
@@ -61,7 +61,7 @@ public class BungeeTeamChat extends TeamChat<CommandSender, ResponseStatus> {
         else {
             Group group = MooQueries.getInstance().getGroup(uuid);
             if(group == null) return "&f";
-            return group.color;
+            return group.getColor();
         }
     }
 

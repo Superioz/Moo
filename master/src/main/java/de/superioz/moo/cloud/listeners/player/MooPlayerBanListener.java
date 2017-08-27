@@ -36,8 +36,8 @@ public class MooPlayerBanListener implements EventListener {
         Ban ban = packet.ban;
 
         // list unique id buf and check if it is valid
-        PlayerData fetchedData = DatabaseCollections.PLAYER.get(new DbFilter(Filters.eq(DbModifier.PLAYER_NAME.getFieldName(), data.lastName)));
-        UUID uuid = fetchedData.uuid;
+        PlayerData fetchedData = DatabaseCollections.PLAYER.get(new DbFilter(Filters.eq(DbModifier.PLAYER_NAME.getFieldName(), data.getLastName())));
+        UUID uuid = fetchedData.getUuid();
 
         // checks ban
         if(ban == null) {
@@ -55,20 +55,20 @@ public class MooPlayerBanListener implements EventListener {
         }
 
         // sets ban values
-        ban.start = System.currentTimeMillis();
-        ban.banned = uuid;
+        ban.setStart(System.currentTimeMillis());
+        ban.setBanned(uuid);
 
         // checks if the executor is allowed to ban the target
         // and send FORBIDDEN if he isn't
-        if(ban.by != null) {
-            PlayerData executor = DatabaseCollections.PLAYER.get(ban.by);
-            PlayerData target = DatabaseCollections.PLAYER.get(ban.banned);
+        if(ban.getBy() != null) {
+            PlayerData executor = DatabaseCollections.PLAYER.get(ban.getBy());
+            PlayerData target = DatabaseCollections.PLAYER.get(ban.getBanned());
 
             if(executor != null && target != null) {
-                Group executorGroup = DatabaseCollections.GROUP.get(executor.group);
-                Group targetGroup = DatabaseCollections.GROUP.get(target.group);
+                Group executorGroup = DatabaseCollections.GROUP.get(executor.getGroup());
+                Group targetGroup = DatabaseCollections.GROUP.get(target.getGroup());
 
-                if(!(executorGroup == null || targetGroup == null || executorGroup.rank > targetGroup.rank)) {
+                if(!(executorGroup == null || targetGroup == null || executorGroup.getRank() > targetGroup.getRank())) {
                     packet.respond(ResponseStatus.FORBIDDEN);
                     return;
                 }
@@ -77,11 +77,11 @@ public class MooPlayerBanListener implements EventListener {
 
         // calculate the duration of the ban if the duration wasn't set before
         BanCategory reason = ban.getSubType();
-        int banPoints = data.banPoints == null ? 0 : data.banPoints;
+        int banPoints = data.getBanPoints() == null ? 0 : data.getBanPoints();
         int newBanPoints = PunishmentManager.calculateBanPoints(banPoints, reason);
-        ban.banPoints = newBanPoints;
-        if(ban.duration == 0) ban.duration = PunishmentManager.calculateDuration(newBanPoints);
-        data.banPoints = newBanPoints;
+        ban.setBanPoints(newBanPoints);
+        if(ban.getDuration() == 0) ban.setDuration(PunishmentManager.calculateDuration(newBanPoints));
+        data.setBanPoints(newBanPoints);
 
         // ban the player and if it isn't successful then respond error
         // update the ban points of the player
@@ -89,13 +89,13 @@ public class MooPlayerBanListener implements EventListener {
             packet.respond(ResponseStatus.NOK);
             return;
         }
-        DatabaseCollections.PLAYER.set(data.uuid, data, DbQueryUnbaked.newInstance(DbModifier.PLAYER_BANPOINTS, data.banPoints));
+        DatabaseCollections.PLAYER.set(data.getUuid(), data, DbQueryUnbaked.newInstance(DbModifier.PLAYER_BANPOINTS, data.getBanPoints()));
         packet.respond(ResponseStatus.OK);
 
         // gets the player and kick him if he is online
-        PlayerData player = Cloud.getInstance().getMooProxy().getPlayer(fetchedData.uuid);
+        PlayerData player = Cloud.getInstance().getMooProxy().getPlayer(fetchedData.getUuid());
         if(player != null) {
-            Cloud.getInstance().getMooProxy().kick(player, new PacketPlayerKick(null, fetchedData.uuid + "",
+            Cloud.getInstance().getMooProxy().kick(player, new PacketPlayerKick(null, fetchedData.getUuid() + "",
                     ban.apply(ban.isPermanent() ? permBanMessage : tempBanMessage)), response -> {
             });
         }

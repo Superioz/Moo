@@ -1,8 +1,9 @@
 package de.superioz.moo.daemon;
 
+import de.superioz.moo.api.util.Validation;
 import de.superioz.moo.api.utils.IOUtil;
 import de.superioz.moo.daemon.common.Server;
-import de.superioz.moo.daemon.common.ServerPatternFolder;
+import de.superioz.moo.daemon.common.ServerFolder;
 import de.superioz.moo.daemon.task.RamUsageTask;
 import de.superioz.moo.daemon.task.ServerStartQueueTask;
 import lombok.Getter;
@@ -31,7 +32,7 @@ public class DaemonInstance {
     private File serversFolder;
 
     private String startFileName;
-    private Map<String, ServerPatternFolder> patternByName = new HashMap<>();
+    private Map<String, ServerFolder> patternByName = new HashMap<>();
 
     public DaemonInstance(File patternFolder, File serversFolder, String startFileName) {
         this.patternFolder = patternFolder;
@@ -82,7 +83,7 @@ public class DaemonInstance {
      */
     public DaemonInstance fetchPatterns() {
         this.patternByName.clear();
-        ServerPatternFolder.from(patternFolder, startFileName)
+        ServerFolder.from(patternFolder, startFileName)
                 .forEach(serverPattern -> patternByName.put(serverPattern.getName(), serverPattern));
         return this;
     }
@@ -93,9 +94,41 @@ public class DaemonInstance {
      * @param cached If false it fetches all patterns before returning the patterns (= live)
      * @return The map of patterns
      */
-    public Map<String, ServerPatternFolder> getPatterns(boolean cached) {
+    public Map<String, ServerFolder> getPatterns(boolean cached) {
         if(!cached) fetchPatterns();
         return patternByName;
+    }
+
+    /**
+     * Creates given pattern if not exists
+     *
+     * @param type The type
+     */
+    public void createPattern(String type) {
+        if(patternByName.containsKey(type) || !Validation.SIMPLE_NAME.matches(type)) return;
+        File folder = new File(getPatternFolder(), type);
+        folder.mkdirs();
+
+        new File(folder, "plugins").mkdirs();
+        new File(folder, "logs").mkdirs();
+        fetchPatterns();
+    }
+
+    /**
+     * Delete given pattern if exists
+     *
+     * @param type The type
+     */
+    public void deletePattern(String type) {
+        if(!patternByName.containsKey(type)) return;
+        File folder = new File(getPatternFolder(), type);
+        try {
+            IOUtil.deleteFile(folder);
+        }
+        catch(IOException e) {
+            // nah
+        }
+        fetchPatterns();
     }
 
     /**
@@ -104,7 +137,7 @@ public class DaemonInstance {
      * @param type The type
      * @return The serverPattern
      */
-    public ServerPatternFolder getPattern(String type, boolean cached) {
+    public ServerFolder getPattern(String type, boolean cached) {
         return getPatterns(cached).get(type);
     }
 
@@ -148,7 +181,7 @@ public class DaemonInstance {
      * @return The server
      */
     public Server createServer(String type, boolean autoSave) {
-        ServerPatternFolder pattern = getPattern(type, false);
+        ServerFolder pattern = getPattern(type, false);
         if(pattern == null) {
             Daemon.getInstance().getLogs().info("There is no pattern available with type='" + type + "'!");
             return null;

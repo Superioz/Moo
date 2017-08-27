@@ -20,11 +20,11 @@ public class GroupCache extends DatabaseCache<String, Group> {
         Cloud.getInstance().getLogger().debug("Loading groups from database ..");
         getDatabaseCollection().fetch(null, -1).forEach((Consumer<Document>) document -> {
             Group group = getDatabaseCollection().convert(document);
-            insert(group.name, group);
+            insert(group.getName(), group);
         });
 
         List<String> l = new ArrayList<>();
-        queryLooped(null).forEach(group -> l.add(group.name));
+        queryLooped(null).forEach(group -> l.add(group.getName()));
         Cloud.getInstance().getLogger().debug("Found groups(" + size() + "): " + l);
     }
 

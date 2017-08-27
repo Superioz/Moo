@@ -36,7 +36,7 @@ public class PacketUpdatePermissionListener implements PacketAdapter {
                 UUID uuid = player.getUniqueId();
                 PlayerData data = MooCache.getInstance().getUniqueIdPlayerMap().get(uuid);
 
-                if(data == null || !data.group.equals(key)) continue;
+                if(data == null || !data.getGroup().equals(key)) continue;
                 Moo.getInstance().runAsync((Runnable) () -> MooQueries.getInstance().updatePermission(uuid));
             }
         }

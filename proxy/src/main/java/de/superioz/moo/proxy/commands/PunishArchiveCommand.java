@@ -81,18 +81,18 @@ public class PunishArchiveCommand {
                 LanguageManager.get("punishment-archive-list-header"), LanguageManager.get("punishment-archive-list-entry-empty"),
                 ban -> {
                     String banExecutorName = CommandContext.CONSOLE_NAME;
-                    PlayerData banExecutor = MooQueries.getInstance().getPlayerData(ban.by);
-                    if(banExecutor != null) banExecutorName = banExecutor.lastName;
+                    PlayerData banExecutor = MooQueries.getInstance().getPlayerData(ban.getBy());
+                    if(banExecutor != null) banExecutorName = banExecutor.getLastName();
 
                     String typeColor = ban.getSubType().getBanType() == BanType.GLOBAL ? "&c" : "&9";
-                    String start = TimeUtil.getFormat(ban.start);
+                    String start = TimeUtil.getFormat(ban.getStart());
                     String end = TimeUtil.getFormat(ban.until());
 
                     context.sendEventMessage(
                             LanguageManager.format(entryFormat,
-                                    start, end, typeColor + ban.reason,
-                                    Arrays.asList("Details", start, end, typeColor + ban.reason,
-                                            BungeeTeamChat.getInstance().getColor(banExecutor == null ? null : banExecutor.uuid) + banExecutorName)),
+                                    start, end, typeColor + ban.getReason(),
+                                    Arrays.asList("Details", start, end, typeColor + ban.getReason(),
+                                            BungeeTeamChat.getInstance().getColor(banExecutor == null ? null : banExecutor.getUuid()) + banExecutorName)),
                             ClickEvent.Action.RUN_COMMAND
                     );
                 }, () -> {

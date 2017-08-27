@@ -58,23 +58,23 @@ public class PunishInfoCommand {
         // otherwise send (not-banned)
         if(currentBan != null) {
             String banExecutorName = CommandContext.CONSOLE_NAME;
-            PlayerData banExecutor = MooQueries.getInstance().getPlayerData(currentBan.by);
-            if(banExecutor != null) banExecutorName = banExecutor.lastName;
+            PlayerData banExecutor = MooQueries.getInstance().getPlayerData(currentBan.getBy());
+            if(banExecutor != null) banExecutorName = banExecutor.getLastName();
 
             // values for formatting
             long current = System.currentTimeMillis();
-            String start = TimeUtil.getFormat(currentBan.start);
+            String start = TimeUtil.getFormat(currentBan.getStart());
             BanCategory subType = currentBan.getSubType();
             String typeColor = subType.getBanType() == BanType.GLOBAL ? "&c" : "&9";
-            String end = TimeUtil.getFormat(current + currentBan.duration);
+            String end = TimeUtil.getFormat(current + currentBan.getDuration());
 
             context.sendEventMessage(LanguageManager.get("punishment-ban-info",
                     start, typeColor + subType.getName(),
                     "Details",
                     start,
                     end,
-                    typeColor + currentBan.reason,
-                    BungeeTeamChat.getInstance().getColor(banExecutor == null ? null : banExecutor.uuid) + banExecutorName));
+                    typeColor + currentBan.getReason(),
+                    BungeeTeamChat.getInstance().getColor(banExecutor == null ? null : banExecutor.getUuid()) + banExecutorName));
         }
         else {
             context.sendMessage(LanguageManager.get("punishment-player-isnt-banned", playerInfo.getName()));

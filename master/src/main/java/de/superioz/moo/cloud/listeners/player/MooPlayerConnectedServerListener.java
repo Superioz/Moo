@@ -25,24 +25,24 @@ public class MooPlayerConnectedServerListener implements EventListener {
         PacketPlayerState packet = event.getPacket();
 
         // list the player and check if exists
-        PlayerData player = MooCache.getInstance().getUniqueIdPlayerMap().get(data.uuid);
+        PlayerData player = MooCache.getInstance().getUniqueIdPlayerMap().get(data.getUuid());
         if(player == null) {
             packet.respond(ResponseStatus.NOT_FOUND);
             return;
         }
 
         // otherwise change currentServer
-        player.currentServer = packet.meta;
+        player.setCurrentServer(packet.meta);
         packet.respond(ResponseStatus.OK);
 
         // update Moo proxy
-        Cloud.getInstance().getMooProxy().getPlayerMap().put(player.uuid, player);
-        Cloud.getInstance().getMooProxy().getPlayerNameMap().put(player.lastName, player);
+        Cloud.getInstance().getMooProxy().getPlayerMap().put(player.getUuid(), player);
+        Cloud.getInstance().getMooProxy().getPlayerNameMap().put(player.getLastName(), player);
 
         // update data of player in database and cache
-        Queries.modify(DatabaseType.PLAYER, data.uuid,
+        Queries.modify(DatabaseType.PLAYER, data.getUuid(),
                 DbQueryUnbaked.newInstance(DbModifier.PLAYER_SERVER, packet.meta));
-        MooCache.getInstance().getUniqueIdPlayerMap().fastPutAsync(data.uuid, player);
+        MooCache.getInstance().getUniqueIdPlayerMap().fastPutAsync(data.getUuid(), player);
     }
 
 }

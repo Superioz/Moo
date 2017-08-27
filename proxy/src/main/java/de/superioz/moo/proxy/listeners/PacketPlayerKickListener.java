@@ -45,8 +45,8 @@ public class PacketPlayerKickListener implements PacketAdapter {
             }
 
             // checks both ranks to check allowement
-            if(MooQueries.getInstance().getGroup(data.uuid).rank
-                    <= MooQueries.getInstance().getGroup(player.getUniqueId()).rank) {
+            if(MooQueries.getInstance().getGroup(data.getUuid()).getRank()
+                    <= MooQueries.getInstance().getGroup(player.getUniqueId()).getRank()) {
                 packet.respond(ResponseStatus.FORBIDDEN);
                 return;
             }

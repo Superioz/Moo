@@ -90,8 +90,8 @@ public abstract class DatabaseCollection<K, E> {
             // CONVERT THE NAME INTO A UNIQUEID
             if(field.getType().equals(UUID.class) && !Validation.UNIQUEID.matches(o.toString())) {
                 for(PlayerData pd : playerDataCache.getCache().asList()) {
-                    if(o.toString().equals(pd.lastName)) {
-                        o = pd.uuid;
+                    if(o.toString().equals(pd.getLastName())) {
+                        o = pd.getUuid();
                     }
                 }
             }
@@ -243,7 +243,7 @@ public abstract class DatabaseCollection<K, E> {
 
         try {
             if(isCacheable() && cached) {
-                List l1 = getCache().get(query, queried);
+                List l1 = query == null ? getCache().asList() : getCache().get(query, queried);
                 l.addAll(l1);
             }
 
@@ -272,6 +272,10 @@ public abstract class DatabaseCollection<K, E> {
 
     public List<E> list(DbFilter query) {
         return list(query, false, -1);
+    }
+
+    public List<E> list() {
+        return list(null);
     }
 
 

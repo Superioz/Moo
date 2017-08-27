@@ -35,7 +35,7 @@ public class RankCommand {
     public void onArgumentHelp(ArgumentHelper helper) {
         helper.react(1, Collections.singletonList(
                 LanguageManager.get("available-groups",
-                        StringUtil.getListToString(MooQueries.getInstance().listGroups(), ", ", group -> group.name))
+                        StringUtil.getListToString(MooQueries.getInstance().listGroups(), ", ", Group::getName))
         ), RANK_LABEL);
     }
 
@@ -46,7 +46,7 @@ public class RankCommand {
         );
 
         completor.react(2, StringUtil.getStringList(
-                MooQueries.getInstance().listGroups(), group -> group.name
+                MooQueries.getInstance().listGroups(), Group::getName
         ), RANK_LABEL);
     }
 
@@ -55,7 +55,7 @@ public class RankCommand {
         // list player and therefore his group
         PlayerData playerData = args.get(0, PlayerData.class);
         context.invalidArgument(playerData == null, LanguageManager.get("error-player-doesnt-exist", args.get(0)));
-        Group group = MooQueries.getInstance().getGroup(playerData.group);
+        Group group = MooQueries.getInstance().getGroup(playerData.getGroup());
 
         // the new group to be set
         Group newGroup = null;
@@ -68,9 +68,9 @@ public class RankCommand {
                 newGroup = MooQueries.getInstance().getGroup(playerData, steps, steps > 0, true);
             }
             else {
-                String command = "/group info " + group.name;
+                String command = "/group info " + group.getName();
                 context.sendEventMessage(
-                        LanguageManager.get("rank-of", args.get(0), group.color + group.name, command, command),
+                        LanguageManager.get("rank-of", args.get(0), group.getColor() + group.getName(), command, command),
                         ClickEvent.Action.RUN_COMMAND
                 );
                 return;
@@ -122,16 +122,16 @@ public class RankCommand {
      * @param group   The group to be set
      */
     public void rank(CommandContext<CommandSender> context, PlayerData data, Group group) {
-        context.sendMessage(LanguageManager.get("rank-player-load", data.lastName, group.name));
+        context.sendMessage(LanguageManager.get("rank-player-load", data.getLastName(), group.getName()));
         ResponseStatus response = MooQueries.getInstance().rankPlayer(data, group);
 
         // send teamchat message or directly to the sender
         if(BungeeTeamChat.getInstance().canTeamchat(context.getCommandSender())) {
-            String playerName = data.lastName;
-            String groupName = group.color + group.name;
+            String playerName = data.getLastName();
+            String groupName = group.getColor() + group.getName();
             String executor = BungeeTeamChat.getInstance().getColoredName(context.getCommandSender());
             String currentTime = TimeUtil.getFormat(System.currentTimeMillis());
-            String oldRank = data.group;
+            String oldRank = data.getGroup();
 
             BungeeTeamChat.getInstance().send(
                     LanguageManager.get("rank-teamchat-announcement",

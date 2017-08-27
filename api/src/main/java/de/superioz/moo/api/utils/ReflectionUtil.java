@@ -51,7 +51,7 @@ public final class ReflectionUtil {
      * @return The class of the generic type
      */
     public static Class<?> getGenericType(Field field) {
-        return (Class<?>) ((ParameterizedType)field.getGenericType()).getActualTypeArguments()[0];
+        return (Class<?>) ((ParameterizedType) field.getGenericType()).getActualTypeArguments()[0];
     }
 
     /**

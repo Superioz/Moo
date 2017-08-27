@@ -23,19 +23,19 @@ public class MooPlayerLeftProxyListener implements EventListener {
 
         // list the current times
         long current = System.currentTimeMillis();
-        long joined = data.joined;
+        long joined = data.getJoined();
 
         // calculate online time
         long onlineTime = 0;
         if(joined > 0 && current > 0 && current > joined) {
-            onlineTime = current - data.joined;
+            onlineTime = current - data.getJoined();
         }
-        long totalTime = data.totalOnline != null ? data.totalOnline + onlineTime : 0;
+        long totalTime = data.getTotalOnline() != null ? data.getTotalOnline() + onlineTime : 0;
 
         // set the time to the data
-        data.lastOnline = current;
-        data.joined = 0L;
-        data.totalOnline = totalTime;
+        data.setLastOnline(current);
+        data.setJoined(0L);
+        data.setTotalOnline(totalTime);
 
         // applies the times onto the database
         DbQueryUnbaked query = DbQueryUnbaked
@@ -43,10 +43,10 @@ public class MooPlayerLeftProxyListener implements EventListener {
                 .equate(DbModifier.PLAYER_TOTAL_ONLINE, totalTime)
                 .equate(DbModifier.PLAYER_JOINED, 0L)
                 .equate(DbModifier.PLAYER_PROXY, -1);
-        DatabaseCollections.PLAYER.set(data.uuid, data, query, true);
+        DatabaseCollections.PLAYER.set(data.getUuid(), data, query, true);
 
         // removes player from moo proxy
-        Cloud.getInstance().getMooProxy().remove(data.uuid, data.lastName);
+        Cloud.getInstance().getMooProxy().remove(data.getUuid(), data.getLastName());
 
         // update user count
         MooCache.getInstance().getConfigMap().fastPutAsync(MooConfigType.PLAYER_COUNT.getKey(),

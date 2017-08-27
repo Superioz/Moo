@@ -179,8 +179,16 @@ public abstract class GenericParameterSet {
         return t;
     }
 
+    public <T> T get(int paramIndex, Class<T> tClass, T backupVal, boolean condition) {
+        return get(paramIndex, tClass, backupVal, f -> condition);
+    }
+
     public <T> T get(int paramIndex, Class<T> tClass, Function<T, Boolean> verifier) {
         return get(paramIndex, tClass, null, verifier);
+    }
+
+    public <T> T get(int paramIndex, Class<T> tClass, boolean condition) {
+        return get(paramIndex, tClass, null, f -> condition);
     }
 
     /**
@@ -233,12 +241,20 @@ public abstract class GenericParameterSet {
         return get(paramIndex, String.class, backupVal, verifier);
     }
 
+    public String getString(int paramIndex, String backupVal, boolean condition) {
+        return get(paramIndex, String.class, backupVal, condition);
+    }
+
     public String getString(int paramIndex) {
         return get(paramIndex, String.class);
     }
 
     public String getString(int paramIndex, Function<String, Boolean> verifier) {
         return get(paramIndex, String.class, verifier);
+    }
+
+    public String getString(int paramIndex, boolean condition) {
+        return get(paramIndex, String.class, condition);
     }
 
     /**
@@ -256,12 +272,20 @@ public abstract class GenericParameterSet {
         return get(paramIndex, Integer.class, backupVal, verifier);
     }
 
+    public Integer getInt(int paramIndex, Integer backupVal, boolean condition) {
+        return get(paramIndex, Integer.class, backupVal, condition);
+    }
+
     public Integer getInt(int paramIndex) {
         return get(paramIndex, Integer.class);
     }
 
     public Integer getInt(int paramIndex, Function<Integer, Boolean> verifier) {
         return get(paramIndex, Integer.class, verifier);
+    }
+
+    public Integer getInt(int paramIndex, boolean condition) {
+        return get(paramIndex, Integer.class, condition);
     }
 
     /**
@@ -279,12 +303,20 @@ public abstract class GenericParameterSet {
         return get(paramIndex, Long.class, backupVal, verifier);
     }
 
+    public Long getLong(int paramIndex, Long backupVal, boolean condition) {
+        return get(paramIndex, Long.class, backupVal, condition);
+    }
+
     public Long getLong(int paramIndex) {
         return get(paramIndex, Long.class);
     }
 
     public Long getLong(int paramIndex, Function<Long, Boolean> verifier) {
         return get(paramIndex, Long.class, verifier);
+    }
+
+    public Long getLong(int paramIndex, boolean condition) {
+        return get(paramIndex, Long.class, condition);
     }
 
     /**
@@ -302,12 +334,20 @@ public abstract class GenericParameterSet {
         return get(paramIndex, Double.class, backupVal, verifier);
     }
 
+    public Double getDouble(int paramIndex, Double backupVal, boolean condition) {
+        return get(paramIndex, Double.class, backupVal, condition);
+    }
+
     public Double getDouble(int paramIndex) {
         return get(paramIndex, Double.class);
     }
 
     public Double getDouble(int paramIndex, Function<Double, Boolean> verifier) {
         return get(paramIndex, Double.class, verifier);
+    }
+
+    public Double getDouble(int paramIndex, boolean condition) {
+        return get(paramIndex, Double.class, condition);
     }
 
     /**
@@ -325,6 +365,10 @@ public abstract class GenericParameterSet {
         return get(paramIndex, Boolean.class, backupVal, verifier);
     }
 
+    public Boolean getDouble(int paramIndex, Boolean backupVal, boolean condition) {
+        return get(paramIndex, Boolean.class, backupVal, condition);
+    }
+
     public Boolean getBoolean(int paramIndex) {
         return get(paramIndex, Boolean.class);
     }
@@ -333,24 +377,29 @@ public abstract class GenericParameterSet {
         return get(paramIndex, Boolean.class, verifier);
     }
 
+    public Boolean getBoolean(int paramIndex, boolean condition) {
+        return get(paramIndex, Boolean.class, condition);
+    }
+
     /**
      * Gets an enum from given parameterIndex and class
      *
      * @param paramIndex The parameterIndex
      * @param enumClass  The enum class (e.g. {@link Operator})
+     * @param backupVal  If something goes wrong ..
      * @param <E>        The enum type
      * @return The enum object
      */
-    public <E extends Enum> E getEnum(int paramIndex, Class<E> enumClass) {
+    public <E extends Enum> E getEnum(int paramIndex, Class<E> enumClass, E backupVal) {
         String s = get(paramIndex);
-        if(s == null) return null;
+        if(s == null) return backupVal;
         Enum[] enums = enumClass.getEnumConstants();
 
         // if the string is an integer list the enum directly
         if(Validation.INTEGER.matches(s)) {
             int i = Integer.parseInt(s);
 
-            if(i >= enums.length || i < 0) return null;
+            if(i >= enums.length || i < 0) return backupVal;
             return (E) enums[i];
         }
 
@@ -360,10 +409,26 @@ public abstract class GenericParameterSet {
         return null;
     }
 
-    public <E extends Enum> E getEnum(int paramIndex, Class<E> enumClass, Function<E, Boolean> verifier) {
+    public <E extends Enum> E getEnum(int paramIndex, Class<E> enumClass) {
+        return getEnum(paramIndex, enumClass, (E) null);
+    }
+
+    public <E extends Enum> E getEnum(int paramIndex, Class<E> enumClass, E backupVal, Function<E, Boolean> verifier) {
         E e = getEnum(paramIndex, enumClass);
-        if(e == null) return null;
-        return verifier.apply(e) ? e : null;
+        if(e == null) return backupVal;
+        return verifier.apply(e) ? e : backupVal;
+    }
+
+    public <E extends Enum> E getEnum(int paramIndex, Class<E> enumClass, E backupVal, boolean condition) {
+        return getEnum(paramIndex, enumClass, backupVal, f -> condition);
+    }
+
+    public <E extends Enum> E getEnum(int paramIndex, Class<E> enumClass, Function<E, Boolean> verifier) {
+        return getEnum(paramIndex, enumClass, null, verifier);
+    }
+
+    public <E extends Enum> E getEnum(int paramIndex, Class<E> enumClass, boolean condition) {
+        return getEnum(paramIndex, enumClass, null, f -> condition);
     }
 
     @Override

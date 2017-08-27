@@ -168,8 +168,8 @@ public class Thunder extends Plugin implements EventListener {
         // if ban ran out archive it otherwise cancel login
         Ban ban = playerProfile.getCurrentBan();
         if(ban != null) {
-            long stamp = ban.start + ban.duration;
-            if(ban.duration != -1 && stamp < System.currentTimeMillis()) {
+            long stamp = ban.getStart() + ban.getDuration();
+            if(ban.getDuration() != -1 && stamp < System.currentTimeMillis()) {
                 // ban ran out; please archive it
                 MooQueries.getInstance().archiveBan(ban);
             }
@@ -181,8 +181,8 @@ public class Thunder extends Plugin implements EventListener {
         }
 
         // list group for checking the maintenance bypassability
-        Group group = MooQueries.getInstance().getGroup(playerProfile.getData().group);
-        boolean maintenanceBypass = group.rank >= (int) MooCache.getInstance().getConfigEntry(MooConfigType.MAINTENANCE_RANK);
+        Group group = MooQueries.getInstance().getGroup(playerProfile.getData().getGroup());
+        boolean maintenanceBypass = group.getRank() >= (int) MooCache.getInstance().getConfigEntry(MooConfigType.MAINTENANCE_RANK);
 
         // if maintenance mode is active and the player is not allowed to bypass it
         if(MooCache.getInstance().getConfigEntry(MooConfigType.MAINTENANCE).equals(true + "") && !maintenanceBypass) {

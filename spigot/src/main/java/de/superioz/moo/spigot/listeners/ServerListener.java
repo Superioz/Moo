@@ -16,7 +16,6 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.permissions.Permissible;
 
-//TODO DUDE
 public class ServerListener implements Listener {
 
     /**
@@ -31,20 +30,20 @@ public class ServerListener implements Listener {
         Player player = event.getPlayer();
 
         PlayerData data = new PlayerData();
-        data.uuid = player.getUniqueId();
-        data.lastName = player.getName();
-        data.lastIp = player.getAddress().getHostString();
+        data.setUuid(player.getUniqueId());
+        data.setLastName(player.getName());
+        data.setLastIp(player.getAddress().getHostString());
 
         // changes state
         Permissible oldPermissible = PermissionInjector.getPermissible(player);
-        CustomPermissible customPermissible = new CustomPermissible(player, data.uuid, oldPermissible);
+        CustomPermissible customPermissible = new CustomPermissible(player, data.getUuid(), oldPermissible);
         PermissionInjector.inject(player, customPermissible);
 
         MooQueries.getInstance().changePlayerState(data, PacketPlayerState.State.JOIN_SERVER, response -> {
         });
 
         // SET JOIN MESSAGE
-        String playerName = MooQueries.getInstance().getGroup(player.getUniqueId()).color + player.getName();
+        String playerName = MooQueries.getInstance().getGroup(player.getUniqueId()).getColor() + player.getName();
         Bukkit.getServer().broadcastMessage(LanguageManager.get("join-message-pattern", playerName));
     }
 
@@ -54,12 +53,12 @@ public class ServerListener implements Listener {
         Player player = event.getPlayer();
 
         PlayerData data = new PlayerData();
-        data.uuid = player.getUniqueId();
-        data.lastName = player.getName();
-        data.lastIp = player.getAddress().getHostString();
+        data.setUuid(player.getUniqueId());
+        data.setLastName(player.getName());
+        data.setLastIp(player.getAddress().getHostString());
 
         // SET QUIT MESSAGE
-        String playerName = MooQueries.getInstance().getGroup(player.getUniqueId()).color + player.getName();
+        String playerName = MooQueries.getInstance().getGroup(player.getUniqueId()).getColor() + player.getName();
         event.setQuitMessage(LanguageManager.get("quit-message-pattern", playerName));
     }
 

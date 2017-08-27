@@ -18,18 +18,18 @@ public final class PermissionUtil {
      * @return The listOfString
      */
     public static Set<String> getAllPermissions(Group base, Collection<Group> groups) {
-        Set<String> permissions = new HashSet<>(base.permissions);
+        Set<String> permissions = new HashSet<>(base.getPermissions());
         Set<String> inheritances = new HashSet<>();
 
         boolean finished = false;
 
-        List<String> copy = new ArrayList<>(base.parents);
+        List<String> copy = new ArrayList<>(base.getParents());
         while(!finished){
             List<String> l = new ArrayList<>();
 
             for(Group g : groups) {
-                if(copy.contains(g.name)) {
-                    l.addAll(g.parents);
+                if(copy.contains(g.getName())) {
+                    l.addAll(g.getParents());
                 }
             }
 
@@ -40,7 +40,7 @@ public final class PermissionUtil {
             }
         }
         groups.forEach(group -> {
-            if(inheritances.contains(group.name)) permissions.addAll(group.permissions);
+            if(inheritances.contains(group.getName())) permissions.addAll(group.getPermissions());
         });
         return permissions;
     }

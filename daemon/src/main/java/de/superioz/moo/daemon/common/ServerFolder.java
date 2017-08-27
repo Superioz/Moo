@@ -9,13 +9,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Getter
-public class ServerPatternFolder {
+public class ServerFolder {
 
     protected File folder;
     protected File startFile;
     protected String name;
 
-    public ServerPatternFolder(File folder, String startFileName) {
+    public ServerFolder(File folder, String startFileName) {
         this.folder = folder;
 
         String fName = folder.getName();
@@ -29,7 +29,7 @@ public class ServerPatternFolder {
         this.startFile = new File(folder, startFileName + "." + (SystemUtil.isWindows() ? "bat" : "sh"));
     }
 
-    public ServerPatternFolder(File folder) {
+    public ServerFolder(File folder) {
         this(folder, "start");
     }
 
@@ -40,13 +40,13 @@ public class ServerPatternFolder {
      * @param startFileName Name of the to-start-server file
      * @return The list of pattern objects
      */
-    public static List<ServerPatternFolder> from(File folder, String startFileName) {
-        List<ServerPatternFolder> patterns = new ArrayList<>();
+    public static List<ServerFolder> from(File folder, String startFileName) {
+        List<ServerFolder> patterns = new ArrayList<>();
         File[] content;
         if(!folder.exists() || (content = folder.listFiles()) == null) return patterns;
         for(File f : content) {
             if(f.isDirectory()) {
-                patterns.add(new ServerPatternFolder(f, startFileName));
+                patterns.add(new ServerFolder(f, startFileName));
             }
         }
         return patterns;
@@ -108,16 +108,6 @@ public class ServerPatternFolder {
         // copy
         File target = new File(to, name);
         return target.mkdirs() && IOUtil.copyFiles(getFolder(), target);
-    }
-
-    public class ServerPatternConfig {
-
-        protected File serverProperties;
-        protected File spigotYml;
-
-        public ServerPatternConfig() {
-
-        }
     }
 
 }

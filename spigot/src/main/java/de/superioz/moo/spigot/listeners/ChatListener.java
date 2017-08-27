@@ -17,7 +17,7 @@ public class ChatListener implements Listener {
         Group group = MooQueries.getInstance().getGroup(player.getUniqueId());
 
         String format = LanguageManager.get("chat-message-pattern");
-        format = LanguageManager.format(format, group.prefix, group.color, "%1$s", group.suffix, "%2$s");
+        format = LanguageManager.format(format, group.getPrefix(), group.getColor(), "%1$s", group.getSuffix(), "%2$s");
 
         event.setFormat(format);
     }

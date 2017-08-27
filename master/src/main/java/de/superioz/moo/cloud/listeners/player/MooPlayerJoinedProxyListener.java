@@ -30,10 +30,10 @@ public class MooPlayerJoinedProxyListener implements EventListener {
         // list the current time
         // set the time as joined time for the player
         long current = System.currentTimeMillis();
-        data.joined = current;
+        data.setJoined(current);
 
         // set the new time into the database
-        DatabaseCollections.PLAYER.set(data.uuid, data, DbQueryUnbaked.newInstance(DbModifier.PLAYER_JOINED, current));
+        DatabaseCollections.PLAYER.set(data.getUuid(), data, DbQueryUnbaked.newInstance(DbModifier.PLAYER_JOINED, current));
 
         // sets the server he is currently on
         String serverId = packet.meta;
@@ -45,12 +45,12 @@ public class MooPlayerJoinedProxyListener implements EventListener {
         Cloud.getInstance().getMooProxy().add(data, clientAddress);
 
         // set new proxy and server into database
-        DatabaseCollections.PLAYER.set(data.uuid, data, DbQueryUnbaked.newInstance(DbModifier.PLAYER_PROXY, proxyId));
+        DatabaseCollections.PLAYER.set(data.getUuid(), data, DbQueryUnbaked.newInstance(DbModifier.PLAYER_PROXY, proxyId));
 
         // update moo cache (user count and playerData)
         MooCache.getInstance().getConfigMap().fastPutAsync(MooConfigType.PLAYER_COUNT.getKey(), Cloud.getInstance().getMooProxy().getPlayers().size());
-        MooCache.getInstance().getUniqueIdPlayerMap().fastPutAsync(data.uuid, data);
-        MooCache.getInstance().getNameUniqueIdMap().fastPutAsync(data.lastName, data.uuid);
+        MooCache.getInstance().getUniqueIdPlayerMap().fastPutAsync(data.getUuid(), data);
+        MooCache.getInstance().getNameUniqueIdMap().fastPutAsync(data.getLastName(), data.getUuid());
 
         packet.respond(ResponseStatus.OK);
     }

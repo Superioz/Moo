@@ -3,61 +3,65 @@ package de.superioz.moo.api.database.objects;
 import de.superioz.moo.api.util.SimpleSerializable;
 import de.superioz.moo.api.utils.TimeUtil;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import de.superioz.moo.api.common.punishment.BanCategory;
 import de.superioz.moo.api.common.punishment.PunishmentManager;
 import de.superioz.moo.api.database.object.DbKey;
+import lombok.Setter;
 
 import java.text.MessageFormat;
 import java.util.UUID;
 
 @NoArgsConstructor
 @AllArgsConstructor
+@Getter
+@Setter
 public class Ban extends SimpleSerializable {
 
     /**
      * The uuid of the banned user
      */
     @DbKey
-    public UUID banned;
+    private UUID banned;
 
     /**
      * The uuid of the player who banned the player (null if console)
      */
     @DbKey
-    public UUID by;
+    private UUID by;
 
     /**
      * The timestamp of the ban execution
      */
     @DbKey
-    public Long start;
+    private Long start;
 
     /**
      * How long is the player banned?
      */
     @DbKey
-    public Long duration;
+    private Long duration;
 
     /**
      * Id of the {@link BanCategory}
      */
     @DbKey
-    public Integer subTypeId;
+    private Integer subTypeId;
 
     /**
      * The reason of the ban (either a subReason of the {@link #subType} or a custom one)<br>
      * This reason will not be shown to the user.
      */
     @DbKey
-    public String reason;
+    private String reason;
 
     /**
      * The banPoints which are then assigned to the player
      * (Will be calculated just before the ban)
      */
     @DbKey
-    public Integer banPoints;
+    private Integer banPoints;
 
     private BanCategory subType;
 

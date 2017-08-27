@@ -195,10 +195,10 @@ public final class MooProxy {
      * Adds a player to the map if not exists
      */
     public void add(PlayerData player, InetSocketAddress address) {
-        if(!playerMap.containsKey(player.uuid)) {
-            playerServerMap.put(player.uuid, address);
-            playerMap.put(player.uuid, player);
-            playerNameMap.put(player.lastName, player);
+        if(!playerMap.containsKey(player.getUuid())) {
+            playerServerMap.put(player.getUuid(), address);
+            playerMap.put(player.getUuid(), player);
+            playerNameMap.put(player.getLastName(), player);
         }
     }
 
@@ -220,7 +220,7 @@ public final class MooProxy {
      * @return The mooClient
      */
     public MooClient getClient(PlayerData player) {
-        InetSocketAddress address = playerServerMap.get(player.uuid);
+        InetSocketAddress address = playerServerMap.get(player.getUuid());
         return netServer.getClientManager().get(address);
     }
 
@@ -232,7 +232,7 @@ public final class MooProxy {
      * @param callback The callback
      */
     public void sendMessage(PlayerData player, PacketPlayerMessage packet, Consumer<Response> callback) {
-        InetSocketAddress address = playerServerMap.get(player.uuid);
+        InetSocketAddress address = playerServerMap.get(player.getUuid());
         MooClient client = netServer.getClientManager().get(address);
 
         if(callback != null) {

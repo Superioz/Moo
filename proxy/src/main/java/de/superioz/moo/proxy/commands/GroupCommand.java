@@ -47,7 +47,7 @@ public class GroupCommand {
         // groups
         helper.react(0, Collections.singletonList(
                 LanguageManager.get("available-groups",
-                        StringUtil.getListToString(MooQueries.getInstance().listGroups(), ", ", group -> group.name))
+                        StringUtil.getListToString(MooQueries.getInstance().listGroups(), ", ", Group::getName))
         ), INFO_COMMAND, MODIFY_COMMAND, DELETE_COMMAND);
 
         // update syntax
@@ -69,7 +69,7 @@ public class GroupCommand {
 
         // groups
         completor.react(2, StringUtil.getStringList(MooQueries.getInstance().listGroups(),
-                group -> group.name
+                Group::getName
         ), StringUtil.prefixed(CommandInstance.PATH, INFO_COMMAND, MODIFY_COMMAND, CREATE_COMMAND, DELETE_COMMAND));
     }
 
@@ -86,8 +86,8 @@ public class GroupCommand {
         // if flag 'h' exists order the groups after the rank in descending order
         PageableList<Group> pageableList = new PageableList<>(MooQueries.getInstance().listGroups(),
                 (Comparator<Group>) (o1, o2) -> args.hasFlag("h")
-                        ? o1.rank.compareTo(o2.rank) * -1
-                        : o1.name.compareTo(o2.name));
+                        ? o1.getRank().compareTo(o2.getRank()) * -1
+                        : o1.getName().compareTo(o2.getName()));
         context.invalidArgument(pageableList.isEmpty(), LanguageManager.get("group-list-empty"));
         context.invalidArgument(!pageableList.checkPage(page), LanguageManager.get("error-page-doesnt-exist", page));
 
@@ -96,10 +96,10 @@ public class GroupCommand {
         DisplayFormats.sendPageableList(context, pageableList, page,
                 LanguageManager.get("group-list-empty"),
                 LanguageManager.get("group-list-header"), LanguageManager.get("group-list-entry-empty"), group -> {
-                    String command = "/group info " + group.name;
+                    String command = "/group info " + group.getName();
 
                     context.sendEventMessage(
-                            LanguageManager.format(entryFormat, group.name, command, group.rank, command),
+                            LanguageManager.format(entryFormat, group.getName(), command, group.getRank(), command),
                             ClickEvent.Action.RUN_COMMAND
                     );
                 }, () -> {
@@ -126,14 +126,14 @@ public class GroupCommand {
                 LanguageManager.get("group-info-header", groupName),
                 context.getFormatSender(entryFormat)
                         .addTranslated("group-info-entry-name", groupName)
-                        .addTranslated("group-info-entry-permissions", "&c" + group.permissions.size(), permCommand, permCommand)
-                        .addTranslated("group-info-entry-parents", "&c" + group.parents.size(),
-                                StringUtil.getListToString(group.parents, "\n", s -> "&8- &7" + s))
-                        .addTranslated("group-info-entry-prefix", group.prefix)
-                        .addTranslated("group-info-entry-suffix", group.suffix)
-                        .addTranslated("group-info-entry-color", group.color)
-                        .addTranslated("group-info-entry-tabprefix", group.tabPrefix)
-                        .addTranslated("group-info-entry-tabsuffix", group.tabSuffix)
+                        .addTranslated("group-info-entry-permissions", "&c" + group.getPermissions().size(), permCommand, permCommand)
+                        .addTranslated("group-info-entry-parents", "&c" + group.getParents().size(),
+                                StringUtil.getListToString(group.getParents(), "\n", s -> "&8- &7" + s))
+                        .addTranslated("group-info-entry-prefix", group.getPrefix())
+                        .addTranslated("group-info-entry-suffix", group.getSuffix())
+                        .addTranslated("group-info-entry-color", group.getColor())
+                        .addTranslated("group-info-entry-tabprefix", group.getTabPrefix())
+                        .addTranslated("group-info-entry-tabsuffix", group.getTabSuffix())
         );
     }
 

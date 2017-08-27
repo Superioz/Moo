@@ -88,7 +88,7 @@ public class PacketPlayerMessageListener implements PacketAdapter {
             for(ProxiedPlayer player : ProxyServer.getInstance().getPlayers()) {
                 Group group = MooQueries.getInstance().getGroup(player.getUniqueId());
 
-                if(group.rank >= rank) {
+                if(group.getRank() >= rank) {
                     BungeeChat.send(message, player);
                 }
             }

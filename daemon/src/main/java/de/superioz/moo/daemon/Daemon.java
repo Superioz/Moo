@@ -14,6 +14,7 @@ import de.superioz.moo.client.events.CloudConnectedEvent;
 import de.superioz.moo.client.events.CloudDisconnectedEvent;
 import de.superioz.moo.daemon.commands.MainCommand;
 import de.superioz.moo.daemon.common.Server;
+import de.superioz.moo.daemon.listeners.PacketPatternStateListener;
 import de.superioz.moo.daemon.listeners.ServerPacketListener;
 import de.superioz.moo.daemon.task.ServerStartTask;
 import de.superioz.moo.protocol.client.ClientType;
@@ -113,7 +114,7 @@ public class Daemon implements EventListener {
 
         // register listeners
         EventExecutor.getInstance().register(getInstance());
-        PacketAdapting.getInstance().register(new ServerPacketListener());
+        PacketAdapting.getInstance().register(new ServerPacketListener(), new PacketPatternStateListener());
 
         // if the config is loaded connect to the cloud
         if(config.isLoaded()) {

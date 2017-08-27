@@ -200,12 +200,12 @@ public final class MooQueries {
      * @return The response (CONFLICT if the group is the same)
      */
     public ResponseStatus rankPlayer(PlayerData target, Group newGroup) {
-        if(target.group.equalsIgnoreCase(newGroup.name)) {
+        if(target.getGroup().equalsIgnoreCase(newGroup.getName())) {
             return new Response(ResponseStatus.CONFLICT).getStatus();
         }
-        return modifyPlayerData(target.uuid,
-                DbQueryUnbaked.newInstance(DbModifier.PLAYER_GROUP, newGroup.name)
-                        .equate(DbModifier.PLAYER_RANK, newGroup.rank));
+        return modifyPlayerData(target.getUuid(),
+                DbQueryUnbaked.newInstance(DbModifier.PLAYER_GROUP, newGroup.getName())
+                        .equate(DbModifier.PLAYER_RANK, newGroup.getRank()));
     }
 
     /**
@@ -229,9 +229,9 @@ public final class MooQueries {
      */
     public HashSet<String> getPlayerPermissions(PlayerData data, boolean withExtra) {
         try {
-            HashSet<String> permissions = new HashSet<>(getGroup(data.group).permissions);
+            HashSet<String> permissions = new HashSet<>(getGroup(data.getGroup()).getPermissions());
             if(withExtra) {
-                permissions.addAll(data.extraPerms);
+                permissions.addAll(data.getExtraPerms());
             }
             return permissions;
         }
@@ -307,7 +307,7 @@ public final class MooQueries {
      * @param ban The ban
      */
     public void archiveBan(Ban ban) {
-        Queries.delete(DatabaseType.BAN, ban.banned);
+        Queries.delete(DatabaseType.BAN, ban.getBanned());
         Queries.create(DatabaseType.BAN, ban);
     }
 
@@ -318,11 +318,11 @@ public final class MooQueries {
      */
     public ResponseStatus unban(Ban ban) {
         try {
-            ResponseStatus status = Queries.delete(DatabaseType.BAN, ban.banned).getStatus();
+            ResponseStatus status = Queries.delete(DatabaseType.BAN, ban.getBanned()).getStatus();
 
             // removes the banpoints of the ban from the player
-            if(ban.banPoints != null && ban.banPoints > 0) {
-                this.modifyPlayerData(ban.banned, DbQueryUnbaked.newInstance().subtract(DbModifier.PLAYER_BANPOINTS, ban.banPoints));
+            if(ban.getBanPoints() != null && ban.getBanPoints() > 0) {
+                this.modifyPlayerData(ban.getBanned(), DbQueryUnbaked.newInstance().subtract(DbModifier.PLAYER_BANPOINTS, ban.getBanPoints()));
             }
             return status;
         }
@@ -373,14 +373,14 @@ public final class MooQueries {
     public boolean updatePermission(UUID uuid) {
         PlayerData data = MooCache.getInstance().getUniqueIdPlayerMap().get(uuid);
         if(data == null) return false;
-        String groupName = data.group;
+        String groupName = data.getGroup();
 
         // list the group out of the cache
         // if the group doesnt exist create a "default" group
         Group group = MooCache.getInstance().getGroupMap().get(groupName);
         if(group == null) {
             group = new Group();
-            group.name = Group.DEFAULT_NAME;
+            group.setName(Group.DEFAULT_NAME);
 
             try {
                 this.createGroup(new Group(groupName));
@@ -396,9 +396,9 @@ public final class MooQueries {
             this.rankPlayer(data, group);
         }
 
-        List<String> permissions = new ArrayList<>(data.extraPerms);
+        List<String> permissions = new ArrayList<>(data.getExtraPerms());
         permissions.addAll(PermissionUtil.getAllPermissions(group, MooCache.getInstance().getGroupMap().values()));
-        MooCache.getInstance().getPlayerPermissionMap().putAsync(data.uuid, permissions);
+        MooCache.getInstance().getPlayerPermissionMap().putAsync(data.getUuid(), permissions);
         return true;
     }
 
@@ -411,7 +411,7 @@ public final class MooQueries {
     public String getGroupColor(String groupName) {
         Group group = getGroup(groupName);
         if(group == null) return "&r";
-        return group.color;
+        return group.getColor();
     }
 
     /**
@@ -438,7 +438,7 @@ public final class MooQueries {
         PlayerData data = MooCache.getInstance().getUniqueIdPlayerMap().get(playerUniqueId);
         if(data == null) return null;
 
-        return getGroup(data.group);
+        return getGroup(data.getGroup());
     }
 
     /**
@@ -454,10 +454,10 @@ public final class MooQueries {
         if(steps < 0 && ignoreInfinite) steps *= -1;
         if(steps != -1) steps--;
 
-        Group currentGroup = getGroup(data.group);
+        Group currentGroup = getGroup(data.getGroup());
         List<Group> groupList = CollectionUtil.filterList(MooQueries.getInstance().listGroups(),
-                e -> up ? e.rank > currentGroup.rank : e.rank < currentGroup.rank,
-                (o1, o2) -> o1.rank.compareTo(o2.rank) * (up ? 1 : -1));
+                e -> up ? e.getRank() > currentGroup.getRank() : e.getRank() < currentGroup.getRank(),
+                (o1, o2) -> o1.getRank().compareTo(o2.getRank()) * (up ? 1 : -1));
 
         // if the steps value is -1 (= infinite) then walk down/up the whole ladder
         if(!ignoreInfinite && steps == -1) {

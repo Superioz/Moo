@@ -21,7 +21,7 @@ public class CloudStartedListener implements EventListener {
         try {
             Queries.list(DatabaseType.GROUP, Group.class).forEach(group -> {
                 if(group == null) return;
-                MooCache.getInstance().getGroupMap().fastPutAsync(group.name, group);
+                MooCache.getInstance().getGroupMap().fastPutAsync(group.getName(), group);
             });
         }
         catch(Exception e) {

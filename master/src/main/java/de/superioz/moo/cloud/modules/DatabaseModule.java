@@ -9,10 +9,7 @@ import de.superioz.moo.api.logging.Loogger;
 import de.superioz.moo.api.module.Module;
 import de.superioz.moo.api.module.ModuleDependency;
 import de.superioz.moo.cloud.Cloud;
-import de.superioz.moo.cloud.database.BanArchiveCollection;
-import de.superioz.moo.cloud.database.BanCollection;
-import de.superioz.moo.cloud.database.GroupCollection;
-import de.superioz.moo.cloud.database.PlayerDataCollection;
+import de.superioz.moo.cloud.database.*;
 import de.superioz.moo.cloud.events.DatabaseConnectionEvent;
 import lombok.Getter;
 
@@ -67,7 +64,8 @@ public class DatabaseModule extends Module {
                 new GroupCollection(dbConn),
                 new PlayerDataCollection(dbConn),
                 new BanCollection(dbConn),
-                new BanArchiveCollection(dbConn)
+                new BanArchiveCollection(dbConn),
+                new PatternCollection(dbConn)
         );
         getLogger().debug("Finished registering database collections. (" + collectionMap.size() + ")");
 

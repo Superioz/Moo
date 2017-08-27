@@ -45,9 +45,9 @@ public class KickCommand {
         if(!context.isConsole()) {
             ProxiedPlayer player = (ProxiedPlayer) context.getCommandSender();
             executor = new PlayerData();
-            executor.uuid = player.getUniqueId();
-            executor.lastName = player.getName();
-            executor.group = MooQueries.getInstance().getGroup(player.getUniqueId()).name;
+            executor.setUuid(player.getUniqueId());
+            executor.setLastName(player.getName());
+            executor.setGroup(MooQueries.getInstance().getGroup(player.getUniqueId()).getName());
         }
 
         // gets the reason for the kick

@@ -43,12 +43,12 @@ public class GroupCollection extends DatabaseCollection<String, Group> {
             def = get("default");
             if(def == null) {
                 def = new Group();
-                def.name = "default";
+                def.setName("default");
             }
-            def.rank = 0;
+            def.setRank(0);
 
             // create or update the group
-            set(def.name, def, true);
+            set(def.getName(), def, true);
         }
         return def;
     }
