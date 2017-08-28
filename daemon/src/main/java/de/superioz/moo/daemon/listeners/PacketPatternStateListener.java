@@ -18,6 +18,7 @@ public class PacketPatternStateListener implements PacketAdapter {
         else {
             Daemon.getInstance().getServer().deletePattern(patternName);
         }
+        Daemon.getInstance().getServer().fetchPatterns();
     }
 
 }

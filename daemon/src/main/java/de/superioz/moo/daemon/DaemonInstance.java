@@ -111,7 +111,6 @@ public class DaemonInstance {
 
         new File(folder, "plugins").mkdirs();
         new File(folder, "logs").mkdirs();
-        fetchPatterns();
     }
 
     /**
@@ -128,7 +127,6 @@ public class DaemonInstance {
         catch(IOException e) {
             // nah
         }
-        fetchPatterns();
     }
 
     /**

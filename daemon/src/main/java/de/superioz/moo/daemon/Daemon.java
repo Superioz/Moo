@@ -1,8 +1,10 @@
 package de.superioz.moo.daemon;
 
+import de.superioz.moo.api.cache.MooCache;
 import de.superioz.moo.api.console.CommandTerminal;
 import de.superioz.moo.api.event.EventHandler;
 import de.superioz.moo.api.event.EventListener;
+import de.superioz.moo.api.events.RedisConnectionEvent;
 import de.superioz.moo.api.io.CustomFile;
 import de.superioz.moo.api.io.JsonConfig;
 import de.superioz.moo.api.logging.ExtendedLogger;
@@ -115,6 +117,13 @@ public class Daemon implements EventListener {
     public static void main(String[] args) {
         instance = new Daemon();
         instance.init();
+    }
+
+    @EventHandler
+    public void onRedis(RedisConnectionEvent event) {
+        if(event.isConnectionActive()) return;
+        MooCache.getInstance().getPatternMap().readAllValuesAsync()
+                .thenAccept(serverPatterns -> serverPatterns.forEach(pattern -> getServer().createPattern(pattern.getName())));
     }
 
     @EventHandler
