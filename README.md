@@ -37,10 +37,6 @@ It could now look like this:
     "port": 27017,
     "user": "user",
     "password": "password"
-  },
-  "predefined-servers": {
-    "activated": false,
-    "list": []
   }
 }
 ```
