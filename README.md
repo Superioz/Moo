@@ -6,8 +6,8 @@
 # MooProject
 A minecraft network communication system based on [Netty](https://github.com/netty) (Some call it 'Cloud system', which is not quite correct).
 
-This project was originally written for a minecraft network, but after it went down I decided to share it on Github. 
+This project was originally written for a minecraft network, but after it went down I decided to share it on Github. So use this on your own responsibility.
 **If you find any flaws feel free to open up an [Issue](https://github.com/Superioz/MooProject/issues/new) or a [Pull Request](https://github.com/Superioz/MooProject/compare)**
 
-## Setup
-WIP
+## Getting started
+
