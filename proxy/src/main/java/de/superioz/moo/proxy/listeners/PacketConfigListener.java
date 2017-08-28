@@ -4,9 +4,9 @@ import de.superioz.moo.api.cache.MooCache;
 import de.superioz.moo.api.io.LanguageManager;
 import de.superioz.moo.api.config.MooConfigType;
 import de.superioz.moo.client.common.MooQueries;
-import de.superioz.moo.protocol.packet.PacketAdapter;
-import de.superioz.moo.protocol.packet.PacketHandler;
-import de.superioz.moo.protocol.packets.PacketConfig;
+import de.superioz.moo.netty.packet.PacketAdapter;
+import de.superioz.moo.netty.packet.PacketHandler;
+import de.superioz.moo.netty.packets.PacketConfig;
 import net.md_5.bungee.api.ProxyServer;
 
 public class PacketConfigListener implements PacketAdapter {

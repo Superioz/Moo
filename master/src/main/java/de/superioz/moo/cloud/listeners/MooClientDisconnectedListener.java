@@ -9,11 +9,11 @@ import de.superioz.moo.api.event.EventListener;
 import de.superioz.moo.api.event.EventPriority;
 import de.superioz.moo.cloud.Cloud;
 import de.superioz.moo.cloud.events.MooServerRestockEvent;
-import de.superioz.moo.protocol.client.ClientType;
-import de.superioz.moo.protocol.common.PacketMessenger;
-import de.superioz.moo.protocol.events.MooClientDisconnectEvent;
-import de.superioz.moo.protocol.packets.PacketServerUnregister;
-import de.superioz.moo.protocol.server.MooClient;
+import de.superioz.moo.netty.client.ClientType;
+import de.superioz.moo.netty.common.PacketMessenger;
+import de.superioz.moo.netty.events.MooClientDisconnectEvent;
+import de.superioz.moo.netty.packets.PacketServerUnregister;
+import de.superioz.moo.netty.server.MooClient;
 
 import java.net.InetSocketAddress;
 import java.util.ArrayList;

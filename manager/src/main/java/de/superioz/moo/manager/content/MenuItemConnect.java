@@ -8,7 +8,7 @@ import de.superioz.moo.client.Moo;
 import de.superioz.moo.client.events.CloudConnectedEvent;
 import de.superioz.moo.client.events.CloudDisconnectedEvent;
 import de.superioz.moo.manager.object.CustomMenuItem;
-import de.superioz.moo.protocol.client.ClientType;
+import de.superioz.moo.netty.client.ClientType;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Alert;

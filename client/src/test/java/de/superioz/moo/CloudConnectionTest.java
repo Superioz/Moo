@@ -1,9 +1,9 @@
 package de.superioz.moo;
 
 import de.superioz.moo.client.Moo;
-import de.superioz.moo.protocol.client.ClientType;
-import de.superioz.moo.protocol.common.PacketMessenger;
-import de.superioz.moo.protocol.packets.PacketPing;
+import de.superioz.moo.netty.client.ClientType;
+import de.superioz.moo.netty.common.PacketMessenger;
+import de.superioz.moo.netty.packets.PacketPing;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Test;
 

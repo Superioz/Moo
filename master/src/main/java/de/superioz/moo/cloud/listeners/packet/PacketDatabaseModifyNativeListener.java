@@ -7,10 +7,10 @@ import de.superioz.moo.api.database.filter.DbFilter;
 import de.superioz.moo.api.database.query.DbQuery;
 import de.superioz.moo.api.reaction.Reaction;
 import de.superioz.moo.cloud.Cloud;
-import de.superioz.moo.protocol.common.ResponseStatus;
-import de.superioz.moo.protocol.packet.PacketAdapter;
-import de.superioz.moo.protocol.packet.PacketHandler;
-import de.superioz.moo.protocol.packets.PacketDatabaseModifyNative;
+import de.superioz.moo.netty.common.ResponseStatus;
+import de.superioz.moo.netty.packet.PacketAdapter;
+import de.superioz.moo.netty.packet.PacketHandler;
+import de.superioz.moo.netty.packets.PacketDatabaseModifyNative;
 import org.bson.Document;
 
 import java.util.ArrayList;

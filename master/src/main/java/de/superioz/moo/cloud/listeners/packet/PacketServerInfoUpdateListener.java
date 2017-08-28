@@ -2,9 +2,9 @@ package de.superioz.moo.cloud.listeners.packet;
 
 import de.superioz.moo.api.common.MooServer;
 import de.superioz.moo.cloud.Cloud;
-import de.superioz.moo.protocol.packet.PacketAdapter;
-import de.superioz.moo.protocol.packet.PacketHandler;
-import de.superioz.moo.protocol.packets.PacketServerInfoUpdate;
+import de.superioz.moo.netty.packet.PacketAdapter;
+import de.superioz.moo.netty.packet.PacketHandler;
+import de.superioz.moo.netty.packets.PacketServerInfoUpdate;
 
 import java.net.InetSocketAddress;
 

@@ -4,9 +4,9 @@ import de.superioz.moo.api.database.objects.ServerPattern;
 import de.superioz.moo.api.event.EventHandler;
 import de.superioz.moo.api.event.EventListener;
 import de.superioz.moo.cloud.events.MooServerRestockEvent;
-import de.superioz.moo.protocol.common.PacketMessenger;
-import de.superioz.moo.protocol.packets.PacketServerRequest;
-import de.superioz.moo.protocol.server.MooProxy;
+import de.superioz.moo.netty.common.PacketMessenger;
+import de.superioz.moo.netty.packets.PacketServerRequest;
+import de.superioz.moo.netty.server.MooProxy;
 
 public class MooServerRestockListener implements EventListener {
 

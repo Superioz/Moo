@@ -8,7 +8,7 @@ import de.superioz.moo.api.io.LanguageManager;
 import de.superioz.moo.api.module.Module;
 import de.superioz.moo.client.Moo;
 import de.superioz.moo.client.events.CloudConnectedEvent;
-import de.superioz.moo.protocol.client.ClientType;
+import de.superioz.moo.netty.client.ClientType;
 import de.superioz.moo.spigot.listeners.ChatListener;
 import de.superioz.moo.spigot.listeners.ServerListener;
 import de.superioz.moo.spigot.task.ServerInfoTask;

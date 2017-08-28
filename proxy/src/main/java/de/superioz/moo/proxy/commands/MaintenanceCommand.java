@@ -9,7 +9,7 @@ import de.superioz.moo.api.common.RunAsynchronous;
 import de.superioz.moo.api.io.LanguageManager;
 import de.superioz.moo.api.config.MooConfigType;
 import de.superioz.moo.client.Moo;
-import de.superioz.moo.protocol.common.ResponseStatus;
+import de.superioz.moo.netty.common.ResponseStatus;
 import de.superioz.moo.proxy.command.BungeeCommandContext;
 
 @RunAsynchronous

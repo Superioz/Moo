@@ -3,9 +3,9 @@ package de.superioz.moo.cloud.common;
 import de.superioz.moo.api.cache.MooCache;
 import de.superioz.moo.api.database.objects.ServerPattern;
 import de.superioz.moo.cloud.database.DatabaseCollections;
-import de.superioz.moo.protocol.client.ClientType;
-import de.superioz.moo.protocol.common.PacketMessenger;
-import de.superioz.moo.protocol.packets.PacketPatternState;
+import de.superioz.moo.netty.client.ClientType;
+import de.superioz.moo.netty.common.PacketMessenger;
+import de.superioz.moo.netty.packets.PacketPatternState;
 
 public final class PatternManager {
 

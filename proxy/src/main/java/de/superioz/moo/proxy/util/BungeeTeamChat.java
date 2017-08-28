@@ -5,7 +5,7 @@ import de.superioz.moo.api.database.objects.Group;
 import de.superioz.moo.client.Moo;
 import de.superioz.moo.client.common.MooQueries;
 import de.superioz.moo.minecraft.chat.TeamChat;
-import de.superioz.moo.protocol.common.ResponseStatus;
+import de.superioz.moo.netty.common.ResponseStatus;
 import de.superioz.moo.proxy.Thunder;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.connection.ProxiedPlayer;

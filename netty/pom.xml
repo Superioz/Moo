@@ -9,7 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>protocol</artifactId>
+    <artifactId>netty</artifactId>
     <version>1.0</version>
 
     <dependencies>
@@ -28,7 +28,7 @@
 
     <!-- Build Parameter -->
     <build>
-        <finalName>protocol</finalName>
+        <finalName>netty</finalName>
         <sourceDirectory>src/main/java</sourceDirectory>
         <resources>
             <resource>

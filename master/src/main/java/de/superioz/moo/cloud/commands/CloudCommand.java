@@ -7,9 +7,9 @@ import de.superioz.moo.api.common.MooServer;
 import de.superioz.moo.api.database.objects.PlayerData;
 import de.superioz.moo.api.event.EventListener;
 import de.superioz.moo.cloud.Cloud;
-import de.superioz.moo.protocol.common.PacketMessenger;
-import de.superioz.moo.protocol.packets.PacketKeepalive;
-import de.superioz.moo.protocol.server.MooClient;
+import de.superioz.moo.netty.common.PacketMessenger;
+import de.superioz.moo.netty.packets.PacketKeepalive;
+import de.superioz.moo.netty.server.MooClient;
 
 import java.util.*;
 

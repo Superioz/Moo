@@ -3,11 +3,11 @@ package de.superioz.moo.cloud.listeners;
 import de.superioz.moo.api.event.EventHandler;
 import de.superioz.moo.api.event.EventListener;
 import de.superioz.moo.cloud.Cloud;
-import de.superioz.moo.protocol.common.Response;
-import de.superioz.moo.protocol.common.ResponseStatus;
-import de.superioz.moo.protocol.events.QueryEvent;
-import de.superioz.moo.protocol.packet.AbstractPacket;
-import de.superioz.moo.protocol.packets.PacketRespond;
+import de.superioz.moo.netty.common.Response;
+import de.superioz.moo.netty.common.ResponseStatus;
+import de.superioz.moo.netty.events.QueryEvent;
+import de.superioz.moo.netty.packet.AbstractPacket;
+import de.superioz.moo.netty.packets.PacketRespond;
 
 public class QueryServerListener implements EventListener {
 

@@ -9,12 +9,12 @@ import de.superioz.moo.api.event.EventPriority;
 import de.superioz.moo.api.logging.ConsoleColor;
 import de.superioz.moo.cloud.Cloud;
 import de.superioz.moo.cloud.events.MooServerRestockEvent;
-import de.superioz.moo.protocol.client.ClientType;
-import de.superioz.moo.protocol.common.PacketMessenger;
-import de.superioz.moo.protocol.events.MooClientConnectedEvent;
-import de.superioz.moo.protocol.packets.MultiPacket;
-import de.superioz.moo.protocol.packets.PacketServerRegister;
-import de.superioz.moo.protocol.server.MooClient;
+import de.superioz.moo.netty.client.ClientType;
+import de.superioz.moo.netty.common.PacketMessenger;
+import de.superioz.moo.netty.events.MooClientConnectedEvent;
+import de.superioz.moo.netty.packets.MultiPacket;
+import de.superioz.moo.netty.packets.PacketServerRegister;
+import de.superioz.moo.netty.server.MooClient;
 
 import java.util.ArrayList;
 import java.util.List;

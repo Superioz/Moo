@@ -4,12 +4,12 @@ import de.superioz.moo.api.database.objects.PlayerData;
 import de.superioz.moo.api.reaction.Reaction;
 import de.superioz.moo.api.util.Validation;
 import de.superioz.moo.cloud.Cloud;
-import de.superioz.moo.protocol.client.ClientType;
-import de.superioz.moo.protocol.common.PacketMessenger;
-import de.superioz.moo.protocol.common.ResponseStatus;
-import de.superioz.moo.protocol.packet.PacketAdapter;
-import de.superioz.moo.protocol.packet.PacketHandler;
-import de.superioz.moo.protocol.packets.PacketPlayerMessage;
+import de.superioz.moo.netty.client.ClientType;
+import de.superioz.moo.netty.common.PacketMessenger;
+import de.superioz.moo.netty.common.ResponseStatus;
+import de.superioz.moo.netty.packet.PacketAdapter;
+import de.superioz.moo.netty.packet.PacketHandler;
+import de.superioz.moo.netty.packets.PacketPlayerMessage;
 
 import java.util.UUID;
 

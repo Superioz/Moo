@@ -1,6 +1,6 @@
 package de.superioz.moo.cloud.events;
 
-import de.superioz.moo.protocol.packets.PacketPlayerState;
+import de.superioz.moo.netty.packets.PacketPlayerState;
 
 /**
  * Event when the player joined a server

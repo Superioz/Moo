@@ -3,11 +3,11 @@ package de.superioz.moo.cloud.listeners;
 import de.superioz.moo.api.cache.MooCache;
 import de.superioz.moo.api.database.objects.ServerPattern;
 import de.superioz.moo.cloud.Cloud;
-import de.superioz.moo.protocol.common.ResponseStatus;
-import de.superioz.moo.protocol.packet.PacketAdapter;
-import de.superioz.moo.protocol.packet.PacketHandler;
-import de.superioz.moo.protocol.packets.*;
-import de.superioz.moo.protocol.server.MooProxy;
+import de.superioz.moo.netty.common.ResponseStatus;
+import de.superioz.moo.netty.packet.PacketAdapter;
+import de.superioz.moo.netty.packet.PacketHandler;
+import de.superioz.moo.netty.packets.*;
+import de.superioz.moo.netty.server.MooProxy;
 
 import java.net.InetSocketAddress;
 

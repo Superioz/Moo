@@ -18,7 +18,7 @@ import de.superioz.moo.api.util.Validation;
 import de.superioz.moo.api.utils.StringUtil;
 import de.superioz.moo.api.utils.TimeUtil;
 import de.superioz.moo.client.common.MooQueries;
-import de.superioz.moo.protocol.common.ResponseStatus;
+import de.superioz.moo.netty.common.ResponseStatus;
 import de.superioz.moo.proxy.command.BungeeCommandContext;
 import de.superioz.moo.proxy.util.BungeeTeamChat;
 import net.md_5.bungee.api.CommandSender;

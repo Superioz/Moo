@@ -9,10 +9,10 @@ import de.superioz.moo.cloud.events.MooPlayerConnectedServerEvent;
 import de.superioz.moo.cloud.events.MooPlayerJoinedProxyEvent;
 import de.superioz.moo.cloud.events.MooPlayerJoinedServerEvent;
 import de.superioz.moo.cloud.events.MooPlayerLeftProxyEvent;
-import de.superioz.moo.protocol.common.ResponseStatus;
-import de.superioz.moo.protocol.packet.PacketAdapter;
-import de.superioz.moo.protocol.packet.PacketHandler;
-import de.superioz.moo.protocol.packets.PacketPlayerState;
+import de.superioz.moo.netty.common.ResponseStatus;
+import de.superioz.moo.netty.packet.PacketAdapter;
+import de.superioz.moo.netty.packet.PacketHandler;
+import de.superioz.moo.netty.packets.PacketPlayerState;
 
 /**
  * This class listens on player state

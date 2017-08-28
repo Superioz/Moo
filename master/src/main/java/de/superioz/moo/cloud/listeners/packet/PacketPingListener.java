@@ -1,8 +1,8 @@
 package de.superioz.moo.cloud.listeners.packet;
 
-import de.superioz.moo.protocol.packet.PacketAdapter;
-import de.superioz.moo.protocol.packet.PacketHandler;
-import de.superioz.moo.protocol.packets.PacketPing;
+import de.superioz.moo.netty.packet.PacketAdapter;
+import de.superioz.moo.netty.packet.PacketHandler;
+import de.superioz.moo.netty.packets.PacketPing;
 
 /**
  * This class listens to PacketPing

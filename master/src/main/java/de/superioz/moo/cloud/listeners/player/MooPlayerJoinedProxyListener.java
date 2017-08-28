@@ -11,8 +11,8 @@ import de.superioz.moo.api.event.EventPriority;
 import de.superioz.moo.cloud.Cloud;
 import de.superioz.moo.cloud.database.DatabaseCollections;
 import de.superioz.moo.cloud.events.MooPlayerJoinedProxyEvent;
-import de.superioz.moo.protocol.common.ResponseStatus;
-import de.superioz.moo.protocol.packets.PacketPlayerState;
+import de.superioz.moo.netty.common.ResponseStatus;
+import de.superioz.moo.netty.packets.PacketPlayerState;
 
 import java.net.InetSocketAddress;
 

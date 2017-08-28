@@ -2,10 +2,10 @@ package de.superioz.moo.cloud.listeners.packet;
 
 import de.superioz.moo.api.config.MooConfigType;
 import de.superioz.moo.cloud.Cloud;
-import de.superioz.moo.protocol.packet.PacketAdapter;
-import de.superioz.moo.protocol.packet.PacketHandler;
-import de.superioz.moo.protocol.packets.PacketConfig;
-import de.superioz.moo.protocol.packets.PacketRespond;
+import de.superioz.moo.netty.packet.PacketAdapter;
+import de.superioz.moo.netty.packet.PacketHandler;
+import de.superioz.moo.netty.packets.PacketConfig;
+import de.superioz.moo.netty.packets.PacketRespond;
 
 /**
  * This class listens on the config packet which edits something from the config

@@ -20,9 +20,9 @@ import de.superioz.moo.api.util.Procedure;
 import de.superioz.moo.api.utils.DisplayFormats;
 import de.superioz.moo.api.utils.ReflectionUtil;
 import de.superioz.moo.api.utils.StringUtil;
-import de.superioz.moo.protocol.common.Queries;
-import de.superioz.moo.protocol.common.Response;
-import de.superioz.moo.protocol.packets.PacketDatabaseCount;
+import de.superioz.moo.netty.common.Queries;
+import de.superioz.moo.netty.common.Response;
+import de.superioz.moo.netty.packets.PacketDatabaseCount;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;

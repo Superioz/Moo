@@ -4,12 +4,12 @@ import de.superioz.moo.api.common.punishment.PunishmentManager;
 import de.superioz.moo.api.event.EventExecutor;
 import de.superioz.moo.client.events.CloudConnectedEvent;
 import de.superioz.moo.client.events.CloudDisconnectedEvent;
-import de.superioz.moo.protocol.client.ClientType;
-import de.superioz.moo.protocol.common.NetworkEventAdapter;
-import de.superioz.moo.protocol.common.PacketMessenger;
-import de.superioz.moo.protocol.common.Response;
-import de.superioz.moo.protocol.packet.AbstractPacket;
-import de.superioz.moo.protocol.packets.PacketHandshake;
+import de.superioz.moo.netty.client.ClientType;
+import de.superioz.moo.netty.common.NetworkEventAdapter;
+import de.superioz.moo.netty.common.PacketMessenger;
+import de.superioz.moo.netty.common.Response;
+import de.superioz.moo.netty.packet.AbstractPacket;
+import de.superioz.moo.netty.packets.PacketHandshake;
 import io.netty.channel.Channel;
 
 import java.util.function.Consumer;

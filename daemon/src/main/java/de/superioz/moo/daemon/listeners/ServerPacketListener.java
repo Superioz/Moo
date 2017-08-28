@@ -4,12 +4,12 @@ import de.superioz.moo.api.cache.MooCache;
 import de.superioz.moo.api.database.objects.ServerPattern;
 import de.superioz.moo.daemon.Daemon;
 import de.superioz.moo.daemon.common.Server;
-import de.superioz.moo.protocol.common.ResponseStatus;
-import de.superioz.moo.protocol.packet.PacketAdapter;
-import de.superioz.moo.protocol.packet.PacketHandler;
-import de.superioz.moo.protocol.packets.PacketRespond;
-import de.superioz.moo.protocol.packets.PacketServerRequest;
-import de.superioz.moo.protocol.packets.PacketServerRequestShutdown;
+import de.superioz.moo.netty.common.ResponseStatus;
+import de.superioz.moo.netty.packet.PacketAdapter;
+import de.superioz.moo.netty.packet.PacketHandler;
+import de.superioz.moo.netty.packets.PacketRespond;
+import de.superioz.moo.netty.packets.PacketServerRequest;
+import de.superioz.moo.netty.packets.PacketServerRequestShutdown;
 
 public class ServerPacketListener implements PacketAdapter {
 
