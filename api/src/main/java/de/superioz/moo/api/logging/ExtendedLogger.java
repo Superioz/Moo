@@ -30,10 +30,13 @@ import java.util.logging.Logger;
  */
 public class ExtendedLogger {
 
-    public static final Formatter DEFAULT_FORMATTING = new ConciseFormatter();
+    public static final Formatter DEFAULT_FORMATTING = new ConciseFormatter(false);
+    public static final Formatter COLORLESS_FORMATTING = new ConciseFormatter(true);
+
     private static final String LOG_FILE = "latest.log";
     private static final String LOG_FOLDER = "logs";
     private static final String COMPRESSED_LOG_FORMAT = "{0}-{1}.log.gz";
+    private static final String ENCODING = "UTF-8";
 
     private ExecutorService executor = Executors.newSingleThreadExecutor(new ThreadFactoryBuilder().setNameFormat("logging-pool-%d").build());
 
@@ -90,7 +93,8 @@ public class ExtendedLogger {
             this.createLogFile();
 
             FileHandler fileHandler = new FileHandler(path, 1000 * 1024, 1, true);
-            fileHandler.setFormatter(DEFAULT_FORMATTING);
+            fileHandler.setFormatter(COLORLESS_FORMATTING);
+            fileHandler.setEncoding(ENCODING);
             baseLogger.addHandler(fileHandler);
         }
         catch(Exception ex) {
@@ -143,7 +147,7 @@ public class ExtendedLogger {
                     "*** START DATE: " + TimeUtil.getFormat(System.currentTimeMillis()),
                     "*** SYSTEM: " + SystemUtil.getCurrentUser() + " (" + SystemUtil.getVMName() + " " + SystemUtil.getVMVersion() + ")",
                     "*** JAVA: " + SystemUtil.getJavaVersion()),
-                    Charset.forName("UTF-8"));
+                    Charset.forName(ENCODING));
         }
         catch(IOException e) {
             //..

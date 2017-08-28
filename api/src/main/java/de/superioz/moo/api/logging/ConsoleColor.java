@@ -62,12 +62,12 @@ public enum ConsoleColor {
      * @param input String to strip of color
      * @return A copy of the input string, without any coloring
      */
-    public static String replaceColor(char colorChar, String input, final String suffix) {
+    public static String stripColors(String input) {
         if(input == null) {
             return null;
         }
-        for(String s : StringUtil.find("(?i)" + colorChar + "[0-9A-FK-OR]", input)) {
-            input = input.replace(s, s + suffix);
+        for(String s : StringUtil.find("(?i)(§|&)[0-9A-FK-OR]", input)) {
+            input = input.replace(s, "");
         }
         return input;
     }

@@ -6,5 +6,6 @@
   "servers-folder": "servers",
   "patterns-folder": "patterns",
   "start-file": "start",
-  "ram-usage-delay": 10000
+  "ram-usage-delay": 10000,
+  "redis-config": "redis_config.json"
 }

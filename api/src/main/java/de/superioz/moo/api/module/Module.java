@@ -2,7 +2,6 @@ package de.superioz.moo.api.module;
 
 import de.superioz.moo.api.common.RunAsynchronous;
 import de.superioz.moo.api.exceptions.ModuleInitializeException;
-import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -36,8 +35,8 @@ public abstract class Module {
     /**
      * When does the module finished starting?
      */
-    @Getter(value = AccessLevel.PRIVATE)
-    private long timeFinished;
+    @Getter
+    private long timeFinished = -1;
 
     /**
      * If the module couldn't be started, here is the reason
@@ -92,7 +91,7 @@ public abstract class Module {
                 wait(3000L);
             }
             catch(InterruptedException e) {
-                e.printStackTrace();
+                this.errorReason = e;
             }
         }
         return (M) this;
@@ -100,7 +99,15 @@ public abstract class Module {
 
     public <M extends Module> void waitFor(Consumer<M> onFinished) {
         waitFor();
-        onFinished.accept((M) this);
+        try {
+            onFinished.accept((M) this);
+        }
+        catch(Exception ex) {
+            errorReason = ex;
+
+            System.err.println("Couldn't wait for module '" + getName() + "': "
+                    + ex.getMessage() + " (:" + ex.getClass().getSimpleName() + ")");
+        }
     }
 
     public <M extends Module> void waitForAsync(Consumer<M> onFinished) {
@@ -146,7 +153,7 @@ public abstract class Module {
             throw new ModuleInitializeException("Couldn't resolve modules dependencies!", this);
         }
         this.onEnable();
-        this.finished(true);
+        this.finished(errorReason == null);
     }
 
     /**

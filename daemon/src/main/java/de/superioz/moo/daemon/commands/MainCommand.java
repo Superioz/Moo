@@ -86,6 +86,7 @@ public class MainCommand {
 
         Moo.getInstance().disconnect();
         Daemon.getInstance().getLogs().info("Shutdown processes ..");
+        Daemon.getInstance().getModuleRegistry().disableAll();
         Daemon.getInstance().getServer().getExecutors().shutdown();
 
         System.exit(0);

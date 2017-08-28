@@ -13,6 +13,11 @@ import java.util.logging.LogRecord;
 public class ConciseFormatter extends Formatter {
 
     private final DateFormat date = new SimpleDateFormat("HH:mm:ss.sss");
+    private boolean stripColors = false;
+
+    public ConciseFormatter(boolean stripColors) {
+        this.stripColors = stripColors;
+    }
 
     @Override
     @SuppressWarnings("ThrowableResultIgnored")
@@ -24,7 +29,7 @@ public class ConciseFormatter extends Formatter {
         formatted.append(" ");
         formatted.append(record.getLevel().getName());
         formatted.append("] ");
-        formatted.append(formatMessage(record));
+        formatted.append(stripColors ? ConsoleColor.stripColors(formatMessage(record)) : formatMessage(record));
         formatted.append('\n');
 
         if(record.getThrown() != null) {
@@ -32,7 +37,6 @@ public class ConciseFormatter extends Formatter {
             record.getThrown().printStackTrace(new PrintWriter(writer));
             formatted.append(writer);
         }
-
         return formatted.toString();
     }
 

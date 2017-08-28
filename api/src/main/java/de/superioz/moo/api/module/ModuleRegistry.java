@@ -1,7 +1,6 @@
 package de.superioz.moo.api.module;
 
 import com.google.common.base.Strings;
-import de.superioz.moo.api.exceptions.InvalidConfigException;
 import de.superioz.moo.api.logging.ConsoleColor;
 import de.superioz.moo.api.logging.ExtendedLogger;
 import de.superioz.moo.api.utils.NumberUtil;
@@ -63,7 +62,7 @@ public class ModuleRegistry {
             totalTime += time;
 
             String timeString = "[ " + Strings.padStart(StringUtil.applyDecimalLength(time, 3), 6, ' ') + " s]";
-            String error = m.isEnabled() ? "" : " (" + (m.getErrorReason() != null ? m.getErrorReason().getClass().getSimpleName() : "Not Finished Yet") + ")";
+            String error = m.isEnabled() ? "" : " (" + (m.getErrorReason() != null ? m.getErrorReason().getClass().getSimpleName() : "Not Enabled") + ")";
             summaryMessages.add(name + " " + state + " " + timeString + error);
         }
         summaryMessages.add(" ");
@@ -78,11 +77,11 @@ public class ModuleRegistry {
                 : successRate <= 75 ? ConsoleColor.GOLD
                 : successRate <= 99 ? ConsoleColor.YELLOW
                 : ConsoleColor.GREEN
-        ) + NumberUtil.round(successRate, 4) + ConsoleColor.RESET;
+        ) + NumberUtil.round(successRate, 4) + "%" + ConsoleColor.RESET;
 
         // time and footer
         String averageTimeString = NumberUtil.round(totalTime / getModules().size(), 4);
-        summaryMessages.add("Success rate: " + successRateString + "% " + "| Average time: " + averageTimeString + "s");
+        summaryMessages.add("Success rate: " + successRateString + " | Average time: " + averageTimeString + "s");
         summaryMessages.add(Strings.repeat("-", 75));
 
         // send all messages
@@ -94,7 +93,9 @@ public class ModuleRegistry {
             service.execute(() -> {
                 for(Module m : getModules()) {
                     while(true){
-                        if(m.isEnabled() || m.getErrorReason() != null) break;
+                        if(m.isEnabled()
+                                || m.getErrorReason() != null
+                                || m.getTimeFinished() != -1) break;
 
                         try {
                             Thread.sleep(5);
@@ -260,9 +261,7 @@ public class ModuleRegistry {
 
             logger.severe("Couldn't load module '" + m.getName() + "': "
                     + error.getMessage() + " (:" + error.getClass().getSimpleName() + ")");
-            if(!(error instanceof InvalidConfigException)) {
-                error.printStackTrace();
-            }
+            error.printStackTrace();
         }
 
         return m;

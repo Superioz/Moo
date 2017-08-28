@@ -233,7 +233,7 @@ public final class ReflectionUtil {
     public static List<Field> getFieldsNonStatic(Class<?> clazz) {
         List<Field> l = new ArrayList<>();
         for(Field f : clazz.getDeclaredFields()) {
-            if(Modifier.isStatic(f.getModifiers()) || Modifier.isPrivate(f.getModifiers())) continue;
+            if(Modifier.isStatic(f.getModifiers())) continue;
             l.add(f);
         }
         return l;
@@ -475,12 +475,15 @@ public final class ReflectionUtil {
     }
 
     public static Field getFieldFromId(int id, Class<?> clazz) {
+        List<Field> fields;
+
         int i = 0;
-        for(Field f : getFieldsNonStatic(clazz)) {
+        for(Field f : (fields = getFieldsNonStatic(clazz))) {
             if(i == id) return f;
             i++;
         }
-        return getFieldsNonStatic(clazz).get(0);
+        if(fields.size() < 1) return null;
+        return fields.get(0);
     }
 
     /**

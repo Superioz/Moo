@@ -287,7 +287,7 @@ public class DataResolver {
      * @return The result
      */
     public static boolean isResolvable(Field f) {
-        return f.isAnnotationPresent(DbKey.class);
+        return f != null && f.isAnnotationPresent(DbKey.class);
     }
 
     /**
