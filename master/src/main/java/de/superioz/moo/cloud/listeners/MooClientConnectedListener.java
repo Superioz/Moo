@@ -1,12 +1,14 @@
 package de.superioz.moo.cloud.listeners;
 
+import de.superioz.moo.api.cache.MooCache;
 import de.superioz.moo.api.common.MooServer;
+import de.superioz.moo.api.event.EventExecutor;
 import de.superioz.moo.api.event.EventHandler;
 import de.superioz.moo.api.event.EventListener;
 import de.superioz.moo.api.event.EventPriority;
 import de.superioz.moo.api.logging.ConsoleColor;
-import de.superioz.moo.api.util.Validation;
 import de.superioz.moo.cloud.Cloud;
+import de.superioz.moo.cloud.events.MooServerRestockEvent;
 import de.superioz.moo.protocol.client.ClientType;
 import de.superioz.moo.protocol.common.PacketMessenger;
 import de.superioz.moo.protocol.events.MooClientConnectedEvent;
@@ -16,19 +18,18 @@ import de.superioz.moo.protocol.server.MooClient;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Pattern;
 
 /**
  * This class listens on a client connecting to the cloud
  */
 public class MooClientConnectedListener implements EventListener {
 
-    private static final Pattern PREDEFINED_SERVER_PATTERN = Pattern.compile("\\w+(:\\d+)?");
+    //private static final Pattern PREDEFINED_SERVER_PATTERN = Pattern.compile("\\w+(:\\d+)?");
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onClientConnected(MooClientConnectedEvent event) {
         MooClient client = event.getClient();
-        if(Cloud.getInstance().getMooProxy() == null){
+        if(Cloud.getInstance().getMooProxy() == null) {
             Cloud.getInstance().getLogger().severe(ConsoleColor.RED
                     + "Couldn't accept client because the MooProxy didn't initialize properly!");
             return;
@@ -45,34 +46,19 @@ public class MooClientConnectedListener implements EventListener {
             Cloud.getInstance().getLogger().debug("Send already registered server to proxy (" + list.size() + "x) ..");
             MultiPacket<PacketServerRegister> multiPacket = new MultiPacket<>(list);
             PacketMessenger.message(multiPacket, client);
-        }
-        // DAEMON DAEMON DAEMON A daemon connects to the server!
-        else if(client.getType() == ClientType.DAEMON) {
-            // if this is not the first daemon, rip
-            if(Cloud.getInstance().getClientManager().getClients(ClientType.DAEMON).size() > 1) {
+
+            // if this is not the first proxy, rip
+            // if no daemon has been found
+            if(Cloud.getInstance().getClientManager().getClients(ClientType.PROXY).size() > 1
+                    || Cloud.getInstance().getClientManager().getClients(ClientType.DAEMON).size() == 0) {
                 return;
             }
 
-            // start predefined servers
-            // ONLY if the serverlist inside config is not empty, nor null
-            // AND ONLY IF AUTOMATIC MODE IS ACTIVATED
-            if(!(boolean) Cloud.getInstance().getConfig().get("predefined-servers.activated")) {
-                return;
-            }
-
-            // otherwise start
-            List<String> predefinedServers = Cloud.getInstance().getConfig().get("predefined-servers.list");
-            if(predefinedServers != null && !predefinedServers.isEmpty()) {
-                for(String server : predefinedServers) {
-                    if(!PREDEFINED_SERVER_PATTERN.matcher(server).matches()) continue;
-                    String[] split = server.split(":");
-                    String type = split[0];
-                    int amount = split.length > 1 && Validation.INTEGER.matches(split[1]) ? Integer.parseInt(split[1]) : 1;
-
-                    Cloud.getInstance().getMooProxy().requestServer(type, false, amount, resultServer -> {
-                    });
-                }
-            }
+            // start minimum amount of servers
+            MooCache.getInstance().getPatternMap().readAllValuesAsync()
+                    .thenAccept(serverPatterns -> serverPatterns.forEach(pattern -> {
+                        EventExecutor.getInstance().execute(new MooServerRestockEvent(pattern));
+                    }));
         }
         // SPIGOT SPIGOT SPIGOT A server connects to the server
         else if(client.getType() == ClientType.SERVER) {

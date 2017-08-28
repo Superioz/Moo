@@ -6,7 +6,7 @@
   "cloud-port": 8000,
   "redis-config": "redis_config.json",
   "team-rank": 10,
-  "colored-chat-permission": "chat.colored",
-  "formatted-chat-permission": "chat.formatted",
-  "command-help-permission": "command.explicit-help"
+  "permissions": {
+    "command-help": "command.explicit-help"
+  }
 }

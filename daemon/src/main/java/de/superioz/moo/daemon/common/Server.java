@@ -150,7 +150,7 @@ public class Server extends ServerFolder {
         parameter.add(getStartFile().getAbsolutePath());
         if(port != DEFAULT_PORT) parameter.addAll(Arrays.asList("-p", port + ""));
         if(!host.equals(DEFAULT_HOST)) parameter.addAll(Arrays.asList("-h", host));
-        if(ram.isEmpty()) parameter.add("-Xmx" + ram);
+        if(!ram.isEmpty()) parameter.add("-Xmx" + ram);
 
         ProcessBuilder builder = new ProcessBuilder(parameter);
         builder.directory(getFolder());

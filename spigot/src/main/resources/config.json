@@ -4,5 +4,10 @@
   "group-id": "server",
   "cloud-ip": "localhost",
   "cloud-port": 8000,
-  "redis-config": "redis_config.json"
+  "redis-config": "redis_config.json",
+  "features": {
+    "enabled": true,
+    "join-message": true,
+    "leave-message": true
+  }
 }

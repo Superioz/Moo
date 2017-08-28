@@ -20,7 +20,7 @@ import java.util.function.Consumer;
  * Representation of the proxy where all clients are connected to
  */
 @Getter
-public final class MooProxy {
+public final class NetworkProxy {
 
     private final Map<UUID, PlayerData> playerMap = new HashMap<>();
     private final Map<String, PlayerData> playerNameMap = new HashMap<>();
@@ -33,7 +33,7 @@ public final class MooProxy {
 
     private NetworkServer netServer;
 
-    public MooProxy(NetworkServer netServer) {
+    public NetworkProxy(NetworkServer netServer) {
         this.netServer = netServer;
     }
 

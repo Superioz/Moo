@@ -1,5 +1,7 @@
 package de.superioz.moo.daemon.listeners;
 
+import de.superioz.moo.api.cache.MooCache;
+import de.superioz.moo.api.database.objects.ServerPattern;
 import de.superioz.moo.daemon.Daemon;
 import de.superioz.moo.daemon.common.Server;
 import de.superioz.moo.protocol.common.ResponseStatus;
@@ -24,10 +26,18 @@ public class ServerPacketListener implements PacketAdapter {
             return;
         }
 
+        // gets the pattern
+        ServerPattern pattern = MooCache.getInstance().getPatternMap().get(serverType);
+        if(pattern == null) {
+            Daemon.getInstance().getLogs().debug("Server type does not exist!");
+            packet.respond(ResponseStatus.NOT_FOUND);
+            return;
+        }
+
         Daemon.getInstance().getLogs().debug("Starting server ..");
 
         // adds given amount of server to start queue
-        Daemon.getInstance().startServer(serverType, "", packet.autoSave, packet.amount,
+        Daemon.getInstance().startServer(serverType, pattern.getRam(), packet.autoSave, packet.amount,
                 server -> {
                     packet.respond(server == null
                             ? new PacketRespond(ResponseStatus.NOK)

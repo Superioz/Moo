@@ -17,7 +17,7 @@ import de.superioz.moo.api.modules.RedisModule;
 import de.superioz.moo.cloud.modules.*;
 import de.superioz.moo.cloud.task.ServerInfoCheckTask;
 import de.superioz.moo.protocol.server.ClientManager;
-import de.superioz.moo.protocol.server.MooProxy;
+import de.superioz.moo.protocol.server.NetworkProxy;
 import de.superioz.moo.protocol.server.NetworkServer;
 import jline.console.ConsoleReader;
 import lombok.Getter;
@@ -37,7 +37,7 @@ public class Cloud implements EventListener {
 
     private final ExecutorService executors = Executors.newCachedThreadPool(
             new ThreadFactoryBuilder().setNameFormat("cloud-pool-%d").build());
-    private MooProxy mooProxy;
+    private NetworkProxy mooProxy;
     @Setter
     private MooConfig mooConfig;
 
@@ -102,7 +102,7 @@ public class Cloud implements EventListener {
         this.databaseModule = moduleRegistry.register(new DatabaseModule(getConfig(), getLogger()));
         this.nettyModule = moduleRegistry.register(new NettyModule(getConfig()));
         this.nettyModule.waitForAsync(module -> {
-            Cloud.this.mooProxy = new MooProxy(getServer());
+            Cloud.this.mooProxy = new NetworkProxy(getServer());
             executors.execute(serverInfoCheckTask = new ServerInfoCheckTask(10 * 1000, 20 * 1000));
         });
 

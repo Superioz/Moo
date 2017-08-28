@@ -16,6 +16,7 @@ import de.superioz.moo.protocol.client.ClientType;
 import de.superioz.moo.proxy.command.BungeeCommandContext;
 import de.superioz.moo.proxy.command.PlayerParamType;
 import de.superioz.moo.proxy.commands.*;
+import de.superioz.moo.proxy.common.CustomReconnectHandler;
 import de.superioz.moo.proxy.listeners.*;
 import lombok.Getter;
 import net.md_5.bungee.api.CommandSender;
@@ -44,6 +45,9 @@ public class ThunderPluginModule extends Module implements EventListener {
         this.config = Moo.getInstance().loadConfig(Thunder.getInstance().getDataFolder());
         this.languageManager = new LanguageManager(Thunder.getInstance().getDataFolder(), ChatUtil::fabulize);
         this.languageManager.load(Locale.US);
+
+        // set reconnect handler
+        ProxyServer.getInstance().setReconnectHandler(new CustomReconnectHandler());
 
         // register commands
         CommandRegistry.getInstance().registerCommandsSeperately(

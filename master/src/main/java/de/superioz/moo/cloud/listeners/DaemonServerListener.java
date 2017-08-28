@@ -1,12 +1,13 @@
 package de.superioz.moo.cloud.listeners;
 
+import de.superioz.moo.api.cache.MooCache;
+import de.superioz.moo.api.database.objects.ServerPattern;
 import de.superioz.moo.cloud.Cloud;
+import de.superioz.moo.protocol.common.ResponseStatus;
 import de.superioz.moo.protocol.packet.PacketAdapter;
 import de.superioz.moo.protocol.packet.PacketHandler;
-import de.superioz.moo.protocol.packets.PacketRamUsage;
-import de.superioz.moo.protocol.packets.PacketServerAttempt;
-import de.superioz.moo.protocol.packets.PacketServerRequest;
-import de.superioz.moo.protocol.packets.PacketServerRequestShutdown;
+import de.superioz.moo.protocol.packets.*;
+import de.superioz.moo.protocol.server.MooProxy;
 
 import java.net.InetSocketAddress;
 
@@ -32,11 +33,34 @@ public class DaemonServerListener implements PacketAdapter {
     @PacketHandler
     public void onServerRequest(PacketServerRequest packet) {
         // requests a server
-        Cloud.getInstance().getMooProxy().requestServer(packet.type, packet.autoSave, packet.amount, abstractPacket -> packet.respond(abstractPacket));
+        String type = packet.type;
+
+        // exists the type?
+        ServerPattern pattern = MooCache.getInstance().getPatternMap().get(type);
+        if(pattern == null) {
+            packet.respond(ResponseStatus.NOT_FOUND);
+            return;
+        }
+
+        // check if the amount is too high! (over 9000!)
+        int maxServers = pattern.getMax();
+        int current = MooProxy.getInstance().getServer(type).size();
+        if(current == maxServers || (current + packet.amount) >= maxServers) {
+            packet.respond(ResponseStatus.BAD_REQUEST);
+            return;
+        }
+
+        Cloud.getInstance().getMooProxy().requestServer(type, packet.autoSave, packet.amount, abstractPacket -> packet.respond(abstractPacket));
     }
 
     @PacketHandler
     public void onServerRequestShutdown(PacketServerRequestShutdown packet) {
+        // does a server exist with this?
+        if(MooProxy.getInstance().getServer(packet.host, packet.port) == null) {
+            packet.respond(ResponseStatus.NOT_FOUND);
+            return;
+        }
+
         // shutdowns a server
         Cloud.getInstance().getMooProxy().requestServerShutdown(packet.host, packet.port, abstractPacket -> packet.respond(abstractPacket));
     }

@@ -33,6 +33,7 @@ public class ListenerModule extends Module {
                 new MooPlayerConnectedServerListener(),
                 new MooPlayerJoinedServerListener(),
                 new MooLoggingListener(),
+                new MooServerRestockListener(),
                 new DatabaseConnectionListener(),
                 new RedisConnectionListener(),
                 new CloudStartedListener()

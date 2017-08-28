@@ -57,7 +57,7 @@ public class PatternCommand {
         context.sendMessage("Pattern '" + name + "': {" + pattern + "}");
     }
 
-    @Command(label = "create", parent = "pattern", usage = "<name> [type] [priority] [min] [max] [ram]")
+    @Command(label = "create", parent = "pattern", usage = "<name> [type] [priority] [ram]")
     public void create(CommandContext context, ParamSet args) {
         String name = args.get(0);
         ServerPattern pattern = DatabaseCollections.PATTERN.get(name);
@@ -67,9 +67,7 @@ public class PatternCommand {
         ServerPattern newPattern = new ServerPattern(name,
                 args.getString(1, ServerPattern.DEFAULT_TYPE, Validation.SIMPLE_NAME::matches),
                 args.getInt(2, ServerPattern.DEFAULT_PRIORITY),
-                args.getInt(3, ServerPattern.DEFAULT_MIN),
-                args.getInt(4, ServerPattern.DEFAULT_MAX),
-                args.getString(5, ServerPattern.DEFAULT_RAM, Validation.RAM::matches)
+                args.getString(3, ServerPattern.DEFAULT_RAM, Validation.RAM::matches)
         );
         context.invalidArgument(!PatternManager.getInstance().createPattern(newPattern), "&cCouldn't create pattern!");
         context.sendMessage("&aCreated pattern successfully.");
@@ -82,25 +80,7 @@ public class PatternCommand {
         context.invalidArgument(pattern == null, "&cThis pattern does not exist! (" + name + ")");
 
         context.invalidArgument(!PatternManager.getInstance().deletePattern(pattern), "&cCouldn't delete pattern!");
-        context.sendMessage("&aDeleted patter successfully.");
-    }
-
-    @Command(label = "modify", parent = "pattern", usage = "<name> <updates>")
-    public void modify(CommandContext context, ParamSet args) {
-        String name = args.get(0);
-        ServerPattern pattern = DatabaseCollections.PATTERN.get(name);
-        context.invalidArgument(pattern == null, "&cThis pattern does not exist! (" + name + ")");
-
-
-    }
-
-    @Command(label = "check", parent = "pattern", usage = "<name>")
-    public void check(CommandContext context, ParamSet args) {
-        String name = args.get(0);
-        ServerPattern pattern = DatabaseCollections.PATTERN.get(name);
-        context.invalidArgument(pattern == null, "&cThis pattern does not exist! (" + name + ")");
-
-
+        context.sendMessage("&aDeleted pattern successfully.");
     }
 
 }

@@ -1,5 +1,6 @@
 package de.superioz.moo.daemon.common;
 
+import de.superioz.moo.api.util.Validation;
 import lombok.Getter;
 import de.superioz.moo.api.utils.IOUtil;
 import de.superioz.moo.api.utils.SystemUtil;
@@ -45,7 +46,7 @@ public class ServerFolder {
         File[] content;
         if(!folder.exists() || (content = folder.listFiles()) == null) return patterns;
         for(File f : content) {
-            if(f.isDirectory()) {
+            if(f.isDirectory() && Validation.SIMPLE_NAME.matches(f.getName())) {
                 patterns.add(new ServerFolder(f, startFileName));
             }
         }

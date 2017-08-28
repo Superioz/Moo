@@ -7,6 +7,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+/**
+ * Pattern of a server. I got some ideas of handling servers (priority, min, max) from @Doppelnull.
+ */
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
@@ -27,24 +30,26 @@ public class ServerPattern extends SimpleSerializable {
 
     /**
      * The type of the pattern (e.g.: LOBBY, GAME, whatever you want)
+     * difference between LOBBY & GAME: Lobbies have to be handled differently
      */
     @DbKey
     private String type;
 
     /**
      * The priority to start the server (high priority -> lowest priority)
+     * Simply idea, but nonetheless thanks to
      */
     @DbKey
     private Integer priority;
 
     /**
-     * The minimum amount of players to do something
+     * The minimum amount of servers to be active simultaneosly
      */
     @DbKey
     private Integer min;
 
     /**
-     * The maximum amount of players to be able to stay on this server
+     * The maximum amount of servers to be active simultaneosly
      */
     @DbKey
     private Integer max;

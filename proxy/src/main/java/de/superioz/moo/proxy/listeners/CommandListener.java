@@ -123,7 +123,7 @@ public class CommandListener extends CommandEventAdapter<CommandSender> implemen
         BungeeCommandContext context = (BungeeCommandContext) event.getContext();
 
         // checks the permission
-        if(!context.getCommandSender().hasPermission(Thunder.getInstance().getPluginModule().getConfig().get("command-help-permission"))) {
+        if(!context.getCommandSender().hasPermission(Thunder.getInstance().getPluginModule().getConfig().get("permission.command-help"))) {
             return;
         }
         CommandInstance instance = context.getCommand();
