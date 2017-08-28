@@ -65,4 +65,10 @@ screen -S bungeecord -dm java -jar -Xmx1024M yourBungeecordFile.jar
 # Setting up Daemons
 A daemon is in this setup a program which runs in the background and manages the server dynamically.  
 
-It's basically the same setup as [Thunder](#thunder) but instead of downloading the bungeecord jar get the `/cloud/jars/daemon.jar` and put it inside a folder of your choice and instead of creating a script take the **start_daemon.sh** script. Start the daemon and configure it just like the you did with the Thunder configuration files. To be able to manage server patterns just use the `/pattern` command inside the cloud console.
+It's basically the same setup as [Thunder](#thunder) but instead of downloading the bungeecord jar get the `/cloud/jars/daemon.jar` and put it inside a folder of your choice and instead of creating a script take the **start_daemon.sh** script. Start the daemon and configure it just like the you did with the Thunder configuration files.
+
+# Setting up patterns
+A pattern is a pre-defined server folder which will be used to start multiple servers of one instance. It is recommended to use something like RSync (Thanks @Doppelnull) to synchronize data between the servers. Creating a pattern:
+1. Use `/pattern create <...>` inside the Cloud console.
+2. After creation in the database go to a daemon and inside the `patterns/nameOfYourCreatedPattern` put all your server files (You know how to obtain them hopefully) inside there (plugins, worlds, server.jar, start.sh, ...). Finish it up by putting the `cloud/jars/lightning.jar` inside the plugins folder as well.  
+For different pattern management (deletion, ..) use `/pattern` inside the cloud console, you'll get sub commands as help.
