@@ -1,7 +1,7 @@
 package de.superioz.moo.cloud.listeners.player;
 
 import de.superioz.moo.api.cache.MooCache;
-import de.superioz.moo.api.config.MooConfigType;
+import de.superioz.moo.api.config.NetworkConfigType;
 import de.superioz.moo.api.database.DbModifier;
 import de.superioz.moo.api.database.objects.PlayerData;
 import de.superioz.moo.api.database.query.DbQueryUnbaked;
@@ -46,11 +46,11 @@ public class MooPlayerLeftProxyListener implements EventListener {
         DatabaseCollections.PLAYER.set(data.getUuid(), data, query, true);
 
         // removes player from moo proxy
-        Cloud.getInstance().getMooProxy().remove(data.getUuid(), data.getLastName());
+        Cloud.getInstance().getNetworkProxy().remove(data.getUuid(), data.getLastName());
 
         // update user count
-        MooCache.getInstance().getConfigMap().fastPutAsync(MooConfigType.PLAYER_COUNT.getKey(),
-                Cloud.getInstance().getMooProxy().getPlayers().size());
+        MooCache.getInstance().getConfigMap().fastPutAsync(NetworkConfigType.PLAYER_COUNT.getKey(),
+                Cloud.getInstance().getNetworkProxy().getPlayers().size());
         packet.respond(ResponseStatus.OK);
     }
 

@@ -22,14 +22,14 @@ public class PacketPlayerKickListener implements PacketAdapter {
         // gets the player from given id
         // if the player cannot be found, than just return a bad status
         PlayerData player = Validation.UNIQUEID.matches(id)
-                ? Cloud.getInstance().getMooProxy().getPlayer(UUID.fromString(id))
-                : Cloud.getInstance().getMooProxy().getPlayer(id);
+                ? Cloud.getInstance().getNetworkProxy().getPlayer(UUID.fromString(id))
+                : Cloud.getInstance().getNetworkProxy().getPlayer(id);
         if(player == null) {
             packet.respond(ResponseStatus.NOT_FOUND);
             return;
         }
 
-        Cloud.getInstance().getMooProxy().kick(player, packet.deepCopy(), response -> packet.respond(response.getStatus()));
+        Cloud.getInstance().getNetworkProxy().kick(player, packet.deepCopy(), response -> packet.respond(response.getStatus()));
     }
 
 }

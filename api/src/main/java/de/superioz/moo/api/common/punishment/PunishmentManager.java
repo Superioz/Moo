@@ -2,7 +2,7 @@ package de.superioz.moo.api.common.punishment;
 
 import de.superioz.moo.api.cache.MooCache;
 import de.superioz.moo.api.collection.MultiMap;
-import de.superioz.moo.api.config.MooConfigType;
+import de.superioz.moo.api.config.NetworkConfigType;
 import de.superioz.moo.api.utils.CollectionUtil;
 
 import java.util.ArrayList;
@@ -64,8 +64,8 @@ public class PunishmentManager {
     public void init() {
         if(!MooCache.getInstance().isInitialized()) return;
         this.init(
-                (List<String>) MooCache.getInstance().getConfigMap().get(MooConfigType.PUNISHMENT_CATEGORIES.getKey()),
-                (List<String>) MooCache.getInstance().getConfigMap().get(MooConfigType.PUNISHMENT_SUBTYPES.getKey())
+                (List<String>) MooCache.getInstance().getConfigMap().get(NetworkConfigType.PUNISHMENT_CATEGORIES.getKey()),
+                (List<String>) MooCache.getInstance().getConfigMap().get(NetworkConfigType.PUNISHMENT_SUBTYPES.getKey())
         );
     }
 

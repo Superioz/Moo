@@ -1,6 +1,6 @@
 package de.superioz.moo.netty.packets;
 
-import de.superioz.moo.api.config.MooConfigType;
+import de.superioz.moo.api.config.NetworkConfigType;
 import de.superioz.moo.netty.packet.AbstractPacket;
 import de.superioz.moo.netty.packet.PacketBuffer;
 import lombok.AllArgsConstructor;
@@ -13,7 +13,7 @@ import java.io.IOException;
  * This is used to either change the cloud's config or to list information from
  * the cloud's config or to inform other instances about changes.
  *
- * @see MooConfigType
+ * @see NetworkConfigType
  */
 @AllArgsConstructor
 @NoArgsConstructor
@@ -22,20 +22,20 @@ public class PacketConfig extends AbstractPacket {
     /**
      * Type of the config
      */
-    public MooConfigType type;
+    public NetworkConfigType type;
 
     /**
      * Meta informations (can be the new entry data)
      */
     public String meta;
 
-    public PacketConfig(MooConfigType type) {
+    public PacketConfig(NetworkConfigType type) {
         this(type, "");
     }
 
     @Override
     public void read(PacketBuffer buf) throws IOException {
-        this.type = buf.readEnumValue(MooConfigType.class);
+        this.type = buf.readEnumValue(NetworkConfigType.class);
         this.meta = buf.readString();
     }
 

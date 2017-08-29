@@ -7,7 +7,7 @@ import de.superioz.moo.api.command.tabcomplete.TabCompletion;
 import de.superioz.moo.api.command.tabcomplete.TabCompletor;
 import de.superioz.moo.api.common.RunAsynchronous;
 import de.superioz.moo.api.io.LanguageManager;
-import de.superioz.moo.api.config.MooConfigType;
+import de.superioz.moo.api.config.NetworkConfigType;
 import de.superioz.moo.client.Moo;
 import de.superioz.moo.netty.common.ResponseStatus;
 import de.superioz.moo.proxy.command.BungeeCommandContext;
@@ -28,17 +28,17 @@ public class MaintenanceCommand {
     @Command(label = LABEL, usage = "[toggle]")
     public void onCommand(BungeeCommandContext context, ParamSet args) {
         // display the maintenance state
-        boolean maintenance = (boolean) MooCache.getInstance().getConfigEntry(MooConfigType.MAINTENANCE);
+        boolean maintenance = (boolean) MooCache.getInstance().getConfigEntry(NetworkConfigType.MAINTENANCE);
         context.sendMessage(LanguageManager.get("maintenance-info", maintenance));
     }
 
     @Command(label = TOGGLE_COMMAND, parent = LABEL)
     public void onToggleCommand(BungeeCommandContext context, ParamSet args) {
         // toggles the maintenance state
-        boolean maintenance = (boolean) MooCache.getInstance().getConfigEntry(MooConfigType.MAINTENANCE);
+        boolean maintenance = (boolean) MooCache.getInstance().getConfigEntry(NetworkConfigType.MAINTENANCE);
 
         context.sendMessage(LanguageManager.get("maintenance-toggle-load"));
-        ResponseStatus status = Moo.getInstance().config(MooConfigType.MAINTENANCE, !maintenance + "");
+        ResponseStatus status = Moo.getInstance().config(NetworkConfigType.MAINTENANCE, !maintenance + "");
         context.invalidArgument(status.isNok(), LanguageManager.get("maintenance-toggle-complete-failure", status));
         context.sendMessage(LanguageManager.get("maintenance-toggle-complete-success"));
     }
@@ -51,14 +51,14 @@ public class MaintenanceCommand {
 
             // set maintenance motd
             context.sendMessage(LanguageManager.get("maintenance-motd-change-load"));
-            ResponseStatus status = Moo.getInstance().config(MooConfigType.MAINTENANCE_MOTD, newMotd);
+            ResponseStatus status = Moo.getInstance().config(NetworkConfigType.MAINTENANCE_MOTD, newMotd);
             context.invalidArgument(status.isNok(), LanguageManager.get("maintenance-motd-change-complete-failure", status));
             context.sendMessage(LanguageManager.get("maintenance-motd-change-complete-success"));
             return;
         }
 
         // otherwise display the motd
-        String motd = (String) MooCache.getInstance().getConfigEntry(MooConfigType.MAINTENANCE_MOTD);
+        String motd = (String) MooCache.getInstance().getConfigEntry(NetworkConfigType.MAINTENANCE_MOTD);
         context.sendMessage(LanguageManager.get("maintenance-motd-info", motd));
     }
 

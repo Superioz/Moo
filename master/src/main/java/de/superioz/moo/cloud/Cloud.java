@@ -2,7 +2,7 @@ package de.superioz.moo.cloud;
 
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import de.superioz.moo.api.cache.MooCache;
-import de.superioz.moo.api.config.MooConfig;
+import de.superioz.moo.api.config.NetworkConfig;
 import de.superioz.moo.api.console.CommandTerminal;
 import de.superioz.moo.api.database.DatabaseCollection;
 import de.superioz.moo.api.database.DatabaseConnection;
@@ -37,9 +37,9 @@ public class Cloud implements EventListener {
 
     private final ExecutorService executors = Executors.newCachedThreadPool(
             new ThreadFactoryBuilder().setNameFormat("cloud-pool-%d").build());
-    private NetworkProxy mooProxy;
+    private NetworkProxy networkProxy;
     @Setter
-    private MooConfig mooConfig;
+    private NetworkConfig networkConfig;
 
     // console
     private ConsoleReader reader;
@@ -102,7 +102,7 @@ public class Cloud implements EventListener {
         this.databaseModule = moduleRegistry.register(new DatabaseModule(getConfig(), getLogger()));
         this.nettyModule = moduleRegistry.register(new NettyModule(getConfig()));
         this.nettyModule.waitForAsync(module -> {
-            Cloud.this.mooProxy = new NetworkProxy(getServer());
+            Cloud.this.networkProxy = new NetworkProxy(getServer());
             executors.execute(serverInfoCheckTask = new ServerInfoCheckTask(10 * 1000, 20 * 1000));
         });
 

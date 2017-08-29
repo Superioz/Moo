@@ -27,9 +27,9 @@ public class ServerInfoCheckTask implements Runnable {
 
             // check for last update with server
             List<UUID> toDelete = new ArrayList<>();
-            for(MooServer server : Cloud.getInstance().getMooProxy().getSpigotServers().values()) {
-                if(server.getLastUpdate() != -1
-                        && (now - server.getLastUpdate()) > threshold) {
+            for(MooServer server : Cloud.getInstance().getNetworkProxy().getSpigotServers().values()) {
+                if(server.getLastHeartBeat() != -1
+                        && (now - server.getLastHeartBeat()) > threshold) {
                     toDelete.add(server.getUuid());
                 }
             }
@@ -37,7 +37,7 @@ public class ServerInfoCheckTask implements Runnable {
             // delete server if they timed out and send to bungee!
             if(!toDelete.isEmpty()) {
                 toDelete.forEach(uuid -> {
-                    MooServer serverDeleted = Cloud.getInstance().getMooProxy().getSpigotServers().remove(uuid);
+                    MooServer serverDeleted = Cloud.getInstance().getNetworkProxy().getSpigotServers().remove(uuid);
                     Cloud.getInstance().getLogger().debug("Server " + serverDeleted.getType()
                             + " [" + serverDeleted.getAddress().getHostName() + ":" + serverDeleted.getAddress().getPort() + "] timed out.");
                     PacketMessenger.message(new PacketServerUnregister(serverDeleted.getAddress()), ClientType.PROXY);

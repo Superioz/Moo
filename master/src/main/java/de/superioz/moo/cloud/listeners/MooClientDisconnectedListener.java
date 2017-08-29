@@ -1,7 +1,7 @@
 package de.superioz.moo.cloud.listeners;
 
 import de.superioz.moo.api.cache.MooCache;
-import de.superioz.moo.api.config.MooConfigType;
+import de.superioz.moo.api.config.NetworkConfigType;
 import de.superioz.moo.api.database.objects.ServerPattern;
 import de.superioz.moo.api.event.EventExecutor;
 import de.superioz.moo.api.event.EventHandler;
@@ -14,6 +14,7 @@ import de.superioz.moo.netty.common.PacketMessenger;
 import de.superioz.moo.netty.events.MooClientDisconnectEvent;
 import de.superioz.moo.netty.packets.PacketServerUnregister;
 import de.superioz.moo.netty.server.MooClient;
+import de.superioz.moo.netty.server.MooProxy;
 
 import java.net.InetSocketAddress;
 import java.util.ArrayList;
@@ -33,15 +34,15 @@ public class MooClientDisconnectedListener implements EventListener {
         // BUNGEE BUNGEE BUNGEE if the type is PROXY
         if(client.getType() == ClientType.PROXY) {
             List<UUID> toRemove = new ArrayList<>();
-            for(UUID uuid : Cloud.getInstance().getMooProxy().getPlayerServerMap().keySet()) {
-                InetSocketAddress proxyAddress = Cloud.getInstance().getMooProxy().getPlayerServerMap().get(uuid);
+            for(UUID uuid : Cloud.getInstance().getNetworkProxy().getPlayerServerMap().keySet()) {
+                InetSocketAddress proxyAddress = Cloud.getInstance().getNetworkProxy().getPlayerServerMap().get(uuid);
                 if(proxyAddress.equals(client.getAddress())) toRemove.add(uuid);
             }
-            toRemove.forEach(uuid -> Cloud.getInstance().getMooProxy().getPlayerServerMap().remove(uuid));
+            toRemove.forEach(uuid -> Cloud.getInstance().getNetworkProxy().getPlayerServerMap().remove(uuid));
 
             // update player count
-            MooCache.getInstance().getConfigMap().fastPutAsync(MooConfigType.PLAYER_COUNT.getKey(),
-                    Cloud.getInstance().getMooProxy().getPlayers().size());
+            MooCache.getInstance().getConfigMap().fastPutAsync(NetworkConfigType.PLAYER_COUNT.getKey(),
+                    Cloud.getInstance().getNetworkProxy().getPlayers().size());
         }
         // SPIGOT SPIGOT SPIGOT ouh, the server went down, let's just unregister the server
         else if(client.getType() == ClientType.SERVER) {
@@ -49,10 +50,10 @@ public class MooClientDisconnectedListener implements EventListener {
             Cloud.getInstance().getLogger().debug("Unregister server " + ip + " with type '" + client.getName() + "' ..");
 
             // unregister server
-            Cloud.getInstance().getMooProxy().unregisterServer(client);
+            Cloud.getInstance().getNetworkProxy().unregisterServer(client);
 
             // call event for new server start
-            ServerPattern pattern = MooCache.getInstance().getPatternMap().get(client.getName());
+            ServerPattern pattern = MooProxy.getInstance().getPattern(client.getName());
             if(pattern != null) {
                 EventExecutor.getInstance().execute(new MooServerRestockEvent(pattern));
             }

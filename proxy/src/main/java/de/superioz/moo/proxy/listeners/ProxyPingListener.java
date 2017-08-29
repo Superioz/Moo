@@ -2,7 +2,7 @@ package de.superioz.moo.proxy.listeners;
 
 import de.superioz.moo.api.cache.MooCache;
 import de.superioz.moo.api.io.LanguageManager;
-import de.superioz.moo.api.config.MooConfigType;
+import de.superioz.moo.api.config.NetworkConfigType;
 import de.superioz.moo.minecraft.util.ChatUtil;
 import net.md_5.bungee.api.ServerPing;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -17,12 +17,12 @@ public class ProxyPingListener implements Listener {
         ServerPing ping = event.getResponse();
 
         // list values for proxyping from config
-        int maxPlayers = (int) MooCache.getInstance().getConfigEntry(MooConfigType.MAX_PLAYERS);
-        int playerCount = (int) MooCache.getInstance().getConfigEntry(MooConfigType.PLAYER_COUNT);
-        boolean maintenance = MooCache.getInstance().getConfigEntry(MooConfigType.MAINTENANCE).equals(true + "");
+        int maxPlayers = (int) MooCache.getInstance().getConfigEntry(NetworkConfigType.MAX_PLAYERS);
+        int playerCount = (int) MooCache.getInstance().getConfigEntry(NetworkConfigType.PLAYER_COUNT);
+        boolean maintenance = MooCache.getInstance().getConfigEntry(NetworkConfigType.MAINTENANCE).equals(true + "");
 
         // motd
-        String motd = (String)MooCache.getInstance().getConfigEntry(maintenance ? MooConfigType.MAINTENANCE_MOTD : MooConfigType.MOTD);
+        String motd = (String)MooCache.getInstance().getConfigEntry(maintenance ? NetworkConfigType.MAINTENANCE_MOTD : NetworkConfigType.MOTD);
         motd = motd.replace("\\n", "\n");
 
         // version

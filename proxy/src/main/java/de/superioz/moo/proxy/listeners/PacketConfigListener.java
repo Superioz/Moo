@@ -2,7 +2,7 @@ package de.superioz.moo.proxy.listeners;
 
 import de.superioz.moo.api.cache.MooCache;
 import de.superioz.moo.api.io.LanguageManager;
-import de.superioz.moo.api.config.MooConfigType;
+import de.superioz.moo.api.config.NetworkConfigType;
 import de.superioz.moo.client.common.MooQueries;
 import de.superioz.moo.netty.packet.PacketAdapter;
 import de.superioz.moo.netty.packet.PacketHandler;
@@ -13,13 +13,13 @@ public class PacketConfigListener implements PacketAdapter {
 
     @PacketHandler
     public void onConfig(PacketConfig packet) {
-        MooConfigType type = packet.type;
+        NetworkConfigType type = packet.type;
         String meta = packet.meta;
 
         // after the maintenance mode changed kick all players who're not permitted
-        if(type == MooConfigType.MAINTENANCE && meta.equals(true + "")) {
+        if(type == NetworkConfigType.MAINTENANCE && meta.equals(true + "")) {
             // list maintenance rank from redis
-            int minRank = (int) MooCache.getInstance().getConfigEntry(MooConfigType.MAINTENANCE_RANK);
+            int minRank = (int) MooCache.getInstance().getConfigEntry(NetworkConfigType.MAINTENANCE_RANK);
 
             ProxyServer.getInstance().getPlayers().forEach(player -> {
                 if(MooQueries.getInstance().getPlayerData(player.getUniqueId()).getRank() < minRank) {

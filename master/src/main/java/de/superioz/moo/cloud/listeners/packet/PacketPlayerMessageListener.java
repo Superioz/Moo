@@ -31,14 +31,14 @@ public class PacketPlayerMessageListener implements PacketAdapter {
             // list player from id
             // if the player
             PlayerData player = Validation.UNIQUEID.matches(id)
-                    ? Cloud.getInstance().getMooProxy().getPlayer(UUID.fromString(id))
-                    : Cloud.getInstance().getMooProxy().getPlayer(id);
+                    ? Cloud.getInstance().getNetworkProxy().getPlayer(UUID.fromString(id))
+                    : Cloud.getInstance().getNetworkProxy().getPlayer(id);
             if(player == null) {
                 packet.respond(ResponseStatus.NOT_FOUND);
             }
 
             // send message
-            Cloud.getInstance().getMooProxy().sendMessage(player, packet.deepCopy(), response -> packet.respond(response.getStatus()));
+            Cloud.getInstance().getNetworkProxy().sendMessage(player, packet.deepCopy(), response -> packet.respond(response.getStatus()));
         });
 
         // if the type of message is not a private message

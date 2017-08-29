@@ -29,7 +29,7 @@ public class MooClientConnectedListener implements EventListener {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onClientConnected(MooClientConnectedEvent event) {
         MooClient client = event.getClient();
-        if(Cloud.getInstance().getMooProxy() == null) {
+        if(Cloud.getInstance().getNetworkProxy() == null) {
             Cloud.getInstance().getLogger().severe(ConsoleColor.RED
                     + "Couldn't accept client because the MooProxy didn't initialize properly!");
             return;
@@ -39,7 +39,7 @@ public class MooClientConnectedListener implements EventListener {
         if(client.getType() == ClientType.PROXY) {
             // send already registered server to the proxy
             List<PacketServerRegister> list = new ArrayList<>();
-            for(MooServer server : Cloud.getInstance().getMooProxy().getSpigotServers().values()) {
+            for(MooServer server : Cloud.getInstance().getNetworkProxy().getSpigotServers().values()) {
                 list.add(new PacketServerRegister(server.getType(), server.getAddress().getHostName(), server.getAddress().getPort()));
             }
 
@@ -66,7 +66,7 @@ public class MooClientConnectedListener implements EventListener {
             Cloud.getInstance().getLogger().debug("Register server " + ip + " with type '" + client.getName() + "' ..");
 
             // register server
-            Cloud.getInstance().getMooProxy().registerServer(client);
+            Cloud.getInstance().getNetworkProxy().registerServer(client);
 
             // what do we do now? YEAH we inform the proxies
             PacketMessenger.message(new PacketServerRegister(client.getName(), client.getAddress().getHostName(), client.getSubPort()),

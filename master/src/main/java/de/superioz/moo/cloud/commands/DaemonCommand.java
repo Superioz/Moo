@@ -16,7 +16,7 @@ public class DaemonCommand {
         // normally we would check if the amount of servers is too high and blabla, but
         // it's the cloud, so FULL access
         context.sendMessage("Requesting server to start .. (" + amount + "x " + type + ")");
-        Cloud.getInstance().getMooProxy().requestServer(type, false, amount, packet -> context.sendMessage(packet.toString()));
+        Cloud.getInstance().getNetworkProxy().requestServer(type, false, amount, packet -> context.sendMessage(packet.toString()));
     }
 
     @Command(label = "reqshutdown", usage = "<host> <port>")
@@ -31,7 +31,7 @@ public class DaemonCommand {
         }
 
         context.sendMessage("Requesting a server to shutdown .. (" + host + ":" + port + ")");
-        Cloud.getInstance().getMooProxy().requestServerShutdown(host, port, packet -> context.sendMessage(packet.toString()));
+        Cloud.getInstance().getNetworkProxy().requestServerShutdown(host, port, packet -> context.sendMessage(packet.toString()));
     }
 
 }

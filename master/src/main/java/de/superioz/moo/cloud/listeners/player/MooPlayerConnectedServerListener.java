@@ -36,8 +36,8 @@ public class MooPlayerConnectedServerListener implements EventListener {
         packet.respond(ResponseStatus.OK);
 
         // update Moo proxy
-        Cloud.getInstance().getMooProxy().getPlayerMap().put(player.getUuid(), player);
-        Cloud.getInstance().getMooProxy().getPlayerNameMap().put(player.getLastName(), player);
+        Cloud.getInstance().getNetworkProxy().getPlayerMap().put(player.getUuid(), player);
+        Cloud.getInstance().getNetworkProxy().getPlayerNameMap().put(player.getLastName(), player);
 
         // update data of player in database and cache
         Queries.modify(DatabaseType.PLAYER, data.getUuid(),

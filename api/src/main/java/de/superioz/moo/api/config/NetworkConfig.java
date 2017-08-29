@@ -10,11 +10,11 @@ import de.superioz.moo.api.database.query.DbQuery;
 import de.superioz.moo.api.utils.ReflectionUtil;
 import org.bson.Document;
 
-public final class MooConfig {
+public final class NetworkConfig {
 
     private DatabaseConnection connection;
 
-    public MooConfig(DatabaseConnection connection) {
+    public NetworkConfig(DatabaseConnection connection) {
         this.connection = connection;
     }
 
@@ -35,7 +35,7 @@ public final class MooConfig {
      * @param type The config type
      * @param val  The value to be set
      */
-    public void set(MooConfigType type, String val) {
+    public void set(NetworkConfigType type, String val) {
         Object castedVal = ReflectionUtil.safeCast(val);
         connection.upsert(DatabaseType.CLOUD_CONFIG, Filters.eq(DbModifier.CONFIG_CATEGORY.getFieldName(), type.getCategory().getName()),
                 new DbQuery().equate(type.getKey(), castedVal).toDocument(), aLong -> {
@@ -49,8 +49,8 @@ public final class MooConfig {
      * Loads the config from the database
      */
     public void load() {
-        for(MooConfigCategory category : MooConfigCategory.values()) {
-            if(category == MooConfigCategory.NONE) {
+        for(NetworkConfigCategory category : NetworkConfigCategory.values()) {
+            if(category == NetworkConfigCategory.NONE) {
                 load(category, null);
                 continue;
             }
@@ -63,7 +63,7 @@ public final class MooConfig {
                     Document defaultDocument = new Document();
 
                     defaultDocument.put(DbModifier.CONFIG_CATEGORY.getFieldName(), databaseKey);
-                    for(MooConfigType configType : MooConfigType.getConfigTypes(category)) {
+                    for(NetworkConfigType configType : NetworkConfigType.getConfigTypes(category)) {
                         defaultDocument.put(configType.getKey(), configType.getDefaultValue());
                     }
 
@@ -79,13 +79,13 @@ public final class MooConfig {
 
         // init PunishmentManager
         PunishmentManager.getInstance().init(
-                get(MooConfigType.PUNISHMENT_CATEGORIES.getKey()),
-                get(MooConfigType.PUNISHMENT_SUBTYPES.getKey())
+                get(NetworkConfigType.PUNISHMENT_CATEGORIES.getKey()),
+                get(NetworkConfigType.PUNISHMENT_SUBTYPES.getKey())
         );
     }
 
-    private void load(MooConfigCategory category, Document document) {
-        for(MooConfigType configType : MooConfigType.getConfigTypes(category)) {
+    private void load(NetworkConfigCategory category, Document document) {
+        for(NetworkConfigType configType : NetworkConfigType.getConfigTypes(category)) {
             Object val = document != null ? document.get(configType.getKey()) : configType.getDefaultValue();
 
             if(val == null) return;

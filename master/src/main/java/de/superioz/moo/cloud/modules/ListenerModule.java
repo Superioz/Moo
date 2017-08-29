@@ -56,7 +56,8 @@ public class ListenerModule extends Module {
                 new PacketPlayerKickListener(),
                 new PacketPlayerMessageListener(),
                 new PacketPlayerBanListener(),
-                new PacketServerInfoUpdateListener()
+                new PacketServerInfoUpdateListener(),
+                new PacketServerHeartBeatListener()
         );
         Cloud.getInstance().getLogger().debug("Finished registering listeners.");
     }

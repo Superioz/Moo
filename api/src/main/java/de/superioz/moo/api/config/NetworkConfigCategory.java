@@ -1,9 +1,9 @@
 package de.superioz.moo.api.config;
 
-public enum MooConfigCategory {
+public enum NetworkConfigCategory {
 
     /**
-     * Common settings (max players, motd, ..)
+     * Common settings (slots players, motd, ..)
      */
     COMMON,
 

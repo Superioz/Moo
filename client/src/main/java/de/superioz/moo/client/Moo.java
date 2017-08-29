@@ -4,12 +4,11 @@ import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import de.superioz.moo.api.cache.RedisConnection;
 import de.superioz.moo.api.command.CommandRegistry;
 import de.superioz.moo.api.command.param.ParamType;
-import de.superioz.moo.api.config.MooConfigType;
+import de.superioz.moo.api.config.NetworkConfigType;
 import de.superioz.moo.api.event.EventExecutor;
 import de.superioz.moo.api.event.EventListener;
 import de.superioz.moo.api.exceptions.InvalidConfigException;
 import de.superioz.moo.api.io.JsonConfig;
-import de.superioz.moo.client.common.MooQueries;
 import de.superioz.moo.client.exception.MooInitializationException;
 import de.superioz.moo.client.listeners.QueryClientListener;
 import de.superioz.moo.client.paramtypes.GroupParamType;
@@ -17,17 +16,12 @@ import de.superioz.moo.client.paramtypes.PlayerDataParamType;
 import de.superioz.moo.client.paramtypes.PlayerInfoParamType;
 import de.superioz.moo.netty.client.ClientType;
 import de.superioz.moo.netty.client.NetworkClient;
-import de.superioz.moo.netty.common.PacketMessenger;
-import de.superioz.moo.netty.common.Response;
-import de.superioz.moo.netty.common.ResponseScope;
-import de.superioz.moo.netty.common.ResponseStatus;
-import de.superioz.moo.netty.packet.AbstractPacket;
+import de.superioz.moo.netty.common.*;
 import de.superioz.moo.netty.packet.PacketAdapter;
 import de.superioz.moo.netty.packet.PacketAdapting;
 import de.superioz.moo.netty.packets.PacketConfig;
 import de.superioz.moo.netty.packets.PacketPing;
 import de.superioz.moo.netty.packets.PacketPlayerMessage;
-import de.superioz.moo.netty.packets.PacketServerRequest;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -379,7 +373,7 @@ public class Moo {
      * @param metadata The metadata
      * @return The respond
      */
-    public ResponseStatus config(MooConfigType type, String metadata) {
+    public ResponseStatus config(NetworkConfigType type, String metadata) {
         return PacketMessenger.<Response>transfer(new PacketConfig(type, metadata), ResponseScope.RESPONSE).getStatus();
     }
 
@@ -393,19 +387,6 @@ public class Moo {
         if(packet == null) return -1;
 
         return (int) (System.currentTimeMillis() - packet.timestamp);
-    }
-
-    /**
-     * Requests a server to start with given values
-     *
-     * @param type     The type
-     * @param autoSave Auto save after stop?
-     * @param amount   Amount of servers to start
-     * @return The respond
-     * @ ..
-     */
-    public AbstractPacket requestServer(String type, boolean autoSave, int amount) {
-        return PacketMessenger.transfer(new PacketServerRequest(type, autoSave, amount));
     }
 
 }

@@ -22,8 +22,8 @@ public class PacketRequestListener implements PacketAdapter {
         // I want to know the ping of the player
         Reaction.react(type, PacketRequest.Type.PING, () -> {
             PlayerData player = Validation.UNIQUEID.matches(information) ?
-                    Cloud.getInstance().getMooProxy().getPlayer(UUID.fromString(information))
-                    : Cloud.getInstance().getMooProxy().getPlayer(information);
+                    Cloud.getInstance().getNetworkProxy().getPlayer(UUID.fromString(information))
+                    : Cloud.getInstance().getNetworkProxy().getPlayer(information);
 
             // didn't found the player
             if(player == null) {
@@ -33,7 +33,7 @@ public class PacketRequestListener implements PacketAdapter {
 
             // sends a request to fetch the players ping
             PacketMessenger.message(packet, response -> packet.respond(response.getHandle()),
-                    Cloud.getInstance().getMooProxy().getClient(player));
+                    Cloud.getInstance().getNetworkProxy().getClient(player));
         });
     }
 

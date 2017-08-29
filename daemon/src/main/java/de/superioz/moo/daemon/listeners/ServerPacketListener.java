@@ -1,6 +1,5 @@
 package de.superioz.moo.daemon.listeners;
 
-import de.superioz.moo.api.cache.MooCache;
 import de.superioz.moo.api.database.objects.ServerPattern;
 import de.superioz.moo.daemon.Daemon;
 import de.superioz.moo.daemon.common.Server;
@@ -10,6 +9,7 @@ import de.superioz.moo.netty.packet.PacketHandler;
 import de.superioz.moo.netty.packets.PacketRespond;
 import de.superioz.moo.netty.packets.PacketServerRequest;
 import de.superioz.moo.netty.packets.PacketServerRequestShutdown;
+import de.superioz.moo.netty.server.MooProxy;
 
 public class ServerPacketListener implements PacketAdapter {
 
@@ -27,7 +27,7 @@ public class ServerPacketListener implements PacketAdapter {
         }
 
         // gets the pattern
-        ServerPattern pattern = MooCache.getInstance().getPatternMap().get(serverType);
+        ServerPattern pattern = MooProxy.getInstance().getPattern(serverType);
         if(pattern == null) {
             Daemon.getInstance().getLogs().debug("Server type does not exist!");
             packet.respond(ResponseStatus.NOT_FOUND);

@@ -3,8 +3,9 @@ package de.superioz.moo.spigot.listeners;
 import de.superioz.moo.api.database.objects.PlayerData;
 import de.superioz.moo.api.io.LanguageManager;
 import de.superioz.moo.client.Moo;
-import de.superioz.moo.client.common.MooQueries;
+import de.superioz.moo.netty.common.MooQueries;
 import de.superioz.moo.netty.packets.PacketPlayerState;
+import de.superioz.moo.spigot.Lightning;
 import de.superioz.moo.spigot.common.CustomPermissible;
 import de.superioz.moo.spigot.common.PermissionInjector;
 import org.bukkit.Bukkit;
@@ -42,6 +43,9 @@ public class ServerListener implements Listener {
         MooQueries.getInstance().changePlayerState(data, PacketPlayerState.State.JOIN_SERVER, response -> {
         });
 
+        // UPDATE SERVER INFO
+        Lightning.getInstance().updateServerInfo();
+
         // SET JOIN MESSAGE
         String playerName = MooQueries.getInstance().getGroup(player.getUniqueId()).getColor() + player.getName();
         Bukkit.getServer().broadcastMessage(LanguageManager.get("join-message-pattern", playerName));
@@ -56,6 +60,9 @@ public class ServerListener implements Listener {
         data.setUuid(player.getUniqueId());
         data.setLastName(player.getName());
         data.setLastIp(player.getAddress().getHostString());
+
+        // UPDATE SERVER INFO
+        Lightning.getInstance().updateServerInfo();
 
         // SET QUIT MESSAGE
         String playerName = MooQueries.getInstance().getGroup(player.getUniqueId()).getColor() + player.getName();

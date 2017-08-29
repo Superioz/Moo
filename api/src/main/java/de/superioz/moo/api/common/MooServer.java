@@ -1,5 +1,6 @@
 package de.superioz.moo.api.common;
 
+import de.superioz.moo.api.database.objects.ServerPattern;
 import lombok.Getter;
 
 import java.net.InetSocketAddress;
@@ -34,6 +35,11 @@ public class MooServer {
     private int id;
 
     /**
+     * The server pattern this server was created from
+     */
+    private ServerPattern pattern;
+
+    /**
      * Current motd of the server
      */
     private String motd;
@@ -51,9 +57,10 @@ public class MooServer {
     /**
      * This value is the timestamp of the last server update packet
      */
-    private long lastUpdate = -1;
+    private long lastHeartBeat = -1;
 
-    public MooServer(int id, InetSocketAddress address, String type) {
+    public MooServer(ServerPattern pattern, int id, InetSocketAddress address, String type) {
+        this.pattern = pattern;
         this.id = id;
         this.address = address;
         this.type = type;
@@ -71,9 +78,13 @@ public class MooServer {
         this.motd = motd;
         this.onlinePlayers = onlinePlayers;
         this.maxPlayers = maxPlayers;
+    }
 
-        // last update: now.
-        this.lastUpdate = System.currentTimeMillis();
+    /**
+     * Lets the heart beat of this server (for timeout purposes?)
+     */
+    public void heartbeat() {
+        this.lastHeartBeat = System.currentTimeMillis();
     }
 
 }

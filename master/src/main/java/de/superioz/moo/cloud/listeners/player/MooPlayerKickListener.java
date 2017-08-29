@@ -20,13 +20,13 @@ public class MooPlayerKickListener implements EventListener {
 
         // gets the player from given id
         // if the player cannot be found, than just return a bad status
-        PlayerData player = Cloud.getInstance().getMooProxy().getPlayer(event.getData().getUuid());
+        PlayerData player = Cloud.getInstance().getNetworkProxy().getPlayer(event.getData().getUuid());
         if(player == null) {
             packet.respond(ResponseStatus.NOT_FOUND);
             return;
         }
 
-        Cloud.getInstance().getMooProxy().kick(player, packet.deepCopy(), response -> packet.respond(response.getStatus()));
+        Cloud.getInstance().getNetworkProxy().kick(player, packet.deepCopy(), response -> packet.respond(response.getStatus()));
     }
 
 }

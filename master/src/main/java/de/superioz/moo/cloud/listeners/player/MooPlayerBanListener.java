@@ -93,9 +93,9 @@ public class MooPlayerBanListener implements EventListener {
         packet.respond(ResponseStatus.OK);
 
         // gets the player and kick him if he is online
-        PlayerData player = Cloud.getInstance().getMooProxy().getPlayer(fetchedData.getUuid());
+        PlayerData player = Cloud.getInstance().getNetworkProxy().getPlayer(fetchedData.getUuid());
         if(player != null) {
-            Cloud.getInstance().getMooProxy().kick(player, new PacketPlayerKick(null, fetchedData.getUuid() + "",
+            Cloud.getInstance().getNetworkProxy().kick(player, new PacketPlayerKick(null, fetchedData.getUuid() + "",
                     ban.apply(ban.isPermanent() ? permBanMessage : tempBanMessage)), response -> {
             });
         }

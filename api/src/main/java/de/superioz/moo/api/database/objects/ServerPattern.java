@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /**
- * Pattern of a server. I got some ideas of handling servers (priority, min, max) from @Doppelnull.
+ * Pattern of a server. I got some ideas of handling servers (priority, min, slots) from @Doppelnull.
  */
 @NoArgsConstructor
 @AllArgsConstructor
@@ -19,7 +19,7 @@ public class ServerPattern extends SimpleSerializable {
     public static final String DEFAULT_TYPE = "game";
     public static final Integer DEFAULT_PRIORITY = 0;
     public static final Integer DEFAULT_MIN = 0;
-    public static final Integer DEFAULT_MAX = 32;
+    public static final Integer DEFAULT_SLOTS = 32;
     public static final String DEFAULT_RAM = "";
 
     /**
@@ -49,10 +49,10 @@ public class ServerPattern extends SimpleSerializable {
     private Integer min;
 
     /**
-     * The maximum amount of servers to be active simultaneosly
+     * The player slots (These are fake tho, just for the waiting lobby)
      */
     @DbKey
-    private Integer max;
+    private Integer slots;
 
     /**
      * The amount of ram ("512M", "1024M", ..)

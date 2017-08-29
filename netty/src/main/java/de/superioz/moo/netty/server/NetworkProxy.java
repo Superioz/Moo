@@ -5,6 +5,7 @@ import de.superioz.moo.api.collection.MultiMap;
 import de.superioz.moo.api.collection.UnmodifiableList;
 import de.superioz.moo.api.common.MooServer;
 import de.superioz.moo.api.database.objects.PlayerData;
+import de.superioz.moo.api.database.objects.ServerPattern;
 import de.superioz.moo.netty.common.PacketMessenger;
 import de.superioz.moo.netty.common.Response;
 import de.superioz.moo.netty.common.ResponseStatus;
@@ -81,8 +82,13 @@ public final class NetworkProxy {
             }
         }
 
+        // get ServerPattern
+        // if the serverPattern is null, than this server is just not
+        // registered officially, no problem.
+        ServerPattern pattern = MooProxy.getInstance().getPattern(type);
+
         // build MooServer
-        MooServer server = new MooServer(id, client.getAddress(), type);
+        MooServer server = new MooServer(pattern, id, client.getAddress(), type);
 
         // register in maps
         typeSpigotServerMap.add(type, server);

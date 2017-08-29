@@ -98,7 +98,7 @@ public class PacketBuffer {
     /**
      * Read string from buffer
      *
-     * @param maxLength The max length
+     * @param maxLength The slots length
      * @return The successful
      */
     public String readString(int maxLength) {
@@ -136,7 +136,7 @@ public class PacketBuffer {
         byte[] abyte = string.getBytes(Charsets.UTF_8);
 
         if(abyte.length > 32767) {
-            throw new EncoderException("String too big (was " + string.length() + " bytes encoded, max " + 32767 + ")");
+            throw new EncoderException("String too big (was " + string.length() + " bytes encoded, slots " + 32767 + ")");
         }
         else {
             this.writeVarInt(abyte.length);

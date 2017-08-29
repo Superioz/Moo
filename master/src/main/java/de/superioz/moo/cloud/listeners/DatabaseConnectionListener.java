@@ -1,7 +1,7 @@
 package de.superioz.moo.cloud.listeners;
 
 import de.superioz.moo.api.cache.MooCache;
-import de.superioz.moo.api.config.MooConfig;
+import de.superioz.moo.api.config.NetworkConfig;
 import de.superioz.moo.api.event.EventHandler;
 import de.superioz.moo.api.event.EventListener;
 import de.superioz.moo.cloud.Cloud;
@@ -19,8 +19,8 @@ public class DatabaseConnectionListener implements EventListener {
 
         if(event.isConnectionActive()) {
             // if the cloud connected to database we want to set config information into the cache
-            Cloud.getInstance().setMooConfig(new MooConfig(event.getConnection()));
-            Cloud.getInstance().getMooConfig().load();
+            Cloud.getInstance().setNetworkConfig(new NetworkConfig(event.getConnection()));
+            Cloud.getInstance().getNetworkConfig().load();
 
             // server patterns into redis cache
             DatabaseCollections.PATTERN.list().forEach(pattern ->

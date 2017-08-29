@@ -15,7 +15,7 @@ public class PacketServerInfoUpdateListener implements PacketAdapter {
         InetSocketAddress address = packet.serverAddress;
 
         // list the server registered and check if it exists
-        MooServer server = Cloud.getInstance().getMooProxy().getServer(address);
+        MooServer server = Cloud.getInstance().getNetworkProxy().getServer(address);
         if(server == null) {
             // it does not exist? LUL
             return;

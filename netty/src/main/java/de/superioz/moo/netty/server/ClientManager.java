@@ -81,7 +81,7 @@ public final class ClientManager {
             int ramUsage = daemonRamUsage.get(address);
 
             if((lowesRamUsage == -1 || lowesRamUsage > ramUsage)
-                    && !((lowesRamUsage = ramUsage) >= (Integer) netServer.getConfig().get("max-ram-usage"))) {
+                    && !((lowesRamUsage = ramUsage) >= (Integer) netServer.getConfig().get("slots-ram-usage"))) {
                 lowestRamUsageClient = client;
             }
         }

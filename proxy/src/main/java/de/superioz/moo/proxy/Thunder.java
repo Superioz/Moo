@@ -2,7 +2,7 @@ package de.superioz.moo.proxy;
 
 import de.superioz.moo.api.cache.MooCache;
 import de.superioz.moo.api.common.PlayerProfile;
-import de.superioz.moo.api.config.MooConfigType;
+import de.superioz.moo.api.config.NetworkConfigType;
 import de.superioz.moo.api.database.objects.Ban;
 import de.superioz.moo.api.database.objects.Group;
 import de.superioz.moo.api.event.EventListener;
@@ -182,10 +182,10 @@ public class Thunder extends Plugin implements EventListener {
 
         // list group for checking the maintenance bypassability
         Group group = MooQueries.getInstance().getGroup(playerProfile.getData().getGroup());
-        boolean maintenanceBypass = group.getRank() >= (int) MooCache.getInstance().getConfigEntry(MooConfigType.MAINTENANCE_RANK);
+        boolean maintenanceBypass = group.getRank() >= (int) MooCache.getInstance().getConfigEntry(NetworkConfigType.MAINTENANCE_RANK);
 
         // if maintenance mode is active and the player is not allowed to bypass it
-        if(MooCache.getInstance().getConfigEntry(MooConfigType.MAINTENANCE).equals(true + "") && !maintenanceBypass) {
+        if(MooCache.getInstance().getConfigEntry(NetworkConfigType.MAINTENANCE).equals(true + "") && !maintenanceBypass) {
             event.setCancelReason(LanguageManager.get("error-currently-in-maintenance"));
             event.setCancelled(true);
         }

@@ -19,6 +19,7 @@
         <module>daemon</module>
         <module>minecraft</module>
         <module>manager</module>
+        <module>lobby</module>
     </modules>
 
     <!-- Repository Management -->

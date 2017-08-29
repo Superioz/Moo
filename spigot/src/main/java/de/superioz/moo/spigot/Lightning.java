@@ -7,13 +7,21 @@ import de.superioz.moo.api.logging.ExtendedLogger;
 import de.superioz.moo.api.module.ModuleRegistry;
 import de.superioz.moo.api.modules.RedisModule;
 import de.superioz.moo.client.Moo;
+import de.superioz.moo.netty.common.PacketMessenger;
+import de.superioz.moo.netty.packets.PacketServerInfoUpdate;
 import lombok.Getter;
 import org.bukkit.Bukkit;
+import org.bukkit.Server;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.net.InetSocketAddress;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.function.Consumer;
 
 @Getter
 public class Lightning extends JavaPlugin implements EventListener {
@@ -45,7 +53,7 @@ public class Lightning extends JavaPlugin implements EventListener {
         this.moduleRegistry.register(pluginModule);
         this.pluginModule.waitFor(module -> {
             if(module.getErrorReason() != null) return;
-            CustomFile customFile = new CustomFile(((LightningPluginModule)module).getConfig().get("redis-config"), Paths.get("configuration"));
+            CustomFile customFile = new CustomFile(((LightningPluginModule) module).getConfig().get("redis-config"), Paths.get("configuration"));
             customFile.load(true, true);
             moduleRegistry.register(new RedisModule(customFile.getFile(), getLogger()));
         });
@@ -66,6 +74,22 @@ public class Lightning extends JavaPlugin implements EventListener {
         logs.disable();
         moduleRegistry.disableAll();
         Moo.getInstance().disconnect();
+    }
+
+    /**
+     * Updates the serverInfo
+     */
+    public void updateServerInfo() {
+        Server server = getServer();
+        String motd = server.getMotd();
+        List<String> players = new ArrayList<>();
+        server.getOnlinePlayers().forEach((Consumer<Player>) player -> players.add(player.getName() + ":" + player.getUniqueId()));
+        int maxPlayers = server.getMaxPlayers();
+
+        PacketMessenger.message(new PacketServerInfoUpdate(
+                new InetSocketAddress(Lightning.getInstance().getServer().getIp(), Lightning.getInstance().getServer().getPort()),
+                motd, players.size(), maxPlayers)
+        );
     }
 
 

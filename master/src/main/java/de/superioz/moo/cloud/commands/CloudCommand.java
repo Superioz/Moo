@@ -95,7 +95,7 @@ public class CloudCommand implements EventListener {
      */
     @Command(label = "lightnings")
     public void lightnings(CommandContext context, ParamSet set) {
-        Map<UUID, MooServer> servers = Cloud.getInstance().getMooProxy().getSpigotServers();
+        Map<UUID, MooServer> servers = Cloud.getInstance().getNetworkProxy().getSpigotServers();
 
         List<String> l = new ArrayList<>();
         if(!(servers.size() > 30)) {
@@ -116,7 +116,7 @@ public class CloudCommand implements EventListener {
      */
     @Command(label = "players")
     public void players(CommandContext context, ParamSet set) {
-        List<PlayerData> players = new ArrayList<>(Cloud.getInstance().getMooProxy().getPlayers());
+        List<PlayerData> players = new ArrayList<>(Cloud.getInstance().getNetworkProxy().getPlayers());
 
         List<String> l = new ArrayList<>();
         if(!(players.size() > 30)) {

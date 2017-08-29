@@ -11,7 +11,7 @@ import de.superioz.moo.client.events.CloudConnectedEvent;
 import de.superioz.moo.netty.client.ClientType;
 import de.superioz.moo.spigot.listeners.ChatListener;
 import de.superioz.moo.spigot.listeners.ServerListener;
-import de.superioz.moo.spigot.task.ServerInfoTask;
+import de.superioz.moo.spigot.task.ServerHeartBeatTask;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -23,7 +23,7 @@ public class LightningPluginModule extends Module implements EventListener {
     private JsonConfig config;
     private LanguageManager languageManager;
 
-    private ServerInfoTask serverInfoTask;
+    private ServerHeartBeatTask serverInfoTask;
 
     @Override
     public String getName() {
@@ -67,7 +67,8 @@ public class LightningPluginModule extends Module implements EventListener {
         Lightning.getInstance().getLogs().info("** AUTHENTICATION STATUS: " + (event.getStatus().getColored()) + " **");
 
         // start serverInfo task
-        Lightning.getInstance().getExecutors().execute(this.serverInfoTask = new ServerInfoTask(5 * 1000));
+        Lightning.getInstance().getExecutors().execute(this.serverInfoTask = new ServerHeartBeatTask(5 * 1000));
+        Lightning.getInstance().updateServerInfo();
     }
 
 }

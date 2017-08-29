@@ -1,4 +1,4 @@
-package de.superioz.moo.client.util;
+package de.superioz.moo.api.utils;
 
 import de.superioz.moo.api.common.GroupPermission;
 import de.superioz.moo.api.database.objects.Group;

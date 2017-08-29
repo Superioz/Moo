@@ -2,11 +2,15 @@ package de.superioz.moo.netty.server;
 
 import de.superioz.moo.api.cache.MooCache;
 import de.superioz.moo.api.common.MooServer;
+import de.superioz.moo.api.database.objects.ServerPattern;
 import de.superioz.moo.netty.common.PacketMessenger;
+import de.superioz.moo.netty.common.Response;
+import de.superioz.moo.netty.packets.PacketServerRequest;
 
 import java.net.InetSocketAddress;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 
 /**
  * Just a helper class for managing servers etc.
@@ -27,7 +31,7 @@ public final class MooProxy {
     /**
      * Get all servers currently active on this network
      *
-     * @return The list of MooServers
+     * @return The list of server
      */
     public List<MooServer> getServers() {
         return new ArrayList<>(MooCache.getInstance().getServerMap().readAllValues());
@@ -65,6 +69,38 @@ public final class MooProxy {
 
     public MooServer getServer(String host, int port) {
         return getServer(new InetSocketAddress(host, port));
+    }
+
+    /**
+     * Get all patterns of this network out of the cache
+     *
+     * @return The list of patterns
+     */
+    public List<ServerPattern> getPatterns() {
+        return new ArrayList<>(MooCache.getInstance().getPatternMap().readAllValues());
+    }
+
+    /**
+     * Gets a pattern out of the {@link MooCache}
+     *
+     * @param type The name of the pattern
+     * @return The server pattern
+     */
+    public ServerPattern getPattern(String type) {
+        return MooCache.getInstance().getPatternMap().get(type);
+    }
+
+    /**
+     * Requests a server to start with given values
+     *
+     * @param type     The type
+     * @param autoSave Auto save after stop?
+     * @param amount   Amount of servers to start
+     * @param callback Callback after the
+     * @ ..
+     */
+    public void requestServer(String type, boolean autoSave, int amount, Consumer<Response> callback) {
+        PacketMessenger.message(new PacketServerRequest(type, autoSave, amount), callback);
     }
 
 }

@@ -1,6 +1,6 @@
 package de.superioz.moo.cloud.listeners.packet;
 
-import de.superioz.moo.api.config.MooConfigType;
+import de.superioz.moo.api.config.NetworkConfigType;
 import de.superioz.moo.cloud.Cloud;
 import de.superioz.moo.netty.packet.PacketAdapter;
 import de.superioz.moo.netty.packet.PacketHandler;
@@ -14,11 +14,11 @@ public class PacketConfigListener implements PacketAdapter {
 
     @PacketHandler
     public void onConfig(PacketConfig packet) {
-        MooConfigType type = packet.type;
+        NetworkConfigType type = packet.type;
         String meta = packet.meta;
 
         // set data into config
-        Cloud.getInstance().getMooConfig().set(type, meta);
+        Cloud.getInstance().getNetworkConfig().set(type, meta);
 
         // respond to the packet
         // after the con

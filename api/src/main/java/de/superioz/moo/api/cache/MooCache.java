@@ -1,7 +1,7 @@
 package de.superioz.moo.api.cache;
 
 import de.superioz.moo.api.common.MooServer;
-import de.superioz.moo.api.config.MooConfigType;
+import de.superioz.moo.api.config.NetworkConfigType;
 import de.superioz.moo.api.database.objects.Group;
 import de.superioz.moo.api.database.objects.PlayerData;
 import de.superioz.moo.api.database.objects.ServerPattern;
@@ -118,11 +118,11 @@ public final class MooCache {
      * @param type The type
      * @return The object
      */
-    public Object getConfigEntry(MooConfigType type) {
+    public Object getConfigEntry(NetworkConfigType type) {
         return configMap.get(type.getKey());
     }
 
-    public RFuture<Object> getConfigEntryAsync(MooConfigType type) {
+    public RFuture<Object> getConfigEntryAsync(NetworkConfigType type) {
         return configMap.getAsync(type.name().toLowerCase());
     }
 
