@@ -15,7 +15,7 @@ import java.util.UUID;
 
 @AllArgsConstructor
 @Getter
-public class ServerInfoCheckTask implements Runnable {
+public class ServerHeartBeatCheckTask implements Runnable {
 
     private int delay;
     private int threshold;

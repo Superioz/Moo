@@ -19,6 +19,7 @@ public class ServerPattern extends SimpleSerializable {
     public static final String DEFAULT_TYPE = "game";
     public static final Integer DEFAULT_PRIORITY = 0;
     public static final Integer DEFAULT_MIN = 0;
+    public static final Integer DEFAULT_MAX = 12;
     public static final Integer DEFAULT_SLOTS = 32;
     public static final String DEFAULT_RAM = "";
 
@@ -41,6 +42,12 @@ public class ServerPattern extends SimpleSerializable {
      */
     @DbKey
     private Integer priority;
+
+    /**
+     * The maximum amount of servers to be active simultaneosly
+     */
+    @DbKey
+    private Integer max;
 
     /**
      * The minimum amount of servers to be active simultaneosly

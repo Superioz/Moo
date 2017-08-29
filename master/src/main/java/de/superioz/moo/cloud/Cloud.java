@@ -15,7 +15,7 @@ import de.superioz.moo.api.logging.MooLogger;
 import de.superioz.moo.api.module.ModuleRegistry;
 import de.superioz.moo.api.modules.RedisModule;
 import de.superioz.moo.cloud.modules.*;
-import de.superioz.moo.cloud.task.ServerInfoCheckTask;
+import de.superioz.moo.cloud.task.ServerHeartBeatCheckTask;
 import de.superioz.moo.netty.server.ClientManager;
 import de.superioz.moo.netty.server.NetworkProxy;
 import de.superioz.moo.netty.server.NetworkServer;
@@ -55,7 +55,7 @@ public class Cloud implements EventListener {
     private ListenerModule listenerModule;
 
     private boolean started = false;
-    private ServerInfoCheckTask serverInfoCheckTask;
+    private ServerHeartBeatCheckTask serverHeartBeatCheckTask;
 
     /**
      * The main method
@@ -103,7 +103,7 @@ public class Cloud implements EventListener {
         this.nettyModule = moduleRegistry.register(new NettyModule(getConfig()));
         this.nettyModule.waitForAsync(module -> {
             Cloud.this.networkProxy = new NetworkProxy(getServer());
-            executors.execute(serverInfoCheckTask = new ServerInfoCheckTask(10 * 1000, 20 * 1000));
+            executors.execute(serverHeartBeatCheckTask = new ServerHeartBeatCheckTask(10 * 1000, 20 * 1000));
         });
 
         // send module summary

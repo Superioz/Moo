@@ -45,7 +45,7 @@ public class DaemonServerListener implements PacketAdapter {
         }
 
         // check if the amount is too high! (over 9000!)
-        int maxServers = pattern.getSlots();
+        int maxServers = pattern.getMax();
         int current = MooProxy.getInstance().getServer(type).size();
         if(current == maxServers || (current + packet.amount) >= maxServers) {
             packet.respond(ResponseStatus.BAD_REQUEST);
