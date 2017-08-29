@@ -2,7 +2,7 @@ package de.superioz.moo.spigot.common;
 
 import de.superioz.moo.api.cache.MooCache;
 import de.superioz.moo.api.common.GroupPermission;
-import de.superioz.moo.client.util.PermissionUtil;
+import de.superioz.moo.api.utils.PermissionUtil;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;

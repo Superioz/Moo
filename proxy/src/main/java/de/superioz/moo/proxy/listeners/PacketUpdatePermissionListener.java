@@ -5,7 +5,7 @@ import de.superioz.moo.api.database.DatabaseType;
 import de.superioz.moo.api.database.objects.PlayerData;
 import de.superioz.moo.api.util.Validation;
 import de.superioz.moo.client.Moo;
-import de.superioz.moo.client.common.MooQueries;
+import de.superioz.moo.netty.common.MooQueries;
 import de.superioz.moo.netty.packet.PacketAdapter;
 import de.superioz.moo.netty.packet.PacketHandler;
 import de.superioz.moo.netty.packets.PacketUpdatePermission;

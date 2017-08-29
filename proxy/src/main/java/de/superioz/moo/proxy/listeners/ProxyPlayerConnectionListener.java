@@ -2,7 +2,7 @@ package de.superioz.moo.proxy.listeners;
 
 import de.superioz.moo.api.cache.MooCache;
 import de.superioz.moo.api.database.objects.PlayerData;
-import de.superioz.moo.client.common.MooQueries;
+import de.superioz.moo.netty.common.MooQueries;
 import de.superioz.moo.netty.exception.MooOutputException;
 import de.superioz.moo.netty.packets.PacketPlayerState;
 import de.superioz.moo.proxy.Thunder;

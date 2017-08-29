@@ -2,7 +2,7 @@ package de.superioz.moo.proxy.listeners;
 
 import de.superioz.moo.api.cache.MooCache;
 import de.superioz.moo.api.event.EventListener;
-import de.superioz.moo.client.util.PermissionUtil;
+import de.superioz.moo.api.utils.PermissionUtil;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.event.PermissionCheckEvent;

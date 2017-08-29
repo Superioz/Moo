@@ -3,7 +3,7 @@ package de.superioz.moo.proxy.listeners;
 import de.superioz.moo.api.database.objects.PlayerData;
 import de.superioz.moo.api.util.Validation;
 import de.superioz.moo.api.utils.ReflectionUtil;
-import de.superioz.moo.client.common.MooQueries;
+import de.superioz.moo.netty.common.MooQueries;
 import de.superioz.moo.minecraft.util.ChatUtil;
 import de.superioz.moo.netty.common.ResponseStatus;
 import de.superioz.moo.netty.packet.PacketAdapter;

@@ -3,7 +3,7 @@ package de.superioz.moo.proxy.util;
 import de.superioz.moo.api.command.context.CommandContext;
 import de.superioz.moo.api.database.objects.Group;
 import de.superioz.moo.client.Moo;
-import de.superioz.moo.client.common.MooQueries;
+import de.superioz.moo.netty.common.MooQueries;
 import de.superioz.moo.minecraft.chat.TeamChat;
 import de.superioz.moo.netty.common.ResponseStatus;
 import de.superioz.moo.proxy.Thunder;

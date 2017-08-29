@@ -3,7 +3,7 @@ package de.superioz.moo.proxy.listeners;
 import de.superioz.moo.api.cache.MooCache;
 import de.superioz.moo.api.io.LanguageManager;
 import de.superioz.moo.api.config.NetworkConfigType;
-import de.superioz.moo.client.common.MooQueries;
+import de.superioz.moo.netty.common.MooQueries;
 import de.superioz.moo.netty.packet.PacketAdapter;
 import de.superioz.moo.netty.packet.PacketHandler;
 import de.superioz.moo.netty.packets.PacketConfig;
