@@ -1,20 +1,18 @@
 package de.superioz.moo.cloud.listeners;
 
-import de.superioz.moo.api.cache.MooCache;
 import de.superioz.moo.api.common.MooServer;
-import de.superioz.moo.api.event.EventExecutor;
 import de.superioz.moo.api.event.EventHandler;
 import de.superioz.moo.api.event.EventListener;
 import de.superioz.moo.api.event.EventPriority;
 import de.superioz.moo.api.logging.ConsoleColor;
 import de.superioz.moo.cloud.Cloud;
-import de.superioz.moo.cloud.events.MooServerRestockEvent;
 import de.superioz.moo.netty.client.ClientType;
 import de.superioz.moo.netty.common.PacketMessenger;
 import de.superioz.moo.netty.events.MooClientConnectedEvent;
 import de.superioz.moo.netty.packets.MultiPacket;
 import de.superioz.moo.netty.packets.PacketServerRegister;
 import de.superioz.moo.netty.server.MooClient;
+import de.superioz.moo.netty.server.MooProxy;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,25 +38,28 @@ public class MooClientConnectedListener implements EventListener {
             // send already registered server to the proxy
             List<PacketServerRegister> list = new ArrayList<>();
             for(MooServer server : Cloud.getInstance().getNetworkProxy().getSpigotServers().values()) {
-                list.add(new PacketServerRegister(server.getType(), server.getAddress().getHostName(), server.getAddress().getPort()));
+                list.add(new PacketServerRegister(
+                        server.getType(),
+                        server.getAddress().getHostName(),
+                        server.getId(),
+                        server.getAddress().getPort())
+                );
             }
 
             Cloud.getInstance().getLogger().debug("Send already registered server to proxy (" + list.size() + "x) ..");
             MultiPacket<PacketServerRegister> multiPacket = new MultiPacket<>(list);
             PacketMessenger.message(multiPacket, client);
 
+            // WE START THE SERVERS ON PROXY CONNECT because that way it is possible to use multiple daemons
             // if this is not the first proxy, rip
-            // if no daemon has been found
+            // OR if no daemon has been found
             if(Cloud.getInstance().getClientManager().getClients(ClientType.PROXY).size() > 1
                     || Cloud.getInstance().getClientManager().getClients(ClientType.DAEMON).size() == 0) {
                 return;
             }
 
             // start minimum amount of servers
-            MooCache.getInstance().getPatternMap().readAllValuesAsync()
-                    .thenAccept(serverPatterns -> serverPatterns.forEach(pattern -> {
-                        EventExecutor.getInstance().execute(new MooServerRestockEvent(pattern));
-                    }));
+            MooProxy.getInstance().serverCycleAll();
         }
         // SPIGOT SPIGOT SPIGOT A server connects to the server
         else if(client.getType() == ClientType.SERVER) {
@@ -66,10 +67,10 @@ public class MooClientConnectedListener implements EventListener {
             Cloud.getInstance().getLogger().debug("Register server " + ip + " with type '" + client.getName() + "' ..");
 
             // register server
-            Cloud.getInstance().getNetworkProxy().registerServer(client);
+            MooServer server = Cloud.getInstance().getNetworkProxy().registerServer(client);
 
             // what do we do now? YEAH we inform the proxies
-            PacketMessenger.message(new PacketServerRegister(client.getName(), client.getAddress().getHostName(), client.getSubPort()),
+            PacketMessenger.message(new PacketServerRegister(client.getName(), client.getAddress().getHostName(), server.getId(), client.getSubPort()),
                     ClientType.PROXY);
         }
     }

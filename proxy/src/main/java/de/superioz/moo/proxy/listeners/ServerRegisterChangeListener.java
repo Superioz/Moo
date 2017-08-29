@@ -10,11 +10,13 @@ public class ServerRegisterChangeListener implements PacketAdapter {
 
     @PacketHandler
     public void onServerRegister(PacketServerRegister packet) {
-        Thunder.getInstance().registerServer(packet.type, packet.host, packet.port);
+        // register server
+        Thunder.getInstance().registerServer(packet.type, packet.host, packet.id, packet.port, "", false);
     }
 
     @PacketHandler
     public void onServerUnregister(PacketServerUnregister packet) {
+        // unregister server
         Thunder.getInstance().unregisterServer(packet.address.getHostName(), packet.address.getPort());
     }
 

@@ -6,52 +6,13 @@ import de.superioz.moo.netty.common.MooQueries;
 import de.superioz.moo.netty.exception.MooOutputException;
 import de.superioz.moo.netty.packets.PacketPlayerState;
 import de.superioz.moo.proxy.Thunder;
-import net.md_5.bungee.api.config.ServerInfo;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.event.PlayerDisconnectEvent;
-import net.md_5.bungee.api.event.ServerConnectEvent;
 import net.md_5.bungee.api.event.ServerConnectedEvent;
 import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.event.EventHandler;
 
-import java.util.List;
-
 public class ProxyPlayerConnectionListener implements Listener {
-
-    /**
-     * When the player is about connecting to a server
-     *
-     * @param event The event
-     */
-    @EventHandler
-    public void onServerConnect(ServerConnectEvent event) {
-        if(!event.getTarget().getName().contains(Thunder.LOBBY_NAME) &&
-                !event.getTarget().getName().contains(Thunder.LIMBO_NAME)) {
-            return;
-        }
-        List<ServerInfo> l = Thunder.getInstance().getServers(Thunder.LOBBY_REGEX);
-
-        // if no lobby server is registered
-        if(l.isEmpty()) {
-            return;
-        }
-
-        // list lobby with fewest player online
-        ServerInfo lobbyFewest = null;
-        int fewestPlayer = -1;
-        for(ServerInfo serverInfo : l) {
-            if(fewestPlayer == -1 || serverInfo.getPlayers().size() < fewestPlayer) {
-                fewestPlayer = serverInfo.getPlayers().size();
-                lobbyFewest = serverInfo;
-            }
-        }
-        if(lobbyFewest == null) {
-            // rip
-            return;
-        }
-
-        event.setTarget(lobbyFewest);
-    }
 
     /**
      * When the player connected to a server

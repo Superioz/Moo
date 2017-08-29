@@ -229,6 +229,7 @@ public final class PacketMessenger {
      * @param consumers      The consumers
      */
     private void convertResponse(AbstractPacket abstractPacket, LazySupplier supplier, Consumer... consumers) {
+        if(consumers == null) consumers = new Consumer[0];
         if(responseScope != null) {
             if(responseScope == ResponseScope.DEFAULT) {
                 for(Consumer c : consumers) {

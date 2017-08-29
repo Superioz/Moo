@@ -121,7 +121,8 @@ public class Cloud implements EventListener {
                 Thread.sleep(5 * 1000);
                 if(nettyModule.isEnabled()) {
                     getLogger().info("Netty instances should now be able to connect successfully."
-                            + ((!databaseModule.isEnabled() || !redisModule.isEnabled()) ? " BUT BE CAUTIOUS - it seems the database/redis is not enabled!" : ""));
+                            + ((!databaseModule.isEnabled() || !redisModule.isEnabled()) ?
+                            " BUT BE CAUTIOUS - it seems the database or redis is not enabled!" : ""));
                     started = true;
                 }
             }

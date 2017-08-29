@@ -1,10 +1,14 @@
 package de.superioz.moo.api.common;
 
+import de.superioz.moo.api.cache.MooCache;
+import de.superioz.moo.api.database.objects.PlayerData;
 import de.superioz.moo.api.database.objects.ServerPattern;
 import lombok.Getter;
 
 import java.net.InetSocketAddress;
 import java.nio.charset.Charset;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -13,6 +17,8 @@ import java.util.UUID;
  */
 @Getter
 public class MooServer {
+
+    public static final char SERVER_SPLIT = '-';
 
     /**
      * Unique id of the server instance
@@ -68,6 +74,28 @@ public class MooServer {
     }
 
     /**
+     * Gets the name of the server (for registering in bungee)
+     *
+     * @return The name
+     */
+    public String getName() {
+        return type + SERVER_SPLIT + id;
+    }
+
+    /**
+     * Get all players online on this server
+     *
+     * @return The list of players
+     */
+    public List<PlayerData> getPlayers() {
+        List<PlayerData> players = new ArrayList<>();
+        MooCache.getInstance().getUniqueIdPlayerMap().values().forEach(playerData -> {
+            if(playerData.getCurrentServer().equals(getName())) players.add(playerData);
+        });
+        return players;
+    }
+
+    /**
      * Updates the server info
      *
      * @param motd          The message of the day
@@ -78,6 +106,9 @@ public class MooServer {
         this.motd = motd;
         this.onlinePlayers = onlinePlayers;
         this.maxPlayers = maxPlayers;
+
+        // update in cache
+        MooCache.getInstance().getServerMap().putAsync(getUuid(), this);
     }
 
     /**
@@ -85,6 +116,9 @@ public class MooServer {
      */
     public void heartbeat() {
         this.lastHeartBeat = System.currentTimeMillis();
+
+        // update in cache
+        MooCache.getInstance().getServerMap().putAsync(getUuid(), this);
     }
 
 }

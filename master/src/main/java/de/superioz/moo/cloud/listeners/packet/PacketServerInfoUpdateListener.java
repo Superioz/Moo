@@ -5,9 +5,11 @@ import de.superioz.moo.cloud.Cloud;
 import de.superioz.moo.netty.packet.PacketAdapter;
 import de.superioz.moo.netty.packet.PacketHandler;
 import de.superioz.moo.netty.packets.PacketServerInfoUpdate;
+import de.superioz.moo.netty.server.MooProxy;
 
 import java.net.InetSocketAddress;
 
+//TODO we need to test serverCycle
 public class PacketServerInfoUpdateListener implements PacketAdapter {
 
     @PacketHandler
@@ -23,6 +25,9 @@ public class PacketServerInfoUpdateListener implements PacketAdapter {
 
         // updates the server info
         server.updateInfo(packet.motd, packet.onlinePlayers, packet.maxPlayers);
+
+        // updates server cycle
+        MooProxy.getInstance().serverCycle(server.getPattern());
     }
 
 }

@@ -25,6 +25,11 @@ public class PacketServerRegister extends AbstractPacket {
     public String host;
 
     /**
+     * The id of the server
+     */
+    public int id;
+
+    /**
      * The port of the server
      */
     public int port;

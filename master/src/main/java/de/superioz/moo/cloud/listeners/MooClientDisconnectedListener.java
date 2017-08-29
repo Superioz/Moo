@@ -3,12 +3,10 @@ package de.superioz.moo.cloud.listeners;
 import de.superioz.moo.api.cache.MooCache;
 import de.superioz.moo.api.config.NetworkConfigType;
 import de.superioz.moo.api.database.objects.ServerPattern;
-import de.superioz.moo.api.event.EventExecutor;
 import de.superioz.moo.api.event.EventHandler;
 import de.superioz.moo.api.event.EventListener;
 import de.superioz.moo.api.event.EventPriority;
 import de.superioz.moo.cloud.Cloud;
-import de.superioz.moo.cloud.events.MooServerRestockEvent;
 import de.superioz.moo.netty.client.ClientType;
 import de.superioz.moo.netty.common.PacketMessenger;
 import de.superioz.moo.netty.events.MooClientDisconnectEvent;
@@ -54,11 +52,9 @@ public class MooClientDisconnectedListener implements EventListener {
 
             // call event for new server start
             ServerPattern pattern = MooProxy.getInstance().getPattern(client.getName());
-            if(pattern != null) {
-                EventExecutor.getInstance().execute(new MooServerRestockEvent(pattern));
-            }
+            MooProxy.getInstance().serverCycle(pattern);
 
-            // informing the PROXY!
+            // Informing the PROXY!
             PacketMessenger.message(new PacketServerUnregister(client.getAddress()), ClientType.PROXY);
         }
     }

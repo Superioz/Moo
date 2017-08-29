@@ -1,6 +1,7 @@
 package de.superioz.moo.proxy;
 
 import de.superioz.moo.api.cache.MooCache;
+import de.superioz.moo.api.common.MooServer;
 import de.superioz.moo.api.common.PlayerProfile;
 import de.superioz.moo.api.config.NetworkConfigType;
 import de.superioz.moo.api.database.objects.Ban;
@@ -30,7 +31,6 @@ import java.util.regex.Pattern;
 public class Thunder extends Plugin implements EventListener {
 
     public static final String LOBBY_NAME = "lobby";
-    public static final String LIMBO_NAME = "limbo";
     public static final String LOBBY_REGEX = "(" + LOBBY_NAME + "-[0-9]*)|(" + LOBBY_NAME + ")";
 
     @Getter
@@ -88,22 +88,15 @@ public class Thunder extends Plugin implements EventListener {
      * @param restricted Is the server restricted
      * @return The server
      */
-    public ServerInfo registerServer(String name, String host, int port, String motd, boolean restricted) {
+    public ServerInfo registerServer(String name, String host, int id, int port, String motd, boolean restricted) {
+        getLogs().debugInfo("Register server '" + name + "'(" + host + ":" + port + ") ..");
+        name = name + MooServer.SERVER_SPLIT + id;
         if(ProxyServer.getInstance().getServers().containsKey(name)) return ProxyServer.getInstance().getServers().get(name);
 
         //
         InetSocketAddress address = InetSocketAddress.createUnresolved(host, port);
         ServerInfo info = ProxyServer.getInstance().constructServerInfo(name, address, motd, restricted);
         return ProxyServer.getInstance().getServers().put(name, info);
-    }
-
-    public ServerInfo registerServer(String name, String host, int port) {
-        int similar = getServers("(" + name + "-[0-9]*|" + name + ")").size();
-        name = similar == 0 ? name : name + "-" + (similar + 1);
-
-        getLogs().debugInfo("Register server '" + name + "'(" + host + ":" + port + ") ..");
-
-        return registerServer(name, host, port, "", false);
     }
 
     /**

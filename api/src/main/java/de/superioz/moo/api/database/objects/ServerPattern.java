@@ -1,5 +1,6 @@
 package de.superioz.moo.api.database.objects;
 
+import de.superioz.moo.api.common.ServerType;
 import de.superioz.moo.api.database.object.DbKey;
 import de.superioz.moo.api.util.SimpleSerializable;
 import lombok.AllArgsConstructor;
@@ -66,5 +67,14 @@ public class ServerPattern extends SimpleSerializable {
      */
     @DbKey
     private String ram;
+
+    /**
+     * Gets the server type type
+     *
+     * @return The server type object
+     */
+    public ServerType getServerType() {
+        return ServerType.fromName(getType());
+    }
 
 }
