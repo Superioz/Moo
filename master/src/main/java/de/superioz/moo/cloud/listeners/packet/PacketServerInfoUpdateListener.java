@@ -9,7 +9,6 @@ import de.superioz.moo.netty.server.MooProxy;
 
 import java.net.InetSocketAddress;
 
-//TODO we need to test serverCycle
 public class PacketServerInfoUpdateListener implements PacketAdapter {
 
     @PacketHandler

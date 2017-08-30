@@ -16,6 +16,7 @@ public class CustomReconnectHandler implements ReconnectHandler {
 
         // if no lobby server is registered
         if(l.isEmpty()) {
+            System.out.println("No lobby registered!");
             return null;
         }
 

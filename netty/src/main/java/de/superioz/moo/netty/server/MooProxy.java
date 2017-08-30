@@ -21,10 +21,11 @@ import java.util.function.Consumer;
  * @see MooCache
  * @see PacketMessenger
  */
+//TODO
 public final class MooProxy {
 
-    public static final double UPPER_PLAYER_THRESHOLD_TOTAL = 2D / 3D;
-    public static final double LOWER_PLAYER_THRESHOLD = 3D / 7D;
+    public static final double UPPER_PLAYER_THRESHOLD = 7D / 10D;
+    public static final double LOWER_PLAYER_THRESHOLD = 4D / 10D;
 
     private static MooProxy instance;
 
@@ -168,7 +169,7 @@ public final class MooProxy {
         if(serverCluster == null) return;
 
         // CHECK FOR TOO FEW SERVERS! (EITHER <min or players size is too much)
-        int toOpen = serverCluster.needsToGetCycledForward(UPPER_PLAYER_THRESHOLD_TOTAL, LOWER_PLAYER_THRESHOLD);
+        int toOpen = serverCluster.needsToGetCycledForward(UPPER_PLAYER_THRESHOLD, LOWER_PLAYER_THRESHOLD);
         if(toOpen > 0) {
             // if bigger than max, cut down
             int total = serverCluster.getSize() + toOpen;

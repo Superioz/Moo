@@ -107,6 +107,7 @@ public class DaemonInstance {
     public void createPattern(String type) {
         if(patternByName.containsKey(type) || !Validation.SIMPLE_NAME.matches(type)) return;
         File folder = new File(getPatternFolder(), type);
+        if(folder.exists()) return;
         folder.mkdirs();
 
         new File(folder, "plugins").mkdirs();

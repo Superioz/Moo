@@ -387,7 +387,7 @@ public final class MooQueries {
             }
 
             // creates the group
-            //MooCache.getInstance().getGroupMap().fastPutAsync(groupName, group);
+            // MooCache.getInstance().getGroupMap().fastPutAsync(groupName, group);
 
             // sets the player's group
             this.rankPlayer(data, group);

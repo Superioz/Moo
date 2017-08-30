@@ -187,17 +187,16 @@ public class PacketDatabaseModifyListener implements PacketAdapter {
      */
     private void updateData(AbstractPacket request, Object key, MultiMap<DatabaseModifyType, Object> data, DatabaseType type, boolean processResult) {
         // update info
-        boolean updateDataResult = false;
         for(DatabaseModifyType modifyType : data.keySet()) {
             Set<Object> modifiedData = data.get(modifyType);
             for(Object modifiedDatum : modifiedData) {
-                updateDataResult = !updateDataResult && updateData(modifyType, modifiedDatum.toString(), type);
+                updateData(modifyType, modifiedDatum.toString(), type);
             }
         }
 
         // trigger update permissions
         request.respond(processResult ? ResponseStatus.OK : ResponseStatus.NOK);
-        if(processResult && updateDataResult) {
+        if(processResult && (type == DatabaseType.GROUP || type == DatabaseType.PLAYER)) {
             PacketMessenger.message(new PacketUpdatePermission(type, key + ""), ClientType.PROXY);
         }
     }
