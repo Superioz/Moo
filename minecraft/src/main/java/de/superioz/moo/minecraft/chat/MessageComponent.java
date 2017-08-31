@@ -1,5 +1,6 @@
 package de.superioz.moo.minecraft.chat;
 
+import de.superioz.moo.api.util.Validation;
 import de.superioz.moo.minecraft.util.ChatUtil;
 import javafx.util.Pair;
 import lombok.Getter;
@@ -14,7 +15,7 @@ import java.util.regex.Pattern;
 
 /**
  * A message component which uses a specific syntax to automatically determine the click/hover events<br>
- * Format: '${"replacement",[0-9]"hover",[0-9]"click"}'<br>
+ * Format: '${"replacement",[0-9]"hoverText",[0-9]"clickComponent"}'<br>
  * The number before the content (either hover or click) is optional and defines the action
  *
  * @see TextComponent
@@ -31,6 +32,7 @@ public class MessageComponent {
     private String message;
     private List<Pair<String, TextEntry>> entryList = new ArrayList<>();
     private int entryCursor = 0;
+    private boolean formatted = false;
 
     /**
      * Returns a valid syntax for an {@link EventEntry}
@@ -130,6 +132,7 @@ public class MessageComponent {
         // set events if the condition is true
         if(condition) {
             eventEntry.initEvents(hoverAction, clickAction);
+            formatted = true;
         }
         return this;
     }
@@ -159,7 +162,8 @@ public class MessageComponent {
     }
 
     /**
-     * Formats all events by automatically detect the click and hover event
+     * Formats all events by automatically get the click and hover event action (only if the user
+     * didn't set the action himself we will use the default ones)
      *
      * @return This
      */
@@ -187,6 +191,7 @@ public class MessageComponent {
      * @return The component
      */
     public TextComponent toTextComponent() {
+        if(!formatted) formatAll();
         TextComponent component = new TextComponent();
 
         entryList.forEach(entryPair -> component.addExtra(entryPair.getValue().toComponent()));
@@ -279,9 +284,18 @@ public class MessageComponent {
             if(hoverEvent == null && !hoverEventContent.isEmpty()) {
                 // user placed a number in front of the content (=action)
                 if(!hoverEventContent.startsWith("\"")) {
-                    int id = Integer.parseInt(hoverEventContent.substring(0, 1));
-                    hoverEventContent = hoverEventContent.substring(1, hoverEventContent.length());
-                    hoverAction = (HoverEvent.Action) EnumUtil.getEnumById(HoverEvent.Action.class, id);
+                    String[] split = hoverEventContent.split("[\"]");
+                    String before = split[0];
+                    hoverEventContent = split[1];
+
+                    // check if id otherwise name
+                    if(Validation.INTEGER.matches(before)) {
+                        int id = Integer.parseInt(before);
+                        hoverAction = (HoverEvent.Action) EnumUtil.getEnumById(HoverEvent.Action.class, id);
+                    }
+                    else {
+                        hoverAction = (HoverEvent.Action) EnumUtil.getEnumByName(HoverEvent.Action.class, before);
+                    }
                 }
                 hoverEventContent = hoverEventContent.replaceAll("[\"]", "");
 
@@ -295,9 +309,18 @@ public class MessageComponent {
             if(clickEvent == null && !clickEventContent.isEmpty()) {
                 // user placed a number in front of the content (=action)
                 if(!clickEventContent.startsWith("\"")) {
-                    int id = Integer.parseInt(clickEventContent.substring(0, 1));
-                    clickEventContent = clickEventContent.substring(1, clickEventContent.length());
-                    clickAction = (ClickEvent.Action) EnumUtil.getEnumById(ClickEvent.Action.class, id);
+                    String[] split = clickEventContent.split("[\"]");
+                    String before = split[0];
+                    clickEventContent = split[1];
+
+                    // check if id otherwise name
+                    if(Validation.INTEGER.matches(before)) {
+                        int id = Integer.parseInt(before);
+                        clickAction = (ClickEvent.Action) EnumUtil.getEnumById(ClickEvent.Action.class, id);
+                    }
+                    else {
+                        clickAction = (ClickEvent.Action) EnumUtil.getEnumByName(ClickEvent.Action.class, before);
+                    }
                 }
                 clickEventContent = clickEventContent.replaceAll("[\"]", "");
 

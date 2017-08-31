@@ -1,6 +1,7 @@
 package de.superioz.moo.proxy.command;
 
 import de.superioz.moo.api.io.LanguageManager;
+import de.superioz.moo.minecraft.chat.formats.DisplayFormat;
 import de.superioz.moo.minecraft.command.MinecraftCommandContext;
 import de.superioz.moo.proxy.util.BungeeChat;
 import net.md_5.bungee.api.CommandSender;
@@ -14,6 +15,16 @@ public class BungeeCommandContext extends MinecraftCommandContext<CommandSender>
 
     public BungeeCommandContext(CommandSender commandSender) {
         super(commandSender);
+    }
+
+    @Override
+    public void sendDisplayFormat(DisplayFormat format, CommandSender... receivers) {
+        format.prepare();
+
+        if(receivers == null || receivers.length == 0) receivers = new CommandSender[]{getCommandSender()};
+        for(CommandSender receiver : receivers) {
+            format.getComponents().forEach(receiver::sendMessage);
+        }
     }
 
     @Override

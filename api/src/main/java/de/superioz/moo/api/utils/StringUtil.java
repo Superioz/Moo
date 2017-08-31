@@ -4,6 +4,7 @@ import com.google.common.base.Joiner;
 import com.google.common.base.Splitter;
 import com.google.common.base.Strings;
 import de.superioz.moo.api.exceptions.InvalidArgumentException;
+import de.superioz.moo.api.io.LanguageManager;
 import de.superioz.moo.api.io.PropertiesConfig;
 import javafx.util.Pair;
 import lombok.AccessLevel;
@@ -22,14 +23,13 @@ public final class StringUtil {
     public static final String SEPERATOR_2 = "Þ";
     public static final String SEPERATOR_3 = "þ";
 
-    private static final Pattern SIMPLE_PLACEHOLER_REGEX = Pattern.compile("\\{[0-9]*}");
-    private static final Pattern FORWARDING_PLACEHOLER_REGEX = Pattern.compile("\\{[a-zA-Z\\-_]*}");
-    private static final Pattern DECIDING_PLACEHOLDER_REGEX = Pattern.compile("\\{\"[^\"]*\"\\|\"[^\"]*\"}");
-    private static final Pattern KEY_PLACEHOLER_REGEX = Pattern.compile("%[a-zA-Z]*%");
-    private static final Pattern REPLACE_REGEX = Pattern.compile(SIMPLE_PLACEHOLER_REGEX
-            + "|" + FORWARDING_PLACEHOLER_REGEX
-            + "|" + DECIDING_PLACEHOLDER_REGEX
-            + "|" + KEY_PLACEHOLER_REGEX);
+    public static final Pattern SIMPLE_PLACEHOLER_REGEX = Pattern.compile("\\{[0-9]*}");
+    public static final Pattern FORWARDING_PLACEHOLDER_REPLACE = Pattern.compile("\\([^\"]*\\)");
+    public static final Pattern FORWARDING_PLACEHOLDER_REGEX = Pattern.compile("(\\{[a-zA-Z\\-_]*})" + FORWARDING_PLACEHOLDER_REPLACE + "*");
+    public static final Pattern DECIDING_PLACEHOLDER_REGEX = Pattern.compile("\\{\"[^\"]*\"\\|\"[^\"]*\"}");
+    public static final Pattern KEY_PLACEHOLER_REGEX = Pattern.compile("%[a-zA-Z]*%");
+    public static final Pattern REPLACE_REGEX = Pattern.compile(SIMPLE_PLACEHOLER_REGEX
+            + "|" + KEY_PLACEHOLER_REGEX + "|" + FORWARDING_PLACEHOLDER_REGEX + "|" + DECIDING_PLACEHOLDER_REGEX);
 
     private static final Pattern EMPTY_STRING_CHAIN = Pattern.compile("\\n+");
 
@@ -245,9 +245,9 @@ public final class StringUtil {
         // list all placeholders from the text inside a HashSet (no duplicates)
         // after getting the placeholders put them into a list (for sorting)
         // order them after this system: {0}, {1} first and then the others chronologically
-        LinkedHashSet<String> placeHoldersSet = new LinkedHashSet<>();
-        placeHoldersSet.addAll(StringUtil.find(REPLACE_REGEX.pattern(), text));
-        List<String> placeHolders = new ArrayList<>(placeHoldersSet);
+        Set<String> placeHolderSet = new HashSet<>(StringUtil.find(REPLACE_REGEX, text));
+        List<String> placeHolders = new ArrayList<>(placeHolderSet);
+
         placeHolders.sort((o1, o2) -> {
             boolean integerOrder1 = SIMPLE_PLACEHOLER_REGEX.matcher(o1).matches();
             boolean integerOrder2 = SIMPLE_PLACEHOLER_REGEX.matcher(o2).matches();
@@ -264,19 +264,43 @@ public final class StringUtil {
             return 0;
         });
 
-        // replace the placeholders
-        for(int i = 0; i < replacements.length; i++) {
-            if(i >= placeHolders.size()) break;
+        // get normal placeholders
+        for(int i = 0; i < placeHolders.size(); i++) {
             String placeHolder = placeHolders.get(i);
-            Object replacement = replacements[i];
+            Object replacement = i >= replacements.length ? null : replacements[i];
+
+            if(replacement == null
+                    || FORWARDING_PLACEHOLDER_REGEX.matcher(placeHolder).matches()
+                    || DECIDING_PLACEHOLDER_REGEX.matcher(placeHolder).matches()) {
+                continue;
+            }
+            text = text.replace(placeHolder, replacement + "");
+        }
+
+        // reload the text
+        placeHolders = StringUtil.find(REPLACE_REGEX, text);
+
+        // get placeholders and replace them
+        for(int i = 0; i < placeHolders.size(); i++) {
+            String placeHolder = placeHolders.get(i);
+            Object replacement = i >= replacements.length ? null : replacements[i];
 
             // if the placeHolder contains an forwarding key
-            if(FORWARDING_PLACEHOLER_REGEX.matcher(placeHolder).matches()
+            if(FORWARDING_PLACEHOLDER_REGEX.matcher(placeHolder).matches()
                     && fetchUnknownKey != null) {
+                List<Object> newReplacements = new ArrayList<>();
+                if(replacement != null && replacement instanceof List) {
+                    newReplacements.addAll((List) replacement);
+                }
+                for(String subReplacement : find(FORWARDING_PLACEHOLDER_REPLACE, placeHolder)) {
+                    subReplacement = subReplacement.replaceAll("[()]", "");
+                    newReplacements.add(subReplacement);
+                }
+
                 replacement = format(
-                        fetchUnknownKey.apply(placeHolder.replaceAll("[{}]", "")),
+                        fetchUnknownKey.apply(placeHolder.replaceAll("[{}]|" + FORWARDING_PLACEHOLDER_REPLACE, "")),
                         fetchUnknownKey,
-                        replacement instanceof List ? ((List) replacement).toArray() : replacement
+                        newReplacements.toArray()
                 );
             }
             if(DECIDING_PLACEHOLDER_REGEX.matcher(placeHolder).matches()) {
@@ -301,7 +325,7 @@ public final class StringUtil {
     }
 
     public static String format(String text, Object... replacements) {
-        return format(text, null, replacements);
+        return format(text, s -> LanguageManager.get(s), replacements);
     }
 
     /**

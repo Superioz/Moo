@@ -10,16 +10,16 @@ import de.superioz.moo.api.command.tabcomplete.TabCompletion;
 import de.superioz.moo.api.command.tabcomplete.TabCompletor;
 import de.superioz.moo.api.common.RunAsynchronous;
 import de.superioz.moo.api.database.object.DataResolver;
+import de.superioz.moo.api.database.objects.Group;
 import de.superioz.moo.api.database.query.DbQuery;
 import de.superioz.moo.api.database.query.DbQueryNode;
-import de.superioz.moo.api.database.objects.Group;
 import de.superioz.moo.api.io.LanguageManager;
 import de.superioz.moo.api.utils.DisplayFormats;
 import de.superioz.moo.api.utils.StringUtil;
+import de.superioz.moo.minecraft.chat.formats.PageableListFormat;
 import de.superioz.moo.netty.common.MooQueries;
 import de.superioz.moo.netty.common.ResponseStatus;
 import de.superioz.moo.proxy.command.BungeeCommandContext;
-import net.md_5.bungee.api.chat.ClickEvent;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -92,10 +92,19 @@ public class GroupCommand {
         context.invalidArgument(!pageableList.checkPage(page), LanguageManager.get("error-page-doesnt-exist", page));
 
         // sends the pageable list with page as list format
-        String entryFormat = LanguageManager.get("group-list-entry");
+        context.sendDisplayFormat(new PageableListFormat<Group>(pageableList)
+                .page(page)
+                .emptyList("group-list-empty").header("group-list-header").emptyEntry("group-list-entry-empty")
+                .entry("group-list-entry").entry(replacor -> replacor.accept(replacor.get().getName(), replacor.get().getRank()))
+                .footer("group-list-next-page", page + 1)
+        );
+
+        /*String entryFormat = LanguageManager.get("group-list-entry");
         DisplayFormats.sendPageableList(context, pageableList, page,
                 LanguageManager.get("group-list-empty"),
-                LanguageManager.get("group-list-header"), LanguageManager.get("group-list-entry-empty"), group -> {
+                LanguageManager.get("group-list-header"),
+                LanguageManager.get("group-list-entry-empty"),
+                group -> {
                     String command = "/group info " + group.getName();
 
                     context.sendEventMessage(
@@ -104,11 +113,12 @@ public class GroupCommand {
                     );
                 }, () -> {
                     String command = "/group list " + (page + 1);
+
                     context.sendEventMessage(
                             LanguageManager.get("group-list-next-page", command, command),
                             ClickEvent.Action.RUN_COMMAND
                     );
-                });
+                });*/
     }
 
     @Command(label = INFO_COMMAND, parent = LABEL, usage = "<name>")
@@ -122,18 +132,16 @@ public class GroupCommand {
         String permCommand = "/perm list -g " + groupName;
 
         // send info
-        DisplayFormats.sendList(context,
-                LanguageManager.get("group-info-header", groupName),
-                context.getFormatSender(entryFormat)
-                        .addTranslated("group-info-entry-name", groupName)
-                        .addTranslated("group-info-entry-permissions", "&c" + group.getPermissions().size(), permCommand, permCommand)
-                        .addTranslated("group-info-entry-parents", "&c" + group.getParents().size(),
-                                StringUtil.getListToString(group.getParents(), "\n", s -> "&8- &7" + s))
-                        .addTranslated("group-info-entry-prefix", group.getPrefix())
-                        .addTranslated("group-info-entry-suffix", group.getSuffix())
-                        .addTranslated("group-info-entry-color", group.getColor())
-                        .addTranslated("group-info-entry-tabprefix", group.getTabPrefix())
-                        .addTranslated("group-info-entry-tabsuffix", group.getTabSuffix())
+        DisplayFormats.sendList(context, LanguageManager.get("group-info-header", groupName), context.getFormatSender(entryFormat)
+                .addTranslated("group-info-entry-name", groupName)
+                .addTranslated("group-info-entry-permissions", "&c" + group.getPermissions().size(), permCommand, permCommand)
+                .addTranslated("group-info-entry-parents", "&c" + group.getParents().size(),
+                        StringUtil.getListToString(group.getParents(), "\n", s -> "&8- &7" + s))
+                .addTranslated("group-info-entry-prefix", group.getPrefix())
+                .addTranslated("group-info-entry-suffix", group.getSuffix())
+                .addTranslated("group-info-entry-color", group.getColor())
+                .addTranslated("group-info-entry-tabprefix", group.getTabPrefix())
+                .addTranslated("group-info-entry-tabsuffix", group.getTabSuffix())
         );
     }
 
