@@ -62,11 +62,16 @@ public class InfoListFormat extends DisplayFormat {
      * @param replacements The replacements (for the languagemanager)
      * @return This
      */
-    public InfoListFormat addEntry(String entry, Object... replacements) {
-        entries.add(new MessageComponent(
-                StringUtil.format(entryFormat != null ? entryFormat : "{0}", getMessage(entry, replacements))
-        ).toTextComponent());
+    public InfoListFormat entryc(String entry, boolean condition, Object... replacements) {
+        String message = getMessage(entry, replacements);
+        String fullMessage = StringUtil.format(entryFormat != null ? entryFormat : "{0}", message);
+
+        entries.add(new MessageComponent(fullMessage).format(condition).toTextComponent());
         return this;
+    }
+
+    public InfoListFormat entry(String entry, Object... replacements) {
+        return entryc(entry, true, replacements);
     }
 
 }

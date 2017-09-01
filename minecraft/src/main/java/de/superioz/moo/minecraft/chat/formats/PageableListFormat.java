@@ -83,18 +83,18 @@ public class PageableListFormat<T> extends DisplayFormat {
         return this;
     }
 
-    public PageableListFormat<T> emptyList(String emptyList) {
-        this.emptyListMessage = getMessage(emptyList);
+    public PageableListFormat<T> emptyList(String emptyList, Object... replacements) {
+        this.emptyListMessage = getMessage(emptyList, replacements);
         return this;
     }
 
-    public PageableListFormat<T> header(String header) {
-        this.header = getMessage(header);
+    public PageableListFormat<T> header(String header, Object... replacements) {
+        this.header = getMessage(header, replacements);
         return this;
     }
 
-    public PageableListFormat<T> emptyEntry(String emptyEntry) {
-        this.emptyEntry = getMessage(emptyEntry);
+    public PageableListFormat<T> emptyEntry(String emptyEntry, Object... replacements) {
+        this.emptyEntry = getMessage(emptyEntry, replacements);
         return this;
     }
 

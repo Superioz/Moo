@@ -132,14 +132,18 @@ public class MessageComponent {
         // set events if the condition is true
         if(condition) {
             eventEntry.initEvents(hoverAction, clickAction);
-            formatted = true;
         }
+        formatted = true;
         return this;
     }
 
     public MessageComponent format(HoverEvent.Action hoverAction, ClickEvent.Action clickAction,
                                    Object... replacements) {
         return formatConditioned(hoverAction, clickAction, true, replacements);
+    }
+
+    public MessageComponent format(boolean condition, Object... replacements) {
+        return formatConditioned(null, null, condition, replacements);
     }
 
     /**
@@ -191,7 +195,9 @@ public class MessageComponent {
      * @return The component
      */
     public TextComponent toTextComponent() {
-        if(!formatted) formatAll();
+        if(!formatted) {
+            formatAll();
+        }
         TextComponent component = new TextComponent();
 
         entryList.forEach(entryPair -> component.addExtra(entryPair.getValue().toComponent()));

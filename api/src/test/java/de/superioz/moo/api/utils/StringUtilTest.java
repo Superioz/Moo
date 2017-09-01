@@ -12,9 +12,9 @@ public class StringUtilTest {
         Map<String, String> entries = new HashMap<>();
         entries.put("click-to-execute", "&7Click to execute &f{0}");
 
-        System.out.println(StringUtil.REPLACE_REGEX);
-        String message = "&8# &r${\"&7{0}\",\"{click-to-execute}(/group info {0})\",2\"/group info {0}\"}$ &7(Rank: &c{2}&7)";
-        String str = StringUtil.format(message, entries::get, "default", 3);
+        String message = "&7Permissions: ${\"&c{0}\",\"{click-to-execute}(/perm list -g {1})\",2\"/perm list -g {1}\"}$";
+
+        String str = StringUtil.format(message, entries::get, 3, "default");
         System.out.println(" ");
         System.out.println(str);
     }

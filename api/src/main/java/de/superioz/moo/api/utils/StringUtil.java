@@ -25,7 +25,7 @@ public final class StringUtil {
 
     public static final Pattern SIMPLE_PLACEHOLER_REGEX = Pattern.compile("\\{[0-9]*}");
     public static final Pattern FORWARDING_PLACEHOLDER_REPLACE = Pattern.compile("\\([^\"]*\\)");
-    public static final Pattern FORWARDING_PLACEHOLDER_REGEX = Pattern.compile("(\\{[a-zA-Z\\-_]*})" + FORWARDING_PLACEHOLDER_REPLACE + "*");
+    public static final Pattern FORWARDING_PLACEHOLDER_REGEX = Pattern.compile("\\{[a-zA-Z\\-_]*}(" + FORWARDING_PLACEHOLDER_REPLACE + ")*");
     public static final Pattern DECIDING_PLACEHOLDER_REGEX = Pattern.compile("\\{\"[^\"]*\"\\|\"[^\"]*\"}");
     public static final Pattern KEY_PLACEHOLER_REGEX = Pattern.compile("%[a-zA-Z]*%");
     public static final Pattern REPLACE_REGEX = Pattern.compile(SIMPLE_PLACEHOLER_REGEX
@@ -265,9 +265,10 @@ public final class StringUtil {
         });
 
         // get normal placeholders
-        for(int i = 0; i < placeHolders.size(); i++) {
-            String placeHolder = placeHolders.get(i);
-            Object replacement = i >= replacements.length ? null : replacements[i];
+        int replacementIndex;
+        for(replacementIndex = 0; replacementIndex < placeHolders.size(); replacementIndex++) {
+            String placeHolder = placeHolders.get(replacementIndex);
+            Object replacement = replacementIndex >= replacements.length ? null : replacements[replacementIndex];
 
             if(replacement == null
                     || FORWARDING_PLACEHOLDER_REGEX.matcher(placeHolder).matches()
@@ -281,7 +282,7 @@ public final class StringUtil {
         placeHolders = StringUtil.find(REPLACE_REGEX, text);
 
         // get placeholders and replace them
-        for(int i = 0; i < placeHolders.size(); i++) {
+        for(int i = replacementIndex; i < placeHolders.size(); i++) {
             String placeHolder = placeHolders.get(i);
             Object replacement = i >= replacements.length ? null : replacements[i];
 
@@ -303,6 +304,10 @@ public final class StringUtil {
                         newReplacements.toArray()
                 );
             }
+
+            // is the replacement null?
+            if(replacement == null) continue;
+
             if(DECIDING_PLACEHOLDER_REGEX.matcher(placeHolder).matches()) {
                 List<String> parts = StringUtil.find("\"[^\"]*\"", placeHolder);
 
@@ -319,6 +324,7 @@ public final class StringUtil {
                     }
                 }
             }
+
             text = text.replace(placeHolder, replacement + "");
         }
         return text;

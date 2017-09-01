@@ -106,15 +106,16 @@ public class GroupCommand {
 
         // send info
         context.sendDisplayFormat(new InfoListFormat().header("group-info-header", groupName).entry("group-info-entry")
-                .addEntry("group-info-entry-name", groupName)
-                .addEntry("group-info-entry-permissions", group.getPermissions().size(), groupName)
-                .addEntry("group-info-entry-parents", group.getParents().size(),
-                        StringUtil.getListToString(group.getParents(), "\n", s -> "&8- &7" + s))
-                .addEntry("group-info-entry-prefix", group.getPrefix())
-                .addEntry("group-info-entry-suffix", group.getSuffix())
-                .addEntry("group-info-entry-color", group.getColor())
-                .addEntry("group-info-entry-tabprefix", group.getTabPrefix())
-                .addEntry("group-info-entry-tabsuffix", group.getTabSuffix())
+                .entry("group-info-entry-name", groupName)
+                .entryc("group-info-entry-permissions", group.getPermissions().size() != 0,
+                        group.getPermissions().size(), groupName)
+                .entryc("group-info-entry-parents", group.getParents().size() != 0,
+                        group.getParents().size(), StringUtil.getListToString(group.getParents(), "\n", s -> "&8- &7" + s))
+                .entry("group-info-entry-prefix", group.getPrefix())
+                .entry("group-info-entry-suffix", group.getSuffix())
+                .entry("group-info-entry-color", group.getColor())
+                .entry("group-info-entry-tabprefix", group.getTabPrefix())
+                .entry("group-info-entry-tabsuffix", group.getTabSuffix())
         );
     }
 
