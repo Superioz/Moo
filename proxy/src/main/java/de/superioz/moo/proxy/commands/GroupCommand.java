@@ -14,8 +14,8 @@ import de.superioz.moo.api.database.objects.Group;
 import de.superioz.moo.api.database.query.DbQuery;
 import de.superioz.moo.api.database.query.DbQueryNode;
 import de.superioz.moo.api.io.LanguageManager;
-import de.superioz.moo.api.utils.DisplayFormats;
 import de.superioz.moo.api.utils.StringUtil;
+import de.superioz.moo.minecraft.chat.formats.InfoListFormat;
 import de.superioz.moo.minecraft.chat.formats.PageableListFormat;
 import de.superioz.moo.netty.common.MooQueries;
 import de.superioz.moo.netty.common.ResponseStatus;
@@ -88,37 +88,14 @@ public class GroupCommand {
                 (Comparator<Group>) (o1, o2) -> args.hasFlag("h")
                         ? o1.getRank().compareTo(o2.getRank()) * -1
                         : o1.getName().compareTo(o2.getName()));
-        context.invalidArgument(pageableList.isEmpty(), LanguageManager.get("group-list-empty"));
-        context.invalidArgument(!pageableList.checkPage(page), LanguageManager.get("error-page-doesnt-exist", page));
 
         // sends the pageable list with page as list format
         context.sendDisplayFormat(new PageableListFormat<Group>(pageableList)
-                .page(page)
+                .page(page).doesntExist("error-page-doesnt-exist")
                 .emptyList("group-list-empty").header("group-list-header").emptyEntry("group-list-entry-empty")
                 .entry("group-list-entry").entry(replacor -> replacor.accept(replacor.get().getName(), replacor.get().getRank()))
                 .footer("group-list-next-page", page + 1)
         );
-
-        /*String entryFormat = LanguageManager.get("group-list-entry");
-        DisplayFormats.sendPageableList(context, pageableList, page,
-                LanguageManager.get("group-list-empty"),
-                LanguageManager.get("group-list-header"),
-                LanguageManager.get("group-list-entry-empty"),
-                group -> {
-                    String command = "/group info " + group.getName();
-
-                    context.sendEventMessage(
-                            LanguageManager.format(entryFormat, group.getName(), command, group.getRank(), command),
-                            ClickEvent.Action.RUN_COMMAND
-                    );
-                }, () -> {
-                    String command = "/group list " + (page + 1);
-
-                    context.sendEventMessage(
-                            LanguageManager.get("group-list-next-page", command, command),
-                            ClickEvent.Action.RUN_COMMAND
-                    );
-                });*/
     }
 
     @Command(label = INFO_COMMAND, parent = LABEL, usage = "<name>")
@@ -127,21 +104,17 @@ public class GroupCommand {
         Group group = args.get(0, Group.class);
         context.invalidArgument(group == null, LanguageManager.get("group-doesnt-exist", groupName));
 
-        // send list of all group information
-        String entryFormat = LanguageManager.get("group-info-entry");
-        String permCommand = "/perm list -g " + groupName;
-
         // send info
-        DisplayFormats.sendList(context, LanguageManager.get("group-info-header", groupName), context.getFormatSender(entryFormat)
-                .addTranslated("group-info-entry-name", groupName)
-                .addTranslated("group-info-entry-permissions", "&c" + group.getPermissions().size(), permCommand, permCommand)
-                .addTranslated("group-info-entry-parents", "&c" + group.getParents().size(),
+        context.sendDisplayFormat(new InfoListFormat().header("group-info-header", groupName).entry("group-info-entry")
+                .addEntry("group-info-entry-name", groupName)
+                .addEntry("group-info-entry-permissions", group.getPermissions().size(), groupName)
+                .addEntry("group-info-entry-parents", group.getParents().size(),
                         StringUtil.getListToString(group.getParents(), "\n", s -> "&8- &7" + s))
-                .addTranslated("group-info-entry-prefix", group.getPrefix())
-                .addTranslated("group-info-entry-suffix", group.getSuffix())
-                .addTranslated("group-info-entry-color", group.getColor())
-                .addTranslated("group-info-entry-tabprefix", group.getTabPrefix())
-                .addTranslated("group-info-entry-tabsuffix", group.getTabSuffix())
+                .addEntry("group-info-entry-prefix", group.getPrefix())
+                .addEntry("group-info-entry-suffix", group.getSuffix())
+                .addEntry("group-info-entry-color", group.getColor())
+                .addEntry("group-info-entry-tabprefix", group.getTabPrefix())
+                .addEntry("group-info-entry-tabsuffix", group.getTabSuffix())
         );
     }
 

@@ -15,6 +15,7 @@ public class PageableListFormat<T> extends DisplayFormat {
 
     private PageableList<T> pageableList;
     private int page;
+    private String pageDoesntExist;
     private String emptyListMessage;
     private String header;
     private String emptyEntry;
@@ -35,7 +36,10 @@ public class PageableListFormat<T> extends DisplayFormat {
             addComponent(emptyListMessage);
             return;
         }
-        if(page < 0 || page > pageableList.getMaxPages()) return;
+        if(!pageableList.checkPage(page)){
+            addComponent(pageDoesntExist);
+            return;
+        }
 
         String seperationFormat = LanguageManager.get("list-format-seperation", header, page + 1, pageableList.getMaxPages() + 1);
         addComponent(seperationFormat);
@@ -71,6 +75,11 @@ public class PageableListFormat<T> extends DisplayFormat {
 
     public PageableListFormat<T> page(int page) {
         this.page = page;
+        return this;
+    }
+
+    public PageableListFormat<T> doesntExist(String pageDoesntExist){
+        this.pageDoesntExist = pageDoesntExist;
         return this;
     }
 
