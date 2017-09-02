@@ -1,9 +1,9 @@
 package de.superioz.moo.daemon.listeners;
 
 import de.superioz.moo.daemon.Daemon;
-import de.superioz.moo.netty.packet.PacketAdapter;
-import de.superioz.moo.netty.packet.PacketHandler;
-import de.superioz.moo.netty.packets.PacketPatternState;
+import de.superioz.moo.network.packet.PacketAdapter;
+import de.superioz.moo.network.packet.PacketHandler;
+import de.superioz.moo.network.packets.PacketPatternState;
 
 public class PacketPatternStateListener implements PacketAdapter {
 

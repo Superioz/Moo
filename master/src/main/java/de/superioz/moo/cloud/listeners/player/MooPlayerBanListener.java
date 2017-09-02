@@ -17,10 +17,10 @@ import de.superioz.moo.cloud.Cloud;
 import de.superioz.moo.cloud.database.DatabaseCollections;
 import de.superioz.moo.cloud.events.MooPlayerBanEvent;
 import de.superioz.moo.cloud.events.MooPlayerPostBanEvent;
-import de.superioz.moo.netty.common.ResponseStatus;
-import de.superioz.moo.netty.exception.MooInputException;
-import de.superioz.moo.netty.packets.PacketPlayerBan;
-import de.superioz.moo.netty.packets.PacketPlayerKick;
+import de.superioz.moo.network.common.ResponseStatus;
+import de.superioz.moo.network.exception.MooInputException;
+import de.superioz.moo.network.packets.PacketPlayerBan;
+import de.superioz.moo.network.packets.PacketPlayerKick;
 
 import java.util.UUID;
 

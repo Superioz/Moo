@@ -8,8 +8,8 @@ import de.superioz.moo.client.Moo;
 import de.superioz.moo.daemon.commands.MainCommand;
 import de.superioz.moo.daemon.listeners.PacketPatternStateListener;
 import de.superioz.moo.daemon.listeners.ServerPacketListener;
-import de.superioz.moo.netty.client.ClientType;
-import de.superioz.moo.netty.packet.PacketAdapting;
+import de.superioz.moo.network.client.ClientType;
+import de.superioz.moo.network.packet.PacketAdapting;
 
 import java.nio.file.Paths;
 

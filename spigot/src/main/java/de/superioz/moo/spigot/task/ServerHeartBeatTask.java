@@ -1,7 +1,7 @@
 package de.superioz.moo.spigot.task;
 
-import de.superioz.moo.netty.common.PacketMessenger;
-import de.superioz.moo.netty.packets.PacketServerHeartBeat;
+import de.superioz.moo.network.common.PacketMessenger;
+import de.superioz.moo.network.packets.PacketServerHeartBeat;
 import de.superioz.moo.spigot.Lightning;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

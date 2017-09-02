@@ -17,8 +17,8 @@ import de.superioz.moo.api.database.query.DbQueryNode;
 import de.superioz.moo.api.io.LanguageManager;
 import de.superioz.moo.api.util.Procedure;
 import de.superioz.moo.api.utils.StringUtil;
-import de.superioz.moo.netty.common.Queries;
-import de.superioz.moo.netty.common.ResponseStatus;
+import de.superioz.moo.network.common.Queries;
+import de.superioz.moo.network.common.ResponseStatus;
 
 import java.util.Collections;
 
@@ -66,6 +66,7 @@ public class DatabaseModifyCommand {
 
     @TabCompletion
     public void tabComplete(TabCompletor completor) {
+        // .
         completor.react(1, StringUtil.getStringList(DatabaseType.values(), type -> type.name().toLowerCase()));
     }
 

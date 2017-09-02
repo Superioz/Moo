@@ -6,7 +6,7 @@ import de.superioz.moo.cloud.Cloud;
 import de.superioz.moo.cloud.listeners.*;
 import de.superioz.moo.cloud.listeners.packet.*;
 import de.superioz.moo.cloud.listeners.player.*;
-import de.superioz.moo.netty.packet.PacketAdapting;
+import de.superioz.moo.network.packet.PacketAdapting;
 import lombok.Getter;
 
 @Getter

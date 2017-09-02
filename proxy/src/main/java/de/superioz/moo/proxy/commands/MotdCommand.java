@@ -1,13 +1,13 @@
 package de.superioz.moo.proxy.commands;
 
-import de.superioz.moo.api.cache.MooCache;
+import de.superioz.moo.network.redis.MooCache;
 import de.superioz.moo.api.command.Command;
 import de.superioz.moo.api.command.param.ParamSet;
 import de.superioz.moo.api.common.RunAsynchronous;
 import de.superioz.moo.api.io.LanguageManager;
 import de.superioz.moo.api.config.NetworkConfigType;
 import de.superioz.moo.client.Moo;
-import de.superioz.moo.netty.common.ResponseStatus;
+import de.superioz.moo.network.common.ResponseStatus;
 import de.superioz.moo.proxy.command.BungeeCommandContext;
 
 @RunAsynchronous

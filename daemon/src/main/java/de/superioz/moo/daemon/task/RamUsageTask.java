@@ -2,9 +2,9 @@ package de.superioz.moo.daemon.task;
 
 import de.superioz.moo.api.utils.SystemUtil;
 import de.superioz.moo.client.Moo;
-import de.superioz.moo.netty.common.PacketMessenger;
-import de.superioz.moo.netty.exception.MooOutputException;
-import de.superioz.moo.netty.packets.PacketRamUsage;
+import de.superioz.moo.network.common.PacketMessenger;
+import de.superioz.moo.network.exception.MooOutputException;
+import de.superioz.moo.network.packets.PacketRamUsage;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 

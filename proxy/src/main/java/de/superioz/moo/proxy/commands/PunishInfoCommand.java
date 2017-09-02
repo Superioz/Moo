@@ -16,7 +16,7 @@ import de.superioz.moo.api.database.objects.PlayerData;
 import de.superioz.moo.api.io.LanguageManager;
 import de.superioz.moo.api.utils.StringUtil;
 import de.superioz.moo.api.utils.TimeUtil;
-import de.superioz.moo.netty.common.MooQueries;
+import de.superioz.moo.network.common.MooQueries;
 import de.superioz.moo.proxy.command.BungeeCommandContext;
 import de.superioz.moo.proxy.util.BungeeTeamChat;
 import net.md_5.bungee.api.ProxyServer;

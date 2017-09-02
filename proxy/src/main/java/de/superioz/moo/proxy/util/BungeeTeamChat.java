@@ -1,13 +1,13 @@
 package de.superioz.moo.proxy.util;
 
-import de.superioz.moo.api.cache.MooCache;
+import de.superioz.moo.network.redis.MooCache;
 import de.superioz.moo.api.command.context.CommandContext;
 import de.superioz.moo.api.config.NetworkConfigType;
 import de.superioz.moo.api.database.objects.Group;
 import de.superioz.moo.client.Moo;
 import de.superioz.moo.minecraft.chat.TeamChat;
-import de.superioz.moo.netty.common.MooQueries;
-import de.superioz.moo.netty.common.ResponseStatus;
+import de.superioz.moo.network.common.MooQueries;
+import de.superioz.moo.network.common.ResponseStatus;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 

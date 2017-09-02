@@ -9,11 +9,11 @@ import de.superioz.moo.api.util.SimpleSerializable;
 import de.superioz.moo.api.util.Validation;
 import de.superioz.moo.api.utils.StringUtil;
 import de.superioz.moo.cloud.database.DatabaseCollections;
-import de.superioz.moo.netty.common.ResponseStatus;
-import de.superioz.moo.netty.packet.PacketAdapter;
-import de.superioz.moo.netty.packet.PacketHandler;
-import de.superioz.moo.netty.packets.PacketPlayerProfile;
-import de.superioz.moo.netty.packets.PacketRespond;
+import de.superioz.moo.network.common.ResponseStatus;
+import de.superioz.moo.network.packet.PacketAdapter;
+import de.superioz.moo.network.packet.PacketHandler;
+import de.superioz.moo.network.packets.PacketPlayerProfile;
+import de.superioz.moo.network.packets.PacketRespond;
 
 import java.util.ArrayList;
 import java.util.List;

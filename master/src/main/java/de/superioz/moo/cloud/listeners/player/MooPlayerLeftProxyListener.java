@@ -1,6 +1,6 @@
 package de.superioz.moo.cloud.listeners.player;
 
-import de.superioz.moo.api.cache.MooCache;
+import de.superioz.moo.network.redis.MooCache;
 import de.superioz.moo.api.config.NetworkConfigType;
 import de.superioz.moo.api.database.DbModifier;
 import de.superioz.moo.api.database.objects.PlayerData;
@@ -11,8 +11,8 @@ import de.superioz.moo.api.event.EventPriority;
 import de.superioz.moo.cloud.Cloud;
 import de.superioz.moo.cloud.database.DatabaseCollections;
 import de.superioz.moo.cloud.events.MooPlayerLeftProxyEvent;
-import de.superioz.moo.netty.common.ResponseStatus;
-import de.superioz.moo.netty.packets.PacketPlayerState;
+import de.superioz.moo.network.common.ResponseStatus;
+import de.superioz.moo.network.packets.PacketPlayerState;
 
 public class MooPlayerLeftProxyListener implements EventListener {
 

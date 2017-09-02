@@ -2,7 +2,6 @@ package de.superioz.moo.api.database;
 
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
-import de.superioz.moo.api.cache.DatabaseCache;
 import de.superioz.moo.api.collection.FixedSizeList;
 import de.superioz.moo.api.database.filter.DbFilter;
 import de.superioz.moo.api.database.filter.DbFilterNode;

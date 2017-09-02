@@ -6,8 +6,8 @@ import de.superioz.moo.api.event.EventListener;
 import de.superioz.moo.api.event.EventPriority;
 import de.superioz.moo.cloud.Cloud;
 import de.superioz.moo.cloud.events.MooPlayerKickEvent;
-import de.superioz.moo.netty.common.ResponseStatus;
-import de.superioz.moo.netty.packets.PacketPlayerBan;
+import de.superioz.moo.network.common.ResponseStatus;
+import de.superioz.moo.network.packets.PacketPlayerBan;
 
 /**
  * This class handles the player kick

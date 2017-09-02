@@ -1,6 +1,6 @@
 package de.superioz.moo.cloud.listeners.packet;
 
-import de.superioz.moo.api.cache.MooCache;
+import de.superioz.moo.network.redis.MooCache;
 import de.superioz.moo.api.collection.MultiMap;
 import de.superioz.moo.api.database.DatabaseCollection;
 import de.superioz.moo.api.database.DatabaseModifyType;
@@ -17,14 +17,14 @@ import de.superioz.moo.api.utils.ReflectionUtil;
 import de.superioz.moo.api.utils.StringUtil;
 import de.superioz.moo.cloud.Cloud;
 import de.superioz.moo.cloud.database.DatabaseCollections;
-import de.superioz.moo.netty.client.ClientType;
-import de.superioz.moo.netty.common.PacketMessenger;
-import de.superioz.moo.netty.common.ResponseStatus;
-import de.superioz.moo.netty.packet.AbstractPacket;
-import de.superioz.moo.netty.packet.PacketAdapter;
-import de.superioz.moo.netty.packet.PacketHandler;
-import de.superioz.moo.netty.packets.PacketDatabaseModify;
-import de.superioz.moo.netty.packets.PacketUpdatePermission;
+import de.superioz.moo.network.client.ClientType;
+import de.superioz.moo.network.common.PacketMessenger;
+import de.superioz.moo.network.common.ResponseStatus;
+import de.superioz.moo.network.packet.AbstractPacket;
+import de.superioz.moo.network.packet.PacketAdapter;
+import de.superioz.moo.network.packet.PacketHandler;
+import de.superioz.moo.network.packets.PacketDatabaseModify;
+import de.superioz.moo.network.packets.PacketUpdatePermission;
 
 import java.util.List;
 import java.util.Set;
@@ -240,13 +240,13 @@ public class PacketDatabaseModifyListener implements PacketAdapter {
         }
         else if(type == DatabaseType.PLAYER) {
             if(modifyType == DatabaseModifyType.DELETE) {
-                MooCache.getInstance().getUniqueIdPlayerMap().remove(UUID.fromString(data));
+                MooCache.getInstance().getPlayerMap().remove(UUID.fromString(data));
 
                 // PLAYERDATA HAS BEEN DELETED ? WHAT THE FLACK? (Shouldnt happen)
             }
             else if(modifyType == DatabaseModifyType.CREATE || modifyType == DatabaseModifyType.MODIFY) {
                 PlayerData playerData = ReflectionUtil.deserialize(data, PlayerData.class);
-                MooCache.getInstance().getUniqueIdPlayerMap().fastPut(playerData.getUuid(), playerData);
+                MooCache.getInstance().getPlayerMap().fastPut(playerData.getUuid(), playerData);
 
                 // UPDATE PERMISSIONS IF EDITED
                 if(modifyType == DatabaseModifyType.MODIFY) {

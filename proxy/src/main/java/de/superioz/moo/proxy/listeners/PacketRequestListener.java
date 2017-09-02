@@ -1,11 +1,11 @@
 package de.superioz.moo.proxy.listeners;
 
 import de.superioz.moo.api.util.Validation;
-import de.superioz.moo.netty.common.ResponseStatus;
-import de.superioz.moo.netty.packet.PacketAdapter;
-import de.superioz.moo.netty.packet.PacketHandler;
-import de.superioz.moo.netty.packets.PacketRequest;
-import de.superioz.moo.netty.packets.PacketRespond;
+import de.superioz.moo.network.common.ResponseStatus;
+import de.superioz.moo.network.packet.PacketAdapter;
+import de.superioz.moo.network.packet.PacketHandler;
+import de.superioz.moo.network.packets.PacketRequest;
+import de.superioz.moo.network.packets.PacketRespond;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 

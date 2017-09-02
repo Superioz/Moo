@@ -1,6 +1,6 @@
 package de.superioz.moo.proxy;
 
-import de.superioz.moo.api.cache.MooCache;
+import de.superioz.moo.network.redis.MooCache;
 import de.superioz.moo.api.common.MooServer;
 import de.superioz.moo.api.common.PlayerProfile;
 import de.superioz.moo.api.config.NetworkConfigType;
@@ -13,7 +13,7 @@ import de.superioz.moo.api.logging.ExtendedLogger;
 import de.superioz.moo.api.module.ModuleRegistry;
 import de.superioz.moo.api.modules.RedisModule;
 import de.superioz.moo.client.Moo;
-import de.superioz.moo.netty.common.MooQueries;
+import de.superioz.moo.network.common.MooQueries;
 import lombok.Getter;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.config.ServerInfo;

@@ -12,7 +12,7 @@ import de.superioz.moo.api.module.Module;
 import de.superioz.moo.client.Moo;
 import de.superioz.moo.client.events.CloudConnectedEvent;
 import de.superioz.moo.minecraft.util.ChatUtil;
-import de.superioz.moo.netty.client.ClientType;
+import de.superioz.moo.network.client.ClientType;
 import de.superioz.moo.proxy.command.BungeeCommandContext;
 import de.superioz.moo.proxy.command.PlayerParamType;
 import de.superioz.moo.proxy.commands.*;

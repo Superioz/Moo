@@ -1,6 +1,6 @@
 package de.superioz.moo.cloud.listeners.player;
 
-import de.superioz.moo.api.cache.MooCache;
+import de.superioz.moo.network.redis.MooCache;
 import de.superioz.moo.api.config.NetworkConfigType;
 import de.superioz.moo.api.database.DbModifier;
 import de.superioz.moo.api.database.objects.PlayerData;
@@ -11,8 +11,8 @@ import de.superioz.moo.api.event.EventPriority;
 import de.superioz.moo.cloud.Cloud;
 import de.superioz.moo.cloud.database.DatabaseCollections;
 import de.superioz.moo.cloud.events.MooPlayerJoinedProxyEvent;
-import de.superioz.moo.netty.common.ResponseStatus;
-import de.superioz.moo.netty.packets.PacketPlayerState;
+import de.superioz.moo.network.common.ResponseStatus;
+import de.superioz.moo.network.packets.PacketPlayerState;
 
 import java.net.InetSocketAddress;
 
@@ -49,7 +49,7 @@ public class MooPlayerJoinedProxyListener implements EventListener {
 
         // update moo cache (user count and playerData)
         MooCache.getInstance().getConfigMap().fastPutAsync(NetworkConfigType.PLAYER_COUNT.getKey(), Cloud.getInstance().getNetworkProxy().getPlayers().size());
-        MooCache.getInstance().getUniqueIdPlayerMap().fastPutAsync(data.getUuid(), data);
+        MooCache.getInstance().getPlayerMap().fastPutAsync(data.getUuid(), data);
         MooCache.getInstance().getNameUniqueIdMap().fastPutAsync(data.getLastName(), data.getUuid());
 
         packet.respond(ResponseStatus.OK);

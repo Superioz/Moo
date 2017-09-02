@@ -4,9 +4,9 @@ import de.superioz.moo.api.utils.IOUtil;
 import de.superioz.moo.daemon.Daemon;
 import de.superioz.moo.daemon.DaemonInstance;
 import de.superioz.moo.daemon.util.ThreadableValue;
-import de.superioz.moo.netty.common.PacketMessenger;
-import de.superioz.moo.netty.exception.MooOutputException;
-import de.superioz.moo.netty.packets.PacketServerAttempt;
+import de.superioz.moo.network.common.PacketMessenger;
+import de.superioz.moo.network.exception.MooOutputException;
+import de.superioz.moo.network.packets.PacketServerAttempt;
 import lombok.Getter;
 import lombok.Setter;
 

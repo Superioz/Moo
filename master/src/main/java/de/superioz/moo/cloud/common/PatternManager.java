@@ -1,11 +1,11 @@
 package de.superioz.moo.cloud.common;
 
-import de.superioz.moo.api.cache.MooCache;
+import de.superioz.moo.network.redis.MooCache;
 import de.superioz.moo.api.database.objects.ServerPattern;
 import de.superioz.moo.cloud.database.DatabaseCollections;
-import de.superioz.moo.netty.client.ClientType;
-import de.superioz.moo.netty.common.PacketMessenger;
-import de.superioz.moo.netty.packets.PacketPatternState;
+import de.superioz.moo.network.client.ClientType;
+import de.superioz.moo.network.common.PacketMessenger;
+import de.superioz.moo.network.packets.PacketPatternState;
 
 public final class PatternManager {
 

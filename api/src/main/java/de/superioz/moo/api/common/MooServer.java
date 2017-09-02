@@ -1,6 +1,6 @@
 package de.superioz.moo.api.common;
 
-import de.superioz.moo.api.cache.MooCache;
+import de.superioz.moo.api.database.cache.MooCache;
 import de.superioz.moo.api.database.objects.PlayerData;
 import de.superioz.moo.api.database.objects.ServerPattern;
 import lombok.Getter;
@@ -89,7 +89,7 @@ public class MooServer {
      */
     public List<PlayerData> getPlayers() {
         List<PlayerData> players = new ArrayList<>();
-        MooCache.getInstance().getUniqueIdPlayerMap().values().forEach(playerData -> {
+        MooCache.getInstance().getPlayerMap().values().forEach(playerData -> {
             if(playerData.getCurrentServer().equals(getName())) players.add(playerData);
         });
         return players;

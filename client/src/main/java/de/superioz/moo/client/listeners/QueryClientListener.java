@@ -3,11 +3,11 @@ package de.superioz.moo.client.listeners;
 import de.superioz.moo.client.Moo;
 import de.superioz.moo.api.event.EventHandler;
 import de.superioz.moo.api.event.EventListener;
-import de.superioz.moo.netty.common.PacketMessenger;
-import de.superioz.moo.netty.common.Response;
-import de.superioz.moo.netty.events.QueryEvent;
-import de.superioz.moo.netty.exception.MooOutputException;
-import de.superioz.moo.netty.packet.AbstractPacket;
+import de.superioz.moo.network.common.PacketMessenger;
+import de.superioz.moo.network.common.Response;
+import de.superioz.moo.network.events.QueryEvent;
+import de.superioz.moo.network.exception.MooOutputException;
+import de.superioz.moo.network.packet.AbstractPacket;
 
 import java.util.function.Consumer;
 

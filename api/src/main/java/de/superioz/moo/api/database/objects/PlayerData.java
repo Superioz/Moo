@@ -21,87 +21,87 @@ public class PlayerData extends SimpleSerializable {
      * The uuid of the player
      */
     @DbKey
-    private UUID uuid;
+    protected UUID uuid;
 
     /**
      * The name the player last played with
      */
     @DbKey
-    private String lastName;
+    protected String lastName;
 
     /**
      * The ip the player last played with
      */
     @DbKey
-    private String lastIp;
+    protected String lastIp;
 
     /**
      * The {@link Group} of the player
      */
     @DbKey
-    private String group;
+    protected String group;
 
     /**
      * The {@link Group} rank of the player
      */
     @DbKey
-    private Integer rank;
+    protected Integer rank;
 
     /**
      * The server where the player is online atm
      */
     @DbKey
     @Setter
-    private String currentServer;
+    protected String currentServer;
 
     /**
      * The proxy where the player has connected to
      */
     @DbKey
     @Setter
-    private Integer currentProxy;
+    protected Integer currentProxy;
 
     /**
      * Timestamp of the last online time (Last online = Leave Time)
      */
     @DbKey
-    private Long lastOnline;
+    protected Long lastOnline;
 
     /**
      * Timestamp of the first online time
      */
     @DbKey
-    private Long firstOnline;
+    protected Long firstOnline;
 
     /**
      * Total online time of the player (in ms)
      */
     @DbKey
-    private Long totalOnline;
+    protected Long totalOnline;
 
     /**
      * Timestamp when the player joined the server (0 = not online)
      */
     @DbKey
-    private Long joined;
+    protected Long joined;
 
     /**
      * Extra permissions of the player. Additional to {@link Group#permissions}
      */
     @DbKey
-    private List<String> extraPerms = new ArrayList<>();
+    protected List<String> extraPerms = new ArrayList<>();
 
     /**
      * Coins amount of the player
      */
     @DbKey
-    private Long coins;
+    protected Long coins;
 
     /**
      * Ban points amount of the player
      */
     @DbKey
-    private Integer banPoints;
+    protected Integer banPoints;
 
     /**
      * Gets the time the player is currently online

@@ -1,12 +1,12 @@
 package de.superioz.moo.proxy.listeners;
 
-import de.superioz.moo.api.cache.MooCache;
+import de.superioz.moo.network.redis.MooCache;
 import de.superioz.moo.api.io.LanguageManager;
 import de.superioz.moo.api.config.NetworkConfigType;
-import de.superioz.moo.netty.common.MooQueries;
-import de.superioz.moo.netty.packet.PacketAdapter;
-import de.superioz.moo.netty.packet.PacketHandler;
-import de.superioz.moo.netty.packets.PacketConfig;
+import de.superioz.moo.network.common.MooQueries;
+import de.superioz.moo.network.packet.PacketAdapter;
+import de.superioz.moo.network.packet.PacketHandler;
+import de.superioz.moo.network.packets.PacketConfig;
 import net.md_5.bungee.api.ProxyServer;
 
 public class PacketConfigListener implements PacketAdapter {

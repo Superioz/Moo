@@ -7,12 +7,12 @@ import de.superioz.moo.api.logging.ConsoleColor;
 import de.superioz.moo.api.util.Validation;
 import de.superioz.moo.cloud.Cloud;
 import de.superioz.moo.cloud.events.HandshakeEvent;
-import de.superioz.moo.netty.events.MooClientConnectedEvent;
-import de.superioz.moo.netty.client.ClientType;
-import de.superioz.moo.netty.common.ResponseStatus;
-import de.superioz.moo.netty.packets.PacketHandshake;
-import de.superioz.moo.netty.packets.PacketRespond;
-import de.superioz.moo.netty.server.MooClient;
+import de.superioz.moo.network.events.MooClientConnectedEvent;
+import de.superioz.moo.network.client.ClientType;
+import de.superioz.moo.network.common.ResponseStatus;
+import de.superioz.moo.network.packets.PacketHandshake;
+import de.superioz.moo.network.packets.PacketRespond;
+import de.superioz.moo.network.server.MooClient;
 import io.netty.channel.Channel;
 
 import java.net.InetSocketAddress;

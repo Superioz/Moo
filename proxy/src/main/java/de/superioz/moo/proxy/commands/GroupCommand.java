@@ -17,8 +17,8 @@ import de.superioz.moo.api.io.LanguageManager;
 import de.superioz.moo.api.utils.StringUtil;
 import de.superioz.moo.minecraft.chat.formats.InfoListFormat;
 import de.superioz.moo.minecraft.chat.formats.PageableListFormat;
-import de.superioz.moo.netty.common.MooQueries;
-import de.superioz.moo.netty.common.ResponseStatus;
+import de.superioz.moo.network.common.MooQueries;
+import de.superioz.moo.network.common.ResponseStatus;
 import de.superioz.moo.proxy.command.BungeeCommandContext;
 
 import java.util.Arrays;

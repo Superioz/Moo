@@ -17,7 +17,7 @@ import de.superioz.moo.api.util.MessageFormatSender;
 import de.superioz.moo.api.utils.DisplayFormats;
 import de.superioz.moo.api.utils.StringUtil;
 import de.superioz.moo.minecraft.util.ChatUtil;
-import de.superioz.moo.netty.exception.MooOutputException;
+import de.superioz.moo.network.exception.MooOutputException;
 import de.superioz.moo.proxy.Thunder;
 import de.superioz.moo.proxy.command.BungeeCommandContext;
 import javafx.util.Pair;

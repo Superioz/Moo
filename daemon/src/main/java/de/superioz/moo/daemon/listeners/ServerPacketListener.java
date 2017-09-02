@@ -3,13 +3,13 @@ package de.superioz.moo.daemon.listeners;
 import de.superioz.moo.api.database.objects.ServerPattern;
 import de.superioz.moo.daemon.Daemon;
 import de.superioz.moo.daemon.common.Server;
-import de.superioz.moo.netty.common.ResponseStatus;
-import de.superioz.moo.netty.packet.PacketAdapter;
-import de.superioz.moo.netty.packet.PacketHandler;
-import de.superioz.moo.netty.packets.PacketRespond;
-import de.superioz.moo.netty.packets.PacketServerRequest;
-import de.superioz.moo.netty.packets.PacketServerRequestShutdown;
-import de.superioz.moo.netty.server.MooProxy;
+import de.superioz.moo.network.common.ResponseStatus;
+import de.superioz.moo.network.packet.PacketAdapter;
+import de.superioz.moo.network.packet.PacketHandler;
+import de.superioz.moo.network.packets.PacketRespond;
+import de.superioz.moo.network.packets.PacketServerRequest;
+import de.superioz.moo.network.packets.PacketServerRequestShutdown;
+import de.superioz.moo.network.server.MooProxy;
 
 public class ServerPacketListener implements PacketAdapter {
 

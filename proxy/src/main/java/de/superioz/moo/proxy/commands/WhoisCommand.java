@@ -14,7 +14,7 @@ import de.superioz.moo.api.io.LanguageManager;
 import de.superioz.moo.api.utils.DisplayFormats;
 import de.superioz.moo.api.utils.StringUtil;
 import de.superioz.moo.api.utils.TimeUtil;
-import de.superioz.moo.netty.common.MooQueries;
+import de.superioz.moo.network.common.MooQueries;
 import de.superioz.moo.proxy.command.BungeeCommandContext;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.connection.ProxiedPlayer;

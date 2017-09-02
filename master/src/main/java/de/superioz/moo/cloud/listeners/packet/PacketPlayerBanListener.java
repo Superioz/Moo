@@ -8,10 +8,10 @@ import de.superioz.moo.api.event.EventExecutor;
 import de.superioz.moo.api.util.Validation;
 import de.superioz.moo.cloud.database.DatabaseCollections;
 import de.superioz.moo.cloud.events.MooPlayerBanEvent;
-import de.superioz.moo.netty.common.ResponseStatus;
-import de.superioz.moo.netty.packet.PacketAdapter;
-import de.superioz.moo.netty.packet.PacketHandler;
-import de.superioz.moo.netty.packets.PacketPlayerBan;
+import de.superioz.moo.network.common.ResponseStatus;
+import de.superioz.moo.network.packet.PacketAdapter;
+import de.superioz.moo.network.packet.PacketHandler;
+import de.superioz.moo.network.packets.PacketPlayerBan;
 
 import java.util.UUID;
 

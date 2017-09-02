@@ -7,11 +7,11 @@ import de.superioz.moo.api.reaction.Reaction;
 import de.superioz.moo.api.reaction.Reactor;
 import de.superioz.moo.api.utils.StringUtil;
 import de.superioz.moo.cloud.Cloud;
-import de.superioz.moo.netty.common.ResponseStatus;
-import de.superioz.moo.netty.packet.PacketAdapter;
-import de.superioz.moo.netty.packet.PacketHandler;
-import de.superioz.moo.netty.packets.PacketDatabaseCount;
-import de.superioz.moo.netty.packets.PacketRespond;
+import de.superioz.moo.network.common.ResponseStatus;
+import de.superioz.moo.network.packet.PacketAdapter;
+import de.superioz.moo.network.packet.PacketHandler;
+import de.superioz.moo.network.packets.PacketDatabaseCount;
+import de.superioz.moo.network.packets.PacketRespond;
 import org.bson.Document;
 
 import java.util.ArrayList;

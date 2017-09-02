@@ -5,9 +5,9 @@ import de.superioz.moo.api.event.EventHandler;
 import de.superioz.moo.api.event.EventListener;
 import de.superioz.moo.api.events.MooLoggingEvent;
 import de.superioz.moo.cloud.Cloud;
-import de.superioz.moo.netty.client.ClientType;
-import de.superioz.moo.netty.common.PacketMessenger;
-import de.superioz.moo.netty.packets.PacketConsoleOutput;
+import de.superioz.moo.network.client.ClientType;
+import de.superioz.moo.network.common.PacketMessenger;
+import de.superioz.moo.network.packets.PacketConsoleOutput;
 
 /**
  * This class listens on the cloud logging, to the send it to other instances

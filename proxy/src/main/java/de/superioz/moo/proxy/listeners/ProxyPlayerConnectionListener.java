@@ -1,10 +1,10 @@
 package de.superioz.moo.proxy.listeners;
 
-import de.superioz.moo.api.cache.MooCache;
+import de.superioz.moo.network.redis.MooCache;
 import de.superioz.moo.api.database.objects.PlayerData;
-import de.superioz.moo.netty.common.MooQueries;
-import de.superioz.moo.netty.exception.MooOutputException;
-import de.superioz.moo.netty.packets.PacketPlayerState;
+import de.superioz.moo.network.common.MooQueries;
+import de.superioz.moo.network.exception.MooOutputException;
+import de.superioz.moo.network.packets.PacketPlayerState;
 import de.superioz.moo.proxy.Thunder;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.event.PlayerDisconnectEvent;
@@ -72,7 +72,7 @@ public class ProxyPlayerConnectionListener implements Listener {
 
                 // removes data of player after 1s
                 MooCache.getInstance().getPlayerPermissionMap().removeAsync(data.getUuid());
-                MooCache.getInstance().getUniqueIdPlayerMap().removeAsync(data.getUuid());
+                MooCache.getInstance().getPlayerMap().removeAsync(data.getUuid());
                 MooCache.getInstance().getNameUniqueIdMap().removeAsync(data.getLastName());
             }
         });

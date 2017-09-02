@@ -11,7 +11,7 @@ public enum Validation {
     NORMAL_STRING("[^;#$¶Þþ]*"),
     COLOR("(&[0-9A-FK-OR])"),
     PERMISSION("[bs*][:]([^.*][-]?[0-9_.A-Za-z*]+[*a-zA-Z]|[*])|[*]"),
-    PLAYERNAME("[a-zA-Z_]{2,16}"),
+    PLAYERNAME("[a-zA-Z_0-9]{2,16}"),
     UNIQUEID("[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}"),
     BINARY_UNIQUEID("(\\{\"\\$binary\":\"[0-9a-z=+]{24}\",\"\\$type\":\"3\"})"),
     BINARY_UNIQUEID_JSON("(\\{\"[0-9a-z]*\":\\{\"\\$binary\":\"[0-9a-z=+/]{24}\",\"\\$type\":\"3\"}})"),

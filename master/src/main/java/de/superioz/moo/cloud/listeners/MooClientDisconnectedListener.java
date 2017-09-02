@@ -1,18 +1,18 @@
 package de.superioz.moo.cloud.listeners;
 
-import de.superioz.moo.api.cache.MooCache;
+import de.superioz.moo.network.redis.MooCache;
 import de.superioz.moo.api.config.NetworkConfigType;
 import de.superioz.moo.api.database.objects.ServerPattern;
 import de.superioz.moo.api.event.EventHandler;
 import de.superioz.moo.api.event.EventListener;
 import de.superioz.moo.api.event.EventPriority;
 import de.superioz.moo.cloud.Cloud;
-import de.superioz.moo.netty.client.ClientType;
-import de.superioz.moo.netty.common.PacketMessenger;
-import de.superioz.moo.netty.events.MooClientDisconnectEvent;
-import de.superioz.moo.netty.packets.PacketServerUnregister;
-import de.superioz.moo.netty.server.MooClient;
-import de.superioz.moo.netty.server.MooProxy;
+import de.superioz.moo.network.client.ClientType;
+import de.superioz.moo.network.common.PacketMessenger;
+import de.superioz.moo.network.events.MooClientDisconnectEvent;
+import de.superioz.moo.network.packets.PacketServerUnregister;
+import de.superioz.moo.network.server.MooClient;
+import de.superioz.moo.network.server.MooProxy;
 
 import java.net.InetSocketAddress;
 import java.util.ArrayList;

@@ -8,12 +8,12 @@ import de.superioz.moo.api.database.filter.DbFilter;
 import de.superioz.moo.api.utils.StringUtil;
 import de.superioz.moo.cloud.Cloud;
 import de.superioz.moo.cloud.database.DatabaseCollections;
-import de.superioz.moo.netty.common.ResponseStatus;
-import de.superioz.moo.netty.packet.PacketAdapter;
-import de.superioz.moo.netty.packet.PacketHandler;
-import de.superioz.moo.netty.packets.PacketDatabaseInfo;
-import de.superioz.moo.netty.packets.PacketDatabaseInfoNative;
-import de.superioz.moo.netty.packets.PacketRespond;
+import de.superioz.moo.network.common.ResponseStatus;
+import de.superioz.moo.network.packet.PacketAdapter;
+import de.superioz.moo.network.packet.PacketHandler;
+import de.superioz.moo.network.packets.PacketDatabaseInfo;
+import de.superioz.moo.network.packets.PacketDatabaseInfoNative;
+import de.superioz.moo.network.packets.PacketRespond;
 import org.bson.Document;
 
 import java.util.ArrayList;

@@ -1,6 +1,6 @@
 package de.superioz.moo.cloud.database.cache;
 
-import de.superioz.moo.api.cache.DatabaseCache;
+import de.superioz.moo.api.database.DatabaseCache;
 import de.superioz.moo.api.database.objects.Group;
 import de.superioz.moo.cloud.Cloud;
 import org.bson.Document;

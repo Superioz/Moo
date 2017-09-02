@@ -1,6 +1,6 @@
 package de.superioz.moo.cloud.commands;
 
-import de.superioz.moo.api.cache.DatabaseCache;
+import de.superioz.moo.api.database.DatabaseCache;
 import de.superioz.moo.api.command.Command;
 import de.superioz.moo.api.command.context.CommandContext;
 import de.superioz.moo.api.command.help.ArgumentHelp;
