@@ -4,6 +4,7 @@ import de.superioz.moo.api.io.LanguageManager;
 import de.superioz.moo.minecraft.chat.formats.DisplayFormat;
 import de.superioz.moo.minecraft.command.MinecraftCommandContext;
 import de.superioz.moo.proxy.util.BungeeChat;
+import de.superioz.moo.proxy.util.BungeeTeamChat;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
@@ -25,6 +26,13 @@ public class BungeeCommandContext extends MinecraftCommandContext<CommandSender>
         for(CommandSender receiver : receivers) {
             format.getComponents().forEach(receiver::sendMessage);
         }
+    }
+
+    @Override
+    public BungeeTeamChat getTeamChat() {
+        if(teamChat != null) return (BungeeTeamChat) teamChat;
+        teamChat = new BungeeTeamChat();
+        return getTeamChat();
     }
 
     @Override

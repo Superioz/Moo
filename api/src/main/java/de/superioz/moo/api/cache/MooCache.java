@@ -118,8 +118,8 @@ public final class MooCache {
      * @param type The type
      * @return The object
      */
-    public Object getConfigEntry(NetworkConfigType type) {
-        return configMap.get(type.getKey());
+    public <T> T getConfigEntry(NetworkConfigType type) {
+        return (T) configMap.get(type.getKey());
     }
 
     public RFuture<Object> getConfigEntryAsync(NetworkConfigType type) {

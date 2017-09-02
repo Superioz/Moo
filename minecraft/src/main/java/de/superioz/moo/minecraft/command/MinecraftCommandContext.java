@@ -3,6 +3,7 @@ package de.superioz.moo.minecraft.command;
 import de.superioz.moo.api.command.context.CommandContext;
 import de.superioz.moo.minecraft.chat.MessageComponent;
 import de.superioz.moo.minecraft.chat.MessageEventable;
+import de.superioz.moo.minecraft.chat.TeamChat;
 import de.superioz.moo.minecraft.chat.formats.DisplayFormat;
 import de.superioz.moo.minecraft.util.ChatUtil;
 import net.md_5.bungee.api.chat.ClickEvent;
@@ -14,6 +15,8 @@ import java.util.List;
 
 public abstract class MinecraftCommandContext<T> extends CommandContext<T> {
 
+    protected TeamChat teamChat;
+
     public MinecraftCommandContext(T commandSender) {
         super(commandSender);
     }
@@ -21,6 +24,8 @@ public abstract class MinecraftCommandContext<T> extends CommandContext<T> {
     public abstract void sendComponent(TextComponent component, List<T> receivers);
 
     public abstract void sendDisplayFormat(DisplayFormat format, T... receivers);
+
+    public abstract <TC extends TeamChat> TC getTeamChat();
 
     /**
      * Sends a message component to given command sender (with hoverevent and this stuff)

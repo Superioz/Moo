@@ -19,7 +19,7 @@ public class PacketConfigListener implements PacketAdapter {
         // after the maintenance mode changed kick all players who're not permitted
         if(type == NetworkConfigType.MAINTENANCE && meta.equals(true + "")) {
             // list maintenance rank from redis
-            int minRank = (int) MooCache.getInstance().getConfigEntry(NetworkConfigType.MAINTENANCE_RANK);
+            int minRank = MooCache.getInstance().getConfigEntry(NetworkConfigType.TEAM_RANK);
 
             ProxyServer.getInstance().getPlayers().forEach(player -> {
                 if(MooQueries.getInstance().getPlayerData(player.getUniqueId()).getRank() < minRank) {

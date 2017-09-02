@@ -31,11 +31,6 @@ public enum NetworkConfigType {
     MAINTENANCE_MOTD(NetworkConfigCategory.COMMON, "&c1. Maintenance\n&42. Maintenance"),
 
     /**
-     * The rank the player need to join during maintenance mode
-     */
-    MAINTENANCE_RANK(NetworkConfigCategory.COMMON, 10),
-
-    /**
      * The punishment categories (clientmods, exploitation, ..)<br>
      * Format: name:time;type (e.g.: "clientmods:30d" or "chat-behaviour:6h;chat")
      */
@@ -46,6 +41,11 @@ public enum NetworkConfigType {
      * Format: name:category (e.g.: "combat:clientmods" or "swearing:chat-behaviour")
      */
     PUNISHMENT_SUBTYPES(NetworkConfigCategory.COMMON, new ArrayList<>()),
+
+    /**
+     * The rank of a team member
+     */
+    TEAM_RANK(NetworkConfigCategory.COMMON, 10),
 
     /**
      * The current amount of players

@@ -1,12 +1,13 @@
 package de.superioz.moo.proxy.util;
 
+import de.superioz.moo.api.cache.MooCache;
 import de.superioz.moo.api.command.context.CommandContext;
+import de.superioz.moo.api.config.NetworkConfigType;
 import de.superioz.moo.api.database.objects.Group;
 import de.superioz.moo.client.Moo;
-import de.superioz.moo.netty.common.MooQueries;
 import de.superioz.moo.minecraft.chat.TeamChat;
+import de.superioz.moo.netty.common.MooQueries;
 import de.superioz.moo.netty.common.ResponseStatus;
-import de.superioz.moo.proxy.Thunder;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 
@@ -25,7 +26,7 @@ public class BungeeTeamChat extends TeamChat<CommandSender, ResponseStatus> {
 
     @Override
     public ResponseStatus send(String formattedMessage, boolean colored, boolean formatted) {
-        Integer rank = Thunder.getInstance().getPluginModule().getConfig().get(TeamChat.RANK_KEY);
+        Integer rank = MooCache.getInstance().getConfigEntry(NetworkConfigType.TEAM_RANK);
         if(rank == null) return ResponseStatus.BAD_REQUEST;
         return Moo.getInstance().broadcast(formattedMessage, rank, colored, formatted);
     }
@@ -37,7 +38,7 @@ public class BungeeTeamChat extends TeamChat<CommandSender, ResponseStatus> {
             Group group = MooQueries.getInstance().getGroup(player.getUniqueId());
 
             return group != null
-                    && group.getRank() >= (Integer) Thunder.getInstance().getPluginModule().getConfig().get(TeamChat.RANK_KEY);
+                    && group.getRank() >= (Integer) MooCache.getInstance().getConfigEntry(NetworkConfigType.TEAM_RANK);
         }
         return false;
     }

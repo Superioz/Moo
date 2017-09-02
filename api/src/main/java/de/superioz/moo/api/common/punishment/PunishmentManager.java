@@ -98,7 +98,7 @@ public class PunishmentManager {
      * @param s The string
      * @return The ban reason object
      */
-    public BanSubType getBanReason(String s) {
+    public BanSubType getBanSubType(String s) {
         if(s == null) return null;
 
         for(Set<BanSubType> reasons : banTypeMap.values()) {
@@ -111,7 +111,7 @@ public class PunishmentManager {
         return null;
     }
 
-    public List<BanSubType> getBanReasons() {
+    public List<BanSubType> getBanSubTypes() {
         List<BanSubType> reasons = new ArrayList<>();
         banTypeMap.values().forEach(reasons::addAll);
         return reasons;

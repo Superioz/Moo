@@ -8,6 +8,7 @@ import de.superioz.moo.api.event.EventExecutor;
 import de.superioz.moo.api.events.CommandErrorEvent;
 import de.superioz.moo.api.exceptions.InvalidArgumentException;
 import de.superioz.moo.api.exceptions.InvalidCommandUsageException;
+import de.superioz.moo.api.io.LanguageManager;
 import de.superioz.moo.api.util.MessageFormatSender;
 import lombok.Getter;
 import lombok.Setter;
@@ -172,8 +173,9 @@ public abstract class CommandContext<T> {
         if(condition) invalidArgument(message, help);
     }
 
-    public void invalidArgument(boolean condition, String message) throws InvalidArgumentException {
-        invalidArgument(condition, false, message);
+    public void invalidArgument(boolean condition, String msg, Object... replacements) throws InvalidArgumentException {
+        String finalMessage = LanguageManager.contains(msg) ? LanguageManager.get(msg, replacements) : msg;
+        invalidArgument(condition, false, finalMessage);
     }
 
     /**

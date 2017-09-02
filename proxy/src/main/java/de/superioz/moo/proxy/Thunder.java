@@ -175,7 +175,7 @@ public class Thunder extends Plugin implements EventListener {
 
         // list group for checking the maintenance bypassability
         Group group = MooQueries.getInstance().getGroup(playerProfile.getData().getGroup());
-        boolean maintenanceBypass = group.getRank() >= (int) MooCache.getInstance().getConfigEntry(NetworkConfigType.MAINTENANCE_RANK);
+        boolean maintenanceBypass = group.getRank() >= (int) MooCache.getInstance().getConfigEntry(NetworkConfigType.TEAM_RANK);
 
         // if maintenance mode is active and the player is not allowed to bypass it
         if(MooCache.getInstance().getConfigEntry(NetworkConfigType.MAINTENANCE).equals(true + "") && !maintenanceBypass) {

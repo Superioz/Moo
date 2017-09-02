@@ -4,7 +4,8 @@ import java.util.UUID;
 
 public abstract class TeamChat<T, R> {
 
-    public static final String RANK_KEY = "team-rank";
+    public TeamChat() {
+    }
 
     /**
      * Sends a message into the team chat

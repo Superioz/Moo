@@ -59,6 +59,7 @@ public class InfoListFormat extends DisplayFormat {
      * from the language properties or use a message itself.
      *
      * @param entry        The entry (either key or message)
+     * @param condition    The condition to be true to have hover/click events
      * @param replacements The replacements (for the languagemanager)
      * @return This
      */
