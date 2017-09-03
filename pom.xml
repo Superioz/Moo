@@ -11,7 +11,7 @@
 
     <modules>
         <module>api</module>
-        <module>netty</module>
+        <module>network</module>
         <module>client</module>
         <module>master</module>
         <module>proxy</module>

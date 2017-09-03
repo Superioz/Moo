@@ -1,6 +1,5 @@
 package de.superioz.moo.network.common;
 
-import de.superioz.moo.network.redis.MooCache;
 import de.superioz.moo.api.common.PlayerProfile;
 import de.superioz.moo.api.common.punishment.BanCategory;
 import de.superioz.moo.api.database.DatabaseType;
@@ -11,6 +10,7 @@ import de.superioz.moo.api.database.objects.PlayerData;
 import de.superioz.moo.api.database.query.DbQuery;
 import de.superioz.moo.api.database.query.DbQueryNode;
 import de.superioz.moo.api.database.query.DbQueryUnbaked;
+import de.superioz.moo.api.redis.MooCache;
 import de.superioz.moo.api.utils.CollectionUtil;
 import de.superioz.moo.api.utils.PermissionUtil;
 import de.superioz.moo.network.exception.MooInputException;

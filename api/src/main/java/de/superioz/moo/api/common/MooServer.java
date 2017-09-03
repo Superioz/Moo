@@ -1,8 +1,8 @@
 package de.superioz.moo.api.common;
 
-import de.superioz.moo.api.database.cache.MooCache;
 import de.superioz.moo.api.database.objects.PlayerData;
 import de.superioz.moo.api.database.objects.ServerPattern;
+import de.superioz.moo.api.redis.MooCache;
 import lombok.Getter;
 
 import java.net.InetSocketAddress;

@@ -1,8 +1,8 @@
 package de.superioz.moo.api.common.punishment;
 
-import de.superioz.moo.api.database.cache.MooCache;
 import de.superioz.moo.api.collection.MultiMap;
 import de.superioz.moo.api.config.NetworkConfigType;
+import de.superioz.moo.api.redis.MooCache;
 import de.superioz.moo.api.utils.CollectionUtil;
 
 import java.util.ArrayList;

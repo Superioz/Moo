@@ -4,9 +4,11 @@ import de.superioz.moo.api.common.MooServer;
 import de.superioz.moo.api.database.DbModifier;
 import de.superioz.moo.api.database.objects.Group;
 import de.superioz.moo.api.database.objects.PlayerData;
-import de.superioz.moo.network.redis.MooCache;
-import lombok.Getter;
+import de.superioz.moo.api.redis.MooCache;
+import de.superioz.moo.api.utils.PermissionUtil;
 
+import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 /**
@@ -17,10 +19,52 @@ public class MooPlayer {
     /**
      * Instead of extending we use this, so that we can't access all setters ..
      */
-    @Getter
     private PlayerData wrappedData;
 
-    private MooPlayer() {
+    /**
+     * The current lazy mode, if >0 it will not update the data
+     * automatically in the database after it went down to 0 again.
+     */
+    private int lazy = 0;
+
+    public MooPlayer(PlayerData data) {
+        this.wrappedData = data;
+    }
+
+    /**
+     * Sets the lazy state to true
+     *
+     * @return This
+     */
+    public synchronized MooPlayer lazyLock(int level) {
+        if(level < 1) level = 1;
+        lazy = level;
+        return this;
+    }
+
+    public synchronized MooPlayer lazyLock() {
+        return lazyLock(1);
+    }
+
+    /**
+     * Returns the lazy state and changes it as well if it's true
+     *
+     * @return The lazy state
+     */
+    private synchronized boolean checkLaziness() {
+        if(lazy > 0) {
+            lazy--;
+        }
+        return lazy > 0;
+    }
+
+    /**
+     * Unwraps this class, meaning only returning the wrapped data
+     *
+     * @return The wrapped data
+     */
+    public PlayerData unwrap() {
+        return wrappedData;
     }
 
     /**
@@ -132,6 +176,26 @@ public class MooPlayer {
         return wrappedData.getBanPoints();
     }
 
+    /**
+     * Gets the private permissions of this user
+     *
+     * @return The list of permissions
+     */
+    public List<String> getPrivatePermissions() {
+        return wrappedData.getExtraPerms();
+    }
+
+    /**
+     * Gets the permissions of the user (group + private)
+     *
+     * @return The list/set of permissions
+     */
+    public Set<String> getPermissions() {
+        Set<String> l = PermissionUtil.getAllPermissions(getGroup(), MooCache.getInstance().getGroupMap().values());
+        if(l == null) l.addAll(getPrivatePermissions());
+        return l;
+    }
+
     /*
     ===================
     SETTER
@@ -141,21 +205,53 @@ public class MooPlayer {
     /**
      * Sets the group of this player
      *
-     * @param group The group
+     * @param group The new group
      */
-    public void setGroup(Group group) {
+    public MooPlayer setGroup(Group group) {
         setGroup(group.getName());
         wrappedData.setRank(group.getRank());
 
-        // MooQueries
-        MooQueries.getInstance().modifyPlayerData(getUniqueId(), DbModifier.PLAYER_RANK, group.getRank());
+        return this;
     }
 
     private void setGroup(String groupName) {
         wrappedData.setGroup(groupName);
 
         // MooQueries
-        MooQueries.getInstance().modifyPlayerData(getUniqueId(), DbModifier.PLAYER_GROUP, groupName);
+        if(checkLaziness()) {
+            MooQueries.getInstance().modifyPlayerData(getUniqueId(), DbModifier.PLAYER_GROUP, groupName);
+        }
+    }
+
+    /**
+     * Sets the new server the player is currently online<br>
+     * <b>USE AT OWN RISK</b>
+     *
+     * @param newServerName The new server name
+     */
+    public MooPlayer setCurrentServer(String newServerName) {
+        wrappedData.setCurrentServer(newServerName);
+
+        // MooQueries
+        if(checkLaziness()) {
+            MooQueries.getInstance().modifyPlayerData(getUniqueId(), DbModifier.PLAYER_SERVER, newServerName);
+        }
+        return this;
+    }
+
+    /**
+     * Sets the coins of the player
+     *
+     * @param coins The coins
+     */
+    public MooPlayer setCoins(long coins) {
+        wrappedData.setCoins(coins);
+
+        // MooQueries
+        if(checkLaziness()) {
+            MooQueries.getInstance().modifyPlayerData(getUniqueId(), DbModifier.PLAYER_COINS, coins);
+        }
+        return this;
     }
 
 }

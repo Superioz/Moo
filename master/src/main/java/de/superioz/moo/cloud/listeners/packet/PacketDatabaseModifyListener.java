@@ -1,6 +1,5 @@
 package de.superioz.moo.cloud.listeners.packet;
 
-import de.superioz.moo.network.redis.MooCache;
 import de.superioz.moo.api.collection.MultiMap;
 import de.superioz.moo.api.database.DatabaseCollection;
 import de.superioz.moo.api.database.DatabaseModifyType;
@@ -13,6 +12,7 @@ import de.superioz.moo.api.database.query.DbQuery;
 import de.superioz.moo.api.database.query.MongoQuery;
 import de.superioz.moo.api.keyvalue.FinalValue;
 import de.superioz.moo.api.reaction.Reaction;
+import de.superioz.moo.api.redis.MooCache;
 import de.superioz.moo.api.utils.ReflectionUtil;
 import de.superioz.moo.api.utils.StringUtil;
 import de.superioz.moo.cloud.Cloud;
@@ -232,7 +232,7 @@ public class PacketDatabaseModifyListener implements PacketAdapter {
                 Object id = ReflectionUtil.safeCast(l.get(0));
                 Group group = ReflectionUtil.deserialize(l.get(1), Group.class);
 
-                MooCache.getInstance().getGroupMap().remove((String) id);
+                MooCache.getInstance().getGroupMap().remove((String)id);
                 MooCache.getInstance().getGroupMap().fastPut(group.getName(), group);
 
                 return true;

@@ -1,9 +1,12 @@
 package de.superioz.moo.network.server;
 
-import de.superioz.moo.network.redis.MooCache;
 import de.superioz.moo.api.common.MooServer;
 import de.superioz.moo.api.common.MooServerCluster;
+import de.superioz.moo.api.database.objects.PlayerData;
 import de.superioz.moo.api.database.objects.ServerPattern;
+import de.superioz.moo.api.redis.MooCache;
+import de.superioz.moo.network.common.MooPlayer;
+import de.superioz.moo.network.common.MooQueries;
 import de.superioz.moo.network.common.PacketMessenger;
 import de.superioz.moo.network.common.Response;
 import de.superioz.moo.network.packets.PacketServerRequest;
@@ -12,6 +15,7 @@ import de.superioz.moo.network.packets.PacketServerRequestShutdown;
 import java.net.InetSocketAddress;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import java.util.function.Consumer;
 
 /**
@@ -21,7 +25,6 @@ import java.util.function.Consumer;
  * @see MooCache
  * @see PacketMessenger
  */
-//TODO
 public final class MooProxy {
 
     public static final double UPPER_PLAYER_THRESHOLD = 7D / 10D;
@@ -94,6 +97,48 @@ public final class MooProxy {
 
     public MooServer getServer(String host, int port) {
         return getServer(new InetSocketAddress(host, port));
+    }
+
+    /*
+    =========================
+    PLAYERS
+    =========================
+     */
+
+    /**
+     * Gets the moo player from this unique id
+     *
+     * @param uuid The unique id
+     * @return The moo player
+     */
+    public MooPlayer getPlayer(UUID uuid) {
+        PlayerData data = MooCache.getInstance().getPlayerMap().get(uuid);
+
+        // if data is null get offline player
+        if(data == null) {
+            data = MooQueries.getInstance().getPlayerData(uuid);
+        }
+        return data == null ? null : new MooPlayer(data);
+    }
+
+    /**
+     * Gets the moo player from this name
+     *
+     * @param name The name of the player
+     * @return The moo player
+     */
+    public MooPlayer getPlayer(String name) {
+        PlayerData data = null;
+        for(PlayerData pd : MooCache.getInstance().getPlayerMap().readAllValues()) {
+            if(pd.getLastName().equals(name)) {
+                data = pd;
+                break;
+            }
+        }
+        if(data == null) {
+            data = MooQueries.getInstance().getPlayerData(name);
+        }
+        return data == null ? null : new MooPlayer(data);
     }
 
     /*

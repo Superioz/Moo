@@ -28,7 +28,7 @@
         </dependency>
         <dependency>
             <groupId>de.superioz</groupId>
-            <artifactId>netty</artifactId>
+            <artifactId>network</artifactId>
             <version>1.0</version>
         </dependency>
 

@@ -1,10 +1,10 @@
 package de.superioz.moo.api.modules;
 
-import de.superioz.moo.api.database.cache.MooCache;
-import de.superioz.moo.api.redis.RedisConnection;
 import de.superioz.moo.api.event.EventExecutor;
 import de.superioz.moo.api.events.RedisConnectionEvent;
 import de.superioz.moo.api.module.Module;
+import de.superioz.moo.api.redis.MooCache;
+import de.superioz.moo.api.redis.RedisConnection;
 import lombok.Getter;
 import org.redisson.config.Config;
 

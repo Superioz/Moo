@@ -1,4 +1,4 @@
-package de.superioz.moo.network.redis;
+package de.superioz.moo.api.redis;
 
 public enum RedisConfig {
 

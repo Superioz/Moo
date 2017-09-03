@@ -1,11 +1,10 @@
-package de.superioz.moo.network.redis;
+package de.superioz.moo.api.redis;
 
 import de.superioz.moo.api.common.MooServer;
 import de.superioz.moo.api.config.NetworkConfigType;
 import de.superioz.moo.api.database.objects.Group;
 import de.superioz.moo.api.database.objects.PlayerData;
 import de.superioz.moo.api.database.objects.ServerPattern;
-import de.superioz.moo.api.redis.RedisConnection;
 import lombok.Getter;
 import org.redisson.api.*;
 

@@ -1,6 +1,6 @@
 package de.superioz.moo.proxy;
 
-import de.superioz.moo.network.redis.MooCache;
+import de.superioz.moo.api.redis.MooCache;
 import de.superioz.moo.api.common.MooServer;
 import de.superioz.moo.api.common.PlayerProfile;
 import de.superioz.moo.api.config.NetworkConfigType;

@@ -1,7 +1,7 @@
 package de.superioz.moo.cloud;
 
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
-import de.superioz.moo.network.redis.MooCache;
+import de.superioz.moo.api.redis.MooCache;
 import de.superioz.moo.api.config.NetworkConfig;
 import de.superioz.moo.api.console.CommandTerminal;
 import de.superioz.moo.api.database.DatabaseCollection;

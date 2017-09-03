@@ -1,6 +1,6 @@
 package de.superioz.moo.daemon;
 
-import de.superioz.moo.network.redis.MooCache;
+import de.superioz.moo.api.redis.MooCache;
 import de.superioz.moo.api.console.CommandTerminal;
 import de.superioz.moo.api.event.EventHandler;
 import de.superioz.moo.api.event.EventListener;

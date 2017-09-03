@@ -118,8 +118,7 @@ public class BanCommand {
         ResponseStatus status = MooQueries.getInstance().ban(
                 context.isConsole() ? null : ((ProxiedPlayer) context.getCommandSender()).getUniqueId(),
                 target, banSubType, reason, duration,
-                LanguageManager.get("ban-message-temp"),
-                LanguageManager.get("ban-message-perm")
+                LanguageManager.get("ban-message-temp"), LanguageManager.get("ban-message-perm")
         );
         context.invalidArgument(status == ResponseStatus.NOT_FOUND, LanguageManager.get("error-player-doesnt-exist", target));
         context.invalidArgument(status == ResponseStatus.FORBIDDEN, LanguageManager.get("ban-not-allowed-to", target));

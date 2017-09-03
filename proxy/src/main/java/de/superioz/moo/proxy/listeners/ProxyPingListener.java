@@ -1,6 +1,6 @@
 package de.superioz.moo.proxy.listeners;
 
-import de.superioz.moo.network.redis.MooCache;
+import de.superioz.moo.api.redis.MooCache;
 import de.superioz.moo.api.io.LanguageManager;
 import de.superioz.moo.api.config.NetworkConfigType;
 import de.superioz.moo.minecraft.util.ChatUtil;

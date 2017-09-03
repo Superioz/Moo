@@ -1,12 +1,12 @@
 package de.superioz.moo.api.config;
 
 import com.mongodb.client.model.Filters;
-import de.superioz.moo.api.database.cache.MooCache;
 import de.superioz.moo.api.common.punishment.PunishmentManager;
 import de.superioz.moo.api.database.DatabaseConnection;
 import de.superioz.moo.api.database.DatabaseType;
 import de.superioz.moo.api.database.DbModifier;
 import de.superioz.moo.api.database.query.DbQuery;
+import de.superioz.moo.api.redis.MooCache;
 import de.superioz.moo.api.utils.ReflectionUtil;
 import org.bson.Document;
 

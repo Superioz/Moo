@@ -1,16 +1,12 @@
 package de.superioz.moo.cloud.listeners.player;
 
-import de.superioz.moo.network.redis.MooCache;
-import de.superioz.moo.api.database.DatabaseType;
-import de.superioz.moo.api.database.DbModifier;
 import de.superioz.moo.api.database.objects.PlayerData;
-import de.superioz.moo.api.database.query.DbQueryUnbaked;
 import de.superioz.moo.api.event.EventHandler;
 import de.superioz.moo.api.event.EventListener;
 import de.superioz.moo.api.event.EventPriority;
+import de.superioz.moo.api.redis.MooCache;
 import de.superioz.moo.cloud.Cloud;
 import de.superioz.moo.cloud.events.MooPlayerConnectedServerEvent;
-import de.superioz.moo.network.common.Queries;
 import de.superioz.moo.network.common.ResponseStatus;
 import de.superioz.moo.network.packets.PacketPlayerState;
 
@@ -35,13 +31,9 @@ public class MooPlayerConnectedServerListener implements EventListener {
         player.setCurrentServer(packet.meta);
         packet.respond(ResponseStatus.OK);
 
-        // update Moo proxy
+        // update Moo proxy and cache
         Cloud.getInstance().getNetworkProxy().getPlayerMap().put(player.getUuid(), player);
         Cloud.getInstance().getNetworkProxy().getPlayerNameMap().put(player.getLastName(), player);
-
-        // update data of player in database and cache
-        Queries.modify(DatabaseType.PLAYER, data.getUuid(),
-                DbQueryUnbaked.newInstance(DbModifier.PLAYER_SERVER, packet.meta));
         MooCache.getInstance().getPlayerMap().fastPutAsync(data.getUuid(), player);
     }
 

@@ -1,6 +1,6 @@
 package de.superioz.moo.proxy.listeners;
 
-import de.superioz.moo.network.redis.MooCache;
+import de.superioz.moo.api.redis.MooCache;
 import de.superioz.moo.api.database.DatabaseType;
 import de.superioz.moo.api.database.objects.PlayerData;
 import de.superioz.moo.api.util.Validation;
