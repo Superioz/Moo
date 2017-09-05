@@ -261,18 +261,12 @@ public class CommandRegistry extends Registry<String, CommandInstance> {
             // list all methods that are tabcompletable
             for(Object o : objects) {
                 for(Method m : o.getClass().getDeclaredMethods()) {
-                    if(checkTabCompleteMethod(m)) {
-                        for(CommandInstance cmd : commands.values()) {
-                            if(cmd.getCommandType() == CommandType.ROOT) {
+                    for(CommandInstance cmd : commands.values()) {
+                        if(cmd.getCommandType() == CommandType.ROOT) {
+                            if(checkTabCompleteMethod(m))
                                 cmd.addTabCompletion(o, m);
-                            }
-                        }
-                    }
-                    else if(checkArgumentHelperMethod(m)) {
-                        for(CommandInstance cmd : commands.values()) {
-                            if(cmd.getCommandType() == CommandType.ROOT) {
+                            else if(checkArgumentHelperMethod(m))
                                 cmd.addArgumentHelper(o, m);
-                            }
                         }
                     }
                 }

@@ -18,6 +18,7 @@ import de.superioz.moo.api.utils.TimeUtil;
 import de.superioz.moo.network.common.MooQueries;
 import de.superioz.moo.network.common.ResponseStatus;
 import de.superioz.moo.proxy.command.BungeeCommandContext;
+import de.superioz.moo.proxy.command.BungeeParamSet;
 import de.superioz.moo.proxy.util.BungeeTeamChat;
 import javafx.util.Pair;
 import net.md_5.bungee.api.CommandSender;
@@ -61,7 +62,7 @@ public class BanCommand {
     }
 
     @Command(label = BAN_LABEL, usage = "<player> <reason>")
-    public void onBanCommand(BungeeCommandContext context, ParamSet args) {
+    public void onBanCommand(BungeeCommandContext context, BungeeParamSet args) {
         CommandSender sender = context.getCommandSender();
         String playerName = args.get(0);
         context.invalidArgument(!Validation.PLAYERNAME.matches(playerName), "error-invalid-player-name", playerName);

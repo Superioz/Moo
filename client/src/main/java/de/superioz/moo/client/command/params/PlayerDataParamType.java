@@ -1,4 +1,4 @@
-package de.superioz.moo.client.paramtypes;
+package de.superioz.moo.client.command.params;
 
 import de.superioz.moo.api.command.param.ParamType;
 import de.superioz.moo.api.database.objects.PlayerData;

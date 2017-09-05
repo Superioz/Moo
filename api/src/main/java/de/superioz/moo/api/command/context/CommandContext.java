@@ -178,6 +178,10 @@ public abstract class CommandContext<T> {
         invalidArgument(condition, false, finalMessage);
     }
 
+    public void invalidArgument(Object value, String msg, Object... replacements) {
+        invalidArgument(value == null, msg, replacements);
+    }
+
     /**
      * Executes the argument helper with current argument and given params
      *
