@@ -35,7 +35,7 @@ public class MaintenanceCommand {
     @Command(label = TOGGLE_COMMAND, parent = LABEL)
     public void onToggleCommand(BungeeCommandContext context, ParamSet args) {
         // toggles the maintenance state
-        boolean maintenance = (boolean) MooCache.getInstance().getConfigEntry(NetworkConfigType.MAINTENANCE);
+        boolean maintenance = MooCache.getInstance().getConfigEntry(NetworkConfigType.MAINTENANCE);
 
         context.sendMessage(LanguageManager.get("maintenance-toggle-load"));
         ResponseStatus status = Moo.getInstance().config(NetworkConfigType.MAINTENANCE, !maintenance + "");

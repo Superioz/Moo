@@ -25,8 +25,10 @@ import java.util.Collections;
 @RunAsynchronous
 public class DatabaseModifyCommand {
 
+    private static final String DBMODIFY_LABEL = "dbmodify";
+
     @ArgumentHelp
-    public void argumentHelp(ArgumentHelper helper) {
+    public void onArgumentHelp(ArgumentHelper helper) {
         helper.react(0, Collections.singletonList(
                 LanguageManager.get("available-types",
                         String.join(", ", StringUtil.getStringList(DatabaseType.values(),
@@ -65,13 +67,12 @@ public class DatabaseModifyCommand {
     }
 
     @TabCompletion
-    public void tabComplete(TabCompletor completor) {
+    public void onTabComplete(TabCompletor completor) {
         // .
         completor.react(1, StringUtil.getStringList(DatabaseType.values(), type -> type.name().toLowerCase()));
     }
 
-    @Command(label = "dbmodify", usage = "<database> <filter> <updates>",
-            flags = {"l"})
+    @Command(label = DBMODIFY_LABEL, usage = "<database> <filter> <updates>", flags = {"l"})
     public void dbmodify(CommandContext context, ParamSet set) {
         Queries queries = Queries.newInstance();
 

@@ -24,7 +24,7 @@ public class PunishmentManager {
     /**
      * the map of ban types and the child reasons from the config
      */
-    private MultiMap<BanCategory, BanSubType> banTypeMap = new MultiMap<>();
+    private MultiMap<BanCategory, BanReason> banTypeMap = new MultiMap<>();
 
     /**
      * Initialises the {@link #banTypeMap} by using the given strings (Most likely are they from the cloud config)
@@ -49,10 +49,10 @@ public class PunishmentManager {
 
             // loop through ban reasons
             banSubTypes.forEach(s -> {
-                BanSubType reason = new BanSubType(s);
+                BanReason reason = new BanReason(s);
                 reason.init(banTypeMap);
-                if(reason.getBanSubTypeStr() != null && !banTypeMap.containsValue(reason)) {
-                    banTypeMap.add(reason.getBanSubType(), reason);
+                if(reason.getBanReasonStr() != null && !banTypeMap.containsValue(reason)) {
+                    banTypeMap.add(reason.getBanCategory(), reason);
                 }
             });
         }
@@ -98,11 +98,11 @@ public class PunishmentManager {
      * @param s The string
      * @return The ban reason object
      */
-    public BanSubType getBanSubType(String s) {
+    public BanReason getBanSubType(String s) {
         if(s == null) return null;
 
-        for(Set<BanSubType> reasons : banTypeMap.values()) {
-            for(BanSubType reason : reasons) {
+        for(Set<BanReason> reasons : banTypeMap.values()) {
+            for(BanReason reason : reasons) {
                 if(reason.getName().equalsIgnoreCase(s)) {
                     return reason;
                 }
@@ -111,8 +111,8 @@ public class PunishmentManager {
         return null;
     }
 
-    public List<BanSubType> getBanSubTypes() {
-        List<BanSubType> reasons = new ArrayList<>();
+    public List<BanReason> getBanSubTypes() {
+        List<BanReason> reasons = new ArrayList<>();
         banTypeMap.values().forEach(reasons::addAll);
         return reasons;
     }

@@ -6,6 +6,8 @@ import de.superioz.moo.api.database.objects.Group;
 import de.superioz.moo.api.database.objects.PlayerData;
 import de.superioz.moo.api.redis.MooCache;
 import de.superioz.moo.api.utils.PermissionUtil;
+import de.superioz.moo.network.packets.PacketPlayerKick;
+import de.superioz.moo.network.server.MooProxy;
 
 import java.util.List;
 import java.util.Set;
@@ -28,6 +30,9 @@ public class MooPlayer {
     private int lazy = 0;
 
     public MooPlayer(PlayerData data) {
+        if(data == null) {
+            data = PlayerData.NON_EXISTENT;
+        }
         this.wrappedData = data;
     }
 
@@ -252,6 +257,50 @@ public class MooPlayer {
             MooQueries.getInstance().modifyPlayerData(getUniqueId(), DbModifier.PLAYER_COINS, coins);
         }
         return this;
+    }
+
+    /*
+    ===================
+    OTHERS
+    ===================
+     */
+
+    /**
+     * Checks if the player exists
+     *
+     * @return The result
+     */
+    public boolean exists() {
+        return wrappedData.getUuid() != null;
+    }
+
+    /**
+     * Checks if the player is online
+     *
+     * @return The result
+     */
+    public boolean isOnline() {
+        return exists() && wrappedData.getJoined() != 0;
+    }
+
+    /**
+     * Kicks a player
+     *
+     * @param from    Who kicks the player?
+     * @param message The message
+     * @return The status
+     */
+    public ResponseStatus kickPlayer(UUID from, String message) {
+        // check if the executor is allowed to do that
+        if(from != null) {
+            MooPlayer executor = MooProxy.getInstance().getPlayer(from);
+
+            if(executor.exists() && (executor.getGroup().getRank() < getGroup().getRank())) {
+                return ResponseStatus.FORBIDDEN;
+            }
+        }
+
+        return PacketMessenger.transferToResponse(new PacketPlayerKick(from, getUniqueId(), message)).getStatus();
     }
 
 }

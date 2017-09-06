@@ -1,11 +1,12 @@
 package de.superioz.moo.network.packets;
 
 import de.superioz.moo.network.packet.AbstractPacket;
+import de.superioz.moo.network.packet.PacketBuffer;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
-import de.superioz.moo.network.packet.PacketBuffer;
 
 import java.io.IOException;
+import java.util.UUID;
 
 /**
  * This packet is for forcing the cloud to kick a player
@@ -14,21 +15,21 @@ import java.io.IOException;
 @AllArgsConstructor
 public class PacketPlayerKick extends AbstractPacket {
 
-    public String from;
-    public String id;
+    public UUID executor;
+    public UUID target;
     public String message;
 
     @Override
     public void read(PacketBuffer buf) throws IOException {
-        this.from = buf.readString();
-        this.id = buf.readString();
+        this.executor = buf.readUuid();
+        this.target = buf.readUuid();
         this.message = buf.readString();
     }
 
     @Override
     public void write(PacketBuffer buf) throws IOException {
-        buf.writeString(from);
-        buf.writeString(id);
+        buf.writeUuid(executor);
+        buf.writeUuid(target);
         buf.writeString(message);
     }
 }

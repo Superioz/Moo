@@ -183,17 +183,6 @@ public final class MooQueries {
     }
 
     /**
-     * Kicks a player
-     *
-     * @param id      The id
-     * @param message The message
-     * @return The respond
-     */
-    public ResponseStatus kickPlayer(PlayerData from, String id, String message) {
-        return PacketMessenger.transferToResponse(new PacketPlayerKick(from == null ? "" : from.toString(), id, message)).getStatus();
-    }
-
-    /**
      * Simply sets the targets group to given group
      *
      * @param target   The target

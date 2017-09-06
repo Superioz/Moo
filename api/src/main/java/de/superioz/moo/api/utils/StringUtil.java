@@ -49,6 +49,17 @@ public final class StringUtil {
     }
 
     /**
+     * Cuts of the string at index if the string is longer than index
+     *
+     * @param s     The string to be cut off
+     * @param index The index
+     * @return The result string (shortened or not)
+     */
+    public static String cutOff(String s, int index) {
+        return s.length() > index ? s.substring(0, index) : s;
+    }
+
+    /**
      * Gets a map from splitting given string.<br>
      * E.g.: String = "name=Tobias" then would the map return the key "name" the operation "=" and the value "Tobias"
      *

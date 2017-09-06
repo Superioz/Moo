@@ -17,6 +17,8 @@ import java.util.UUID;
 @Setter
 public class PlayerData extends SimpleSerializable {
 
+    public static final PlayerData NON_EXISTENT = new PlayerData();
+
     /**
      * The uuid of the player
      */

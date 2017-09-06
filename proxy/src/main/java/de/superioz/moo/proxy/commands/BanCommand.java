@@ -8,7 +8,7 @@ import de.superioz.moo.api.command.tabcomplete.TabCompletion;
 import de.superioz.moo.api.command.tabcomplete.TabCompletor;
 import de.superioz.moo.api.common.RunAsynchronous;
 import de.superioz.moo.api.common.punishment.BanCategory;
-import de.superioz.moo.api.common.punishment.BanSubType;
+import de.superioz.moo.api.common.punishment.BanReason;
 import de.superioz.moo.api.common.punishment.BanType;
 import de.superioz.moo.api.common.punishment.PunishmentManager;
 import de.superioz.moo.api.io.LanguageManager;
@@ -44,7 +44,7 @@ public class BanCommand {
                         StringUtil.getListToString(PunishmentManager.getInstance().getBanSubTypes()
                                         .stream().filter(banReason -> banReason.getType() == BanType.GLOBAL)
                                         .collect(Collectors.toList()),
-                                ", ", BanSubType::getName))
+                                ", ", BanReason::getName))
         ));
 
         // time unit
@@ -62,34 +62,36 @@ public class BanCommand {
     }
 
     @Command(label = BAN_LABEL, usage = "<player> <reason>")
-    public void onBanCommand(BungeeCommandContext context, BungeeParamSet args) {
+    public void ban(BungeeCommandContext context, BungeeParamSet args) {
         CommandSender sender = context.getCommandSender();
         String playerName = args.get(0);
         context.invalidArgument(!Validation.PLAYERNAME.matches(playerName), "error-invalid-player-name", playerName);
         context.invalidArgument(playerName.equalsIgnoreCase(sender.getName()), "ban-cannot-ban-yourself");
 
-        // list the ban reason
+        // get the ban reason
         // if null = rip (or invalid ban reason)
-        BanSubType banSubType = PunishmentManager.getInstance().getBanSubType(args.get(1));
-        context.invalidArgument(banSubType == null || banSubType.getType() == BanType.CHAT, "ban-invalid-reason", args.get(1));
+        String reason = args.get(1);
+        BanReason banReason = PunishmentManager.getInstance().getBanSubType(reason);
+        context.invalidArgument(banReason == null || banReason.getType() == BanType.CHAT, "ban-invalid-reason", reason);
 
         // executes the ban
-        executeBan(context, playerName, banSubType.getBanSubType(), banSubType.getName(), 0L);
+        executeBan(context, playerName, banReason.getBanCategory(), banReason.getName(), 0L);
     }
 
     @Command(label = TEMPBAN_LABEL, usage = "<player> <reason> <time>")
-    public void onTempbanCommand(BungeeCommandContext context, ParamSet args) {
+    public void tempban(BungeeCommandContext context, ParamSet args) {
         CommandSender sender = context.getCommandSender();
         String playerName = args.get(0);
         context.invalidArgument(!Validation.PLAYERNAME.matches(playerName), "error-invalid-player-name", playerName);
         context.invalidArgument(playerName.equalsIgnoreCase(sender.getName()), "ban-cannot-ban-yourself");
 
-        // list the ban reason
+        // get the ban reason
         // if null = rip (or invalid ban reason)
-        BanSubType banSubType = PunishmentManager.getInstance().getBanSubType(args.get(1));
-        context.invalidArgument(banSubType == null || banSubType.getType() == BanType.CHAT, "ban-invalid-reason", args.get(1));
+        String reason = args.get(1);
+        BanReason banReason = PunishmentManager.getInstance().getBanSubType(reason);
+        context.invalidArgument(banReason == null || banReason.getType() == BanType.CHAT, "ban-invalid-reason", reason);
 
-        // list duration
+        // get duration
         List<String> rawDurations = args.getRange(2);
         long duration = 0L;
         for(String rawDuration : rawDurations) {
@@ -102,7 +104,7 @@ public class BanCommand {
         }
 
         // executes the ban
-        executeBan(context, playerName, banSubType.getBanSubType(), banSubType.getName(), duration);
+        executeBan(context, playerName, banReason.getBanCategory(), banReason.getName(), duration);
     }
 
     /**

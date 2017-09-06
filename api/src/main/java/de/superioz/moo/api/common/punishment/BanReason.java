@@ -10,34 +10,34 @@ import java.util.regex.Pattern;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class BanSubType {
+public class BanReason {
 
     public static final Pattern REGEX = Pattern.compile("[a-z\\-]*(:[a-z\\-]*)");
 
     private String name;
-    private String banSubTypeStr;
-    private BanCategory banSubType;
+    private String banReasonStr;
+    private BanCategory banCategory;
 
-    public BanSubType(String s) {
+    public BanReason(String s) {
         if(!REGEX.matcher(s).matches()) return;
 
         String[] split = s.split(":");
         this.name = split[0];
-        this.banSubTypeStr = split[1];
+        this.banReasonStr = split[1];
     }
 
     /**
      * Initialises the ban reason by checking for the ban sub type
      * inside the map and putting this inside there
      *
-     * @param banTypes The bantypes map
+     * @param banReasons The bantypes map
      */
-    public void init(MultiMap<BanCategory, BanSubType> banTypes) {
-        if(banSubTypeStr == null) return;
-        for(BanCategory type : banTypes.keySet()) {
-            if(banSubTypeStr.equalsIgnoreCase(type.getName())) {
-                this.banSubType = type;
-                banTypes.add(type, this);
+    public void init(MultiMap<BanCategory, BanReason> banReasons) {
+        if(banReasonStr == null) return;
+        for(BanCategory category : banReasons.keySet()) {
+            if(banReasonStr.equalsIgnoreCase(category.getName())) {
+                this.banCategory = category;
+                banReasons.add(category, this);
                 break;
             }
         }
@@ -49,7 +49,7 @@ public class BanSubType {
      * @return The type object
      */
     public BanType getType() {
-        return getBanSubType().getBanType();
+        return getBanCategory().getBanType();
     }
 
 }
