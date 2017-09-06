@@ -15,6 +15,7 @@ import de.superioz.moo.api.io.LanguageManager;
 import de.superioz.moo.api.util.Validation;
 import de.superioz.moo.api.utils.StringUtil;
 import de.superioz.moo.api.utils.TimeUtil;
+import de.superioz.moo.network.common.MooPlayer;
 import de.superioz.moo.network.common.MooQueries;
 import de.superioz.moo.network.common.ResponseStatus;
 import de.superioz.moo.proxy.command.BungeeCommandContext;
@@ -65,6 +66,11 @@ public class BanCommand {
     public void ban(BungeeCommandContext context, BungeeParamSet args) {
         CommandSender sender = context.getCommandSender();
         String playerName = args.get(0);
+
+        // get player
+        MooPlayer player = args.getMooPlayer(playerName);
+        context.invalidArgument(!player.exists(), "error-player-doesnt-exist");
+
         context.invalidArgument(!Validation.PLAYERNAME.matches(playerName), "error-invalid-player-name", playerName);
         context.invalidArgument(playerName.equalsIgnoreCase(sender.getName()), "ban-cannot-ban-yourself");
 
@@ -117,19 +123,19 @@ public class BanCommand {
      * @param duration   The duration (or null for automatic)
      */
     private void executeBan(BungeeCommandContext context, String target, BanCategory banSubType, String reason, Long duration) {
-        context.sendMessage(LanguageManager.get("ban-load"));
+        context.sendMessage("ban-load");
         ResponseStatus status = MooQueries.getInstance().ban(
                 context.isConsole() ? null : ((ProxiedPlayer) context.getCommandSender()).getUniqueId(),
                 target, banSubType, reason, duration,
                 LanguageManager.get("ban-message-temp"), LanguageManager.get("ban-message-perm")
         );
-        context.invalidArgument(status == ResponseStatus.NOT_FOUND, LanguageManager.get("error-player-doesnt-exist", target));
-        context.invalidArgument(status == ResponseStatus.FORBIDDEN, LanguageManager.get("ban-not-allowed-to", target));
-        context.invalidArgument(status == ResponseStatus.CONFLICT, LanguageManager.get("ban-player-already-banned", target));
+        context.invalidArgument(status == ResponseStatus.NOT_FOUND, "error-player-doesnt-exist", target);
+        context.invalidArgument(status == ResponseStatus.FORBIDDEN, "ban-not-allowed-to", target);
+        context.invalidArgument(status == ResponseStatus.CONFLICT, "ban-player-already-banned", target);
 
         // send teamchat message or only direct to him
         if(!BungeeTeamChat.getInstance().canTeamchat(context.getCommandSender())) {
-            context.sendMessage(LanguageManager.get("ban-complete", status));
+            context.sendMessage("ban-complete", status);
             return;
         }
 

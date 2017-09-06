@@ -107,22 +107,16 @@ public abstract class CommandContext<T> {
     /**
      * Sends a message to all targets or to the commandSender
      *
-     * @param msg     The msg
-     * @param targets The targets
+     * @param msg          The msg
+     * @param replacements The replacements for the message
      */
-    public void sendMessage(String msg, T... targets) {
-        if(targets == null || targets.length == 0) {
-            message(msg, commandSender);
-        }
-        else {
-            for(T target : targets) {
-                message(msg, target);
-            }
-        }
+    public void sendMessage(String msg, Object... replacements) {
+        String fullMessage = LanguageManager.contains(msg) ? LanguageManager.get(msg, replacements) : msg;
+        message(fullMessage, commandSender);
     }
 
-    public void sendMessage(List<String> messages, T... targets) {
-        messages.forEach(s -> sendMessage(s, targets));
+    public void sendMessage(List<String> messages) {
+        messages.forEach(s -> sendMessage(s));
     }
 
     /**

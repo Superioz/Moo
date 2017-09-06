@@ -100,9 +100,9 @@ public class DatabaseModifyCommand {
         queries.update(query);
 
         // execute modification
-        context.sendMessage(LanguageManager.get("dbmodify-load"), queries.getDatabase(), queries.getFilter().getSize(), queries.getQuery().getSize());
+        context.sendMessage("dbmodify-load", queries.getDatabase(), queries.getFilter().getSize(), queries.getQuery().getSize());
         ResponseStatus status = queries.execute().getStatus();
-        context.sendMessage(LanguageManager.get("dbmodify-complete", status));
+        context.sendMessage("dbmodify-complete", status);
     }
 
 }

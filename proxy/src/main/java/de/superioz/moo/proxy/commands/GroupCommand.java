@@ -123,23 +123,23 @@ public class GroupCommand {
     public void modify(BungeeCommandContext context, ParamSet args) {
         String groupName = args.get(0);
         Group group = args.get(0, Group.class);
-        context.invalidArgument(group == null, LanguageManager.get("group-doesnt-exist", groupName));
+        context.invalidArgument(group == null, "group-doesnt-exist", groupName);
 
         // list updates (for modification)
         String rawParam = args.get(1);
         DbQuery updates = DbQuery.fromParameter(Group.class, rawParam);
 
         // execute modification
-        context.sendMessage(LanguageManager.get("group-modify-load", groupName));
+        context.sendMessage("group-modify-load", groupName);
         ResponseStatus status = MooQueries.getInstance().modifyGroup(groupName, updates);
-        context.sendMessage(LanguageManager.get("group-modify-complete", status));
+        context.sendMessage("group-modify-complete", status);
     }
 
     @Command(label = CREATE_COMMAND, parent = LABEL, usage = "<name> [updates]")
     public void create(BungeeCommandContext context, ParamSet args) {
         String groupName = args.get(0);
         Group group = args.get(0, Group.class);
-        context.invalidArgument(group != null, LanguageManager.get("group-already-exists", groupName));
+        context.invalidArgument(group != null, "group-already-exists", groupName);
 
         // create new group object
         // apply updates (optional)
@@ -151,21 +151,21 @@ public class GroupCommand {
         }
 
         // execute creation
-        context.sendMessage(LanguageManager.get("group-create-load", groupName));
+        context.sendMessage("group-create-load", groupName);
         ResponseStatus status = MooQueries.getInstance().createGroup(group);
-        context.sendMessage(LanguageManager.get("group-create-complete", status));
+        context.sendMessage("group-create-complete", status);
     }
 
     @Command(label = DELETE_COMMAND, parent = LABEL, usage = "<name>")
     public void delete(BungeeCommandContext context, ParamSet args) {
         String groupName = args.get(0);
         Group group = args.get(0, Group.class);
-        context.invalidArgument(group == null, LanguageManager.get("group-doesnt-exist", groupName));
+        context.invalidArgument(group == null, "group-doesnt-exist", groupName);
 
         // execute deletion
-        context.sendMessage(LanguageManager.get("group-delete-load", groupName));
+        context.sendMessage("group-delete-load", groupName);
         ResponseStatus status = MooQueries.getInstance().deleteGroup(groupName);
-        context.sendMessage(LanguageManager.get("group-delete-complete", status));
+        context.sendMessage("group-delete-complete", status);
     }
 
 }
