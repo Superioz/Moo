@@ -12,7 +12,7 @@ This project was originally written for a minecraft network, but after it went d
 
 # Getting started
 1. Download the .sh files from the [/scripts](https://github.com/Superioz/MooProject/tree/master/.github/scripts) folder (`Raw` -> `Rightlick` -> `Save site`) and save them inside a folder where you want the program to be installed (e.g.: `/home/minecraft/`).  
-2. Run **install_requirements.sh** to install Redis and MongoDB (you can skip this step if you've already installed both).
+2. Run **install_requirements.sh** to install Redis and MongoDB (you can skip this step if you've already installed them or if you want to install them yourself).
 3. Run **setup_cloud.sh** to create the `/cloud` folder and to download the files from [Jenkins](http://ci.superioz.de:8080/job/MooProject/).
 4. Put the **start_cloud.sh** into the `/cloud` folder and run the script to start the cloud once - It'll fail but now you're able to configure the MongoDB connection inside the `/cloud/configuration/config.yml`.  
 It could now look like this:
