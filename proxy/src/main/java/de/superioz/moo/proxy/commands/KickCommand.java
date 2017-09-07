@@ -44,8 +44,8 @@ public class KickCommand {
         String playerName = args.get(0);
 
         // get player
-        MooPlayer player = MooProxy.getInstance().getPlayer(playerName);
         context.invalidArgument(playerName.equalsIgnoreCase(sender.getName()), "kick-cannot-kick-yourself");
+        MooPlayer player = MooProxy.getInstance().getPlayer(playerName);
         context.invalidArgument(!player.isOnline(), "error-player-doesnt-exist", playerName);
 
         // gets the reason for the kick
@@ -53,7 +53,7 @@ public class KickCommand {
 
         // kicks the player
         context.sendMessage("kick-player-load", playerName);
-        ResponseStatus status = player.kickPlayer(executor, LanguageManager.get("kick-player", reason));
+        ResponseStatus status = player.kick(executor, LanguageManager.get("kick-player", reason));
         context.invalidArgument(status.isNok(), "kick-player-complete-failure", status);
 
         // send either directly or teamchat

@@ -1,11 +1,15 @@
 package de.superioz.moo.network.common;
 
 import de.superioz.moo.api.common.MooServer;
+import de.superioz.moo.api.common.punishment.BanReason;
 import de.superioz.moo.api.database.DbModifier;
+import de.superioz.moo.api.database.objects.Ban;
 import de.superioz.moo.api.database.objects.Group;
 import de.superioz.moo.api.database.objects.PlayerData;
+import de.superioz.moo.api.io.LanguageManager;
 import de.superioz.moo.api.redis.MooCache;
 import de.superioz.moo.api.utils.PermissionUtil;
+import de.superioz.moo.network.packets.PacketPlayerBan;
 import de.superioz.moo.network.packets.PacketPlayerKick;
 import de.superioz.moo.network.server.MooProxy;
 
@@ -284,13 +288,31 @@ public class MooPlayer {
     }
 
     /**
+     * Checks if the player is banned atm
+     *
+     * @return The result
+     */
+    public boolean isBanned() {
+        return getCurrentBan() != null;
+    }
+
+    /**
+     * Gets the current ban of this player (null = not banned)
+     *
+     * @return The ban or null
+     */
+    public Ban getCurrentBan() {
+        return MooQueries.getInstance().getBan(getUniqueId());
+    }
+
+    /**
      * Kicks a player
      *
      * @param from    Who kicks the player?
      * @param message The message
      * @return The status
      */
-    public ResponseStatus kickPlayer(UUID from, String message) {
+    public ResponseStatus kick(UUID from, String message) {
         // check if the executor is allowed to do that
         if(from != null) {
             MooPlayer executor = MooProxy.getInstance().getPlayer(from);
@@ -301,6 +323,39 @@ public class MooPlayer {
         }
 
         return PacketMessenger.transferToResponse(new PacketPlayerKick(from, getUniqueId(), message)).getStatus();
+    }
+
+    /**
+     * Bans the player
+     *
+     * @param from      The executor of the ban (null = console)
+     * @param banReason The reason for the ban
+     * @param duration  The duration of the ban
+     * @return The status
+     */
+    public ResponseStatus ban(UUID from, BanReason banReason, long duration) {
+        // check if the player is already banned
+        if(isBanned()) {
+            return ResponseStatus.CONFLICT;
+        }
+
+        // check if the executor is allowed to do that
+        if(from != null) {
+            MooPlayer executor = MooProxy.getInstance().getPlayer(from);
+
+            if(executor.exists() && (executor.getGroup().getRank() < getGroup().getRank())) {
+                return ResponseStatus.FORBIDDEN;
+            }
+        }
+
+        return PacketMessenger.transferToResponse(
+                new PacketPlayerBan(from, getName(), banReason.getBanCategory(), banReason.getName(), duration,
+                        LanguageManager.get("ban-message-temp"), LanguageManager.get("ban-message-perm"))
+        ).getStatus();
+    }
+
+    public ResponseStatus ban(UUID from, BanReason banReason) {
+        return ban(from, banReason, 0L);
     }
 
 }

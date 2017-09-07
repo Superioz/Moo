@@ -3,20 +3,16 @@ package de.superioz.moo.proxy.commands;
 import de.superioz.moo.api.command.Command;
 import de.superioz.moo.api.command.help.ArgumentHelp;
 import de.superioz.moo.api.command.help.ArgumentHelper;
-import de.superioz.moo.api.command.param.ParamSet;
 import de.superioz.moo.api.command.tabcomplete.TabCompletion;
 import de.superioz.moo.api.command.tabcomplete.TabCompletor;
 import de.superioz.moo.api.common.RunAsynchronous;
-import de.superioz.moo.api.common.punishment.BanCategory;
 import de.superioz.moo.api.common.punishment.BanReason;
 import de.superioz.moo.api.common.punishment.BanType;
 import de.superioz.moo.api.common.punishment.PunishmentManager;
 import de.superioz.moo.api.io.LanguageManager;
-import de.superioz.moo.api.util.Validation;
 import de.superioz.moo.api.utils.StringUtil;
 import de.superioz.moo.api.utils.TimeUtil;
 import de.superioz.moo.network.common.MooPlayer;
-import de.superioz.moo.network.common.MooQueries;
 import de.superioz.moo.network.common.ResponseStatus;
 import de.superioz.moo.proxy.command.BungeeCommandContext;
 import de.superioz.moo.proxy.command.BungeeParamSet;
@@ -29,6 +25,7 @@ import net.md_5.bungee.api.connection.ProxiedPlayer;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
@@ -65,14 +62,13 @@ public class BanCommand {
     @Command(label = BAN_LABEL, usage = "<player> <reason>")
     public void ban(BungeeCommandContext context, BungeeParamSet args) {
         CommandSender sender = context.getCommandSender();
+        UUID executor = context.isConsole() ? null : ((ProxiedPlayer) context.getCommandSender()).getUniqueId();
         String playerName = args.get(0);
 
         // get player
-        MooPlayer player = args.getMooPlayer(playerName);
-        context.invalidArgument(!player.exists(), "error-player-doesnt-exist");
-
-        context.invalidArgument(!Validation.PLAYERNAME.matches(playerName), "error-invalid-player-name", playerName);
         context.invalidArgument(playerName.equalsIgnoreCase(sender.getName()), "ban-cannot-ban-yourself");
+        MooPlayer player = args.getMooPlayer(playerName);
+        context.invalidArgument(!player.exists(), "error-player-doesnt-exist", playerName);
 
         // get the ban reason
         // if null = rip (or invalid ban reason)
@@ -81,15 +77,20 @@ public class BanCommand {
         context.invalidArgument(banReason == null || banReason.getType() == BanType.CHAT, "ban-invalid-reason", reason);
 
         // executes the ban
-        executeBan(context, playerName, banReason.getBanCategory(), banReason.getName(), 0L);
+        context.sendMessage("ban-load");
+        reactStatus(context, player.ban(executor, banReason), playerName, banReason, 0L);
     }
 
     @Command(label = TEMPBAN_LABEL, usage = "<player> <reason> <time>")
-    public void tempban(BungeeCommandContext context, ParamSet args) {
+    public void tempban(BungeeCommandContext context, BungeeParamSet args) {
         CommandSender sender = context.getCommandSender();
+        UUID executor = context.isConsole() ? null : ((ProxiedPlayer) context.getCommandSender()).getUniqueId();
         String playerName = args.get(0);
-        context.invalidArgument(!Validation.PLAYERNAME.matches(playerName), "error-invalid-player-name", playerName);
+
+        // get player
         context.invalidArgument(playerName.equalsIgnoreCase(sender.getName()), "ban-cannot-ban-yourself");
+        MooPlayer player = args.getMooPlayer(playerName);
+        context.invalidArgument(!player.exists(), "error-player-doesnt-exist", playerName);
 
         // get the ban reason
         // if null = rip (or invalid ban reason)
@@ -110,28 +111,20 @@ public class BanCommand {
         }
 
         // executes the ban
-        executeBan(context, playerName, banReason.getBanCategory(), banReason.getName(), duration);
+        context.sendMessage("ban-load");
+        reactStatus(context, player.ban(executor, banReason), playerName, banReason, duration);
     }
 
     /**
-     * Executes the ban
+     * Reacts to the ban status
      *
-     * @param context    The command context
-     * @param target     The ban target name
-     * @param banSubType The bansubtype
-     * @param reason     The banreason
-     * @param duration   The duration (or null for automatic)
+     * @param context The command context
+     * @param status  The status
      */
-    private void executeBan(BungeeCommandContext context, String target, BanCategory banSubType, String reason, Long duration) {
-        context.sendMessage("ban-load");
-        ResponseStatus status = MooQueries.getInstance().ban(
-                context.isConsole() ? null : ((ProxiedPlayer) context.getCommandSender()).getUniqueId(),
-                target, banSubType, reason, duration,
-                LanguageManager.get("ban-message-temp"), LanguageManager.get("ban-message-perm")
-        );
-        context.invalidArgument(status == ResponseStatus.NOT_FOUND, "error-player-doesnt-exist", target);
-        context.invalidArgument(status == ResponseStatus.FORBIDDEN, "ban-not-allowed-to", target);
-        context.invalidArgument(status == ResponseStatus.CONFLICT, "ban-player-already-banned", target);
+    private void reactStatus(BungeeCommandContext context, ResponseStatus status,
+                             String playerName, BanReason reason, long duration) {
+        context.invalidArgument(status == ResponseStatus.FORBIDDEN, "ban-not-allowed-to", playerName);
+        context.invalidArgument(status == ResponseStatus.CONFLICT, "ban-player-already-banned", playerName);
 
         // send teamchat message or only direct to him
         if(!BungeeTeamChat.getInstance().canTeamchat(context.getCommandSender())) {
@@ -148,7 +141,7 @@ public class BanCommand {
 
         // send the chat
         BungeeTeamChat.getInstance().send(LanguageManager.get("ban-teamchat-announcement",
-                target, executor, typeColor + banSubType.getName(),
+                playerName, executor, typeColor + reason.getName(),
                 Arrays.asList("Details", start, end, typeColor + reason, executor))
         );
     }

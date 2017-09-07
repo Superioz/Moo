@@ -28,14 +28,10 @@ public class PacketPlayerBan extends AbstractPacket {
      * @param target         The target to be banned (name or uuid as string)
      * @param banSubType     The sub type of the ban
      * @param reason         The reason
+     * @param duration       The duration
      * @param banTempMessage The format of the temp ban message (temporary ban)
      * @param banPermMessage The format of the perm ban message (permanent ban)
      */
-    public PacketPlayerBan(UUID executor, String target, BanCategory banSubType, String reason,
-                           String banTempMessage, String banPermMessage) {
-        this(executor, target, new Ban(executor, banSubType, reason), banTempMessage, banPermMessage);
-    }
-
     public PacketPlayerBan(UUID executor, String target, BanCategory banSubType, String reason,
                            long duration, String banTempMessage, String banPermMessage) {
         this(executor, target, new Ban(executor, banSubType, reason, duration), banTempMessage, banPermMessage);
