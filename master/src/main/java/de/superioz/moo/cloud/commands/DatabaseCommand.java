@@ -9,7 +9,8 @@ import de.superioz.moo.api.command.help.ArgumentHelper;
 import de.superioz.moo.api.command.param.ParamSet;
 import de.superioz.moo.api.command.tabcomplete.TabCompletion;
 import de.superioz.moo.api.command.tabcomplete.TabCompletor;
-import de.superioz.moo.api.database.*;
+import de.superioz.moo.api.console.format.PageableListFormat;
+import de.superioz.moo.api.database.DatabaseType;
 import de.superioz.moo.api.database.filter.DbFilter;
 import de.superioz.moo.api.database.object.DataResolver;
 import de.superioz.moo.api.database.query.DbQuery;
@@ -17,7 +18,6 @@ import de.superioz.moo.api.database.query.DbQueryNode;
 import de.superioz.moo.api.exceptions.InvalidArgumentException;
 import de.superioz.moo.api.util.Operator;
 import de.superioz.moo.api.util.Procedure;
-import de.superioz.moo.api.utils.DisplayFormats;
 import de.superioz.moo.api.utils.ReflectionUtil;
 import de.superioz.moo.api.utils.StringUtil;
 import de.superioz.moo.network.common.Queries;
@@ -26,7 +26,6 @@ import de.superioz.moo.network.packets.PacketDatabaseCount;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
-import java.util.function.Consumer;
 
 public class DatabaseCommand {
 
@@ -168,27 +167,13 @@ public class DatabaseCommand {
             return;
         }
 
-        DisplayFormats.sendPageableList(() -> {
-                    context.sendMessage(DisplayFormats.getListSeperation("=", 20,
-                            "[", "]",
-                            "Data List(" + (page + 1) + "/" + (pageableList.getMaxPages() + 1) + ")"));
-                },
-                entryPage, new Consumer<String>() {
-                    @Override
-                    public void accept(String s) {
-                        if(s == null) {
-                            context.sendMessage("#");
-                        }
-                        else {
-                            context.sendMessage("# " + s);
-                        }
-                    }
-                }, () -> {
-                    if(page < pageableList.getMaxPages()) {
-                        context.sendMessage("");
-                        context.sendMessage("Next page: /[...] " + (page + 1));
-                    }
-                });
+        // send pageable list
+        context.sendDisplayFormat(new PageableListFormat<>(pageableList)
+                .doesntExist("§cThis page doesn't exist! (" + page + ")")
+                .header("Data List(" + (page + 1) + "/" + (pageableList.getMaxPages() + 1) + ")")
+                .emptyEntry("#")
+                .entry("# {0}")
+                .footer("Next page: /[...] " + (page + 1)));
     }
 
     @Command(label = "dbcount", usage = "<database>")
@@ -207,8 +192,7 @@ public class DatabaseCommand {
         Response response = queries.execute();
 
         int count = Integer.parseInt(response.getMessage());
-        context.sendMessage(StringUtil.format("Count: {0} {1}", count,
-                DisplayFormats.getPluralOrSingular(count, "entry", "entries")));
+        context.sendMessage(StringUtil.format("Count: {0} {entry|entries}", count, count > 1));
     }
 
     @Command(label = "dblist", usage = "<database> [page]",
@@ -247,27 +231,14 @@ public class DatabaseCommand {
             return;
         }
 
-        DisplayFormats.sendPageableList(() -> {
-                    context.sendMessage(DisplayFormats.getListSeperation("=", 20,
-                            "[", "]",
-                            "Database List(" + (page + 1) + "/" + (pageableList.getMaxPages() + 1) + ")"));
-                },
-                entryPage, new Consumer<String>() {
-                    @Override
-                    public void accept(String s) {
-                        if(s == null) {
-                            context.sendMessage("#");
-                        }
-                        else {
-                            context.sendMessage("# " + s);
-                        }
-                    }
-                }, () -> {
-                    if(page < pageableList.getMaxPages()) {
-                        context.sendMessage("");
-                        context.sendMessage("Next page: /[...] " + (page + 1));
-                    }
-                });
+        // display format
+        context.sendDisplayFormat(new PageableListFormat<>(pageableList)
+                .doesntExist("§cThis page doesn't exist! (" + page + ")")
+                .header("Database List(" + (page + 1) + "/" + (pageableList.getMaxPages() + 1) + ")")
+                .emptyEntry("#")
+                .entry("# {0}")
+
+        );
     }
 
     @Command(label = "dbdelete", usage = "<database> <filter>",
@@ -317,7 +288,7 @@ public class DatabaseCommand {
         if(type != null) {
             toCreate = ReflectionUtil.getInstance(type.getWrappedClass());
         }
-        if(toCreate == null){
+        if(toCreate == null) {
             context.sendMessage("Couldn't initiate instance of " + (type != null ? type.getWrappedClass() : "null"));
             return;
         }

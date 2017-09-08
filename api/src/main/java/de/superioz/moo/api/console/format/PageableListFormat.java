@@ -1,10 +1,9 @@
-package de.superioz.moo.minecraft.chat.formats;
+package de.superioz.moo.api.console.format;
 
 import de.superioz.moo.api.collection.PageableList;
 import de.superioz.moo.api.common.Replacor;
 import de.superioz.moo.api.io.LanguageManager;
 import de.superioz.moo.api.utils.StringUtil;
-import de.superioz.moo.minecraft.util.ChatUtil;
 import lombok.Getter;
 
 import java.util.function.Consumer;
@@ -33,21 +32,23 @@ public class PageableListFormat<T> extends DisplayFormat {
     @Override
     public void setupComponents() {
         if(pageableList.size() == 0) {
-            addComponent(emptyListMessage);
+            addMessage(emptyListMessage);
             return;
         }
         if(!pageableList.checkPage(page)){
-            addComponent(pageDoesntExist);
+            addMessage(pageDoesntExist);
             return;
         }
 
-        String seperationFormat = LanguageManager.get("list-format-seperation", header, page + 1, pageableList.getMaxPages() + 1);
-        addComponent(seperationFormat);
+        String seperationFormat = LanguageManager.contains("list-format-seperation")
+                        ? LanguageManager.get("list-format-seperation", header, page + 1, pageableList.getMaxPages() + 1)
+                        : StringUtil.repeat("=", 20) + header + StringUtil.repeat("=", 20);
+        addMessage(seperationFormat);
 
         // content
         pageableList.getPage(page, null).forEach(t -> {
             if(t == null) {
-                addComponent(emptyEntry);
+                addMessage(emptyEntry);
                 return;
             }
 
@@ -55,16 +56,16 @@ public class PageableListFormat<T> extends DisplayFormat {
             entryConsumer.accept(replacor);
 
             String entry = StringUtil.format(entryFormat, replacor.getReplacements());
-            addComponent(ChatUtil.getEventMessage(entry, condition == null ? true : condition.apply(t)).toTextComponent());
+            addMessage(entry, condition == null ? true : condition.apply(t));
         });
 
         // footer
         if(page < pageableList.getMaxPages() && footer != null && !footer.isEmpty()) {
-            addComponent("");
-            addComponent(footer);
+            addMessage("");
+            addMessage(footer);
         }
 
-        addComponent(seperationFormat);
+        addMessage(seperationFormat);
     }
 
     /*

@@ -4,6 +4,7 @@ import de.superioz.moo.api.collection.MultiCache;
 import de.superioz.moo.api.command.CommandInstance;
 import de.superioz.moo.api.command.help.ArgumentHelper;
 import de.superioz.moo.api.command.param.ParamSet;
+import de.superioz.moo.api.console.format.DisplayFormat;
 import de.superioz.moo.api.event.EventExecutor;
 import de.superioz.moo.api.events.CommandErrorEvent;
 import de.superioz.moo.api.exceptions.InvalidArgumentException;
@@ -52,6 +53,15 @@ public abstract class CommandContext<T> {
         protected void message(String msg, Object target) {
             System.out.println(msg);
         }
+
+        @Override
+        public void sendDisplayFormat(DisplayFormat format, Object[] receivers) {
+            format.getComponents().forEach((s, bool) -> {
+                for(Object receiver : receivers) {
+                    message(s, receiver);
+                }
+            });
+        }
     };
 
     /**
@@ -94,6 +104,14 @@ public abstract class CommandContext<T> {
      * @param msg    The message
      */
     protected abstract void message(String msg, T target);
+
+    /**
+     * Sends a display format to the receivers
+     *
+     * @param format    The format
+     * @param receivers The receivers
+     */
+    public abstract void sendDisplayFormat(DisplayFormat format, T... receivers);
 
     /**
      * Checks if the sender is the console

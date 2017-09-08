@@ -3,7 +3,6 @@ package de.superioz.moo.minecraft.command;
 import de.superioz.moo.api.command.context.CommandContext;
 import de.superioz.moo.minecraft.chat.MessageComponent;
 import de.superioz.moo.minecraft.chat.MessageEventable;
-import de.superioz.moo.minecraft.chat.formats.DisplayFormat;
 import de.superioz.moo.minecraft.util.ChatUtil;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -19,8 +18,6 @@ public abstract class ClientCommandContext<T> extends CommandContext<T> {
     }
 
     public abstract void sendComponent(TextComponent component, List<T> receivers);
-
-    public abstract void sendDisplayFormat(DisplayFormat format, T... receivers);
 
     /**
      * Sends a message component to given command sender (with hoverevent and this stuff)

@@ -1,35 +1,20 @@
-package de.superioz.moo.minecraft.chat.formats;
+package de.superioz.moo.api.console.format;
 
 import de.superioz.moo.api.utils.StringUtil;
-import de.superioz.moo.minecraft.chat.MessageComponent;
-import lombok.Getter;
-import net.md_5.bungee.api.chat.TextComponent;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class InfoListFormat extends DisplayFormat {
-
-    @Getter
-    private List<TextComponent> entries = new ArrayList<>();
 
     private String entryFormat;
     private String header;
 
     public InfoListFormat() {
-
     }
 
     @Override
     public void setupComponents() {
         if(header != null) {
-            addComponent(header);
+            addMessage(header);
         }
-
-        entries.forEach(component -> {
-            if(component == null) return;
-            addComponent(component);
-        });
     }
 
     /*
@@ -69,7 +54,7 @@ public class InfoListFormat extends DisplayFormat {
                 ? StringUtil.format(entryFormat, replacements)
                 : StringUtil.format(entryFormat != null ? entryFormat : "{0}", message);
 
-        entries.add(new MessageComponent(fullMessage).format(condition).toTextComponent());
+        addMessage(fullMessage, condition);
         return this;
     }
 

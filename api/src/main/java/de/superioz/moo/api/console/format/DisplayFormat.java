@@ -1,12 +1,10 @@
-package de.superioz.moo.minecraft.chat.formats;
+package de.superioz.moo.api.console.format;
 
 import de.superioz.moo.api.io.LanguageManager;
-import de.superioz.moo.minecraft.chat.MessageComponent;
 import lombok.Getter;
-import net.md_5.bungee.api.chat.TextComponent;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * This format is for sending complex message formats to a user simply (like lists, ..)
@@ -15,7 +13,7 @@ import java.util.List;
 public abstract class DisplayFormat {
 
     @Getter
-    private List<TextComponent> components = new ArrayList<>();
+    private Map<String, Boolean> components = new HashMap<>();
 
     /**
      * In this method you can add components
@@ -35,17 +33,17 @@ public abstract class DisplayFormat {
     /**
      * Adds a component to the components list to be sent to the player
      *
-     * @param component The component to be added
+     * @param message   The component to be added
+     * @param condition The condition
      * @return This
      */
-    protected DisplayFormat addComponent(TextComponent component) {
-        components.add(component);
+    protected DisplayFormat addMessage(String message, boolean condition) {
+        components.put(message, condition);
         return this;
     }
 
-    protected DisplayFormat addComponent(String message) {
-        components.add(new MessageComponent(message).toTextComponent());
-        return this;
+    protected DisplayFormat addMessage(String message) {
+        return addMessage(message, true);
     }
 
     /**

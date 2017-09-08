@@ -1,8 +1,9 @@
 package de.superioz.moo.proxy.command;
 
+import de.superioz.moo.api.console.format.DisplayFormat;
 import de.superioz.moo.api.io.LanguageManager;
-import de.superioz.moo.minecraft.chat.formats.DisplayFormat;
 import de.superioz.moo.minecraft.command.ClientCommandContext;
+import de.superioz.moo.minecraft.util.ChatUtil;
 import de.superioz.moo.proxy.util.BungeeChat;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -23,7 +24,7 @@ public class BungeeCommandContext extends ClientCommandContext<CommandSender> {
 
         if(receivers == null || receivers.length == 0) receivers = new CommandSender[]{getCommandSender()};
         for(CommandSender receiver : receivers) {
-            format.getComponents().forEach(receiver::sendMessage);
+            format.getComponents().forEach((s, bool) -> receiver.sendMessage(ChatUtil.getEventMessage(s, bool).toTextComponent()));
         }
     }
 
