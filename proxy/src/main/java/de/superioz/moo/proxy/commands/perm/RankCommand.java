@@ -1,4 +1,4 @@
-package de.superioz.moo.proxy.commands.group;
+package de.superioz.moo.proxy.commands.perm;
 
 import de.superioz.moo.api.command.Command;
 import de.superioz.moo.api.command.context.CommandContext;
