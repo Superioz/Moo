@@ -1,4 +1,4 @@
-package de.superioz.moo.proxy.commands;
+package de.superioz.moo.proxy.commands.group;
 
 import de.superioz.moo.api.collection.PageableList;
 import de.superioz.moo.api.command.Command;
@@ -105,7 +105,7 @@ public class GroupCommand {
         context.invalidArgument(group == null, LanguageManager.get("group-doesnt-exist", groupName));
 
         // send info
-        context.sendDisplayFormat(new InfoListFormat().header("group-info-header", groupName).entry("group-info-entry")
+        context.sendDisplayFormat(new InfoListFormat().header("group-info-header", groupName).entryFormat("group-info-entry")
                 .entry("group-info-entry-name", groupName)
                 .entryc("group-info-entry-permissions", group.getPermissions().size() != 0,
                         group.getPermissions().size(), groupName)

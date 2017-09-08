@@ -26,8 +26,8 @@ public class TeamChatCommand {
         // list team chat format (either the message or blank format)
         // if flag r (=raw) exists ^
         String formattedMessage = args.hasFlag("r")
-                ? LanguageManager.get("teamchat-format", "/tc ", message)
-                : LanguageManager.get("teamchat-format-message", "/tc ", sender, message);
+                ? LanguageManager.get("teamchat-format", message)
+                : LanguageManager.get("teamchat-format-message", sender, message);
 
         // dispatch message
         BungeeTeamChat.getInstance().send(formattedMessage, colored, formatted);

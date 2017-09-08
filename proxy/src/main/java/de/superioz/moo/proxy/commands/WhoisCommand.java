@@ -3,7 +3,6 @@ package de.superioz.moo.proxy.commands;
 import de.superioz.moo.api.command.Command;
 import de.superioz.moo.api.command.help.ArgumentHelp;
 import de.superioz.moo.api.command.help.ArgumentHelper;
-import de.superioz.moo.api.command.param.ParamSet;
 import de.superioz.moo.api.command.tabcomplete.TabCompletion;
 import de.superioz.moo.api.command.tabcomplete.TabCompletor;
 import de.superioz.moo.api.common.PlayerProfile;
@@ -11,11 +10,12 @@ import de.superioz.moo.api.common.RunAsynchronous;
 import de.superioz.moo.api.database.objects.Ban;
 import de.superioz.moo.api.database.objects.PlayerData;
 import de.superioz.moo.api.io.LanguageManager;
-import de.superioz.moo.api.utils.DisplayFormats;
 import de.superioz.moo.api.utils.StringUtil;
 import de.superioz.moo.api.utils.TimeUtil;
-import de.superioz.moo.network.common.MooQueries;
+import de.superioz.moo.minecraft.chat.formats.InfoListFormat;
+import de.superioz.moo.network.common.MooPlayer;
 import de.superioz.moo.proxy.command.BungeeCommandContext;
+import de.superioz.moo.proxy.command.BungeeParamSet;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 
@@ -42,16 +42,17 @@ public class WhoisCommand {
     }
 
     @Command(label = LABEL, usage = "<player>")
-    public void onCommand(BungeeCommandContext context, ParamSet args) {
-        PlayerProfile playerInfo = args.get(0, PlayerProfile.class);
-        context.invalidArgument(playerInfo == null, LanguageManager.get("error-player-doesnt-exist", args.get(0)));
+    public void onCommand(BungeeCommandContext context, BungeeParamSet args) {
+        String playerName = args.get(0);
+        MooPlayer player = args.getMooPlayer(playerName);
+        context.invalidArgument(!player.exists(), LanguageManager.get("error-player-doesnt-exist", playerName));
 
         // list current informations
-        Ban currentBan = playerInfo.getCurrentBan();
-        PlayerData data = playerInfo.getData();
+        PlayerProfile profile = player.getProfile();
+        Ban currentBan = profile.getCurrentBan();
+        PlayerData data = profile.getData();
 
         // list rough information about the player
-        String playerName = args.get(0);
         UUID uuid = data.getUuid();
         String ip = data.getLastIp();
         String rank = data.getGroup();
@@ -70,17 +71,17 @@ public class WhoisCommand {
                 : Arrays.asList(false, currentServer, currentProxy, onlineSince);
 
         // send the information
-        DisplayFormats.sendList(context, LanguageManager.get("playerinfo-header", playerName),
-                context.getFormatSender(LanguageManager.get("playerinfo-entry"))
-                        .addTranslated("playerinfo-entry-uuid", uuid)
-                        .addTranslated("playerinfo-entry-ip", ip)
-                        .addTranslated("playerinfo-entry-rank", MooQueries.getInstance().getGroupColor(rank) + rank)
-                        .addTranslated("playerinfo-entry-coins", coins)
-                        .addTranslated("playerinfo-entry-firstonline", firstOnline)
-                        .addTranslated("playerinfo-entry-totalonline", totalOnline)
-                        .addTranslated("playerinfo-entry-onlinestatus", onlineStatus)
-                        .addTranslated("playerinfo-entry-banpoints", banPoints)
-                        .addTranslated("playerinfo-entry-banstatus", currentBan != null));
+        context.sendDisplayFormat(new InfoListFormat().header("playerinfo-header", playerName).entryFormat("playerinfo-entry")
+                .entry("playerinfo-entry-uuid", uuid)
+                .entry("playerinfo-entry-ip", ip)
+                .entry("playerinfo-entry-rank", player.getGroup().getColor() + rank)
+                .entry("playerinfo-entry-coins", coins)
+                .entry("playerinfo-entry-firstonline", firstOnline)
+                .entry("playerinfo-entry-totalonline", totalOnline)
+                .entry("playerinfo-entry-onlinestatus", onlineStatus)
+                .entry("playerinfo-entry-banpoints", banPoints)
+                .entry("playerinfo-entry-banstatus", currentBan != null)
+        );
     }
 
 }

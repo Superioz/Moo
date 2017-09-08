@@ -1,4 +1,4 @@
-package de.superioz.moo.proxy.commands;
+package de.superioz.moo.proxy.commands.punish;
 
 import de.superioz.moo.api.collection.PageableList;
 import de.superioz.moo.api.command.Command;

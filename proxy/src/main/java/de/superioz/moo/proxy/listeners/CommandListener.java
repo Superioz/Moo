@@ -13,9 +13,8 @@ import de.superioz.moo.api.events.TabCompleteEvent;
 import de.superioz.moo.api.exceptions.InvalidArgumentException;
 import de.superioz.moo.api.exceptions.InvalidCommandUsageException;
 import de.superioz.moo.api.io.LanguageManager;
-import de.superioz.moo.api.util.MessageFormatSender;
-import de.superioz.moo.api.utils.DisplayFormats;
 import de.superioz.moo.api.utils.StringUtil;
+import de.superioz.moo.minecraft.chat.formats.InfoListFormat;
 import de.superioz.moo.minecraft.util.ChatUtil;
 import de.superioz.moo.network.exception.MooOutputException;
 import de.superioz.moo.proxy.Thunder;
@@ -131,8 +130,11 @@ public class CommandListener extends CommandEventAdapter<CommandSender> implemen
         // send the command help
         // if the instance has children show a list of subcommands
         if(instance.hasChildren()) {
-            MessageFormatSender formatSender = context.getFormatSender(LanguageManager.get("help-command-leaf-entry"));
             ChatColor[] gradient = ChatUtil.GRADIENT_BLUE;
+
+            // get list
+            InfoListFormat listFormat = new InfoListFormat().header("help-command-leaf-header", instance.getLabel())
+                    .entryFormat("help-command-leaf-entry");
 
             for(CommandInstance children : instance.getChildrens()) {
                 List<String> wholePath = children.getWholePath();
@@ -148,16 +150,10 @@ public class CommandListener extends CommandEventAdapter<CommandSender> implemen
                     coloredPath.add(color + wholePath.get(i));
                 }
 
-                formatSender.add(() -> {
-                    context.sendEventMessage(StringUtil.format(formatSender.getFormat(), s -> LanguageManager.get(s),
-                            String.join(" ", coloredPath) + " &7" + children.getUsage().getBase(),
-                            suggestUsage, suggestUsage));
-                });
+                listFormat.entryr(String.join(" ", coloredPath) + " &7" + children.getUsage().getBase(), suggestUsage, suggestUsage);
             }
 
-            DisplayFormats.sendList(context,
-                    LanguageManager.get("help-command-leaf-header", instance.getLabel()),
-                    formatSender);
+            context.sendDisplayFormat(listFormat);
         }
         // if the instance has NO children show a detailed command info
         else {

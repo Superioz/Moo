@@ -2,10 +2,9 @@ package de.superioz.moo.api.utils;
 
 import com.google.common.base.Strings;
 import de.superioz.moo.api.collection.PageableList;
-import de.superioz.moo.api.util.MessageFormatSender;
-import de.superioz.moo.api.util.Procedure;
 import de.superioz.moo.api.command.context.CommandContext;
 import de.superioz.moo.api.io.LanguageManager;
+import de.superioz.moo.api.util.Procedure;
 
 import java.util.List;
 import java.util.function.Consumer;
@@ -117,18 +116,6 @@ public final class DisplayFormats {
                 header + " &7(&e" + (page + 1) + "&7/" + (list.getMaxPages() + 1) + ")"),
                 header, emptyEntry, entry,
                 footerMessage);
-    }
-
-    /**
-     * Sends a non-pageable list (with header)
-     *
-     * @param context     The context to send the message
-     * @param header      The header
-     * @param entries     The entries (replacements for the format)
-     */
-    public static void sendList(CommandContext context, String header, MessageFormatSender entries) {
-        context.sendMessage(header);
-        entries.execute();
     }
 
 }

@@ -19,6 +19,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.function.Consumer;
 
+@RunAsynchronous
 public class MooThunderCommand {
 
     /**
@@ -37,14 +38,13 @@ public class MooThunderCommand {
         return activated;
     }
 
-    @RunAsynchronous
     @Command(label = "mthunder",
             permission = "network.moo",
             usage = "[subCommand]")
     public void onCommand(BungeeCommandContext context, ParamSet args) {
-        boolean connected = Moo.getInstance().isConnected();
-
         if(!checkMoo(context)) return;
+
+        boolean connected = Moo.getInstance().isConnected();
 
         // list status from connection
         context.sendMessage("&7Connection status: " + (connected ? "&aONLINE" : "&8Offline"));
@@ -55,7 +55,6 @@ public class MooThunderCommand {
         }
     }
 
-    @RunAsynchronous
     @Command(label = "connect", parent = "mthunder")
     public void connect(BungeeCommandContext context, ParamSet args) {
         if(!checkMoo(context)) return;
@@ -69,7 +68,6 @@ public class MooThunderCommand {
         Moo.getInstance().reconnect();
     }
 
-    @RunAsynchronous
     @Command(label = "disconnect", parent = "mthunder")
     public void disconnect(BungeeCommandContext context, ParamSet args) {
         if(!checkMoo(context)) return;
@@ -119,7 +117,6 @@ public class MooThunderCommand {
         }
     }
 
-    @RunAsynchronous
     @Command(label = "reqserver", parent = "mthunder", usage = "<type> [amount]", flags = "s")
     public void reqserver(BungeeCommandContext context, ParamSet args) {
         String type = args.get(0);
@@ -142,7 +139,6 @@ public class MooThunderCommand {
         });
     }
 
-    @RunAsynchronous
     @Command(label = "reqshutdown", parent = "mthunder", usage = "<host> <port>")
     public void reqshutdown(BungeeCommandContext context, ParamSet args) {
         String host = args.get(0);

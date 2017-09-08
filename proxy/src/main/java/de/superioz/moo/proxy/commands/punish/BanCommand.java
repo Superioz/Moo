@@ -1,4 +1,4 @@
-package de.superioz.moo.proxy.commands;
+package de.superioz.moo.proxy.commands.punish;
 
 import de.superioz.moo.api.command.Command;
 import de.superioz.moo.api.command.help.ArgumentHelp;
@@ -115,12 +115,6 @@ public class BanCommand {
         reactStatus(context, player.ban(executor, banReason), playerName, banReason, duration);
     }
 
-    /**
-     * Reacts to the ban status
-     *
-     * @param context The command context
-     * @param status  The status
-     */
     private void reactStatus(BungeeCommandContext context, ResponseStatus status,
                              String playerName, BanReason reason, long duration) {
         context.invalidArgument(status == ResponseStatus.FORBIDDEN, "ban-not-allowed-to", playerName);

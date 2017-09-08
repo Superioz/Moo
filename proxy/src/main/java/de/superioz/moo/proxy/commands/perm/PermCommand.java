@@ -1,4 +1,4 @@
-package de.superioz.moo.proxy.commands;
+package de.superioz.moo.proxy.commands.group;
 
 import javafx.util.Pair;
 import de.superioz.moo.api.collection.PageableList;

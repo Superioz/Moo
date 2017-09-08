@@ -22,16 +22,15 @@ public class MotdCommand {
             String newMotd = String.join(" ", args.getRange(0));
 
             // change motd
-            context.sendMessage(LanguageManager.get("motd-change-load"));
+            context.sendMessage("motd-change-load");
             ResponseStatus status = Moo.getInstance().config(NetworkConfigType.MOTD, newMotd);
             context.invalidArgument(status.isNok(), LanguageManager.get("motd-change-complete-failure", status));
-            context.sendMessage(LanguageManager.get("motd-change-complete-success"));
+            context.sendMessage("motd-change-complete-success");
             return;
         }
 
         // otherwise display the motd
-        String motd = (String) MooCache.getInstance().getConfigEntry(NetworkConfigType.MOTD);
-        context.sendMessage(LanguageManager.get("motd-info", motd));
+        context.sendMessage("motd-info", MooCache.getInstance().getConfigEntry(NetworkConfigType.MOTD));
     }
 
 }

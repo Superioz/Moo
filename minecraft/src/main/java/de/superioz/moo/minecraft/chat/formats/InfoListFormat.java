@@ -43,7 +43,7 @@ public class InfoListFormat extends DisplayFormat {
         return this;
     }
 
-    public InfoListFormat entry(String entryFormat) {
+    public InfoListFormat entryFormat(String entryFormat) {
         this.entryFormat = getMessage(entryFormat);
         return this;
     }
@@ -65,7 +65,9 @@ public class InfoListFormat extends DisplayFormat {
      */
     public InfoListFormat entryc(String entry, boolean condition, Object... replacements) {
         String message = getMessage(entry, replacements);
-        String fullMessage = StringUtil.format(entryFormat != null ? entryFormat : "{0}", message);
+        String fullMessage = message.isEmpty()
+                ? StringUtil.format(entryFormat, replacements)
+                : StringUtil.format(entryFormat != null ? entryFormat : "{0}", message);
 
         entries.add(new MessageComponent(fullMessage).format(condition).toTextComponent());
         return this;
@@ -73,6 +75,10 @@ public class InfoListFormat extends DisplayFormat {
 
     public InfoListFormat entry(String entry, Object... replacements) {
         return entryc(entry, true, replacements);
+    }
+
+    public InfoListFormat entryr(Object... replacements) {
+        return entryc("", true, replacements);
     }
 
 }

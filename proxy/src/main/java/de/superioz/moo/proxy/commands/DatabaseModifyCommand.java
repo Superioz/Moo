@@ -73,7 +73,7 @@ public class DatabaseModifyCommand {
     }
 
     @Command(label = DBMODIFY_LABEL, usage = "<database> <filter> <updates>", flags = {"l"})
-    public void dbmodify(CommandContext context, ParamSet set) {
+    public void onCommand(CommandContext context, ParamSet set) {
         Queries queries = Queries.newInstance();
 
         // list the database

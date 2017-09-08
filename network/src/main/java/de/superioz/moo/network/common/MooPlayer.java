@@ -1,6 +1,7 @@
 package de.superioz.moo.network.common;
 
 import de.superioz.moo.api.common.MooServer;
+import de.superioz.moo.api.common.PlayerProfile;
 import de.superioz.moo.api.common.punishment.BanReason;
 import de.superioz.moo.api.database.DbModifier;
 import de.superioz.moo.api.database.objects.Ban;
@@ -303,6 +304,24 @@ public class MooPlayer {
      */
     public Ban getCurrentBan() {
         return MooQueries.getInstance().getBan(getUniqueId());
+    }
+
+    /**
+     * Gets the bans of the player already archived
+     *
+     * @return The list of bans
+     */
+    public List<Ban> getBanArchive() {
+        return MooQueries.getInstance().getBanArchive(getUniqueId());
+    }
+
+    /**
+     * Gets the profile of this player
+     *
+     * @return The profile
+     */
+    public PlayerProfile getProfile() {
+        return new PlayerProfile(unwrap(), getCurrentBan(), getBanArchive());
     }
 
     /**

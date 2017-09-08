@@ -56,6 +56,7 @@ public abstract class DisplayFormat {
      */
     protected String getMessage(String s, Object... replacements) {
         if(LanguageManager.contains(s)) return LanguageManager.get(s, replacements);
+        if(s.isEmpty()) return "";
         return s;
     }
 
