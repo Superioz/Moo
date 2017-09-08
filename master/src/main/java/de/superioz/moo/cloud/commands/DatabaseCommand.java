@@ -169,10 +169,11 @@ public class DatabaseCommand {
 
         // send pageable list
         context.sendDisplayFormat(new PageableListFormat<>(pageableList)
+                .page(page)
                 .doesntExist("§cThis page doesn't exist! (" + page + ")")
                 .header("Data List(" + (page + 1) + "/" + (pageableList.getMaxPages() + 1) + ")")
                 .emptyEntry("#")
-                .entry("# {0}")
+                .entryFormat("# {0}")
                 .footer("Next page: /[...] " + (page + 1)));
     }
 
@@ -233,11 +234,11 @@ public class DatabaseCommand {
 
         // display format
         context.sendDisplayFormat(new PageableListFormat<>(pageableList)
+                .page(page)
                 .doesntExist("§cThis page doesn't exist! (" + page + ")")
                 .header("Database List(" + (page + 1) + "/" + (pageableList.getMaxPages() + 1) + ")")
                 .emptyEntry("#")
-                .entry("# {0}")
-
+                .entryFormat("# {0}")
         );
     }
 

@@ -1,5 +1,7 @@
 package de.superioz.moo.api.command.context;
 
+import de.superioz.moo.api.console.format.DisplayFormat;
+
 import java.util.UUID;
 import java.util.logging.Logger;
 
@@ -23,5 +25,12 @@ public class ConsoleCommandContext extends CommandContext {
     @Override
     protected void message(String msg, Object target) {
         logger.info(msg);
+    }
+
+    @Override
+    public void sendDisplayFormat(DisplayFormat format, Object[] receivers) {
+        format.prepare();
+
+        format.getComponents().forEach((s, bool) -> logger.info(s));
     }
 }

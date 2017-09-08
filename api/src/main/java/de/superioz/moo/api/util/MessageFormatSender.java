@@ -1,7 +1,6 @@
 package de.superioz.moo.api.util;
 
 import de.superioz.moo.api.command.context.CommandContext;
-import de.superioz.moo.api.utils.DisplayFormats;
 import de.superioz.moo.api.utils.StringUtil;
 import lombok.Getter;
 import de.superioz.moo.api.io.LanguageManager;
@@ -10,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * This class is an addition to the {@link DisplayFormats} class because this
+ * This class is an addition to the class because this
  * message sender either formats the given format and adds a {@link Procedure} which will send
  * the given message or it directly adds a given procedure.<br>
  * After finishing using {@link #execute()} will invoke all procedures
@@ -21,7 +20,6 @@ import java.util.List;
  * entries and {@link #add(Procedure)} to send the hoverable message (mostly CommandContext#sendEventMessage)
  *
  * @see Procedure
- * @see DisplayFormats
  */
 public abstract class MessageFormatSender {
 

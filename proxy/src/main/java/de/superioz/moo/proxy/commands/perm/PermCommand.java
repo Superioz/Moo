@@ -1,6 +1,5 @@
-package de.superioz.moo.proxy.commands.group;
+package de.superioz.moo.proxy.commands.perm;
 
-import javafx.util.Pair;
 import de.superioz.moo.api.collection.PageableList;
 import de.superioz.moo.api.command.Command;
 import de.superioz.moo.api.command.CommandFlag;
@@ -13,20 +12,20 @@ import de.superioz.moo.api.command.tabcomplete.TabCompletion;
 import de.superioz.moo.api.command.tabcomplete.TabCompletor;
 import de.superioz.moo.api.common.GroupPermission;
 import de.superioz.moo.api.common.RunAsynchronous;
+import de.superioz.moo.api.console.format.PageableListFormat;
 import de.superioz.moo.api.database.DbModifier;
-import de.superioz.moo.api.database.query.DbQueryUnbaked;
 import de.superioz.moo.api.database.objects.Group;
 import de.superioz.moo.api.database.objects.PlayerData;
+import de.superioz.moo.api.database.query.DbQueryUnbaked;
 import de.superioz.moo.api.exceptions.InvalidArgumentException;
 import de.superioz.moo.api.io.LanguageManager;
 import de.superioz.moo.api.util.Validation;
-import de.superioz.moo.api.utils.DisplayFormats;
 import de.superioz.moo.api.utils.StringUtil;
 import de.superioz.moo.network.common.MooQueries;
 import de.superioz.moo.network.common.ResponseStatus;
 import de.superioz.moo.proxy.command.BungeeCommandContext;
+import javafx.util.Pair;
 import net.md_5.bungee.api.ProxyServer;
-import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 
 import java.util.*;
@@ -95,29 +94,23 @@ public class PermCommand {
         context.invalidArgument(!pageableList.checkPage(page), LanguageManager.get("error-page-doesnt-exist", page));
 
         // sends the pageable list with page as list format
-        String entryFormat = LanguageManager.get("permission-list-entry");
-        DisplayFormats.sendPageableList(context, pageableList, page,
-                LanguageManager.get("permission-list-empty"),
-                LanguageManager.get("permission-list-header"),
-                LanguageManager.get("permission-list-entry-empty"), groupPermission -> {
-                    // list prefix for the permission (indicates the workspace)
+        context.sendDisplayFormat(new PageableListFormat<GroupPermission>(pageableList)
+                .page(page).doesntExist("error-page-doesnt-exist")
+                .emptyList("permission-list-empty").header("permission-list-header")
+                .emptyEntry("permission-list-entry-empty")
+                .entryFormat("permission-list-entry")
+                .entry(replacor -> {
+                    GroupPermission groupPermission = replacor.get();
                     String prefix = groupPermission.isProxied() ? "&bb" : (groupPermission.isStar() ? "&9*" : "&es");
 
-                    context.sendMessage(LanguageManager.format(entryFormat, prefix,
-                            groupPermission.getPerm()
-                                    .replace("*", "&9*&7")
-                                    .replace("-", "&c-&7")));
-                }, () -> {
-                    // list the command to see the next page
-                    String command = "/perm list " + (page + 1) + " " + (args.hasFlag("g")
-                            ? args.getFlag("g").getRawCommandline() : args.hasFlag("p")
-                            ? args.getFlag("p").getRawCommandline() : "");
-
-                    context.sendEventMessage(
-                            LanguageManager.get("permission-list-next-page", command, command),
-                            ClickEvent.Action.RUN_COMMAND
-                    );
-                });
+                    replacor.accept(prefix, groupPermission.getPerm()
+                            .replace("*", "&9*&7")
+                            .replace("-", "&c-&7"));
+                })
+                .footer("permission-list-next-page", "/perm list " + (page + 1) + " " + (args.hasFlag("g")
+                        ? args.getFlag("g").getRawCommandline() : args.hasFlag("p")
+                        ? args.getFlag("p").getRawCommandline() : ""))
+        );
     }
 
     @Command(label = ADD_COMMAND, parent = LABEL, usage = "<permission>", flags = {"g", "p"})

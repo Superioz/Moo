@@ -1,4 +1,4 @@
-package de.superioz.moo.proxy.commands.group;
+package de.superioz.moo.proxy.commands.perm;
 
 import de.superioz.moo.api.collection.PageableList;
 import de.superioz.moo.api.command.Command;
@@ -9,14 +9,14 @@ import de.superioz.moo.api.command.param.ParamSet;
 import de.superioz.moo.api.command.tabcomplete.TabCompletion;
 import de.superioz.moo.api.command.tabcomplete.TabCompletor;
 import de.superioz.moo.api.common.RunAsynchronous;
+import de.superioz.moo.api.console.format.InfoListFormat;
+import de.superioz.moo.api.console.format.PageableListFormat;
 import de.superioz.moo.api.database.object.DataResolver;
 import de.superioz.moo.api.database.objects.Group;
 import de.superioz.moo.api.database.query.DbQuery;
 import de.superioz.moo.api.database.query.DbQueryNode;
 import de.superioz.moo.api.io.LanguageManager;
 import de.superioz.moo.api.utils.StringUtil;
-import de.superioz.moo.minecraft.chat.formats.InfoListFormat;
-import de.superioz.moo.minecraft.chat.formats.PageableListFormat;
 import de.superioz.moo.network.common.MooQueries;
 import de.superioz.moo.network.common.ResponseStatus;
 import de.superioz.moo.proxy.command.BungeeCommandContext;
@@ -93,7 +93,7 @@ public class GroupCommand {
         context.sendDisplayFormat(new PageableListFormat<Group>(pageableList)
                 .page(page).doesntExist("error-page-doesnt-exist")
                 .emptyList("group-list-empty").header("group-list-header").emptyEntry("group-list-entry-empty")
-                .entry("group-list-entry").entry(replacor -> replacor.accept(replacor.get().getName(), replacor.get().getRank()))
+                .entryFormat("group-list-entry").entry(replacor -> replacor.accept(replacor.get().getName(), replacor.get().getRank()))
                 .footer("group-list-next-page", page + 1)
         );
     }

@@ -105,7 +105,7 @@ public class PageableListFormat<T> extends DisplayFormat {
     ===================
      */
 
-    public PageableListFormat<T> entry(String entryFormat) {
+    public PageableListFormat<T> entryFormat(String entryFormat) {
         this.entryFormat = getMessage(entryFormat);
         return this;
     }

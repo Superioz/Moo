@@ -10,18 +10,17 @@ import de.superioz.moo.api.command.tabcomplete.TabCompletion;
 import de.superioz.moo.api.command.tabcomplete.TabCompletor;
 import de.superioz.moo.api.common.RunAsynchronous;
 import de.superioz.moo.api.common.punishment.BanType;
+import de.superioz.moo.api.console.format.PageableListFormat;
 import de.superioz.moo.api.database.objects.Ban;
 import de.superioz.moo.api.database.objects.PlayerData;
 import de.superioz.moo.api.io.LanguageManager;
 import de.superioz.moo.api.util.Validation;
-import de.superioz.moo.api.utils.DisplayFormats;
 import de.superioz.moo.api.utils.StringUtil;
 import de.superioz.moo.api.utils.TimeUtil;
 import de.superioz.moo.network.common.MooQueries;
 import de.superioz.moo.proxy.command.BungeeCommandContext;
 import de.superioz.moo.proxy.util.BungeeTeamChat;
 import net.md_5.bungee.api.ProxyServer;
-import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 
 import java.util.Arrays;
@@ -75,11 +74,13 @@ public class PunishArchiveCommand {
         int page = args.getInt(0, 0);
 
         // sends the list
-        String entryFormat = LanguageManager.get("punishment-archive-list-entry");
-        DisplayFormats.sendPageableList(context, pageableList, page,
-                LanguageManager.get("punishment-archive-list-empty"),
-                LanguageManager.get("punishment-archive-list-header"), LanguageManager.get("punishment-archive-list-entry-empty"),
-                ban -> {
+        context.sendDisplayFormat(new PageableListFormat<Ban>(pageableList)
+                .page(page).header("punishment-archive-list-header").emptyList("punishment-archive-list-empty")
+                .doesntExist("error-page-doesnt-exist")
+                .emptyEntry("punishment-archive-list-entry-empty").entryFormat("punishment-archive-list-entry")
+                .entry(replacor -> {
+                    Ban ban = replacor.get();
+
                     String banExecutorName = CommandContext.CONSOLE_NAME;
                     PlayerData banExecutor = MooQueries.getInstance().getPlayerData(ban.getBy());
                     if(banExecutor != null) banExecutorName = banExecutor.getLastName();
@@ -88,20 +89,12 @@ public class PunishArchiveCommand {
                     String start = TimeUtil.getFormat(ban.getStart());
                     String end = TimeUtil.getFormat(ban.until());
 
-                    context.sendEventMessage(
-                            LanguageManager.format(entryFormat,
-                                    start, end, typeColor + ban.getReason(),
-                                    Arrays.asList("Details", start, end, typeColor + ban.getReason(),
-                                            BungeeTeamChat.getInstance().getColor(banExecutor == null ? null : banExecutor.getUuid()) + banExecutorName)),
-                            ClickEvent.Action.RUN_COMMAND
-                    );
-                }, () -> {
-                    String command = "/punisharchive " + playerName + " " + (page + 1);
-                    context.sendEventMessage(
-                            LanguageManager.get("punishment-archive-next-page", command, command),
-                            ClickEvent.Action.RUN_COMMAND
-                    );
-                });
+                    replacor.accept(start, end, typeColor + ban.getReason(),
+                            Arrays.asList("Details", start, end, typeColor + ban.getReason(),
+                                    BungeeTeamChat.getInstance().getColor(banExecutor == null ? null : banExecutor.getUuid()) + banExecutorName));
+                })
+                .footer("punishment-archive-next-page", "/punisharchive " + playerName + " " + (page + 1))
+        );
     }
 
 }
