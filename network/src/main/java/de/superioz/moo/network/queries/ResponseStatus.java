@@ -1,4 +1,4 @@
-package de.superioz.moo.network.common;
+package de.superioz.moo.network.queries;
 
 import de.superioz.moo.api.logging.ConsoleColor;
 import de.superioz.moo.api.util.Validation;

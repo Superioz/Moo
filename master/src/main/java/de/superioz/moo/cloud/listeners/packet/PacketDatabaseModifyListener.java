@@ -19,7 +19,7 @@ import de.superioz.moo.cloud.Cloud;
 import de.superioz.moo.cloud.database.DatabaseCollections;
 import de.superioz.moo.network.client.ClientType;
 import de.superioz.moo.network.common.PacketMessenger;
-import de.superioz.moo.network.common.ResponseStatus;
+import de.superioz.moo.network.queries.ResponseStatus;
 import de.superioz.moo.network.packet.AbstractPacket;
 import de.superioz.moo.network.packet.PacketAdapter;
 import de.superioz.moo.network.packet.PacketHandler;

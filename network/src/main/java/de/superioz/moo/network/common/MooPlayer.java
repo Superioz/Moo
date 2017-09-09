@@ -1,6 +1,7 @@
 package de.superioz.moo.network.common;
 
 import de.superioz.moo.api.common.MooServer;
+import de.superioz.moo.api.common.ObjectWrapper;
 import de.superioz.moo.api.common.PlayerProfile;
 import de.superioz.moo.api.common.punishment.BanReason;
 import de.superioz.moo.api.database.DbModifier;
@@ -12,6 +13,8 @@ import de.superioz.moo.api.redis.MooCache;
 import de.superioz.moo.api.utils.PermissionUtil;
 import de.superioz.moo.network.packets.PacketPlayerBan;
 import de.superioz.moo.network.packets.PacketPlayerKick;
+import de.superioz.moo.network.queries.MooQueries;
+import de.superioz.moo.network.queries.ResponseStatus;
 import de.superioz.moo.network.server.MooProxy;
 
 import java.util.List;
@@ -19,62 +22,17 @@ import java.util.Set;
 import java.util.UUID;
 
 /**
- * Wrapper class for playerData
+ * Wrapper class for {@link PlayerData}
  */
-public class MooPlayer {
+public class MooPlayer extends ObjectWrapper<MooPlayer, PlayerData> {
 
-    /**
-     * Instead of extending we use this, so that we can't access all setters ..
-     */
-    private PlayerData wrappedData;
-
-    /**
-     * The current lazy mode, if >0 it will not update the data
-     * automatically in the database after it went down to 0 again.
-     */
-    private int lazy = 0;
-
-    public MooPlayer(PlayerData data) {
-        if(data == null) {
-            data = PlayerData.NON_EXISTENT;
-        }
-        this.wrappedData = data;
+    public MooPlayer(PlayerData wrappedObject) {
+        super(wrappedObject == null ? PlayerData.NON_EXISTENT : wrappedObject);
     }
 
-    /**
-     * Sets the lazy state to true
-     *
-     * @return This
-     */
-    public synchronized MooPlayer lazyLock(int level) {
-        if(level < 1) level = 1;
-        lazy = level;
-        return this;
-    }
-
-    public synchronized MooPlayer lazyLock() {
-        return lazyLock(1);
-    }
-
-    /**
-     * Returns the lazy state and changes it as well if it's true
-     *
-     * @return The lazy state
-     */
-    private synchronized boolean checkLaziness() {
-        if(lazy > 0) {
-            lazy--;
-        }
-        return lazy > 0;
-    }
-
-    /**
-     * Unwraps this class, meaning only returning the wrapped data
-     *
-     * @return The wrapped data
-     */
-    public PlayerData unwrap() {
-        return wrappedData;
+    @Override
+    public void update() {
+        this.wrappedObject = MooCache.getInstance().getPlayerMap().get(getUniqueId());
     }
 
     /**
@@ -83,7 +41,7 @@ public class MooPlayer {
      * @return The uuid
      */
     public UUID getUniqueId() {
-        return wrappedData.getUuid();
+        return wrappedObject.getUuid();
     }
 
     /**
@@ -92,7 +50,7 @@ public class MooPlayer {
      * @return The name
      */
     public String getName() {
-        return wrappedData.getLastName();
+        return wrappedObject.getLastName();
     }
 
     /**
@@ -101,7 +59,7 @@ public class MooPlayer {
      * @return The ip
      */
     public String getIp() {
-        return wrappedData.getLastIp();
+        return wrappedObject.getLastIp();
     }
 
     /**
@@ -110,7 +68,7 @@ public class MooPlayer {
      * @return The group
      */
     public Group getGroup() {
-        String groupName = wrappedData.getGroup();
+        String groupName = wrappedObject.getGroup();
         return MooCache.getInstance().getGroupMap().get(groupName);
     }
 
@@ -120,7 +78,7 @@ public class MooPlayer {
      * @return The rank
      */
     public int getRank() {
-        return wrappedData.getRank();
+        return wrappedObject.getRank();
     }
 
     /**
@@ -129,7 +87,7 @@ public class MooPlayer {
      * @return The server
      */
     public MooServer getCurrentServer() {
-        return MooCache.getInstance().getServer(server -> server.getName().equals(wrappedData.getCurrentServer()));
+        return MooCache.getInstance().getServer(server -> server.getName().equals(wrappedObject.getCurrentServer()));
     }
 
     /**
@@ -138,7 +96,7 @@ public class MooPlayer {
      * @return The proxy
      */
     public int getCurrentProxy() {
-        return wrappedData.getCurrentProxy();
+        return wrappedObject.getCurrentProxy();
     }
 
     /**
@@ -147,7 +105,7 @@ public class MooPlayer {
      * @return The time
      */
     public Long getTotalOnline() {
-        return getCurrentOnline() + wrappedData.getTotalOnline();
+        return getCurrentOnline() + wrappedObject.getTotalOnline();
     }
 
     /**
@@ -156,7 +114,7 @@ public class MooPlayer {
      * @return The time (0 = not online)
      */
     public long getJoined() {
-        return wrappedData.getJoined();
+        return wrappedObject.getJoined();
     }
 
     /**
@@ -174,7 +132,7 @@ public class MooPlayer {
      * @return The coins
      */
     public Long getCoins() {
-        return wrappedData.getCoins();
+        return wrappedObject.getCoins();
     }
 
     /**
@@ -183,7 +141,7 @@ public class MooPlayer {
      * @return The ban points
      */
     public int getBanPoints() {
-        return wrappedData.getBanPoints();
+        return wrappedObject.getBanPoints();
     }
 
     /**
@@ -192,7 +150,7 @@ public class MooPlayer {
      * @return The list of permissions
      */
     public List<String> getPrivatePermissions() {
-        return wrappedData.getExtraPerms();
+        return wrappedObject.getExtraPerms();
     }
 
     /**
@@ -219,18 +177,19 @@ public class MooPlayer {
      */
     public MooPlayer setGroup(Group group) {
         setGroup(group.getName());
-        wrappedData.setRank(group.getRank());
+        wrappedObject.setRank(group.getRank());
 
         return this;
     }
 
-    private void setGroup(String groupName) {
-        wrappedData.setGroup(groupName);
+    private MooPlayer setGroup(String groupName) {
+        wrappedObject.setGroup(groupName);
 
         // MooQueries
         if(checkLaziness()) {
             MooQueries.getInstance().modifyPlayerData(getUniqueId(), DbModifier.PLAYER_GROUP, groupName);
         }
+        return this;
     }
 
     /**
@@ -240,7 +199,7 @@ public class MooPlayer {
      * @param newServerName The new server name
      */
     public MooPlayer setCurrentServer(String newServerName) {
-        wrappedData.setCurrentServer(newServerName);
+        wrappedObject.setCurrentServer(newServerName);
 
         // MooQueries
         if(checkLaziness()) {
@@ -255,7 +214,7 @@ public class MooPlayer {
      * @param coins The coins
      */
     public MooPlayer setCoins(long coins) {
-        wrappedData.setCoins(coins);
+        wrappedObject.setCoins(coins);
 
         // MooQueries
         if(checkLaziness()) {
@@ -276,7 +235,7 @@ public class MooPlayer {
      * @return The result
      */
     public boolean exists() {
-        return wrappedData.getUuid() != null;
+        return wrappedObject.getUuid() != null;
     }
 
     /**
@@ -285,7 +244,7 @@ public class MooPlayer {
      * @return The result
      */
     public boolean isOnline() {
-        return exists() && wrappedData.getJoined() != 0;
+        return exists() && wrappedObject.getJoined() != 0;
     }
 
     /**

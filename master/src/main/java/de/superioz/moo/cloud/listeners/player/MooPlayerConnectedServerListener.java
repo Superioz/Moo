@@ -7,7 +7,7 @@ import de.superioz.moo.api.event.EventPriority;
 import de.superioz.moo.api.redis.MooCache;
 import de.superioz.moo.cloud.Cloud;
 import de.superioz.moo.cloud.events.MooPlayerConnectedServerEvent;
-import de.superioz.moo.network.common.ResponseStatus;
+import de.superioz.moo.network.queries.ResponseStatus;
 import de.superioz.moo.network.packets.PacketPlayerState;
 
 /**

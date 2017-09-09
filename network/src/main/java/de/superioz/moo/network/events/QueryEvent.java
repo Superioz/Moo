@@ -1,7 +1,7 @@
 package de.superioz.moo.network.events;
 
-import de.superioz.moo.network.common.Queries;
-import de.superioz.moo.network.common.Response;
+import de.superioz.moo.network.queries.Queries;
+import de.superioz.moo.network.queries.Response;
 import de.superioz.moo.network.packet.AbstractPacket;
 import lombok.Getter;
 import lombok.Setter;

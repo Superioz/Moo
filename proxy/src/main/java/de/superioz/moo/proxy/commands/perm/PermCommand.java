@@ -21,8 +21,8 @@ import de.superioz.moo.api.exceptions.InvalidArgumentException;
 import de.superioz.moo.api.io.LanguageManager;
 import de.superioz.moo.api.util.Validation;
 import de.superioz.moo.api.utils.StringUtil;
-import de.superioz.moo.network.common.MooQueries;
-import de.superioz.moo.network.common.ResponseStatus;
+import de.superioz.moo.network.queries.MooQueries;
+import de.superioz.moo.network.queries.ResponseStatus;
 import de.superioz.moo.proxy.command.BungeeCommandContext;
 import javafx.util.Pair;
 import net.md_5.bungee.api.ProxyServer;
@@ -120,7 +120,6 @@ public class PermCommand {
         HashSet<String> permissionsValues = permissions.getValue();
         Object primKey = permissions.getKey();
 
-
         // list permissions from arguments to be added
         String rawArg = args.get(0);
         List<String> argPermissions = StringUtil.find(Validation.PERMISSION.getRawRegex(), rawArg);
@@ -139,11 +138,11 @@ public class PermCommand {
         ResponseStatus status;
         if(primKey instanceof String) {
             status = MooQueries.getInstance().modifyGroup((String) primKey,
-                    DbQueryUnbaked.newInstance().append(DbModifier.GROUP_PERMISSIONS, argPermissions));
+                    DbQueryUnbaked.newInstance(DbModifier.GROUP_PERMISSIONS, argPermissions));
         }
         else {
             status = MooQueries.getInstance().modifyPlayerData(primKey,
-                    DbQueryUnbaked.newInstance().append(DbModifier.PLAYER_EXTRA_PERMS, argPermissions));
+                    DbQueryUnbaked.newInstance(DbModifier.PLAYER_EXTRA_PERMS, argPermissions));
         }
         context.sendMessage(LanguageManager.get("permission-add-complete", status));
     }

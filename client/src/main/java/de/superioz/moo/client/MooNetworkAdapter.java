@@ -7,7 +7,7 @@ import de.superioz.moo.client.events.CloudDisconnectedEvent;
 import de.superioz.moo.network.client.ClientType;
 import de.superioz.moo.network.common.NetworkEventAdapter;
 import de.superioz.moo.network.common.PacketMessenger;
-import de.superioz.moo.network.common.Response;
+import de.superioz.moo.network.queries.Response;
 import de.superioz.moo.network.packet.AbstractPacket;
 import de.superioz.moo.network.packets.PacketHandshake;
 import io.netty.channel.Channel;

@@ -20,8 +20,8 @@ import de.superioz.moo.api.util.Operator;
 import de.superioz.moo.api.util.Procedure;
 import de.superioz.moo.api.utils.ReflectionUtil;
 import de.superioz.moo.api.utils.StringUtil;
-import de.superioz.moo.network.common.Queries;
-import de.superioz.moo.network.common.Response;
+import de.superioz.moo.network.queries.Queries;
+import de.superioz.moo.network.queries.Response;
 import de.superioz.moo.network.packets.PacketDatabaseCount;
 
 import java.util.List;

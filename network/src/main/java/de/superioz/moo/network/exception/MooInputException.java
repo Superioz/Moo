@@ -1,6 +1,6 @@
 package de.superioz.moo.network.exception;
 
-import de.superioz.moo.network.common.Response;
+import de.superioz.moo.network.queries.Response;
 import lombok.Getter;
 
 /**

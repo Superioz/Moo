@@ -8,7 +8,7 @@ import de.superioz.moo.api.common.RunAsynchronous;
 import de.superioz.moo.api.config.NetworkConfigType;
 import de.superioz.moo.api.redis.MooCache;
 import de.superioz.moo.client.Moo;
-import de.superioz.moo.network.common.ResponseStatus;
+import de.superioz.moo.network.queries.ResponseStatus;
 import de.superioz.moo.proxy.command.BungeeCommandContext;
 
 @RunAsynchronous

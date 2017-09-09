@@ -1,6 +1,6 @@
 package de.superioz.moo.network.packets;
 
-import de.superioz.moo.network.common.ResponseStatus;
+import de.superioz.moo.network.queries.ResponseStatus;
 import de.superioz.moo.network.packet.AbstractPacket;
 import lombok.NoArgsConstructor;
 import de.superioz.moo.network.packet.PacketBuffer;

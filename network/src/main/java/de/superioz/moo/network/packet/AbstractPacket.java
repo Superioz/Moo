@@ -1,7 +1,7 @@
 package de.superioz.moo.network.packet;
 
 import de.superioz.moo.network.Protocol;
-import de.superioz.moo.network.common.ResponseStatus;
+import de.superioz.moo.network.queries.ResponseStatus;
 import de.superioz.moo.network.packets.PacketKeepalive;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.Channel;

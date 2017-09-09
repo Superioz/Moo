@@ -9,7 +9,7 @@ import de.superioz.moo.cloud.Cloud;
 import de.superioz.moo.cloud.events.HandshakeEvent;
 import de.superioz.moo.network.events.MooClientConnectedEvent;
 import de.superioz.moo.network.client.ClientType;
-import de.superioz.moo.network.common.ResponseStatus;
+import de.superioz.moo.network.queries.ResponseStatus;
 import de.superioz.moo.network.packets.PacketHandshake;
 import de.superioz.moo.network.packets.PacketRespond;
 import de.superioz.moo.network.server.MooClient;

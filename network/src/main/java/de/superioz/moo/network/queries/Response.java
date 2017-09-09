@@ -1,4 +1,4 @@
-package de.superioz.moo.network.common;
+package de.superioz.moo.network.queries;
 
 import lombok.Getter;
 import de.superioz.moo.api.database.object.DataArchitecture;

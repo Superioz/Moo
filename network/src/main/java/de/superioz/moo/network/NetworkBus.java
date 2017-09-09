@@ -2,7 +2,7 @@ package de.superioz.moo.network;
 
 import com.google.common.base.Charsets;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
-import de.superioz.moo.network.common.ResponseStatus;
+import de.superioz.moo.network.queries.ResponseStatus;
 import de.superioz.moo.network.packet.AbstractPacket;
 import de.superioz.moo.network.packet.PacketAdapting;
 import de.superioz.moo.network.packets.MultiPacket;

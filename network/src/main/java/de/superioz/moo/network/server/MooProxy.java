@@ -6,9 +6,9 @@ import de.superioz.moo.api.database.objects.PlayerData;
 import de.superioz.moo.api.database.objects.ServerPattern;
 import de.superioz.moo.api.redis.MooCache;
 import de.superioz.moo.network.common.MooPlayer;
-import de.superioz.moo.network.common.MooQueries;
+import de.superioz.moo.network.queries.MooQueries;
 import de.superioz.moo.network.common.PacketMessenger;
-import de.superioz.moo.network.common.Response;
+import de.superioz.moo.network.queries.Response;
 import de.superioz.moo.network.packets.PacketServerRequest;
 import de.superioz.moo.network.packets.PacketServerRequestShutdown;
 

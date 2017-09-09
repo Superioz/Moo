@@ -1,4 +1,4 @@
-package de.superioz.moo.network.common;
+package de.superioz.moo.network.queries;
 
 import de.superioz.moo.api.common.PlayerProfile;
 import de.superioz.moo.api.database.DatabaseType;
@@ -12,6 +12,7 @@ import de.superioz.moo.api.database.query.DbQueryUnbaked;
 import de.superioz.moo.api.redis.MooCache;
 import de.superioz.moo.api.utils.CollectionUtil;
 import de.superioz.moo.api.utils.PermissionUtil;
+import de.superioz.moo.network.common.PacketMessenger;
 import de.superioz.moo.network.exception.MooInputException;
 import de.superioz.moo.network.exception.MooOutputException;
 import de.superioz.moo.network.packets.PacketPlayerMessage;
@@ -475,6 +476,10 @@ public final class MooQueries {
 
     public ResponseStatus modifyGroup(String groupName, DbQuery query) {
         return Queries.modify(DatabaseType.GROUP, groupName, query).getStatus();
+    }
+
+    public ResponseStatus modifyGroup(String groupName, DbModifier modifier, Object val) {
+        return Queries.modify(DatabaseType.GROUP, groupName, DbQueryUnbaked.newInstance(modifier, val)).getStatus();
     }
 
     public ResponseStatus modifyGroup(String groupName, DbQueryUnbaked query) {

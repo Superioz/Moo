@@ -1,4 +1,4 @@
-package de.superioz.moo.network.common;
+package de.superioz.moo.network.queries;
 
 import de.superioz.moo.api.database.*;
 import de.superioz.moo.api.database.filter.DbFilter;
@@ -7,6 +7,7 @@ import de.superioz.moo.api.database.objects.PlayerData;
 import de.superioz.moo.api.database.query.DbQuery;
 import de.superioz.moo.api.database.query.DbQueryNode;
 import de.superioz.moo.api.database.query.DbQueryUnbaked;
+import de.superioz.moo.network.common.PacketMessenger;
 import de.superioz.moo.network.packet.AbstractPacket;
 import de.superioz.moo.network.packets.*;
 import lombok.AccessLevel;

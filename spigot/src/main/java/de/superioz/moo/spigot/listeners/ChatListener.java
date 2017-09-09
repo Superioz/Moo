@@ -2,7 +2,7 @@ package de.superioz.moo.spigot.listeners;
 
 import de.superioz.moo.api.database.objects.Group;
 import de.superioz.moo.api.io.LanguageManager;
-import de.superioz.moo.network.common.MooQueries;
+import de.superioz.moo.network.queries.MooQueries;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;

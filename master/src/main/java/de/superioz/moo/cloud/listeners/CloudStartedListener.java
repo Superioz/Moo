@@ -7,7 +7,7 @@ import de.superioz.moo.api.event.EventHandler;
 import de.superioz.moo.api.event.EventListener;
 import de.superioz.moo.cloud.Cloud;
 import de.superioz.moo.cloud.events.CloudStartedEvent;
-import de.superioz.moo.network.common.Queries;
+import de.superioz.moo.network.queries.Queries;
 
 /**
  * This class listens on the start of the cloud

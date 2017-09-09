@@ -9,7 +9,7 @@ import de.superioz.moo.cloud.events.MooPlayerConnectedServerEvent;
 import de.superioz.moo.cloud.events.MooPlayerJoinedProxyEvent;
 import de.superioz.moo.cloud.events.MooPlayerJoinedServerEvent;
 import de.superioz.moo.cloud.events.MooPlayerLeftProxyEvent;
-import de.superioz.moo.network.common.ResponseStatus;
+import de.superioz.moo.network.queries.ResponseStatus;
 import de.superioz.moo.network.packet.PacketAdapter;
 import de.superioz.moo.network.packet.PacketHandler;
 import de.superioz.moo.network.packets.PacketPlayerState;

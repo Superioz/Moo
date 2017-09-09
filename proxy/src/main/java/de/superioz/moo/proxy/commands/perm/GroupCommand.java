@@ -17,8 +17,8 @@ import de.superioz.moo.api.database.query.DbQuery;
 import de.superioz.moo.api.database.query.DbQueryNode;
 import de.superioz.moo.api.io.LanguageManager;
 import de.superioz.moo.api.utils.StringUtil;
-import de.superioz.moo.network.common.MooQueries;
-import de.superioz.moo.network.common.ResponseStatus;
+import de.superioz.moo.network.queries.MooQueries;
+import de.superioz.moo.network.queries.ResponseStatus;
 import de.superioz.moo.proxy.command.BungeeCommandContext;
 
 import java.util.Arrays;

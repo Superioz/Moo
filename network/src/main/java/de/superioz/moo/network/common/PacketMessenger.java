@@ -4,6 +4,8 @@ import de.superioz.moo.network.client.ClientType;
 import de.superioz.moo.network.events.PacketQueueEvent;
 import de.superioz.moo.network.packet.AbstractPacket;
 import de.superioz.moo.network.packets.PacketRespond;
+import de.superioz.moo.network.queries.Response;
+import de.superioz.moo.network.queries.ResponseScope;
 import de.superioz.moo.network.server.ClientManager;
 import de.superioz.moo.network.server.MooClient;
 import de.superioz.moo.network.util.NettyUtil;

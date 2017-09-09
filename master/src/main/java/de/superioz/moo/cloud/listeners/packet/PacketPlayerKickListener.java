@@ -2,7 +2,7 @@ package de.superioz.moo.cloud.listeners.packet;
 
 import de.superioz.moo.api.database.objects.PlayerData;
 import de.superioz.moo.cloud.Cloud;
-import de.superioz.moo.network.common.ResponseStatus;
+import de.superioz.moo.network.queries.ResponseStatus;
 import de.superioz.moo.network.packet.PacketAdapter;
 import de.superioz.moo.network.packet.PacketHandler;
 import de.superioz.moo.network.packets.PacketPlayerKick;

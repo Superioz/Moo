@@ -3,7 +3,7 @@ package de.superioz.moo.client.command.params;
 import de.superioz.moo.api.command.param.ParamType;
 import de.superioz.moo.api.database.objects.PlayerData;
 import de.superioz.moo.api.util.Validation;
-import de.superioz.moo.network.common.MooQueries;
+import de.superioz.moo.network.queries.MooQueries;
 
 import java.util.UUID;
 

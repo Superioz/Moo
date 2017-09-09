@@ -13,7 +13,7 @@ import de.superioz.moo.api.logging.ExtendedLogger;
 import de.superioz.moo.api.module.ModuleRegistry;
 import de.superioz.moo.api.modules.RedisModule;
 import de.superioz.moo.client.Moo;
-import de.superioz.moo.network.common.MooQueries;
+import de.superioz.moo.network.queries.MooQueries;
 import lombok.Getter;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.config.ServerInfo;
