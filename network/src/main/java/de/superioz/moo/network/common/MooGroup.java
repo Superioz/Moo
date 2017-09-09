@@ -8,12 +8,14 @@ import de.superioz.moo.api.util.Validation;
 import de.superioz.moo.network.queries.MooQueries;
 import de.superioz.moo.network.queries.ResponseStatus;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
  * Wrapper class for {@link Group}
  */
-public class MooGroup extends ObjectWrapper<MooGroup, Group> {
+public class MooGroup extends ObjectWrapper<MooGroup, Group> implements PermissionHolder {
 
     public MooGroup(Group wrappedObject) {
         super(wrappedObject);
@@ -285,7 +287,8 @@ public class MooGroup extends ObjectWrapper<MooGroup, Group> {
      * @param permissions The permissions
      * @return The status
      */
-    public ResponseStatus addPermission(String... permissions) {
+    @Override
+    public ResponseStatus addPermission(List<String> permissions) {
         List<String> currentPermissions = getPermissions();
         int size = currentPermissions.size();
         for(String s : permissions) {
@@ -297,8 +300,8 @@ public class MooGroup extends ObjectWrapper<MooGroup, Group> {
         return setPermissions(currentPermissions);
     }
 
-    public ResponseStatus addPermission(List<String> permissions) {
-        return addPermission(permissions.toArray(new String[]{}));
+    public ResponseStatus addPermission(String... permissions) {
+        return addPermission(Arrays.asList(permissions));
     }
 
     /**
@@ -307,7 +310,8 @@ public class MooGroup extends ObjectWrapper<MooGroup, Group> {
      * @param permissions The permissions
      * @return The status
      */
-    public ResponseStatus removePermission(String... permissions) {
+    @Override
+    public ResponseStatus removePermission(List<String> permissions) {
         List<String> currentPermissions = getPermissions();
         int size = currentPermissions.size();
         for(String s : permissions) {
@@ -319,8 +323,19 @@ public class MooGroup extends ObjectWrapper<MooGroup, Group> {
         return setPermissions(currentPermissions);
     }
 
-    public ResponseStatus removePermission(List<String> permissions) {
-        return removePermission(permissions.toArray(new String[]{}));
+    public ResponseStatus removePermission(String... permissions) {
+        return addPermission(Arrays.asList(permissions));
+    }
+
+    /**
+     * Clears the permission of this player
+     *
+     * @return The status
+     */
+    @Override
+    public ResponseStatus clearPermission() {
+        if(getPermissions().isEmpty()) return ResponseStatus.NOT_FOUND;
+        return setPermissions(new ArrayList<>());
     }
 
 

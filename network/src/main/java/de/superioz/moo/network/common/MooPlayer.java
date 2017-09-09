@@ -23,7 +23,7 @@ import java.util.*;
 /**
  * Wrapper class for {@link PlayerData}
  */
-public class MooPlayer extends ObjectWrapper<MooPlayer, PlayerData> {
+public class MooPlayer extends ObjectWrapper<MooPlayer, PlayerData> implements PermissionHolder {
 
     public MooPlayer(PlayerData wrappedObject) {
         super(wrappedObject == null ? PlayerData.NON_EXISTENT : wrappedObject);
@@ -314,7 +314,8 @@ public class MooPlayer extends ObjectWrapper<MooPlayer, PlayerData> {
      * @param permissions The permissions
      * @return The status
      */
-    public ResponseStatus addPermission(String... permissions) {
+    @Override
+    public ResponseStatus addPermission(List<String> permissions) {
         HashSet<String> currentPermissions = getPermissions();
         int size = currentPermissions.size();
         for(String s : permissions) {
@@ -326,8 +327,8 @@ public class MooPlayer extends ObjectWrapper<MooPlayer, PlayerData> {
         return setPermissions(currentPermissions);
     }
 
-    public ResponseStatus addPermission(List<String> permissions) {
-        return addPermission(permissions.toArray(new String[]{}));
+    public ResponseStatus addPermission(String... permissions) {
+        return addPermission(Arrays.asList(permissions));
     }
 
     /**
@@ -336,7 +337,8 @@ public class MooPlayer extends ObjectWrapper<MooPlayer, PlayerData> {
      * @param permissions The permissions
      * @return The status
      */
-    public ResponseStatus removePermission(String... permissions) {
+    @Override
+    public ResponseStatus removePermission(List<String> permissions) {
         HashSet<String> currentPermissions = getPermissions();
         int size = currentPermissions.size();
         for(String s : permissions) {
@@ -348,8 +350,8 @@ public class MooPlayer extends ObjectWrapper<MooPlayer, PlayerData> {
         return setPermissions(currentPermissions);
     }
 
-    public ResponseStatus removePermission(List<String> permissions) {
-        return removePermission(permissions.toArray(new String[]{}));
+    public ResponseStatus removePermission(String... permissions) {
+        return removePermission(Arrays.asList(permissions));
     }
 
     /**
@@ -357,7 +359,8 @@ public class MooPlayer extends ObjectWrapper<MooPlayer, PlayerData> {
      *
      * @return The status
      */
-    public ResponseStatus clearPermissions() {
+    @Override
+    public ResponseStatus clearPermission() {
         if(unwrap().getExtraPerms().isEmpty()) return ResponseStatus.NOT_FOUND;
         return setPermissions(new HashSet<>());
     }
