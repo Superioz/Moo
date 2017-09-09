@@ -10,6 +10,7 @@ import de.superioz.moo.api.database.objects.Group;
 import de.superioz.moo.api.database.objects.PlayerData;
 import de.superioz.moo.api.io.LanguageManager;
 import de.superioz.moo.api.redis.MooCache;
+import de.superioz.moo.api.util.Validation;
 import de.superioz.moo.api.utils.PermissionUtil;
 import de.superioz.moo.network.packets.PacketPlayerBan;
 import de.superioz.moo.network.packets.PacketPlayerKick;
@@ -17,9 +18,7 @@ import de.superioz.moo.network.queries.MooQueries;
 import de.superioz.moo.network.queries.ResponseStatus;
 import de.superioz.moo.network.server.MooProxy;
 
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * Wrapper class for {@link PlayerData}
@@ -158,8 +157,8 @@ public class MooPlayer extends ObjectWrapper<MooPlayer, PlayerData> {
      *
      * @return The list/set of permissions
      */
-    public Set<String> getPermissions() {
-        Set<String> l = PermissionUtil.getAllPermissions(getGroup(), MooCache.getInstance().getGroupMap().values());
+    public HashSet<String> getPermissions() {
+        HashSet<String> l = PermissionUtil.getAllPermissions(getGroup(), MooCache.getInstance().getGroupMap().values());
         if(l == null) l.addAll(getPrivatePermissions());
         return l;
     }
@@ -171,25 +170,47 @@ public class MooPlayer extends ObjectWrapper<MooPlayer, PlayerData> {
      */
 
     /**
+     * Sets the permissions of the player
+     *
+     * @param permissions The permissions
+     * @return The status
+     */
+    public ResponseStatus setPermissions(HashSet<String> permissions) {
+        if(!exists()) return ResponseStatus.NOK;
+        List<String> l = new ArrayList<>();
+        permissions.forEach(s -> {
+            if(Validation.PERMISSION.matches(s)) l.add(s);
+        });
+
+        if(checkLaziness()) {
+            return MooQueries.getInstance().modifyPlayerData(getUniqueId(), DbModifier.PLAYER_EXTRA_PERMS, l);
+        }
+        return ResponseStatus.OK;
+    }
+
+    /**
      * Sets the group of this player
      *
      * @param group The new group
+     * @return The status
      */
-    public MooPlayer setGroup(Group group) {
-        setGroup(group.getName());
+    public ResponseStatus setGroup(Group group) {
+        if(!exists()) return ResponseStatus.NOK;
+        ResponseStatus status = setGroup(group.getName());
         wrappedObject.setRank(group.getRank());
 
-        return this;
+        return status;
     }
 
-    private MooPlayer setGroup(String groupName) {
+    private ResponseStatus setGroup(String groupName) {
+        if(!exists()) return ResponseStatus.NOK;
         wrappedObject.setGroup(groupName);
 
         // MooQueries
         if(checkLaziness()) {
-            MooQueries.getInstance().modifyPlayerData(getUniqueId(), DbModifier.PLAYER_GROUP, groupName);
+            return MooQueries.getInstance().modifyPlayerData(getUniqueId(), DbModifier.PLAYER_GROUP, groupName);
         }
-        return this;
+        return ResponseStatus.OK;
     }
 
     /**
@@ -197,30 +218,34 @@ public class MooPlayer extends ObjectWrapper<MooPlayer, PlayerData> {
      * <b>USE AT OWN RISK</b>
      *
      * @param newServerName The new server name
+     * @return The status
      */
-    public MooPlayer setCurrentServer(String newServerName) {
+    public ResponseStatus setCurrentServer(String newServerName) {
+        if(!exists()) return ResponseStatus.NOK;
         wrappedObject.setCurrentServer(newServerName);
 
         // MooQueries
         if(checkLaziness()) {
-            MooQueries.getInstance().modifyPlayerData(getUniqueId(), DbModifier.PLAYER_SERVER, newServerName);
+            return MooQueries.getInstance().modifyPlayerData(getUniqueId(), DbModifier.PLAYER_SERVER, newServerName);
         }
-        return this;
+        return ResponseStatus.OK;
     }
 
     /**
      * Sets the coins of the player
      *
      * @param coins The coins
+     * @return The status
      */
-    public MooPlayer setCoins(long coins) {
+    public ResponseStatus setCoins(long coins) {
+        if(!exists()) return ResponseStatus.NOK;
         wrappedObject.setCoins(coins);
 
         // MooQueries
         if(checkLaziness()) {
-            MooQueries.getInstance().modifyPlayerData(getUniqueId(), DbModifier.PLAYER_COINS, coins);
+            return MooQueries.getInstance().modifyPlayerData(getUniqueId(), DbModifier.PLAYER_COINS, coins);
         }
-        return this;
+        return ResponseStatus.OK;
     }
 
     /*
@@ -235,7 +260,7 @@ public class MooPlayer extends ObjectWrapper<MooPlayer, PlayerData> {
      * @return The result
      */
     public boolean exists() {
-        return wrappedObject.getUuid() != null;
+        return wrappedObject != null && wrappedObject.getUuid() != null;
     }
 
     /**
@@ -281,6 +306,60 @@ public class MooPlayer extends ObjectWrapper<MooPlayer, PlayerData> {
      */
     public PlayerProfile getProfile() {
         return new PlayerProfile(unwrap(), getCurrentBan(), getBanArchive());
+    }
+
+    /**
+     * Adds given permissions to the player
+     *
+     * @param permissions The permissions
+     * @return The status
+     */
+    public ResponseStatus addPermission(String... permissions) {
+        HashSet<String> currentPermissions = getPermissions();
+        int size = currentPermissions.size();
+        for(String s : permissions) {
+            if(Validation.PERMISSION.matches(s)) {
+                currentPermissions.add(s);
+            }
+        }
+        if(currentPermissions.size() == size) return ResponseStatus.BAD_REQUEST;
+        return setPermissions(currentPermissions);
+    }
+
+    public ResponseStatus addPermission(List<String> permissions) {
+        return addPermission(permissions.toArray(new String[]{}));
+    }
+
+    /**
+     * Removes given permissions from the player
+     *
+     * @param permissions The permissions
+     * @return The status
+     */
+    public ResponseStatus removePermission(String... permissions) {
+        HashSet<String> currentPermissions = getPermissions();
+        int size = currentPermissions.size();
+        for(String s : permissions) {
+            if(Validation.PERMISSION.matches(s)) {
+                currentPermissions.remove(s);
+            }
+        }
+        if(currentPermissions.size() == size) return ResponseStatus.BAD_REQUEST;
+        return setPermissions(currentPermissions);
+    }
+
+    public ResponseStatus removePermission(List<String> permissions) {
+        return removePermission(permissions.toArray(new String[]{}));
+    }
+
+    /**
+     * Clears the permissions
+     *
+     * @return The status
+     */
+    public ResponseStatus clearPermissions() {
+        if(unwrap().getExtraPerms().isEmpty()) return ResponseStatus.NOT_FOUND;
+        return setPermissions(new HashSet<>());
     }
 
     /**
@@ -335,5 +414,4 @@ public class MooPlayer extends ObjectWrapper<MooPlayer, PlayerData> {
     public ResponseStatus ban(UUID from, BanReason banReason) {
         return ban(from, banReason, 0L);
     }
-
 }

@@ -17,9 +17,9 @@ public final class PermissionUtil {
      * @param groups The list of groups to list all parents
      * @return The listOfString
      */
-    public static Set<String> getAllPermissions(Group base, Collection<Group> groups) {
-        Set<String> permissions = new HashSet<>(base.getPermissions());
-        Set<String> inheritances = new HashSet<>();
+    public static HashSet<String> getAllPermissions(Group base, Collection<Group> groups) {
+        HashSet<String> permissions = new HashSet<>(base.getPermissions());
+        HashSet<String> inheritances = new HashSet<>();
 
         boolean finished = false;
 

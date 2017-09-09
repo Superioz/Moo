@@ -482,6 +482,10 @@ public final class MooQueries {
         return Queries.modify(DatabaseType.GROUP, groupName, DbQueryUnbaked.newInstance(modifier, val)).getStatus();
     }
 
+    public ResponseStatus modifyGroup(String groupName, DbModifier modifier, DbQueryNode.Type type, Object val) {
+        return Queries.modify(DatabaseType.GROUP, groupName, DbQueryUnbaked.newInstance().add(modifier, type, val)).getStatus();
+    }
+
     public ResponseStatus modifyGroup(String groupName, DbQueryUnbaked query) {
         return modifyGroup(groupName, query.bake(Group.class));
     }

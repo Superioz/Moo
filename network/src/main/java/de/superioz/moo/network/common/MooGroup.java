@@ -3,7 +3,10 @@ package de.superioz.moo.network.common;
 import de.superioz.moo.api.common.ObjectWrapper;
 import de.superioz.moo.api.database.DbModifier;
 import de.superioz.moo.api.database.objects.Group;
+import de.superioz.moo.api.redis.MooCache;
+import de.superioz.moo.api.util.Validation;
 import de.superioz.moo.network.queries.MooQueries;
+import de.superioz.moo.network.queries.ResponseStatus;
 
 import java.util.List;
 
@@ -18,7 +21,7 @@ public class MooGroup extends ObjectWrapper<MooGroup, Group> {
 
     @Override
     public void update() {
-
+        this.wrappedObject = MooCache.getInstance().getGroupMap().get(getName());
     }
 
     /**
@@ -114,14 +117,15 @@ public class MooGroup extends ObjectWrapper<MooGroup, Group> {
      * @param name The name
      * @return This
      */
-    public MooGroup setName(String name) {
+    public ResponseStatus setName(String name) {
+        if(!exists()) return ResponseStatus.NOK;
         wrappedObject.setName(name);
 
         // MooQueries
         if(checkLaziness()) {
-            MooQueries.getInstance().modifyGroup(getName(), DbModifier.GROUP_NAME, name);
+            return MooQueries.getInstance().modifyGroup(getName(), DbModifier.GROUP_NAME, name);
         }
-        return this;
+        return ResponseStatus.OK;
     }
 
     /**
@@ -130,14 +134,15 @@ public class MooGroup extends ObjectWrapper<MooGroup, Group> {
      * @param rank The rank
      * @return This
      */
-    public MooGroup setRank(int rank) {
+    public ResponseStatus setRank(int rank) {
+        if(!exists()) return ResponseStatus.NOK;
         wrappedObject.setRank(rank);
 
         // MooQueries
         if(checkLaziness()) {
-            MooQueries.getInstance().modifyGroup(getName(), DbModifier.GROUP_RANK, rank);
+            return MooQueries.getInstance().modifyGroup(getName(), DbModifier.GROUP_RANK, rank);
         }
-        return this;
+        return ResponseStatus.OK;
     }
 
     /**
@@ -146,14 +151,15 @@ public class MooGroup extends ObjectWrapper<MooGroup, Group> {
      * @param permissions The permissions
      * @return This
      */
-    public MooGroup setPermissions(List<String> permissions) {
+    public ResponseStatus setPermissions(List<String> permissions) {
+        if(!exists()) return ResponseStatus.NOK;
         wrappedObject.setPermissions(permissions);
 
         // MooQueries
         if(checkLaziness()) {
-            MooQueries.getInstance().modifyGroup(getName(), DbModifier.GROUP_PERMISSIONS, permissions);
+            return MooQueries.getInstance().modifyGroup(getName(), DbModifier.GROUP_PERMISSIONS, permissions);
         }
-        return this;
+        return ResponseStatus.OK;
     }
 
     /**
@@ -162,14 +168,15 @@ public class MooGroup extends ObjectWrapper<MooGroup, Group> {
      * @param parents The parents
      * @return This
      */
-    public MooGroup setParents(List<String> parents) {
+    public ResponseStatus setParents(List<String> parents) {
+        if(!exists()) return ResponseStatus.NOK;
         wrappedObject.setParents(parents);
 
         // MooQueries
         if(checkLaziness()) {
-            MooQueries.getInstance().modifyGroup(getName(), DbModifier.GROUP_INHERITANCES, parents);
+            return MooQueries.getInstance().modifyGroup(getName(), DbModifier.GROUP_INHERITANCES, parents);
         }
-        return this;
+        return ResponseStatus.OK;
     }
 
     /**
@@ -178,14 +185,15 @@ public class MooGroup extends ObjectWrapper<MooGroup, Group> {
      * @param prefix The prefix
      * @return This
      */
-    public MooGroup setPrefix(String prefix) {
+    public ResponseStatus setPrefix(String prefix) {
+        if(!exists()) return ResponseStatus.NOK;
         wrappedObject.setPrefix(prefix);
 
         // MooQueries
         if(checkLaziness()) {
-            MooQueries.getInstance().modifyGroup(getName(), DbModifier.GROUP_PREFIX, prefix);
+            return MooQueries.getInstance().modifyGroup(getName(), DbModifier.GROUP_PREFIX, prefix);
         }
-        return this;
+        return ResponseStatus.OK;
     }
 
     /**
@@ -194,14 +202,15 @@ public class MooGroup extends ObjectWrapper<MooGroup, Group> {
      * @param suffix The suffix
      * @return This
      */
-    public MooGroup setSuffix(String suffix) {
+    public ResponseStatus setSuffix(String suffix) {
+        if(!exists()) return ResponseStatus.NOK;
         wrappedObject.setSuffix(suffix);
 
         // MooQueries
         if(checkLaziness()) {
-            MooQueries.getInstance().modifyGroup(getName(), DbModifier.GROUP_SUFFIX, suffix);
+            return MooQueries.getInstance().modifyGroup(getName(), DbModifier.GROUP_SUFFIX, suffix);
         }
-        return this;
+        return ResponseStatus.OK;
     }
 
     /**
@@ -210,14 +219,15 @@ public class MooGroup extends ObjectWrapper<MooGroup, Group> {
      * @param color The color
      * @return This
      */
-    public MooGroup setColor(String color) {
+    public ResponseStatus setColor(String color) {
+        if(!exists()) return ResponseStatus.NOK;
         wrappedObject.setColor(color);
 
         // MooQueries
         if(checkLaziness()) {
-            MooQueries.getInstance().modifyGroup(getName(), DbModifier.GROUP_COLOR, color);
+            return MooQueries.getInstance().modifyGroup(getName(), DbModifier.GROUP_COLOR, color);
         }
-        return this;
+        return ResponseStatus.OK;
     }
 
     /**
@@ -226,14 +236,15 @@ public class MooGroup extends ObjectWrapper<MooGroup, Group> {
      * @param tabPrefix The tab prefix
      * @return This
      */
-    public MooGroup setTabPrefix(String tabPrefix) {
+    public ResponseStatus setTabPrefix(String tabPrefix) {
+        if(!exists()) return ResponseStatus.NOK;
         wrappedObject.setTabPrefix(tabPrefix);
 
         // MooQueries
         if(checkLaziness()) {
-            MooQueries.getInstance().modifyGroup(getName(), DbModifier.GROUP_TAB_PREFIX, tabPrefix);
+            return MooQueries.getInstance().modifyGroup(getName(), DbModifier.GROUP_TAB_PREFIX, tabPrefix);
         }
-        return this;
+        return ResponseStatus.OK;
     }
 
     /**
@@ -242,14 +253,75 @@ public class MooGroup extends ObjectWrapper<MooGroup, Group> {
      * @param tabSuffix The tab suffix
      * @return This
      */
-    public MooGroup setTabSuffix(String tabSuffix) {
+    public ResponseStatus setTabSuffix(String tabSuffix) {
+        if(!exists()) return ResponseStatus.NOK;
         wrappedObject.setTabSuffix(tabSuffix);
 
         // MooQueries
         if(checkLaziness()) {
-            MooQueries.getInstance().modifyGroup(getName(), DbModifier.GROUP_TAB_SUFFIX, tabSuffix);
+            return MooQueries.getInstance().modifyGroup(getName(), DbModifier.GROUP_TAB_SUFFIX, tabSuffix);
         }
-        return this;
+        return ResponseStatus.OK;
     }
+
+    /*
+    ===================
+    OTHERS
+    ===================
+     */
+
+    /**
+     * Checks if the player exists
+     *
+     * @return The result
+     */
+    public boolean exists() {
+        return wrappedObject != null && wrappedObject.getName() != null;
+    }
+
+    /**
+     * Adds given permissions to the player
+     *
+     * @param permissions The permissions
+     * @return The status
+     */
+    public ResponseStatus addPermission(String... permissions) {
+        List<String> currentPermissions = getPermissions();
+        int size = currentPermissions.size();
+        for(String s : permissions) {
+            if(Validation.PERMISSION.matches(s)) {
+                currentPermissions.add(s);
+            }
+        }
+        if(currentPermissions.size() == size) return ResponseStatus.BAD_REQUEST;
+        return setPermissions(currentPermissions);
+    }
+
+    public ResponseStatus addPermission(List<String> permissions) {
+        return addPermission(permissions.toArray(new String[]{}));
+    }
+
+    /**
+     * Removes given permissions from the player
+     *
+     * @param permissions The permissions
+     * @return The status
+     */
+    public ResponseStatus removePermission(String... permissions) {
+        List<String> currentPermissions = getPermissions();
+        int size = currentPermissions.size();
+        for(String s : permissions) {
+            if(Validation.PERMISSION.matches(s)) {
+                currentPermissions.remove(s);
+            }
+        }
+        if(currentPermissions.size() == size) return ResponseStatus.BAD_REQUEST;
+        return setPermissions(currentPermissions);
+    }
+
+    public ResponseStatus removePermission(List<String> permissions) {
+        return removePermission(permissions.toArray(new String[]{}));
+    }
+
 
 }

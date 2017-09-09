@@ -2,15 +2,17 @@ package de.superioz.moo.network.server;
 
 import de.superioz.moo.api.common.MooServer;
 import de.superioz.moo.api.common.MooServerCluster;
+import de.superioz.moo.api.database.objects.Group;
 import de.superioz.moo.api.database.objects.PlayerData;
 import de.superioz.moo.api.database.objects.ServerPattern;
 import de.superioz.moo.api.redis.MooCache;
+import de.superioz.moo.network.common.MooGroup;
 import de.superioz.moo.network.common.MooPlayer;
-import de.superioz.moo.network.queries.MooQueries;
 import de.superioz.moo.network.common.PacketMessenger;
-import de.superioz.moo.network.queries.Response;
 import de.superioz.moo.network.packets.PacketServerRequest;
 import de.superioz.moo.network.packets.PacketServerRequestShutdown;
+import de.superioz.moo.network.queries.MooQueries;
+import de.superioz.moo.network.queries.Response;
 
 import java.net.InetSocketAddress;
 import java.util.ArrayList;
@@ -97,6 +99,19 @@ public final class MooProxy {
 
     public MooServer getServer(String host, int port) {
         return getServer(new InetSocketAddress(host, port));
+    }
+
+    /*
+    =========================
+    GROUP
+    =========================
+     */
+
+    public MooGroup getGroup(String name) {
+        Group group = MooCache.getInstance().getGroupMap().get(name);
+
+        if(group == null) return null;
+        return new MooGroup(group);
     }
 
     /*

@@ -16,6 +16,7 @@ import de.superioz.moo.api.console.format.PageableListFormat;
 import de.superioz.moo.api.database.DbModifier;
 import de.superioz.moo.api.database.objects.Group;
 import de.superioz.moo.api.database.objects.PlayerData;
+import de.superioz.moo.api.database.query.DbQueryNode;
 import de.superioz.moo.api.database.query.DbQueryUnbaked;
 import de.superioz.moo.api.exceptions.InvalidArgumentException;
 import de.superioz.moo.api.io.LanguageManager;
@@ -39,6 +40,9 @@ public class PermCommand {
     private static final String ADD_COMMAND = "add";
     private static final String REMOVE_COMMAND = "remove";
     private static final String CLEAR_COMMAND = "clear";
+
+    private static final String PLAYER_FLAG = "p";
+    private static final String GROUP_FLAG = "g";
 
     @ArgumentHelp
     public void onArgumentHelp(ArgumentHelper helper) {
@@ -76,7 +80,7 @@ public class PermCommand {
     @Command(label = LIST_COMMAND, parent = LABEL, usage = "[page]", flags = {"g", "p", "s", "b"})
     public void list(BungeeCommandContext context, ParamSet args) {
         // list permissions (either from group or player)
-        HashSet<String> permissions = getPermissions(context, args, "g", "p").getValue();
+        HashSet<String> permissions = getPermissions(context, args).getValue();
 
         // list group permissions out of strings
         List<GroupPermission> groupPermissions = new ArrayList<>();
@@ -116,7 +120,7 @@ public class PermCommand {
     @Command(label = ADD_COMMAND, parent = LABEL, usage = "<permission>", flags = {"g", "p"})
     public void add(BungeeCommandContext context, ParamSet args) {
         // list permissions (either from group or player)
-        Pair<Object, HashSet<String>> permissions = getPermissions(context, args, "g", "p");
+        Pair<Object, HashSet<String>> permissions = getPermissions(context, args);
         HashSet<String> permissionsValues = permissions.getValue();
         Object primKey = permissions.getKey();
 
@@ -134,6 +138,7 @@ public class PermCommand {
         }
 
         // execute modification
+        // if primkey string then it is a group, otherwise a player
         context.sendMessage(LanguageManager.get("permission-add-load"));
         ResponseStatus status;
         if(primKey instanceof String) {
@@ -147,10 +152,10 @@ public class PermCommand {
         context.sendMessage(LanguageManager.get("permission-add-complete", status));
     }
 
-    @Command(label = REMOVE_COMMAND, parent = LABEL, usage = "<permission>", flags = {"g", "p"})
+    @Command(label = REMOVE_COMMAND, parent = LABEL, usage = "<permission>", flags = {GROUP_FLAG, PLAYER_FLAG})
     public void remove(BungeeCommandContext context, ParamSet args) {
         // list permissions (either from group or player)
-        Pair<Object, HashSet<String>> permissions = getPermissions(context, args, "g", "p");
+        Pair<Object, HashSet<String>> permissions = getPermissions(context, args);
         HashSet<String> permissionsValues = permissions.getValue();
         Object primKey = permissions.getKey();
 
@@ -168,68 +173,57 @@ public class PermCommand {
         }
 
         // execute modification
+        // if primkey string then it is a group, otherwise a player
         context.sendMessage(LanguageManager.get("permission-remove-load"));
         ResponseStatus status;
         if(primKey instanceof String) {
-            status = MooQueries.getInstance().modifyGroup((String) primKey,
-                    DbQueryUnbaked.newInstance().subtract(DbModifier.GROUP_PERMISSIONS, argPermissions));
+            status = MooQueries.getInstance().modifyGroup((String)primKey,
+                    DbModifier.GROUP_PERMISSIONS, DbQueryNode.Type.SUBTRACT, argPermissions);
         }
         else {
             status = MooQueries.getInstance().modifyPlayerData(primKey,
-                    DbQueryUnbaked.newInstance().subtract(DbModifier.PLAYER_EXTRA_PERMS, argPermissions));
+                    DbModifier.PLAYER_EXTRA_PERMS, DbQueryNode.Type.SUBTRACT, argPermissions);
         }
         context.sendMessage(LanguageManager.get("permission-remove-complete", status));
     }
 
-    @Command(label = CLEAR_COMMAND, parent = LABEL, flags = {"g", "p"})
+    @Command(label = CLEAR_COMMAND, parent = LABEL, flags = {GROUP_FLAG, PLAYER_FLAG})
     public void clear(BungeeCommandContext context, ParamSet args) {
-        // list permissions (either from group or player)
-        Pair<Object, HashSet<String>> permissions = getPermissions(context, args, "g", "p");
-        HashSet<String> permissionsValues = permissions.getValue();
-        Object primKey = permissions.getKey();
-
         // execute modification
         context.sendMessage(LanguageManager.get("permission-clear-load"));
-        ResponseStatus status;
-        if(primKey instanceof String) {
-            status = MooQueries.getInstance().modifyGroup((String) primKey,
-                    DbQueryUnbaked.newInstance().subtract(DbModifier.GROUP_PERMISSIONS, permissionsValues));
+        ResponseStatus status = ResponseStatus.NOK;
+        if(args.hasFlag(GROUP_FLAG)) {
+            status = MooQueries.getInstance().modifyGroup(args.getFlag(GROUP_FLAG).get(0), DbModifier.GROUP_PERMISSIONS, new ArrayList<>());
         }
-        else {
-            status = MooQueries.getInstance().modifyPlayerData(primKey,
-                    DbQueryUnbaked.newInstance().subtract(DbModifier.PLAYER_EXTRA_PERMS, permissionsValues));
+        else if(args.hasFlag(PLAYER_FLAG)) {
+            status = MooQueries.getInstance().modifyPlayerData(args.getFlag(PLAYER_FLAG).get(0), DbModifier.PLAYER_EXTRA_PERMS, new ArrayList<>());
         }
         context.sendMessage(LanguageManager.get("permission-remove-complete", status));
     }
 
-    /**
-     * Helper method for the command<br>
-     * Get permissions from values out of command context
-     *
-     * @param context The command context
-     * @param args    The argument
-     * @return The list of permissions
-     * @throws InvalidArgumentException If the flag arguments are invalid
-     */
-    private Pair<Object, HashSet<String>> getPermissions(CommandContext context, ParamSet args, String groupFlag, String playerFlag) throws InvalidArgumentException {
+    private Pair<Object, HashSet<String>> getPermissions(CommandContext context, ParamSet args) throws InvalidArgumentException {
         HashSet<String> permissions = new HashSet<>();
         Object primKey = null;
 
         // permissions from group
-        if(args.hasFlag(groupFlag)) {
-            CommandFlag flag = args.getFlag(groupFlag);
+        if(args.hasFlag(GROUP_FLAG)) {
+            CommandFlag flag = args.getFlag(GROUP_FLAG);
             Group group = flag.get(0, Group.class);
-            context.invalidArgument(group == null || group.getName() == null, LanguageManager.get("group-doesnt-exist", flag.get(0)));
+            context.invalidArgument(group == null || group.getName() == null,
+                    LanguageManager.get("group-doesnt-exist", flag.get(0)));
 
+            // get permissions
             permissions = new HashSet<>(group.getPermissions());
             primKey = group.getName();
         }
         // permissions from player
-        else if(args.hasFlag(playerFlag)) {
-            CommandFlag flag = args.getFlag(playerFlag);
+        else if(args.hasFlag(PLAYER_FLAG)) {
+            CommandFlag flag = args.getFlag(PLAYER_FLAG);
             PlayerData playerData = flag.get(0, PlayerData.class);
-            context.invalidArgument(playerData == null || playerData.getUuid() == null, LanguageManager.get("", flag.get(0)));
+            context.invalidArgument(playerData == null || playerData.getUuid() == null,
+                    LanguageManager.get("error-player-doesnt-exist", flag.get(0)));
 
+            // get permissions
             permissions = MooQueries.getInstance().getPlayerPermissions(playerData, true);
             primKey = playerData.getUuid();
         }
@@ -242,7 +236,6 @@ public class PermCommand {
                 primKey = uuid;
             }
         }
-
         return new Pair<>(primKey, permissions);
     }
 
