@@ -1,19 +1,19 @@
 package de.superioz.moo.proxy;
 
-import de.superioz.moo.network.common.MooCache;
-import de.superioz.moo.network.common.MooServer;
 import de.superioz.moo.api.common.PlayerProfile;
 import de.superioz.moo.api.config.NetworkConfigType;
 import de.superioz.moo.api.database.objects.Ban;
-import de.superioz.moo.api.database.objects.Group;
 import de.superioz.moo.api.event.EventListener;
 import de.superioz.moo.api.io.CustomFile;
 import de.superioz.moo.api.io.LanguageManager;
 import de.superioz.moo.api.logging.ExtendedLogger;
 import de.superioz.moo.api.module.ModuleRegistry;
-import de.superioz.moo.network.redis.RedisModule;
 import de.superioz.moo.client.Moo;
+import de.superioz.moo.network.common.MooCache;
+import de.superioz.moo.network.common.MooGroup;
+import de.superioz.moo.network.common.MooServer;
 import de.superioz.moo.network.queries.MooQueries;
+import de.superioz.moo.network.redis.RedisModule;
 import lombok.Getter;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.config.ServerInfo;
@@ -174,7 +174,7 @@ public class Thunder extends Plugin implements EventListener {
         }
 
         // list group for checking the maintenance bypassability
-        Group group = MooQueries.getInstance().getGroup(playerProfile.getData().getGroup());
+        MooGroup group = MooQueries.getInstance().getGroup(playerProfile.getData().getGroup());
         boolean maintenanceBypass = group.getRank() >= (int) MooCache.getInstance().getConfigEntry(NetworkConfigType.TEAM_RANK);
 
         // if maintenance mode is active and the player is not allowed to bypass it

@@ -18,6 +18,7 @@ import de.superioz.moo.api.utils.StringUtil;
 import de.superioz.moo.cloud.Cloud;
 import de.superioz.moo.cloud.database.DatabaseCollections;
 import de.superioz.moo.network.client.ClientType;
+import de.superioz.moo.network.common.MooGroup;
 import de.superioz.moo.network.common.PacketMessenger;
 import de.superioz.moo.network.queries.ResponseStatus;
 import de.superioz.moo.network.packet.AbstractPacket;
@@ -220,7 +221,7 @@ public class PacketDatabaseModifyListener implements PacketAdapter {
             }
             else if(modifyType == DatabaseModifyType.CREATE || modifyType == DatabaseModifyType.MODIFY) {
                 Group group = ReflectionUtil.deserialize(data, Group.class);
-                MooCache.getInstance().getGroupMap().fastPut(group.getName(), group);
+                MooCache.getInstance().getGroupMap().fastPut(group.getName(), new MooGroup(group));
 
                 // GROUP HAS BEEN UPDATED
                 if(modifyType == DatabaseModifyType.CREATE) {
@@ -233,7 +234,7 @@ public class PacketDatabaseModifyListener implements PacketAdapter {
                 Group group = ReflectionUtil.deserialize(l.get(1), Group.class);
 
                 MooCache.getInstance().getGroupMap().remove((String)id);
-                MooCache.getInstance().getGroupMap().fastPut(group.getName(), group);
+                MooCache.getInstance().getGroupMap().fastPut(group.getName(), new MooGroup(group));
 
                 return true;
             }

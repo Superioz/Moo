@@ -35,7 +35,7 @@ public class BungeeTeamChat extends TeamChat<CommandSender, ResponseStatus> {
     public boolean canTeamchat(CommandSender commandSender) {
         if(commandSender instanceof ProxiedPlayer) {
             ProxiedPlayer player = (ProxiedPlayer) commandSender;
-            Group group = MooQueries.getInstance().getGroup(player.getUniqueId());
+            Group group = MooQueries.getInstance().getGroup(player.getUniqueId()).unwrap();
 
             return group != null
                     && group.getRank() >= (Integer) MooCache.getInstance().getConfigEntry(NetworkConfigType.TEAM_RANK);
@@ -60,7 +60,7 @@ public class BungeeTeamChat extends TeamChat<CommandSender, ResponseStatus> {
             return "&4";
         }
         else {
-            Group group = MooQueries.getInstance().getGroup(uuid);
+            Group group = MooQueries.getInstance().getGroup(uuid).unwrap();
             if(group == null) return "&f";
             return group.getColor();
         }

@@ -2,7 +2,7 @@ package de.superioz.moo.client.command.params;
 
 import de.superioz.moo.api.command.param.ParamType;
 import de.superioz.moo.api.database.objects.Group;
-import de.superioz.moo.network.queries.MooQueries;
+import de.superioz.moo.network.server.MooProxy;
 
 public class GroupParamType extends ParamType<Group> {
 
@@ -13,7 +13,7 @@ public class GroupParamType extends ParamType<Group> {
 
     @Override
     public Group resolve(String s) {
-        return MooQueries.getInstance().getGroup(s);
+        return MooProxy.getGroup(s).unwrap();
     }
 
     @Override

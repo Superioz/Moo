@@ -1,14 +1,9 @@
 package de.superioz.moo.network.server;
 
-import de.superioz.moo.network.common.MooServer;
-import de.superioz.moo.network.common.MooServerCluster;
 import de.superioz.moo.api.database.objects.Group;
 import de.superioz.moo.api.database.objects.PlayerData;
 import de.superioz.moo.api.database.objects.ServerPattern;
-import de.superioz.moo.network.common.MooCache;
-import de.superioz.moo.network.common.MooGroup;
-import de.superioz.moo.network.common.MooPlayer;
-import de.superioz.moo.network.common.PacketMessenger;
+import de.superioz.moo.network.common.*;
 import de.superioz.moo.network.packets.PacketServerRequest;
 import de.superioz.moo.network.packets.PacketServerRequestShutdown;
 import de.superioz.moo.network.queries.MooQueries;
@@ -107,10 +102,10 @@ public final class MooProxy {
      * @return The group
      */
     public static MooGroup getGroup(String name) {
-        Group group = MooCache.getInstance().getGroupMap().get(name);
+        MooGroup group = MooCache.getInstance().getGroupMap().get(name);
 
-        if(group == null) return null;
-        return new MooGroup(group);
+        if(group == null) return new MooGroup(null);
+        return group;
     }
 
     /**
@@ -119,9 +114,17 @@ public final class MooProxy {
      * @return The list of moo groups
      */
     public static List<MooGroup> getGroups() {
-        List<MooGroup> groups = new ArrayList<>();
-        MooCache.getInstance().getGroupMap().values().forEach(group -> groups.add(new MooGroup(group)));
+        return new ArrayList<>(MooCache.getInstance().getGroupMap().values());
+    }
 
+    /**
+     * Gets the list of all groups as raw groups
+     *
+     * @return The list of groups
+     */
+    public static List<Group> getRawGroups() {
+        List<Group> groups = new ArrayList<>();
+        getGroups().forEach(mooGroup -> groups.add(mooGroup.unwrap()));
         return groups;
     }
 

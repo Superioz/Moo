@@ -13,6 +13,7 @@ import de.superioz.moo.api.database.objects.PlayerData;
 import de.superioz.moo.api.io.LanguageManager;
 import de.superioz.moo.api.utils.StringUtil;
 import de.superioz.moo.api.utils.TimeUtil;
+import de.superioz.moo.network.common.MooGroup;
 import de.superioz.moo.network.queries.MooQueries;
 import de.superioz.moo.network.queries.ResponseStatus;
 import de.superioz.moo.proxy.util.BungeeTeamChat;
@@ -55,7 +56,7 @@ public class RankCommand {
         // list player and therefore his group
         PlayerData playerData = args.get(0, PlayerData.class);
         context.invalidArgument(playerData == null, LanguageManager.get("error-player-doesnt-exist", args.get(0)));
-        Group group = MooQueries.getInstance().getGroup(playerData.getGroup());
+        MooGroup group = MooQueries.getInstance().getGroup(playerData.getGroup());
 
         // the new group to be set
         Group newGroup = null;
@@ -65,7 +66,7 @@ public class RankCommand {
             // if the player uses the 'steps' flag he want to rank the player
             if(args.hasFlag("s")) {
                 int steps = args.getFlag("s").getInt(0, 1);
-                newGroup = MooQueries.getInstance().getGroup(playerData, steps, steps > 0, true);
+                newGroup = MooQueries.getInstance().getGroup(playerData, steps, steps > 0, true).unwrap();
             }
             else {
                 String command = "/group info " + group.getName();
@@ -94,7 +95,7 @@ public class RankCommand {
 
         // list new group through shifting steps
         int steps = args.hasFlag("s") ? args.getFlag("s").getInt(0, 1) : 1;
-        Group newGroup = MooQueries.getInstance().getGroup(playerData, steps, true);
+        Group newGroup = MooQueries.getInstance().getGroup(playerData, steps, true).unwrap();
 
         // execute the ranking
         this.rank(context, playerData, newGroup);
@@ -108,7 +109,7 @@ public class RankCommand {
 
         // list new group through shifting steps
         int steps = args.hasFlag("s") ? args.getFlag("s").getInt(0, 1) : 1;
-        Group newGroup = MooQueries.getInstance().getGroup(playerData, steps, false);
+        Group newGroup = MooQueries.getInstance().getGroup(playerData, steps, false).unwrap();
 
         // execute the ranking
         this.rank(context, playerData, newGroup);

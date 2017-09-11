@@ -1,15 +1,15 @@
 package de.superioz.moo.proxy.listeners;
 
-import de.superioz.moo.api.database.objects.Group;
 import de.superioz.moo.api.util.SpecialCharacter;
 import de.superioz.moo.api.util.Validation;
-import de.superioz.moo.network.queries.MooQueries;
 import de.superioz.moo.minecraft.chat.MessageComponent;
 import de.superioz.moo.minecraft.util.ChatUtil;
-import de.superioz.moo.network.queries.ResponseStatus;
+import de.superioz.moo.network.common.MooGroup;
 import de.superioz.moo.network.packet.PacketAdapter;
 import de.superioz.moo.network.packet.PacketHandler;
 import de.superioz.moo.network.packets.PacketPlayerMessage;
+import de.superioz.moo.network.queries.MooQueries;
+import de.superioz.moo.network.queries.ResponseStatus;
 import de.superioz.moo.proxy.util.BungeeChat;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -86,7 +86,7 @@ public class PacketPlayerMessageListener implements PacketAdapter {
 
             // loop through all players and search for rank
             for(ProxiedPlayer player : ProxyServer.getInstance().getPlayers()) {
-                Group group = MooQueries.getInstance().getGroup(player.getUniqueId());
+                MooGroup group = MooQueries.getInstance().getGroup(player.getUniqueId());
 
                 if(group.getRank() >= rank) {
                     BungeeChat.send(message, player);

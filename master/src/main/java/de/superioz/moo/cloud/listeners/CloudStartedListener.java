@@ -7,6 +7,7 @@ import de.superioz.moo.api.event.EventHandler;
 import de.superioz.moo.api.event.EventListener;
 import de.superioz.moo.cloud.Cloud;
 import de.superioz.moo.cloud.events.CloudStartedEvent;
+import de.superioz.moo.network.common.MooGroup;
 import de.superioz.moo.network.queries.Queries;
 
 /**
@@ -21,7 +22,7 @@ public class CloudStartedListener implements EventListener {
         try {
             Queries.list(DatabaseType.GROUP, Group.class).forEach(group -> {
                 if(group == null) return;
-                MooCache.getInstance().getGroupMap().fastPutAsync(group.getName(), group);
+                MooCache.getInstance().getGroupMap().fastPutAsync(group.getName(), new MooGroup(group));
             });
         }
         catch(Exception e) {

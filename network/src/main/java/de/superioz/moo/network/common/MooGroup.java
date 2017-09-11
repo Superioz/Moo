@@ -28,7 +28,7 @@ public class MooGroup extends ObjectWrapper<MooGroup, Group> implements Permissi
 
     @Override
     public void update() {
-        this.wrappedObject = MooCache.getInstance().getGroupMap().get(getName());
+        this.wrappedObject = MooCache.getInstance().getGroupMap().get(getName()).unwrap();
     }
 
     /**

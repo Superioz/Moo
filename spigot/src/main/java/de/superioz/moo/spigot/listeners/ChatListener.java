@@ -14,7 +14,7 @@ public class ChatListener implements Listener {
     @EventHandler(priority = EventPriority.LOW)
     public void onChat(AsyncPlayerChatEvent event) {
         Player player = event.getPlayer();
-        Group group = MooQueries.getInstance().getGroup(player.getUniqueId());
+        Group group = MooQueries.getInstance().getGroup(player.getUniqueId()).unwrap();
 
         String format = LanguageManager.get("chat-message-pattern");
         format = LanguageManager.format(format, group.getPrefix(), group.getColor(), "%1$s", group.getSuffix(), "%2$s");

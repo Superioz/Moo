@@ -12,6 +12,7 @@ import de.superioz.moo.api.database.query.DbQueryUnbaked;
 import de.superioz.moo.network.common.MooCache;
 import de.superioz.moo.api.utils.CollectionUtil;
 import de.superioz.moo.api.utils.PermissionUtil;
+import de.superioz.moo.network.common.MooGroup;
 import de.superioz.moo.network.common.PacketMessenger;
 import de.superioz.moo.network.exception.MooInputException;
 import de.superioz.moo.network.exception.MooOutputException;
@@ -19,6 +20,7 @@ import de.superioz.moo.network.packets.PacketPlayerMessage;
 import de.superioz.moo.network.packets.PacketPlayerProfile;
 import de.superioz.moo.network.packets.PacketPlayerState;
 import de.superioz.moo.network.packets.PacketRequest;
+import de.superioz.moo.network.server.MooProxy;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -210,7 +212,7 @@ public final class MooQueries {
      * @return The response (CONFLICT if the group is the same)
      */
     public ResponseStatus rankPlayer(PlayerData target, int steps, boolean up) {
-        return rankPlayer(target, getGroup(target, steps, up, true));
+        return rankPlayer(target, getGroup(target, steps, up, true).unwrap());
     }
 
     /**
@@ -347,9 +349,8 @@ public final class MooQueries {
 
         // list the group out of the cache
         // if the group doesnt exist create a "default" group
-        Group group = MooCache.getInstance().getGroupMap().get(groupName);
+        MooGroup group = MooCache.getInstance().getGroupMap().get(groupName);
         if(group == null) {
-            group = new Group();
             group.setName(Group.DEFAULT_NAME);
 
             try {
@@ -363,11 +364,11 @@ public final class MooQueries {
             // MooCache.getInstance().getGroupMap().fastPutAsync(groupName, group);
 
             // sets the player's group
-            this.rankPlayer(data, group);
+            this.rankPlayer(data, group.unwrap());
         }
 
         List<String> permissions = new ArrayList<>(data.getExtraPerms());
-        permissions.addAll(PermissionUtil.getAllPermissions(group, MooCache.getInstance().getGroupMap().values()));
+        permissions.addAll(PermissionUtil.getAllPermissions(group.unwrap(), MooProxy.getRawGroups()));
         MooCache.getInstance().getPlayerPermissionMap().putAsync(data.getUuid(), permissions);
         return true;
     }
@@ -379,7 +380,7 @@ public final class MooQueries {
      * @return The color as string
      */
     public String getGroupColor(String groupName) {
-        Group group = getGroup(groupName);
+        MooGroup group = getGroup(groupName);
         if(group == null) return "&r";
         return group.getColor();
     }
@@ -390,21 +391,21 @@ public final class MooQueries {
      * @param groupName The groupName
      * @return The group
      */
-    public Group getGroup(String groupName) {
+    public MooGroup getGroup(String groupName) {
         if(groupName == null) return null;
 
         if(MooCache.getInstance().getGroupMap().size() > 0) {
             return MooCache.getInstance().getGroupMap().get(groupName);
         }
         try {
-            return Queries.get(DatabaseType.GROUP, groupName, Group.class);
+            return new MooGroup(Queries.get(DatabaseType.GROUP, groupName, Group.class));
         }
         catch(MooInputException e) {
             return null;
         }
     }
 
-    public Group getGroup(UUID playerUniqueId) {
+    public MooGroup getGroup(UUID playerUniqueId) {
         PlayerData data = MooCache.getInstance().getPlayerMap().get(playerUniqueId);
         if(data == null) return null;
 
@@ -420,12 +421,12 @@ public final class MooQueries {
      * @param ignoreInfinite If the value '-1' should be ignored as infinite
      * @return The group
      */
-    public Group getGroup(PlayerData data, int steps, boolean up, boolean ignoreInfinite) {
+    public MooGroup getGroup(PlayerData data, int steps, boolean up, boolean ignoreInfinite) {
         if(steps < 0 && ignoreInfinite) steps *= -1;
         if(steps != -1) steps--;
 
-        Group currentGroup = getGroup(data.getGroup());
-        List<Group> groupList = CollectionUtil.filterList(MooQueries.getInstance().listGroups(),
+        MooGroup currentGroup = getGroup(data.getGroup());
+        List<MooGroup> groupList = CollectionUtil.filterList(MooProxy.getGroups(),
                 e -> up ? e.getRank() > currentGroup.getRank() : e.getRank() < currentGroup.getRank(),
                 (o1, o2) -> o1.getRank().compareTo(o2.getRank()) * (up ? 1 : -1));
 
@@ -436,7 +437,7 @@ public final class MooQueries {
         return CollectionUtil.getEntrySafely(groupList, steps, currentGroup);
     }
 
-    public Group getGroup(PlayerData data, int steps, boolean up) {
+    public MooGroup getGroup(PlayerData data, int steps, boolean up) {
         return getGroup(data, steps, up, false);
     }
 
@@ -446,7 +447,7 @@ public final class MooQueries {
      * @return The list of groups
      */
     public List<Group> listGroups() {
-        Collection<Group> groups = MooCache.getInstance().getGroupMap().values();
+        Collection<Group> groups = MooProxy.getRawGroups();
         if(groups != null && !groups.isEmpty()) {
             return new ArrayList<>(groups);
         }

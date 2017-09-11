@@ -43,7 +43,7 @@ public final class MooCache {
     /**
      * This map stores the group behind the group's name
      */
-    private RLocalCachedMap<String, Group> groupMap;
+    private RLocalCachedMap<String, MooGroup> groupMap;
 
     /**
      * This map stores the playerData behind the player's uuid

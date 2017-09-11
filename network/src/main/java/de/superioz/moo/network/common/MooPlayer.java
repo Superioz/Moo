@@ -64,7 +64,7 @@ public class MooPlayer extends ObjectWrapper<MooPlayer, PlayerData> implements P
      *
      * @return The group
      */
-    public Group getGroup() {
+    public MooGroup getGroup() {
         String groupName = wrappedObject.getGroup();
         return MooCache.getInstance().getGroupMap().get(groupName);
     }
@@ -156,7 +156,7 @@ public class MooPlayer extends ObjectWrapper<MooPlayer, PlayerData> implements P
      * @return The list/set of permissions
      */
     public HashSet<String> getAllPermissions() {
-        HashSet<String> l = PermissionUtil.getAllPermissions(getGroup(), MooCache.getInstance().getGroupMap().values());
+        HashSet<String> l = PermissionUtil.getAllPermissions(getGroup().unwrap(), MooProxy.getRawGroups());
         if(l == null) l.addAll(getPrivatePermissions());
         return l;
     }
