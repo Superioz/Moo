@@ -2,7 +2,7 @@ package de.superioz.moo.cloud.listeners;
 
 import de.superioz.moo.api.event.EventHandler;
 import de.superioz.moo.api.event.EventListener;
-import de.superioz.moo.api.events.RedisConnectionEvent;
+import de.superioz.moo.network.redis.RedisConnectionEvent;
 
 /**
  * This class listens on the cloud being connected to redis

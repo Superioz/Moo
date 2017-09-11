@@ -2,8 +2,8 @@ package de.superioz.moo.api.common.punishment;
 
 import de.superioz.moo.api.collection.MultiMap;
 import de.superioz.moo.api.config.NetworkConfigType;
-import de.superioz.moo.api.redis.MooCache;
 import de.superioz.moo.api.utils.CollectionUtil;
+import org.redisson.api.RLocalCachedMap;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -61,11 +61,11 @@ public class PunishmentManager {
     /**
      * Simply initializes this class but with automatically getting the needed informations
      */
-    public void init() {
-        if(!MooCache.getInstance().isInitialized()) return;
+    public void init(RLocalCachedMap<String, Object> configMap) {
+        if(configMap == null) return;
         this.init(
-                (List<String>) MooCache.getInstance().getConfigMap().get(NetworkConfigType.PUNISHMENT_CATEGORIES.getKey()),
-                (List<String>) MooCache.getInstance().getConfigMap().get(NetworkConfigType.PUNISHMENT_SUBTYPES.getKey())
+                (List<String>) configMap.get(NetworkConfigType.PUNISHMENT_CATEGORIES.getKey()),
+                (List<String>) configMap.get(NetworkConfigType.PUNISHMENT_SUBTYPES.getKey())
         );
     }
 

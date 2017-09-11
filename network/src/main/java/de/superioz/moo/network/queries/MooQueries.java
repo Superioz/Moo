@@ -9,7 +9,7 @@ import de.superioz.moo.api.database.objects.PlayerData;
 import de.superioz.moo.api.database.query.DbQuery;
 import de.superioz.moo.api.database.query.DbQueryNode;
 import de.superioz.moo.api.database.query.DbQueryUnbaked;
-import de.superioz.moo.api.redis.MooCache;
+import de.superioz.moo.network.common.MooCache;
 import de.superioz.moo.api.utils.CollectionUtil;
 import de.superioz.moo.api.utils.PermissionUtil;
 import de.superioz.moo.network.common.PacketMessenger;
@@ -470,10 +470,6 @@ public final class MooQueries {
         return Queries.create(DatabaseType.GROUP, group).getStatus();
     }
 
-    public ResponseStatus deleteGroup(String groupName) {
-        return Queries.delete(DatabaseType.GROUP, groupName).getStatus();
-    }
-
     public ResponseStatus modifyGroup(String groupName, DbQuery query) {
         return Queries.modify(DatabaseType.GROUP, groupName, query).getStatus();
     }
@@ -484,10 +480,6 @@ public final class MooQueries {
 
     public ResponseStatus modifyGroup(String groupName, DbModifier modifier, DbQueryNode.Type type, Object val) {
         return Queries.modify(DatabaseType.GROUP, groupName, DbQueryUnbaked.newInstance().add(modifier, type, val)).getStatus();
-    }
-
-    public ResponseStatus modifyGroup(String groupName, DbQueryUnbaked query) {
-        return modifyGroup(groupName, query.bake(Group.class));
     }
 
 }

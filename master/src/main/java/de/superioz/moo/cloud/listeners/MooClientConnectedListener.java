@@ -1,6 +1,6 @@
 package de.superioz.moo.cloud.listeners;
 
-import de.superioz.moo.api.common.MooServer;
+import de.superioz.moo.network.common.MooServer;
 import de.superioz.moo.api.event.EventHandler;
 import de.superioz.moo.api.event.EventListener;
 import de.superioz.moo.api.event.EventPriority;
@@ -59,7 +59,7 @@ public class MooClientConnectedListener implements EventListener {
             }
 
             // start minimum amount of servers
-            MooProxy.getInstance().serverCycleAll();
+            MooProxy.serverCycleAll();
         }
         // SPIGOT SPIGOT SPIGOT A server connects to the server
         else if(client.getType() == ClientType.SERVER) {

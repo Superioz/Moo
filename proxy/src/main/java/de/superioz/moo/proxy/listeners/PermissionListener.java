@@ -1,6 +1,6 @@
 package de.superioz.moo.proxy.listeners;
 
-import de.superioz.moo.api.redis.MooCache;
+import de.superioz.moo.network.common.MooCache;
 import de.superioz.moo.api.event.EventListener;
 import de.superioz.moo.api.utils.PermissionUtil;
 import net.md_5.bungee.api.CommandSender;

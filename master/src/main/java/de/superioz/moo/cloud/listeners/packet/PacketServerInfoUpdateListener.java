@@ -1,6 +1,6 @@
 package de.superioz.moo.cloud.listeners.packet;
 
-import de.superioz.moo.api.common.MooServer;
+import de.superioz.moo.network.common.MooServer;
 import de.superioz.moo.cloud.Cloud;
 import de.superioz.moo.network.packet.PacketAdapter;
 import de.superioz.moo.network.packet.PacketHandler;
@@ -26,7 +26,7 @@ public class PacketServerInfoUpdateListener implements PacketAdapter {
         server.updateInfo(packet.motd, packet.onlinePlayers, packet.maxPlayers);
 
         // updates server cycle
-        MooProxy.getInstance().serverCycle(server.getPattern());
+        MooProxy.serverCycle(server.getPattern());
     }
 
 }

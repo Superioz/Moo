@@ -6,7 +6,7 @@ import de.superioz.moo.api.command.tabcomplete.TabCompletion;
 import de.superioz.moo.api.command.tabcomplete.TabCompletor;
 import de.superioz.moo.api.common.RunAsynchronous;
 import de.superioz.moo.api.config.NetworkConfigType;
-import de.superioz.moo.api.redis.MooCache;
+import de.superioz.moo.network.common.MooCache;
 import de.superioz.moo.client.Moo;
 import de.superioz.moo.network.queries.ResponseStatus;
 import de.superioz.moo.proxy.command.BungeeCommandContext;

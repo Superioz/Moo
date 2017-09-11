@@ -1,6 +1,6 @@
 package de.superioz.moo.cloud.listeners;
 
-import de.superioz.moo.api.redis.MooCache;
+import de.superioz.moo.network.common.MooCache;
 import de.superioz.moo.api.database.DatabaseType;
 import de.superioz.moo.api.database.objects.Group;
 import de.superioz.moo.api.event.EventHandler;

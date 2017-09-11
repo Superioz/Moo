@@ -1,7 +1,7 @@
 package de.superioz.moo.cloud.common;
 
 import de.superioz.moo.api.database.objects.ServerPattern;
-import de.superioz.moo.api.redis.MooCache;
+import de.superioz.moo.network.common.MooCache;
 import de.superioz.moo.cloud.database.DatabaseCollections;
 import de.superioz.moo.network.client.ClientType;
 import de.superioz.moo.network.common.PacketMessenger;

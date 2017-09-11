@@ -1,13 +1,13 @@
 package de.superioz.moo.api.database.objects;
 
+import de.superioz.moo.api.common.punishment.BanCategory;
+import de.superioz.moo.api.common.punishment.PunishmentManager;
+import de.superioz.moo.api.database.object.DbKey;
 import de.superioz.moo.api.util.SimpleSerializable;
 import de.superioz.moo.api.utils.TimeUtil;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import de.superioz.moo.api.common.punishment.BanCategory;
-import de.superioz.moo.api.common.punishment.PunishmentManager;
-import de.superioz.moo.api.database.object.DbKey;
 import lombok.Setter;
 
 import java.text.MessageFormat;

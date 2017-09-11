@@ -1,11 +1,11 @@
 package de.superioz.moo.network.server;
 
-import de.superioz.moo.api.common.MooServer;
-import de.superioz.moo.api.common.MooServerCluster;
+import de.superioz.moo.network.common.MooServer;
+import de.superioz.moo.network.common.MooServerCluster;
 import de.superioz.moo.api.database.objects.Group;
 import de.superioz.moo.api.database.objects.PlayerData;
 import de.superioz.moo.api.database.objects.ServerPattern;
-import de.superioz.moo.api.redis.MooCache;
+import de.superioz.moo.network.common.MooCache;
 import de.superioz.moo.network.common.MooGroup;
 import de.superioz.moo.network.common.MooPlayer;
 import de.superioz.moo.network.common.PacketMessenger;
@@ -32,13 +32,6 @@ public final class MooProxy {
     public static final double UPPER_PLAYER_THRESHOLD = 7D / 10D;
     public static final double LOWER_PLAYER_THRESHOLD = 4D / 10D;
 
-    private static MooProxy instance;
-
-    public static MooProxy getInstance() {
-        if(instance == null) instance = new MooProxy();
-        return instance;
-    }
-
     /*
     =========================
     SERVERS
@@ -50,7 +43,7 @@ public final class MooProxy {
      *
      * @return The list of server
      */
-    public List<MooServer> getServers() {
+    public static List<MooServer> getServers() {
         return new ArrayList<>(MooCache.getInstance().getServerMap().readAllValues());
     }
 
@@ -61,7 +54,7 @@ public final class MooProxy {
      * @return The list of servers found
      * @see #getServers()
      */
-    public List<MooServer> getServers(String type) {
+    public static List<MooServer> getServers(String type) {
         List<MooServer> servers = new ArrayList<>();
         getServers().forEach(mooServer -> {
             if(mooServer.getType().equalsIgnoreCase(type)) {
@@ -77,7 +70,7 @@ public final class MooProxy {
      * @param type The type of the server
      * @return The server cluster
      */
-    public MooServerCluster getCluster(String type) {
+    public static MooServerCluster getCluster(String type) {
         ServerPattern pattern = getPattern(type);
         if(pattern == null) return null;
 
@@ -90,14 +83,14 @@ public final class MooProxy {
      * @param address The address to check for
      * @return The server or null
      */
-    public MooServer getServer(InetSocketAddress address) {
+    public static MooServer getServer(InetSocketAddress address) {
         for(MooServer server : getServers()) {
             if(server.getAddress().equals(address)) return server;
         }
         return null;
     }
 
-    public MooServer getServer(String host, int port) {
+    public static MooServer getServer(String host, int port) {
         return getServer(new InetSocketAddress(host, port));
     }
 
@@ -107,11 +100,29 @@ public final class MooProxy {
     =========================
      */
 
-    public MooGroup getGroup(String name) {
+    /**
+     * Gets the group with given name
+     *
+     * @param name The group's name
+     * @return The group
+     */
+    public static MooGroup getGroup(String name) {
         Group group = MooCache.getInstance().getGroupMap().get(name);
 
         if(group == null) return null;
         return new MooGroup(group);
+    }
+
+    /**
+     * Gets the list of all groups
+     *
+     * @return The list of moo groups
+     */
+    public static List<MooGroup> getGroups() {
+        List<MooGroup> groups = new ArrayList<>();
+        MooCache.getInstance().getGroupMap().values().forEach(group -> groups.add(new MooGroup(group)));
+
+        return groups;
     }
 
     /*
@@ -126,7 +137,7 @@ public final class MooProxy {
      * @param uuid The unique id
      * @return The moo player
      */
-    public MooPlayer getPlayer(UUID uuid) {
+    public static MooPlayer getPlayer(UUID uuid) {
         PlayerData data = MooCache.getInstance().getPlayerMap().get(uuid);
 
         // if data is null get offline player
@@ -142,7 +153,7 @@ public final class MooProxy {
      * @param name The name of the player
      * @return The moo player
      */
-    public MooPlayer getPlayer(String name) {
+    public static MooPlayer getPlayer(String name) {
         PlayerData data = null;
         for(PlayerData pd : MooCache.getInstance().getPlayerMap().readAllValues()) {
             if(pd.getLastName().equals(name)) {
@@ -153,7 +164,7 @@ public final class MooProxy {
         if(data == null) {
             data = MooQueries.getInstance().getPlayerData(name);
         }
-        return data == null ? null : new MooPlayer(data);
+        return new MooPlayer(data);
     }
 
     /*
@@ -167,7 +178,7 @@ public final class MooProxy {
      *
      * @return The list of patterns
      */
-    public List<ServerPattern> getPatterns() {
+    public static List<ServerPattern> getPatterns() {
         return new ArrayList<>(MooCache.getInstance().getPatternMap().readAllValues());
     }
 
@@ -177,7 +188,7 @@ public final class MooProxy {
      * @param type The name of the pattern
      * @return The server pattern
      */
-    public ServerPattern getPattern(String type) {
+    public static ServerPattern getPattern(String type) {
         return MooCache.getInstance().getPatternMap().get(type);
     }
 
@@ -190,7 +201,7 @@ public final class MooProxy {
      * @param callback Callback after the
      * @ ..
      */
-    public void requestServer(String type, boolean autoSave, int amount, Consumer<Response> callback) {
+    public static void requestServer(String type, boolean autoSave, int amount, Consumer<Response> callback) {
         PacketMessenger.message(new PacketServerRequest(type, autoSave, amount), callback);
     }
 
@@ -201,11 +212,11 @@ public final class MooProxy {
      * @param port     The port
      * @param callback The callback
      */
-    public void requestServerShutdown(String host, int port, Consumer<Response> callback) {
+    public static void requestServerShutdown(String host, int port, Consumer<Response> callback) {
         PacketMessenger.message(new PacketServerRequestShutdown(host, port), callback);
     }
 
-    public void requestServerShutdown(MooServer server, Consumer<Response> callback) {
+    public static void requestServerShutdown(MooServer server, Consumer<Response> callback) {
         requestServerShutdown(server.getAddress().getHostName(), server.getAddress().getPort(), callback);
     }
 
@@ -219,7 +230,7 @@ public final class MooProxy {
      * This will be executed to test how many servers are started and therefore
      * eventually starts server etc.
      */
-    public void serverCycle(ServerPattern pattern) {
+    public static void serverCycle(ServerPattern pattern) {
         // cannot check null pattern
         if(pattern == null) return;
 
@@ -259,9 +270,9 @@ public final class MooProxy {
         }
     }
 
-    public void serverCycleAll() {
+    public static void serverCycleAll() {
         MooCache.getInstance().getPatternMap().readAllValuesAsync()
-                .thenAccept(serverPatterns -> serverPatterns.forEach(this::serverCycle));
+                .thenAccept(serverPatterns -> serverPatterns.forEach(MooProxy::serverCycle));
     }
 
 

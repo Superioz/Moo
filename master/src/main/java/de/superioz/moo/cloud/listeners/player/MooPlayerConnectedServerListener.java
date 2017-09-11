@@ -4,7 +4,7 @@ import de.superioz.moo.api.database.objects.PlayerData;
 import de.superioz.moo.api.event.EventHandler;
 import de.superioz.moo.api.event.EventListener;
 import de.superioz.moo.api.event.EventPriority;
-import de.superioz.moo.api.redis.MooCache;
+import de.superioz.moo.network.common.MooCache;
 import de.superioz.moo.cloud.Cloud;
 import de.superioz.moo.cloud.events.MooPlayerConnectedServerEvent;
 import de.superioz.moo.network.queries.ResponseStatus;

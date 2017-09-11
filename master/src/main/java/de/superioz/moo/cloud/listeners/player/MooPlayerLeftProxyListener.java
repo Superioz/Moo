@@ -1,6 +1,6 @@
 package de.superioz.moo.cloud.listeners.player;
 
-import de.superioz.moo.api.redis.MooCache;
+import de.superioz.moo.network.common.MooCache;
 import de.superioz.moo.api.config.NetworkConfigType;
 import de.superioz.moo.api.database.DbModifier;
 import de.superioz.moo.api.database.objects.PlayerData;

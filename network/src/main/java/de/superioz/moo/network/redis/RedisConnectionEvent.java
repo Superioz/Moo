@@ -1,7 +1,6 @@
-package de.superioz.moo.api.events;
+package de.superioz.moo.network.redis;
 
 import de.superioz.moo.api.event.Event;
-import de.superioz.moo.api.modules.RedisModule;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 

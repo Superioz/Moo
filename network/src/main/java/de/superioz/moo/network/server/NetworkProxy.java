@@ -2,10 +2,10 @@ package de.superioz.moo.network.server;
 
 import de.superioz.moo.api.collection.MultiMap;
 import de.superioz.moo.api.collection.UnmodifiableList;
-import de.superioz.moo.api.common.MooServer;
+import de.superioz.moo.network.common.MooServer;
 import de.superioz.moo.api.database.objects.PlayerData;
 import de.superioz.moo.api.database.objects.ServerPattern;
-import de.superioz.moo.api.redis.MooCache;
+import de.superioz.moo.network.common.MooCache;
 import de.superioz.moo.network.common.PacketMessenger;
 import de.superioz.moo.network.queries.Response;
 import de.superioz.moo.network.queries.ResponseStatus;
@@ -85,7 +85,7 @@ public final class NetworkProxy {
         // get ServerPattern
         // if the serverPattern is null, than this server is just not
         // registered officially, no problem.
-        ServerPattern pattern = MooProxy.getInstance().getPattern(type);
+        ServerPattern pattern = MooProxy.getPattern(type);
 
         // build MooServer
         MooServer server = new MooServer(pattern, id, client.getAddress(), type);

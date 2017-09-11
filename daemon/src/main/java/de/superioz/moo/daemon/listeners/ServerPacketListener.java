@@ -27,7 +27,7 @@ public class ServerPacketListener implements PacketAdapter {
         }
 
         // gets the pattern
-        ServerPattern pattern = MooProxy.getInstance().getPattern(serverType);
+        ServerPattern pattern = MooProxy.getPattern(serverType);
         if(pattern == null) {
             Daemon.getInstance().getLogs().debug("Server type does not exist!");
             packet.respond(ResponseStatus.NOT_FOUND);

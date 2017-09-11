@@ -1,11 +1,16 @@
 package de.superioz.moo.network.common;
 
+import de.superioz.moo.api.common.GroupPermission;
 import de.superioz.moo.api.common.ObjectWrapper;
+import de.superioz.moo.api.database.DatabaseType;
 import de.superioz.moo.api.database.DbModifier;
 import de.superioz.moo.api.database.objects.Group;
-import de.superioz.moo.api.redis.MooCache;
+import de.superioz.moo.api.database.query.DbQuery;
+import de.superioz.moo.api.database.query.DbQueryNode;
+import de.superioz.moo.api.database.query.DbQueryUnbaked;
 import de.superioz.moo.api.util.Validation;
 import de.superioz.moo.network.queries.MooQueries;
+import de.superioz.moo.network.queries.Queries;
 import de.superioz.moo.network.queries.ResponseStatus;
 
 import java.util.ArrayList;
@@ -18,12 +23,49 @@ import java.util.List;
 public class MooGroup extends ObjectWrapper<MooGroup, Group> implements PermissionHolder {
 
     public MooGroup(Group wrappedObject) {
-        super(wrappedObject);
+        super(wrappedObject == null ? Group.NON_EXISTENT : wrappedObject);
     }
 
     @Override
     public void update() {
         this.wrappedObject = MooCache.getInstance().getGroupMap().get(getName());
+    }
+
+    /**
+     * Creates this group
+     *
+     * @return The status
+     */
+    public ResponseStatus create() {
+        return Queries.create(DatabaseType.GROUP, wrappedObject).getStatus();
+    }
+
+    /**
+     * Deletes this group
+     *
+     * @return The status
+     */
+    public ResponseStatus delete() {
+        if(getName() == null) return ResponseStatus.BAD_REQUEST;
+        return Queries.delete(DatabaseType.GROUP, getName()).getStatus();
+    }
+
+    /**
+     * Modifies the group with given query
+     *
+     * @param query The query
+     * @return The status
+     */
+    public ResponseStatus modify(DbQuery query) {
+        return Queries.modify(DatabaseType.GROUP, getName(), query).getStatus();
+    }
+
+    public ResponseStatus modify(DbModifier modifier, Object val) {
+        return Queries.modify(DatabaseType.GROUP, getName(), DbQueryUnbaked.newInstance(modifier, val)).getStatus();
+    }
+
+    public ResponseStatus modify(DbModifier modifier, DbQueryNode.Type type, Object val) {
+        return Queries.modify(DatabaseType.GROUP, getName(), DbQueryUnbaked.newInstance().add(modifier, type, val)).getStatus();
     }
 
     /**
@@ -40,7 +82,7 @@ public class MooGroup extends ObjectWrapper<MooGroup, Group> implements Permissi
      *
      * @return The rank
      */
-    public int getRank() {
+    public Integer getRank() {
         return wrappedObject.getRank();
     }
 
@@ -49,8 +91,20 @@ public class MooGroup extends ObjectWrapper<MooGroup, Group> implements Permissi
      *
      * @return The permissions
      */
+    @Override
     public List<String> getPermissions() {
         return wrappedObject.getPermissions();
+    }
+
+    /**
+     * Gets the permissions as group permission list
+     *
+     * @return The list
+     */
+    public List<GroupPermission> getGroupPermissions() {
+        List<GroupPermission> permissions = new ArrayList<>();
+        getPermissions().forEach(s -> permissions.add(new GroupPermission(s)));
+        return permissions;
     }
 
     /**

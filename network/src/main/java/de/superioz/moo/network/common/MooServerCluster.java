@@ -1,4 +1,4 @@
-package de.superioz.moo.api.common;
+package de.superioz.moo.network.common;
 
 import de.superioz.moo.api.database.objects.PlayerData;
 import de.superioz.moo.api.database.objects.ServerPattern;

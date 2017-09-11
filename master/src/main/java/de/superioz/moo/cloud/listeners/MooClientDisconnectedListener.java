@@ -1,6 +1,6 @@
 package de.superioz.moo.cloud.listeners;
 
-import de.superioz.moo.api.redis.MooCache;
+import de.superioz.moo.network.common.MooCache;
 import de.superioz.moo.api.config.NetworkConfigType;
 import de.superioz.moo.api.database.objects.ServerPattern;
 import de.superioz.moo.api.event.EventHandler;
@@ -51,8 +51,8 @@ public class MooClientDisconnectedListener implements EventListener {
             Cloud.getInstance().getNetworkProxy().unregisterServer(client);
 
             // call event for new server start
-            ServerPattern pattern = MooProxy.getInstance().getPattern(client.getName());
-            MooProxy.getInstance().serverCycle(pattern);
+            ServerPattern pattern = MooProxy.getPattern(client.getName());
+            MooProxy.serverCycle(pattern);
 
             // Informing the PROXY!
             PacketMessenger.message(new PacketServerUnregister(client.getAddress()), ClientType.PROXY);

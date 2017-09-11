@@ -1,16 +1,16 @@
 package de.superioz.moo.daemon;
 
-import de.superioz.moo.api.redis.MooCache;
+import de.superioz.moo.network.common.MooCache;
 import de.superioz.moo.api.console.CommandTerminal;
 import de.superioz.moo.api.event.EventHandler;
 import de.superioz.moo.api.event.EventListener;
-import de.superioz.moo.api.events.RedisConnectionEvent;
+import de.superioz.moo.network.redis.RedisConnectionEvent;
 import de.superioz.moo.api.io.CustomFile;
 import de.superioz.moo.api.io.JsonConfig;
 import de.superioz.moo.api.logging.ExtendedLogger;
 import de.superioz.moo.api.logging.MooLogger;
 import de.superioz.moo.api.module.ModuleRegistry;
-import de.superioz.moo.api.modules.RedisModule;
+import de.superioz.moo.network.redis.RedisModule;
 import de.superioz.moo.api.utils.SystemUtil;
 import de.superioz.moo.client.Moo;
 import de.superioz.moo.client.events.CloudConnectedEvent;

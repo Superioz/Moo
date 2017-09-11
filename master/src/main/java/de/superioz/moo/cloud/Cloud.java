@@ -1,8 +1,8 @@
 package de.superioz.moo.cloud;
 
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
-import de.superioz.moo.api.redis.MooCache;
-import de.superioz.moo.api.config.NetworkConfig;
+import de.superioz.moo.network.common.MooCache;
+import de.superioz.moo.network.config.NetworkConfig;
 import de.superioz.moo.api.console.CommandTerminal;
 import de.superioz.moo.api.database.DatabaseCollection;
 import de.superioz.moo.api.database.DatabaseConnection;
@@ -13,7 +13,7 @@ import de.superioz.moo.api.io.JsonConfig;
 import de.superioz.moo.api.logging.ExtendedLogger;
 import de.superioz.moo.api.logging.MooLogger;
 import de.superioz.moo.api.module.ModuleRegistry;
-import de.superioz.moo.api.modules.RedisModule;
+import de.superioz.moo.network.redis.RedisModule;
 import de.superioz.moo.cloud.modules.*;
 import de.superioz.moo.cloud.task.ServerHeartBeatCheckTask;
 import de.superioz.moo.network.server.ClientManager;

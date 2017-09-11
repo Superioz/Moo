@@ -45,7 +45,7 @@ public class KickCommand {
 
         // get player
         context.invalidArgument(playerName.equalsIgnoreCase(sender.getName()), "kick-cannot-kick-yourself");
-        MooPlayer player = MooProxy.getInstance().getPlayer(playerName);
+        MooPlayer player = MooProxy.getPlayer(playerName);
         context.invalidArgument(!player.isOnline(), "error-player-doesnt-exist", playerName);
 
         // gets the reason for the kick

@@ -142,8 +142,7 @@ public class PermCommand {
         context.sendMessage(LanguageManager.get("permission-add-load"));
         ResponseStatus status;
         if(primKey instanceof String) {
-            status = MooQueries.getInstance().modifyGroup((String) primKey,
-                    DbQueryUnbaked.newInstance(DbModifier.GROUP_PERMISSIONS, argPermissions));
+            status = MooQueries.getInstance().modifyGroup((String) primKey, DbModifier.GROUP_PERMISSIONS, argPermissions);
         }
         else {
             status = MooQueries.getInstance().modifyPlayerData(primKey,
@@ -177,7 +176,7 @@ public class PermCommand {
         context.sendMessage(LanguageManager.get("permission-remove-load"));
         ResponseStatus status;
         if(primKey instanceof String) {
-            status = MooQueries.getInstance().modifyGroup((String)primKey,
+            status = MooQueries.getInstance().modifyGroup((String) primKey,
                     DbModifier.GROUP_PERMISSIONS, DbQueryNode.Type.SUBTRACT, argPermissions);
         }
         else {

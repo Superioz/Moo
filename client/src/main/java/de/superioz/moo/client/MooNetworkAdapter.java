@@ -5,6 +5,7 @@ import de.superioz.moo.api.event.EventExecutor;
 import de.superioz.moo.client.events.CloudConnectedEvent;
 import de.superioz.moo.client.events.CloudDisconnectedEvent;
 import de.superioz.moo.network.client.ClientType;
+import de.superioz.moo.network.common.MooCache;
 import de.superioz.moo.network.common.NetworkEventAdapter;
 import de.superioz.moo.network.common.PacketMessenger;
 import de.superioz.moo.network.queries.Response;
@@ -62,7 +63,7 @@ public class MooNetworkAdapter implements NetworkEventAdapter {
                         EventExecutor.getInstance().execute(new CloudConnectedEvent(response.getStatus()));
 
                         // initialize punishmental
-                        PunishmentManager.getInstance().init();
+                        PunishmentManager.getInstance().init(MooCache.getInstance().getConfigMap());
 
                         // set authenticated
                         moo.getClient().setAuthenticated(response.isOk());

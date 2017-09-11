@@ -38,7 +38,7 @@ public class DaemonServerListener implements PacketAdapter {
         String type = packet.type;
 
         // exists the type?
-        ServerPattern pattern = MooProxy.getInstance().getPattern(type);
+        ServerPattern pattern = MooProxy.getPattern(type);
         if(pattern == null) {
             packet.respond(ResponseStatus.NOT_FOUND);
             return;
@@ -46,7 +46,7 @@ public class DaemonServerListener implements PacketAdapter {
 
         // check if the amount is too high! (over 9000!)
         int maxServers = pattern.getMax();
-        int current = MooProxy.getInstance().getServers(type).size();
+        int current = MooProxy.getServers(type).size();
         if(current == maxServers || (current + packet.amount) >= maxServers) {
             packet.respond(ResponseStatus.BAD_REQUEST);
             return;
@@ -58,7 +58,7 @@ public class DaemonServerListener implements PacketAdapter {
     @PacketHandler
     public void onServerRequestShutdown(PacketServerRequestShutdown packet) {
         // does a server exist with this?
-        if(MooProxy.getInstance().getServer(packet.host, packet.port) == null) {
+        if(MooProxy.getServer(packet.host, packet.port) == null) {
             packet.respond(ResponseStatus.NOT_FOUND);
             return;
         }

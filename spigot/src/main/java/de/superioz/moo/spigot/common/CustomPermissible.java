@@ -1,6 +1,6 @@
 package de.superioz.moo.spigot.common;
 
-import de.superioz.moo.api.redis.MooCache;
+import de.superioz.moo.network.common.MooCache;
 import de.superioz.moo.api.common.GroupPermission;
 import de.superioz.moo.api.utils.PermissionUtil;
 import lombok.Getter;

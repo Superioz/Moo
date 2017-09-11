@@ -12,7 +12,7 @@ import de.superioz.moo.api.database.query.DbQuery;
 import de.superioz.moo.api.database.query.MongoQuery;
 import de.superioz.moo.api.keyvalue.FinalValue;
 import de.superioz.moo.api.reaction.Reaction;
-import de.superioz.moo.api.redis.MooCache;
+import de.superioz.moo.network.common.MooCache;
 import de.superioz.moo.api.utils.ReflectionUtil;
 import de.superioz.moo.api.utils.StringUtil;
 import de.superioz.moo.cloud.Cloud;

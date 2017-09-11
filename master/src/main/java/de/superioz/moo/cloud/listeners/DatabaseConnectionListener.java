@@ -1,7 +1,7 @@
 package de.superioz.moo.cloud.listeners;
 
-import de.superioz.moo.api.redis.MooCache;
-import de.superioz.moo.api.config.NetworkConfig;
+import de.superioz.moo.network.common.MooCache;
+import de.superioz.moo.network.config.NetworkConfig;
 import de.superioz.moo.api.event.EventHandler;
 import de.superioz.moo.api.event.EventListener;
 import de.superioz.moo.cloud.Cloud;

@@ -5,7 +5,7 @@ import de.superioz.moo.api.event.EventListener;
 import de.superioz.moo.api.io.CustomFile;
 import de.superioz.moo.api.logging.ExtendedLogger;
 import de.superioz.moo.api.module.ModuleRegistry;
-import de.superioz.moo.api.modules.RedisModule;
+import de.superioz.moo.network.redis.RedisModule;
 import de.superioz.moo.client.Moo;
 import de.superioz.moo.network.common.PacketMessenger;
 import de.superioz.moo.network.packets.PacketServerInfoUpdate;

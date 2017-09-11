@@ -1,6 +1,6 @@
 package de.superioz.moo.proxy.commands;
 
-import de.superioz.moo.api.redis.MooCache;
+import de.superioz.moo.network.common.MooCache;
 import de.superioz.moo.api.command.Command;
 import de.superioz.moo.api.command.param.ParamSet;
 import de.superioz.moo.api.common.RunAsynchronous;

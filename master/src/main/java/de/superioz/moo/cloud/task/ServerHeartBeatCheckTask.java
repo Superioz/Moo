@@ -1,7 +1,7 @@
 package de.superioz.moo.cloud.task;
 
-import de.superioz.moo.api.redis.MooCache;
-import de.superioz.moo.api.common.MooServer;
+import de.superioz.moo.network.common.MooCache;
+import de.superioz.moo.network.common.MooServer;
 import de.superioz.moo.cloud.Cloud;
 import de.superioz.moo.network.client.ClientType;
 import de.superioz.moo.network.common.PacketMessenger;

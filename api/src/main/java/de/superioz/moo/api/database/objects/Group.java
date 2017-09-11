@@ -19,6 +19,7 @@ import java.util.List;
 public class Group extends SimpleSerializable {
 
     public static final String DEFAULT_NAME = "default";
+    public static final Group NON_EXISTENT = new Group();
 
     /**
      * Name of the group

@@ -1,6 +1,5 @@
 package de.superioz.moo.network.common;
 
-import de.superioz.moo.api.common.MooServer;
 import de.superioz.moo.api.common.ObjectWrapper;
 import de.superioz.moo.api.common.PlayerProfile;
 import de.superioz.moo.api.common.punishment.BanReason;
@@ -9,7 +8,6 @@ import de.superioz.moo.api.database.objects.Ban;
 import de.superioz.moo.api.database.objects.Group;
 import de.superioz.moo.api.database.objects.PlayerData;
 import de.superioz.moo.api.io.LanguageManager;
-import de.superioz.moo.api.redis.MooCache;
 import de.superioz.moo.api.util.Validation;
 import de.superioz.moo.api.utils.PermissionUtil;
 import de.superioz.moo.network.packets.PacketPlayerBan;
@@ -157,7 +155,7 @@ public class MooPlayer extends ObjectWrapper<MooPlayer, PlayerData> implements P
      *
      * @return The list/set of permissions
      */
-    public HashSet<String> getPermissions() {
+    public HashSet<String> getAllPermissions() {
         HashSet<String> l = PermissionUtil.getAllPermissions(getGroup(), MooCache.getInstance().getGroupMap().values());
         if(l == null) l.addAll(getPrivatePermissions());
         return l;
@@ -308,6 +306,11 @@ public class MooPlayer extends ObjectWrapper<MooPlayer, PlayerData> implements P
         return new PlayerProfile(unwrap(), getCurrentBan(), getBanArchive());
     }
 
+    @Override
+    public List<String> getPermissions() {
+        return getPrivatePermissions();
+    }
+
     /**
      * Adds given permissions to the player
      *
@@ -316,7 +319,7 @@ public class MooPlayer extends ObjectWrapper<MooPlayer, PlayerData> implements P
      */
     @Override
     public ResponseStatus addPermission(List<String> permissions) {
-        HashSet<String> currentPermissions = getPermissions();
+        HashSet<String> currentPermissions = getAllPermissions();
         int size = currentPermissions.size();
         for(String s : permissions) {
             if(Validation.PERMISSION.matches(s)) {
@@ -339,7 +342,7 @@ public class MooPlayer extends ObjectWrapper<MooPlayer, PlayerData> implements P
      */
     @Override
     public ResponseStatus removePermission(List<String> permissions) {
-        HashSet<String> currentPermissions = getPermissions();
+        HashSet<String> currentPermissions = getAllPermissions();
         int size = currentPermissions.size();
         for(String s : permissions) {
             if(Validation.PERMISSION.matches(s)) {
@@ -375,7 +378,7 @@ public class MooPlayer extends ObjectWrapper<MooPlayer, PlayerData> implements P
     public ResponseStatus kick(UUID from, String message) {
         // check if the executor is allowed to do that
         if(from != null) {
-            MooPlayer executor = MooProxy.getInstance().getPlayer(from);
+            MooPlayer executor = MooProxy.getPlayer(from);
 
             if(executor.exists() && (executor.getGroup().getRank() < getGroup().getRank())) {
                 return ResponseStatus.FORBIDDEN;
@@ -401,7 +404,7 @@ public class MooPlayer extends ObjectWrapper<MooPlayer, PlayerData> implements P
 
         // check if the executor is allowed to do that
         if(from != null) {
-            MooPlayer executor = MooProxy.getInstance().getPlayer(from);
+            MooPlayer executor = MooProxy.getPlayer(from);
 
             if(executor.exists() && (executor.getGroup().getRank() < getGroup().getRank())) {
                 return ResponseStatus.FORBIDDEN;
