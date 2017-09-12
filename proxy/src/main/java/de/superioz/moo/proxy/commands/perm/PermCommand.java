@@ -55,7 +55,7 @@ public class PermCommand {
 
     @Command(label = SYNTAX_COMMAND, parent = LABEL)
     public void syntax(BungeeCommandContext context, BungeeParamSet args) {
-        context.sendEventMessage(LanguageManager.get("permission-syntax"));
+        context.sendMessage(LanguageManager.get("permission-syntax"));
     }
 
     @Command(label = LIST_COMMAND, parent = LABEL, usage = "<player> [page]")

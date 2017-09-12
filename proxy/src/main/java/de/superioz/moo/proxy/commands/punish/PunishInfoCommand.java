@@ -68,7 +68,7 @@ public class PunishInfoCommand {
             String typeColor = subType.getBanType() == BanType.GLOBAL ? "&c" : "&9";
             String end = TimeUtil.getFormat(current + currentBan.getDuration());
 
-            context.sendEventMessage(LanguageManager.get("punishment-ban-info",
+            context.sendMessage(LanguageManager.get("punishment-ban-info",
                     start, typeColor + subType.getName(),
                     "Details",
                     start,

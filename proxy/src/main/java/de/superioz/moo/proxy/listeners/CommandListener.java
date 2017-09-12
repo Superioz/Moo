@@ -170,7 +170,7 @@ public class CommandListener extends CommandEventAdapter<CommandSender> implemen
 
             // send whole usage
             boolean hasParent = instance.hasParent();
-            context.sendEventMessage(
+            context.sendMessage(
                     LanguageManager.get("help-command-leaf-usage",
                             hasParent ? ".." : "&f" + instance.getLabel(),
                             hasParent ? String.join(" ", instance.getBeforePath()) : "",
@@ -183,7 +183,7 @@ public class CommandListener extends CommandEventAdapter<CommandSender> implemen
                 context.sendMessage(LanguageManager.get("help-command-leaf-parent", instance.getParentName()));
             }
 
-            context.sendEventMessage(
+            context.sendMessage(
                     LanguageManager.get("help-command-leaf-flags", flags.size(), String.join("\n", flags)),
                     flags.size() > 0
             );

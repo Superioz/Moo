@@ -17,7 +17,7 @@ import java.util.List;
  * Example usage:<br>
  * You want to send a group information to the player and you decide to make the permissions
  * entry hoverable. <br>So simply use: {@link #addTranslated(String, Object...)} or {@link #add(Object...)} for the simple
- * entries and {@link #add(Procedure)} to send the hoverable message (mostly CommandContext#sendEventMessage)
+ * entries and {@link #add(Procedure)} to send the hoverable message (mostly CommandContext#sendMessage)
  *
  * @see Procedure
  */
