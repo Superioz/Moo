@@ -10,7 +10,6 @@ import de.superioz.moo.api.events.CommandErrorEvent;
 import de.superioz.moo.api.exceptions.InvalidArgumentException;
 import de.superioz.moo.api.exceptions.InvalidCommandUsageException;
 import de.superioz.moo.api.io.LanguageManager;
-import de.superioz.moo.api.util.MessageFormatSender;
 import lombok.Getter;
 import lombok.Setter;
 import net.jodah.expiringmap.ExpiringMap;
@@ -294,21 +293,6 @@ public abstract class CommandContext<T> {
     public void checkParameterSize(ParamSet args, int size) {
         if(args.size() == size) return;
         this.invalidUsage();
-    }
-
-    /**
-     * Get the message format sender which can be used to easily send non-pageable lists
-     *
-     * @param format The format (text to-be-formatted)
-     * @return The instance of the sender
-     */
-    public MessageFormatSender getFormatSender(String format) {
-        return new MessageFormatSender(format) {
-            @Override
-            public void sendMessage(String s) {
-                CommandContext.this.sendMessage(s);
-            }
-        };
     }
 
     /**
