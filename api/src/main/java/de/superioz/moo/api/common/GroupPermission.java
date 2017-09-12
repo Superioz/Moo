@@ -2,8 +2,12 @@ package de.superioz.moo.api.common;
 
 import lombok.Getter;
 
+import java.util.Comparator;
+
 @Getter
 public class GroupPermission {
+
+    public static final Comparator<GroupPermission> PERMISSION_COMPARATOR = (o1, o2) -> o1.getRawPerm().compareTo(o2.getRawPerm());
 
     /**
      * Is the permission an all star permission? (="*")<br>

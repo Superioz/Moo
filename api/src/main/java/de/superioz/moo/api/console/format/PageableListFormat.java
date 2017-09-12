@@ -127,6 +127,11 @@ public class PageableListFormat<T> extends DisplayFormat {
         return entry(entryConsumer, null);
     }
 
+    public PageableListFormat<T> entryf(Function<T, Object[]> entryConsumer) {
+        return entry(replacor -> replacor.accept(entryConsumer.apply(replacor.get())), null);
+    }
+
+
     /**
      * Sets the footer and the replacor to set
      *

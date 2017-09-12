@@ -45,7 +45,7 @@ public final class PermissionUtil {
         return permissions;
     }
 
-    public static List<GroupPermission> getPermissions(List<String> permissions) {
+    public static List<GroupPermission> getPermissions(Collection<String> permissions) {
         List<GroupPermission> groupPermissions = new ArrayList<>();
         permissions.forEach(s -> groupPermissions.add(new GroupPermission(s)));
         return groupPermissions;

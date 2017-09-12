@@ -260,6 +260,10 @@ public class MooPlayer extends ObjectWrapper<MooPlayer, PlayerData> implements P
         return wrappedObject != null && wrappedObject.getUuid() != null;
     }
 
+    public boolean nexists() {
+        return !exists();
+    }
+
     /**
      * Checks if the player is online
      *
