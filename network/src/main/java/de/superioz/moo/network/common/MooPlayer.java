@@ -14,7 +14,6 @@ import de.superioz.moo.network.packets.PacketPlayerBan;
 import de.superioz.moo.network.packets.PacketPlayerKick;
 import de.superioz.moo.network.queries.MooQueries;
 import de.superioz.moo.network.queries.ResponseStatus;
-import de.superioz.moo.network.server.MooProxy;
 
 import java.util.*;
 

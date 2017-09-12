@@ -20,7 +20,7 @@ import de.superioz.moo.network.packets.PacketPlayerMessage;
 import de.superioz.moo.network.packets.PacketPlayerProfile;
 import de.superioz.moo.network.packets.PacketPlayerState;
 import de.superioz.moo.network.packets.PacketRequest;
-import de.superioz.moo.network.server.MooProxy;
+import de.superioz.moo.network.common.MooProxy;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

@@ -6,7 +6,7 @@ import de.superioz.moo.client.events.CloudConnectedEvent;
 import de.superioz.moo.client.events.CloudDisconnectedEvent;
 import de.superioz.moo.network.client.ClientType;
 import de.superioz.moo.network.common.MooCache;
-import de.superioz.moo.network.common.NetworkEventAdapter;
+import de.superioz.moo.network.event.NetworkEventAdapter;
 import de.superioz.moo.network.common.PacketMessenger;
 import de.superioz.moo.network.queries.Response;
 import de.superioz.moo.network.packet.AbstractPacket;

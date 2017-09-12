@@ -1,6 +1,5 @@
-package de.superioz.moo.network.server;
+package de.superioz.moo.network.client;
 
-import de.superioz.moo.network.client.ClientType;
 import io.netty.channel.Channel;
 import lombok.Getter;
 import lombok.Setter;

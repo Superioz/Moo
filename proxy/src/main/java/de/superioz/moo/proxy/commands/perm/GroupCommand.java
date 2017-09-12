@@ -21,7 +21,7 @@ import de.superioz.moo.api.utils.StringUtil;
 import de.superioz.moo.network.common.MooGroup;
 import de.superioz.moo.network.queries.MooQueries;
 import de.superioz.moo.network.queries.ResponseStatus;
-import de.superioz.moo.network.server.MooProxy;
+import de.superioz.moo.network.common.MooProxy;
 import de.superioz.moo.proxy.command.BungeeCommandContext;
 import de.superioz.moo.proxy.command.BungeeParamSet;
 

@@ -1,6 +1,6 @@
-package de.superioz.moo.network.server;
+package de.superioz.moo.network.client;
 
-import de.superioz.moo.network.client.ClientType;
+import de.superioz.moo.network.server.NetworkServer;
 import lombok.Getter;
 import de.superioz.moo.api.collection.UnmodifiableList;
 

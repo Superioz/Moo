@@ -1,7 +1,7 @@
 package de.superioz.moo.network.events;
 
 import de.superioz.moo.api.event.Event;
-import de.superioz.moo.network.server.MooClient;
+import de.superioz.moo.network.client.MooClient;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 

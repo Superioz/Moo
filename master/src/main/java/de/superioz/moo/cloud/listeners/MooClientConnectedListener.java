@@ -11,8 +11,8 @@ import de.superioz.moo.network.common.PacketMessenger;
 import de.superioz.moo.network.events.MooClientConnectedEvent;
 import de.superioz.moo.network.packets.MultiPacket;
 import de.superioz.moo.network.packets.PacketServerRegister;
-import de.superioz.moo.network.server.MooClient;
-import de.superioz.moo.network.server.MooProxy;
+import de.superioz.moo.network.client.MooClient;
+import de.superioz.moo.network.common.MooProxy;
 
 import java.util.ArrayList;
 import java.util.List;

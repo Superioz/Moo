@@ -16,7 +16,7 @@ import de.superioz.moo.api.module.ModuleRegistry;
 import de.superioz.moo.network.redis.RedisModule;
 import de.superioz.moo.cloud.modules.*;
 import de.superioz.moo.cloud.task.ServerHeartBeatCheckTask;
-import de.superioz.moo.network.server.ClientManager;
+import de.superioz.moo.network.client.ClientManager;
 import de.superioz.moo.network.server.NetworkProxy;
 import de.superioz.moo.network.server.NetworkServer;
 import jline.console.ConsoleReader;

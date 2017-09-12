@@ -9,7 +9,7 @@ import de.superioz.moo.api.event.EventListener;
 import de.superioz.moo.cloud.Cloud;
 import de.superioz.moo.network.common.PacketMessenger;
 import de.superioz.moo.network.packets.PacketKeepalive;
-import de.superioz.moo.network.server.MooClient;
+import de.superioz.moo.network.client.MooClient;
 
 import java.util.*;
 

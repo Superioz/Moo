@@ -2,6 +2,8 @@ package de.superioz.moo.network.server;
 
 import de.superioz.moo.api.collection.MultiMap;
 import de.superioz.moo.api.collection.UnmodifiableList;
+import de.superioz.moo.network.client.MooClient;
+import de.superioz.moo.network.common.MooProxy;
 import de.superioz.moo.network.common.MooServer;
 import de.superioz.moo.api.database.objects.PlayerData;
 import de.superioz.moo.api.database.objects.ServerPattern;

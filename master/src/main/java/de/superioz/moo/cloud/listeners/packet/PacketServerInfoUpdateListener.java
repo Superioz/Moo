@@ -5,7 +5,7 @@ import de.superioz.moo.cloud.Cloud;
 import de.superioz.moo.network.packet.PacketAdapter;
 import de.superioz.moo.network.packet.PacketHandler;
 import de.superioz.moo.network.packets.PacketServerInfoUpdate;
-import de.superioz.moo.network.server.MooProxy;
+import de.superioz.moo.network.common.MooProxy;
 
 import java.net.InetSocketAddress;
 

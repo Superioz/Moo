@@ -9,7 +9,7 @@ import de.superioz.moo.network.packet.PacketHandler;
 import de.superioz.moo.network.packets.PacketRespond;
 import de.superioz.moo.network.packets.PacketServerRequest;
 import de.superioz.moo.network.packets.PacketServerRequestShutdown;
-import de.superioz.moo.network.server.MooProxy;
+import de.superioz.moo.network.common.MooProxy;
 
 public class ServerPacketListener implements PacketAdapter {
 

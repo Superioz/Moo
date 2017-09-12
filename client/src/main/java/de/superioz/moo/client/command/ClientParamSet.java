@@ -5,7 +5,7 @@ import de.superioz.moo.api.command.param.ParamSet;
 import de.superioz.moo.api.util.Validation;
 import de.superioz.moo.network.common.MooGroup;
 import de.superioz.moo.network.common.MooPlayer;
-import de.superioz.moo.network.server.MooProxy;
+import de.superioz.moo.network.common.MooProxy;
 
 public abstract class ClientParamSet extends ParamSet {
 

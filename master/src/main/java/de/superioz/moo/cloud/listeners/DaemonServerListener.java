@@ -9,7 +9,7 @@ import de.superioz.moo.network.packets.PacketRamUsage;
 import de.superioz.moo.network.packets.PacketServerAttempt;
 import de.superioz.moo.network.packets.PacketServerRequest;
 import de.superioz.moo.network.packets.PacketServerRequestShutdown;
-import de.superioz.moo.network.server.MooProxy;
+import de.superioz.moo.network.common.MooProxy;
 
 import java.net.InetSocketAddress;
 

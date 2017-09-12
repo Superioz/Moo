@@ -12,7 +12,7 @@ import de.superioz.moo.network.client.ClientType;
 import de.superioz.moo.network.queries.ResponseStatus;
 import de.superioz.moo.network.packets.PacketHandshake;
 import de.superioz.moo.network.packets.PacketRespond;
-import de.superioz.moo.network.server.MooClient;
+import de.superioz.moo.network.client.MooClient;
 import io.netty.channel.Channel;
 
 import java.net.InetSocketAddress;

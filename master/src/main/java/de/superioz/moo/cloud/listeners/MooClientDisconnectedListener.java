@@ -11,8 +11,8 @@ import de.superioz.moo.network.client.ClientType;
 import de.superioz.moo.network.common.PacketMessenger;
 import de.superioz.moo.network.events.MooClientDisconnectEvent;
 import de.superioz.moo.network.packets.PacketServerUnregister;
-import de.superioz.moo.network.server.MooClient;
-import de.superioz.moo.network.server.MooProxy;
+import de.superioz.moo.network.client.MooClient;
+import de.superioz.moo.network.common.MooProxy;
 
 import java.net.InetSocketAddress;
 import java.util.ArrayList;

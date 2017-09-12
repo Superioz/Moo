@@ -1,9 +1,8 @@
-package de.superioz.moo.network.server;
+package de.superioz.moo.network.common;
 
 import de.superioz.moo.api.database.objects.Group;
 import de.superioz.moo.api.database.objects.PlayerData;
 import de.superioz.moo.api.database.objects.ServerPattern;
-import de.superioz.moo.network.common.*;
 import de.superioz.moo.network.packets.PacketServerRequest;
 import de.superioz.moo.network.packets.PacketServerRequestShutdown;
 import de.superioz.moo.network.queries.MooQueries;

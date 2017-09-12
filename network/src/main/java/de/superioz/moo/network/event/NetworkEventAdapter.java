@@ -1,4 +1,4 @@
-package de.superioz.moo.network.common;
+package de.superioz.moo.network.event;
 
 import de.superioz.moo.network.packet.AbstractPacket;
 import de.superioz.moo.network.packets.PacketHandshake;
