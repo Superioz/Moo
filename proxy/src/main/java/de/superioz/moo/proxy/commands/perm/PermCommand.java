@@ -98,9 +98,9 @@ public class PermCommand {
         context.invalidArgument(argPermissions.isEmpty(), LanguageManager.get("permission-format-invalid"));
 
         // set permissions
-        context.sendMessage(LanguageManager.get("permission-add-load"));
+        context.sendMessage("permission-add-load");
         ResponseStatus status = player.addPermission(argPermissions);
-        context.sendMessage(LanguageManager.get("permission-add-complete", status));
+        context.sendMessage("permission-add-complete", status);
     }
 
     @Command(label = REMOVE_COMMAND, parent = LABEL, usage = "<player> <permission>")

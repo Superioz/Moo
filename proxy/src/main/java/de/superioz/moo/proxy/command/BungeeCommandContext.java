@@ -4,12 +4,9 @@ import de.superioz.moo.api.console.format.DisplayFormat;
 import de.superioz.moo.api.io.LanguageManager;
 import de.superioz.moo.minecraft.command.ClientCommandContext;
 import de.superioz.moo.minecraft.util.ChatUtil;
-import de.superioz.moo.proxy.util.BungeeChat;
 import net.md_5.bungee.api.CommandSender;
-import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 
-import java.util.List;
 import java.util.UUID;
 
 public class BungeeCommandContext extends ClientCommandContext<CommandSender> {
@@ -36,17 +33,12 @@ public class BungeeCommandContext extends ClientCommandContext<CommandSender> {
 
     @Override
     protected void message(String msg, CommandSender commandSender) {
-        BungeeChat.send(msg, commandSender);
+        commandSender.sendMessage(ChatUtil.getEventMessage(msg, true).toTextComponent());
     }
 
     @Override
     public void sendCurrentUsage() {
         super.sendCurrentUsage(LanguageManager.get("usage-prefix"));
-    }
-
-    @Override
-    public void sendComponent(TextComponent component, List<CommandSender> receiver) {
-        BungeeChat.send(component, receiver.toArray(new CommandSender[]{}));
     }
 
 }

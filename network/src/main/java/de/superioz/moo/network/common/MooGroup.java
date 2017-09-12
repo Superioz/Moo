@@ -15,12 +15,16 @@ import de.superioz.moo.network.queries.ResponseStatus;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 
 /**
  * Wrapper class for {@link Group}
  */
 public class MooGroup extends ObjectWrapper<MooGroup, Group> implements PermissionHolder {
+
+    public static final Comparator<MooGroup> DEFAULT_COMPARISON = Comparator.comparing(MooGroup::getName);
+    public static final Comparator<MooGroup> HIRARCHY_COMPARISON = (o1, o2) -> o1.getRank().compareTo(o2.getRank()) * -1;
 
     public MooGroup(Group wrappedObject) {
         super(wrappedObject == null ? Group.NON_EXISTENT : wrappedObject);
@@ -57,14 +61,26 @@ public class MooGroup extends ObjectWrapper<MooGroup, Group> implements Permissi
      * @return The status
      */
     public ResponseStatus modify(DbQuery query) {
+        if(checkLaziness()) {
+            query.apply(unwrap());
+            return ResponseStatus.OK;
+        }
         return Queries.modify(DatabaseType.GROUP, getName(), query).getStatus();
     }
 
     public ResponseStatus modify(DbModifier modifier, Object val) {
+        if(checkLaziness()) {
+            new DbQuery().equate(modifier, val).apply(unwrap());
+            return ResponseStatus.OK;
+        }
         return Queries.modify(DatabaseType.GROUP, getName(), DbQueryUnbaked.newInstance(modifier, val)).getStatus();
     }
 
     public ResponseStatus modify(DbModifier modifier, DbQueryNode.Type type, Object val) {
+        if(checkLaziness()) {
+            new DbQuery().add(modifier, type, val).apply(unwrap());
+            return ResponseStatus.OK;
+        }
         return Queries.modify(DatabaseType.GROUP, getName(), DbQueryUnbaked.newInstance().add(modifier, type, val)).getStatus();
     }
 
@@ -333,6 +349,10 @@ public class MooGroup extends ObjectWrapper<MooGroup, Group> implements Permissi
      */
     public boolean exists() {
         return wrappedObject != null && wrappedObject.getName() != null;
+    }
+
+    public boolean nexists() {
+        return !exists();
     }
 
     /**

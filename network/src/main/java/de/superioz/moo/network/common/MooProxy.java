@@ -3,6 +3,7 @@ package de.superioz.moo.network.common;
 import de.superioz.moo.api.database.objects.Group;
 import de.superioz.moo.api.database.objects.PlayerData;
 import de.superioz.moo.api.database.objects.ServerPattern;
+import de.superioz.moo.api.utils.CollectionUtil;
 import de.superioz.moo.network.packets.PacketServerRequest;
 import de.superioz.moo.network.packets.PacketServerRequestShutdown;
 import de.superioz.moo.network.queries.MooQueries;
@@ -105,6 +106,34 @@ public final class MooProxy {
 
         if(group == null) return new MooGroup(null);
         return group;
+    }
+
+    /**
+     * Gets the group of the player but shifted {@code steps} steps either up or down
+     *
+     * @param currentGroup   The current group
+     * @param steps          The steps to be shifted
+     * @param up             Up or down the ladder? (true = up; false = down)
+     * @param ignoreInfinite If the value '-1' should be ignored as infinite
+     * @return The group
+     */
+    public static MooGroup getGroup(MooGroup currentGroup, int steps, boolean up, boolean ignoreInfinite) {
+        if(steps < 0 && ignoreInfinite) steps *= -1;
+        if(steps != -1) steps--;
+
+        List<MooGroup> groupList = CollectionUtil.filterList(MooProxy.getGroups(),
+                e -> up ? e.getRank() > currentGroup.getRank() : e.getRank() < currentGroup.getRank(),
+                (o1, o2) -> o1.getRank().compareTo(o2.getRank()) * (up ? 1 : -1));
+
+        // if the steps value is -1 (= infinite) then walk down/up the whole ladder
+        if(!ignoreInfinite && steps == -1) {
+            steps = groupList.size() - 1;
+        }
+        return CollectionUtil.getEntrySafely(groupList, steps, currentGroup);
+    }
+
+    public static MooGroup getGroup(MooGroup currentGroup, int steps, boolean up) {
+        return getGroup(currentGroup, steps, up, false);
     }
 
     /**

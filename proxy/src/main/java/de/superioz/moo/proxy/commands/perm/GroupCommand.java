@@ -28,7 +28,6 @@ import de.superioz.moo.proxy.command.BungeeParamSet;
 
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 @RunAsynchronous
@@ -80,7 +79,7 @@ public class GroupCommand {
         // groups
         completor.react(2, StringUtil.getStringList(MooQueries.getInstance().listGroups(),
                 Group::getName
-        ), StringUtil.prefixed(CommandInstance.PATH, INFO_COMMAND, MODIFY_COMMAND, CREATE_COMMAND, DELETE_COMMAND));
+        ), INFO_COMMAND, MODIFY_COMMAND, CREATE_COMMAND, DELETE_COMMAND);
     }
 
     @Command(label = LABEL, usage = "<subCommand>")
@@ -95,9 +94,7 @@ public class GroupCommand {
         // list the ordered pageable list and check page
         // if flag 'h' exists order the groups after the rank in descending order
         PageableList<MooGroup> pageableList = new PageableList<>(MooProxy.getGroups(),
-                (Comparator<MooGroup>) (o1, o2) -> args.hasFlag("h")
-                        ? o1.getRank().compareTo(o2.getRank()) * -1
-                        : o1.getName().compareTo(o2.getName()));
+                args.hasFlag("h") ? MooGroup.HIRARCHY_COMPARISON : MooGroup.DEFAULT_COMPARISON);
 
         // sends the pageable list with page as list format
         context.sendDisplayFormat(new PageableListFormat<Group>(pageableList)
@@ -112,7 +109,7 @@ public class GroupCommand {
     public void info(BungeeCommandContext context, BungeeParamSet args) {
         String groupName = args.get(0);
         MooGroup group = args.getMooGroup(groupName);
-        context.invalidArgument(!group.exists(), LanguageManager.get("group-doesnt-exist", groupName));
+        context.invalidArgument(group.nexists(), "group-doesnt-exist", groupName);
 
         // send info
         context.sendDisplayFormat(new InfoListFormat().header("group-info-header", groupName).entryFormat("group-info-entry")
@@ -133,7 +130,7 @@ public class GroupCommand {
     public void modify(BungeeCommandContext context, BungeeParamSet args) {
         String groupName = args.get(0);
         MooGroup group = args.getMooGroup(groupName);
-        context.invalidArgument(!group.exists(), LanguageManager.get("group-doesnt-exist", groupName));
+        context.invalidArgument(!group.exists(), "group-doesnt-exist", groupName);
 
         // list updates (for modification)
         String rawParam = args.get(1);
@@ -149,14 +146,14 @@ public class GroupCommand {
     public void create(BungeeCommandContext context, BungeeParamSet args) {
         String groupName = args.get(0);
         MooGroup group = args.getMooGroup(groupName);
-        context.invalidArgument(group.exists(), LanguageManager.get("group-already-exists", groupName));
+        context.invalidArgument(group.exists(), "group-already-exists", groupName);
 
         // if group not exists create it
         // apply updates (optional)
         if(args.size() > 1) {
             String rawParam = args.get(1);
             DbQuery updates = DbQuery.fromParameter(Group.class, rawParam);
-            updates.apply(group.unwrap());
+            group.lazyLock().modify(updates);
         }
 
         // execute creation
@@ -187,7 +184,7 @@ public class GroupCommand {
     public void listperm(BungeeCommandContext context, BungeeParamSet args) {
         String groupName = args.get(0);
         MooGroup group = args.getMooGroup(groupName);
-        context.invalidArgument(!group.exists(), LanguageManager.get("group-doesnt-exist", groupName));
+        context.invalidArgument(!group.exists(), "group-doesnt-exist", groupName);
 
         // get list of perms
         int page = args.getInt(1, 0);
@@ -215,46 +212,46 @@ public class GroupCommand {
     public void addperm(BungeeCommandContext context, BungeeParamSet args) {
         String groupName = args.get(0);
         MooGroup group = args.getMooGroup(groupName);
-        context.invalidArgument(!group.exists(), LanguageManager.get("group-doesnt-exist", groupName));
+        context.invalidArgument(group.nexists(), "group-doesnt-exist", groupName);
 
         // list permissions from arguments to be added
         String rawArg = args.get(1);
         List<String> argPermissions = StringUtil.find(Validation.PERMISSION.getRawRegex(), rawArg);
-        context.invalidArgument(argPermissions.isEmpty(), LanguageManager.get("permission-format-invalid"));
+        context.invalidArgument(argPermissions.isEmpty(), "permission-format-invalid");
 
         // set permissions
-        context.sendMessage(LanguageManager.get("permission-add-load"));
+        context.sendMessage("permission-add-load");
         ResponseStatus status = group.addPermission(argPermissions);
-        context.sendMessage(LanguageManager.get("permission-add-complete", status));
+        context.sendMessage("permission-add-complete", status);
     }
 
     @Command(label = REMOVE_PERM_COMMAND, parent = LABEL, usage = "<name> <permission>")
     public void remperm(BungeeCommandContext context, BungeeParamSet args) {
         String groupName = args.get(0);
         MooGroup group = args.getMooGroup(groupName);
-        context.invalidArgument(!group.exists(), LanguageManager.get("group-doesnt-exist", groupName));
+        context.invalidArgument(group.nexists(), "group-doesnt-exist", groupName);
 
         // list permissions from arguments to be added
         String rawArg = args.get(1);
         List<String> argPermissions = StringUtil.find(Validation.PERMISSION.getRawRegex(), rawArg);
-        context.invalidArgument(argPermissions.isEmpty(), LanguageManager.get("permission-format-invalid"));
+        context.invalidArgument(argPermissions.isEmpty(), "permission-format-invalid");
 
         // set permissions
-        context.sendMessage(LanguageManager.get("permission-remove-load"));
+        context.sendMessage("permission-remove-load");
         ResponseStatus status = group.removePermission(argPermissions);
-        context.sendMessage(LanguageManager.get("permission-remove-complete", status));
+        context.sendMessage("permission-remove-complete", status);
     }
 
     @Command(label = CLEAR_PERM_COMMAND, parent = LABEL, usage = "<name>")
     public void clearperm(BungeeCommandContext context, BungeeParamSet args) {
         String groupName = args.get(0);
         MooGroup group = args.getMooGroup(groupName);
-        context.invalidArgument(!group.exists(), LanguageManager.get("group-doesnt-exist", groupName));
+        context.invalidArgument(!group.exists(), "group-doesnt-exist", groupName);
 
         // set permissions
-        context.sendMessage(LanguageManager.get("permission-clear-load"));
+        context.sendMessage("permission-clear-load");
         ResponseStatus status = group.clearPermission();
-        context.sendMessage(LanguageManager.get("permission-remove-complete", status));
+        context.sendMessage("permission-remove-complete", status);
     }
 
 }

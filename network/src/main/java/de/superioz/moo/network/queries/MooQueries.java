@@ -9,10 +9,10 @@ import de.superioz.moo.api.database.objects.PlayerData;
 import de.superioz.moo.api.database.query.DbQuery;
 import de.superioz.moo.api.database.query.DbQueryNode;
 import de.superioz.moo.api.database.query.DbQueryUnbaked;
-import de.superioz.moo.network.common.MooCache;
-import de.superioz.moo.api.utils.CollectionUtil;
 import de.superioz.moo.api.utils.PermissionUtil;
+import de.superioz.moo.network.common.MooCache;
 import de.superioz.moo.network.common.MooGroup;
+import de.superioz.moo.network.common.MooProxy;
 import de.superioz.moo.network.common.PacketMessenger;
 import de.superioz.moo.network.exception.MooInputException;
 import de.superioz.moo.network.exception.MooOutputException;
@@ -20,12 +20,14 @@ import de.superioz.moo.network.packets.PacketPlayerMessage;
 import de.superioz.moo.network.packets.PacketPlayerProfile;
 import de.superioz.moo.network.packets.PacketPlayerState;
 import de.superioz.moo.network.packets.PacketRequest;
-import de.superioz.moo.network.common.MooProxy;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.UUID;
 import java.util.function.Consumer;
 
 /**
@@ -378,35 +380,6 @@ public final class MooQueries {
         if(data == null) return null;
 
         return getGroup(data.getGroup());
-    }
-
-    /**
-     * Gets the group of the player but shifted {@code steps} steps either up or down
-     *
-     * @param data           The playerData
-     * @param steps          The steps to be shifted
-     * @param up             Up or down the ladder? (true = up; false = down)
-     * @param ignoreInfinite If the value '-1' should be ignored as infinite
-     * @return The group
-     */
-    public MooGroup getGroup(PlayerData data, int steps, boolean up, boolean ignoreInfinite) {
-        if(steps < 0 && ignoreInfinite) steps *= -1;
-        if(steps != -1) steps--;
-
-        MooGroup currentGroup = getGroup(data.getGroup());
-        List<MooGroup> groupList = CollectionUtil.filterList(MooProxy.getGroups(),
-                e -> up ? e.getRank() > currentGroup.getRank() : e.getRank() < currentGroup.getRank(),
-                (o1, o2) -> o1.getRank().compareTo(o2.getRank()) * (up ? 1 : -1));
-
-        // if the steps value is -1 (= infinite) then walk down/up the whole ladder
-        if(!ignoreInfinite && steps == -1) {
-            steps = groupList.size() - 1;
-        }
-        return CollectionUtil.getEntrySafely(groupList, steps, currentGroup);
-    }
-
-    public MooGroup getGroup(PlayerData data, int steps, boolean up) {
-        return getGroup(data, steps, up, false);
     }
 
     /**

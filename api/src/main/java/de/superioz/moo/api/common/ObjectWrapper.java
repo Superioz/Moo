@@ -38,7 +38,8 @@ public abstract class ObjectWrapper<W, T> {
     }
 
     /**
-     * Sets the lazy state to true
+     * Sets the lazy state to true, which means {@code level} times the wrapper won't update the
+     * object in the database as well, it will only affect the object itself.
      *
      * @return This
      */
@@ -48,6 +49,12 @@ public abstract class ObjectWrapper<W, T> {
         return (W) this;
     }
 
+    /**
+     * Sets the lazy state to true, which means one time the wrapper won't update the
+     * object in the database as well, it will only affect the object itself.
+     *
+     * @return This
+     */
     public synchronized W lazyLock() {
         return lazyLock(1);
     }

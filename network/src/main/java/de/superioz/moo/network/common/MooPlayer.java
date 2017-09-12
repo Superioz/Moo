@@ -199,6 +199,10 @@ public class MooPlayer extends ObjectWrapper<MooPlayer, PlayerData> implements P
         return status;
     }
 
+    public ResponseStatus setGroup(MooGroup group) {
+        return setGroup(group.unwrap());
+    }
+
     private ResponseStatus setGroup(String groupName) {
         if(!exists()) return ResponseStatus.NOK;
         wrappedObject.setGroup(groupName);
