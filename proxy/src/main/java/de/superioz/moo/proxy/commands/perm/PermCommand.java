@@ -33,9 +33,6 @@ public class PermCommand {
     private static final String REMOVE_COMMAND = "remove";
     private static final String CLEAR_COMMAND = "clear";
 
-    private static final String PLAYER_FLAG = "p";
-    private static final String GROUP_FLAG = "g";
-
     @ArgumentHelp
     public void onArgumentHelp(ArgumentHelper helper) {
         helper.react(0, Collections.singletonList(

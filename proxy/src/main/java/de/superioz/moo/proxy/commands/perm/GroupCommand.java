@@ -17,17 +17,19 @@ import de.superioz.moo.api.database.objects.Group;
 import de.superioz.moo.api.database.query.DbQuery;
 import de.superioz.moo.api.database.query.DbQueryNode;
 import de.superioz.moo.api.io.LanguageManager;
+import de.superioz.moo.api.util.Validation;
 import de.superioz.moo.api.utils.StringUtil;
 import de.superioz.moo.network.common.MooGroup;
+import de.superioz.moo.network.common.MooProxy;
 import de.superioz.moo.network.queries.MooQueries;
 import de.superioz.moo.network.queries.ResponseStatus;
-import de.superioz.moo.network.common.MooProxy;
 import de.superioz.moo.proxy.command.BungeeCommandContext;
 import de.superioz.moo.proxy.command.BungeeParamSet;
 
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.List;
 
 @RunAsynchronous
 public class GroupCommand {
@@ -35,7 +37,10 @@ public class GroupCommand {
     private static final String LABEL = "group";
     private static final String INFO_COMMAND = "info";
     private static final String LIST_COMMAND = "list";
-    private static final String PERMS_COMMAND = "listperms";
+    private static final String LIST_PERM_COMMAND = "listperm";
+    private static final String ADD_PERM_COMMAND = "addperm";
+    private static final String REMOVE_PERM_COMMAND = "remperm";
+    private static final String CLEAR_PERM_COMMAND = "clearperm";
     private static final String MODIFY_COMMAND = "modify";
     private static final String CREATE_COMMAND = "create";
     private static final String DELETE_COMMAND = "delete";
@@ -124,34 +129,6 @@ public class GroupCommand {
         );
     }
 
-    @Command(label = PERMS_COMMAND, parent = LABEL, usage = "<name> [page]")
-    public void listperms(BungeeCommandContext context, BungeeParamSet args) {
-        String groupName = args.get(0);
-        MooGroup group = args.getMooGroup(groupName);
-        context.invalidArgument(!group.exists(), LanguageManager.get("group-doesnt-exist", groupName));
-
-        // get list of perms
-        int page = args.getInt(1, 0);
-        PageableList<GroupPermission> pageableList = new PageableList<>(group.getGroupPermissions(), 10);
-
-        // display em
-        context.sendDisplayFormat(new PageableListFormat<GroupPermission>(pageableList)
-                .page(page).doesntExist("error-page-doesnt-exist")
-                .emptyList("permission-list-empty").header("permission-list-header")
-                .emptyEntry("permission-list-entry-empty")
-                .entryFormat("permission-list-entry")
-                .entry(replacor -> {
-                    GroupPermission groupPermission = replacor.get();
-                    String prefix = groupPermission.isProxied() ? "&bb" : (groupPermission.isStar() ? "&9*" : "&es");
-
-                    replacor.accept(prefix, groupPermission.getPerm()
-                            .replace("*", "&9*&7")
-                            .replace("-", "&c-&7"));
-                })
-                .footer("permission-list-next-page", "/group listperms " + groupName + (page + 1))
-        );
-    }
-
     @Command(label = MODIFY_COMMAND, parent = LABEL, usage = "<name> <updates>")
     public void modify(BungeeCommandContext context, BungeeParamSet args) {
         String groupName = args.get(0);
@@ -198,6 +175,86 @@ public class GroupCommand {
         context.sendMessage("group-delete-load", groupName);
         ResponseStatus status = group.delete();
         context.sendMessage("group-delete-complete", status);
+    }
+
+    /*
+    =====================
+    PERMISSION
+    =====================
+     */
+
+    @Command(label = LIST_PERM_COMMAND, parent = LABEL, usage = "<name> [page]")
+    public void listperm(BungeeCommandContext context, BungeeParamSet args) {
+        String groupName = args.get(0);
+        MooGroup group = args.getMooGroup(groupName);
+        context.invalidArgument(!group.exists(), LanguageManager.get("group-doesnt-exist", groupName));
+
+        // get list of perms
+        int page = args.getInt(1, 0);
+        PageableList<GroupPermission> pageableList = new PageableList<>(group.getGroupPermissions(), 10);
+
+        // display em
+        context.sendDisplayFormat(new PageableListFormat<GroupPermission>(pageableList)
+                .page(page).doesntExist("error-page-doesnt-exist")
+                .emptyList("permission-list-empty").header("permission-list-header")
+                .emptyEntry("permission-list-entry-empty")
+                .entryFormat("permission-list-entry")
+                .entry(replacor -> {
+                    GroupPermission groupPermission = replacor.get();
+                    String prefix = groupPermission.isProxied() ? "&bb" : (groupPermission.isStar() ? "&9*" : "&es");
+
+                    replacor.accept(prefix, groupPermission.getPerm()
+                            .replace("*", "&9*&7")
+                            .replace("-", "&c-&7"));
+                })
+                .footer("permission-list-next-page", "/group listperms " + groupName + (page + 1))
+        );
+    }
+
+    @Command(label = ADD_PERM_COMMAND, parent = LABEL, usage = "<name> <permission>")
+    public void addperm(BungeeCommandContext context, BungeeParamSet args) {
+        String groupName = args.get(0);
+        MooGroup group = args.getMooGroup(groupName);
+        context.invalidArgument(!group.exists(), LanguageManager.get("group-doesnt-exist", groupName));
+
+        // list permissions from arguments to be added
+        String rawArg = args.get(1);
+        List<String> argPermissions = StringUtil.find(Validation.PERMISSION.getRawRegex(), rawArg);
+        context.invalidArgument(argPermissions.isEmpty(), LanguageManager.get("permission-format-invalid"));
+
+        // set permissions
+        context.sendMessage(LanguageManager.get("permission-add-load"));
+        ResponseStatus status = group.addPermission(argPermissions);
+        context.sendMessage(LanguageManager.get("permission-add-complete", status));
+    }
+
+    @Command(label = REMOVE_PERM_COMMAND, parent = LABEL, usage = "<name> <permission>")
+    public void remperm(BungeeCommandContext context, BungeeParamSet args) {
+        String groupName = args.get(0);
+        MooGroup group = args.getMooGroup(groupName);
+        context.invalidArgument(!group.exists(), LanguageManager.get("group-doesnt-exist", groupName));
+
+        // list permissions from arguments to be added
+        String rawArg = args.get(1);
+        List<String> argPermissions = StringUtil.find(Validation.PERMISSION.getRawRegex(), rawArg);
+        context.invalidArgument(argPermissions.isEmpty(), LanguageManager.get("permission-format-invalid"));
+
+        // set permissions
+        context.sendMessage(LanguageManager.get("permission-remove-load"));
+        ResponseStatus status = group.removePermission(argPermissions);
+        context.sendMessage(LanguageManager.get("permission-remove-complete", status));
+    }
+
+    @Command(label = CLEAR_PERM_COMMAND, parent = LABEL, usage = "<name>")
+    public void clearperm(BungeeCommandContext context, BungeeParamSet args) {
+        String groupName = args.get(0);
+        MooGroup group = args.getMooGroup(groupName);
+        context.invalidArgument(!group.exists(), LanguageManager.get("group-doesnt-exist", groupName));
+
+        // set permissions
+        context.sendMessage(LanguageManager.get("permission-clear-load"));
+        ResponseStatus status = group.clearPermission();
+        context.sendMessage(LanguageManager.get("permission-remove-complete", status));
     }
 
 }

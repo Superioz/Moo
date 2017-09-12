@@ -203,38 +203,6 @@ public final class MooQueries {
                         .equate(DbModifier.PLAYER_RANK, newGroup.getRank()));
     }
 
-    /**
-     * Ranks the player but without specifying the new group
-     *
-     * @param target The target playerData
-     * @param steps  The steps to take either up or down the group ladder
-     * @param up     Up or down the ladder? (true = up; false = down)
-     * @return The response (CONFLICT if the group is the same)
-     */
-    public ResponseStatus rankPlayer(PlayerData target, int steps, boolean up) {
-        return rankPlayer(target, getGroup(target, steps, up, true).unwrap());
-    }
-
-    /**
-     * Gets the group permissions of the given player (additional: his extra perms)
-     *
-     * @param data      The playerData
-     * @param withExtra Should the extra perms of the player be added too?
-     * @return The list of permissions
-     */
-    public HashSet<String> getPlayerPermissions(PlayerData data, boolean withExtra) {
-        try {
-            HashSet<String> permissions = new HashSet<>(getGroup(data.getGroup()).getPermissions());
-            if(withExtra) {
-                permissions.addAll(data.getExtraPerms());
-            }
-            return permissions;
-        }
-        catch(NullPointerException ex) {
-            return new HashSet<>();
-        }
-    }
-
     /*
     =========================
     PUNISHMENT SYSTEM
