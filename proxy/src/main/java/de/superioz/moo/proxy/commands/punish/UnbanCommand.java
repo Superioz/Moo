@@ -1,28 +1,21 @@
 package de.superioz.moo.proxy.commands.punish;
 
 import de.superioz.moo.api.command.Command;
-import de.superioz.moo.api.command.context.CommandContext;
 import de.superioz.moo.api.command.help.ArgumentHelp;
 import de.superioz.moo.api.command.help.ArgumentHelper;
 import de.superioz.moo.api.command.param.ParamSet;
 import de.superioz.moo.api.command.tabcomplete.TabCompletion;
 import de.superioz.moo.api.command.tabcomplete.TabCompletor;
 import de.superioz.moo.api.common.RunAsynchronous;
-import de.superioz.moo.api.common.punishment.BanCategory;
-import de.superioz.moo.api.common.punishment.BanType;
 import de.superioz.moo.api.database.objects.Ban;
 import de.superioz.moo.api.database.objects.PlayerData;
 import de.superioz.moo.api.io.LanguageManager;
 import de.superioz.moo.api.utils.StringUtil;
-import de.superioz.moo.api.utils.TimeUtil;
 import de.superioz.moo.network.queries.MooQueries;
 import de.superioz.moo.network.queries.ResponseStatus;
-import de.superioz.moo.proxy.util.BungeeTeamChat;
 import de.superioz.moo.proxy.command.BungeeCommandContext;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
-
-import java.util.Arrays;
 
 @RunAsynchronous
 public class UnbanCommand {
@@ -59,8 +52,8 @@ public class UnbanCommand {
         context.invalidArgument(status.isNok(), LanguageManager.get("unban-couldnt-execute", status));
 
         // send teamchat message or only direct to him
-        if(BungeeTeamChat.getInstance().canTeamchat(context.getCommandSender())) {
-            String target = BungeeTeamChat.getInstance().getColor(ban.getBanned()) + playerName;
+        /*if(Moo.getInstance().canTeamchat(context.getCommandSender())) {
+            String target = Moo.getInstance().getColoredName(ban.getBanned()) + playerName;
 
             BanCategory banSubType = ban.getSubType();
             String executor = BungeeTeamChat.getInstance().getColoredName(context.getCommandSender());
@@ -81,7 +74,7 @@ public class UnbanCommand {
         }
         else {
             context.sendMessage(LanguageManager.get("unban-successful", playerName));
-        }
+        }*/
     }
 
 }

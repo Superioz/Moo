@@ -21,7 +21,6 @@ import de.superioz.moo.api.util.Validation;
 import de.superioz.moo.api.utils.StringUtil;
 import de.superioz.moo.network.common.MooGroup;
 import de.superioz.moo.network.common.MooProxy;
-import de.superioz.moo.network.queries.MooQueries;
 import de.superioz.moo.network.queries.ResponseStatus;
 import de.superioz.moo.proxy.command.BungeeCommandContext;
 import de.superioz.moo.proxy.command.BungeeParamSet;
@@ -77,8 +76,8 @@ public class GroupCommand {
         completor.reactSubCommands(LABEL);
 
         // groups
-        completor.react(2, StringUtil.getStringList(MooQueries.getInstance().listGroups(),
-                Group::getName
+        completor.react(2, StringUtil.getStringList(MooProxy.getGroups(),
+                MooGroup::getName
         ), INFO_COMMAND, MODIFY_COMMAND, CREATE_COMMAND, DELETE_COMMAND);
     }
 

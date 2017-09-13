@@ -1,7 +1,6 @@
 package de.superioz.moo.network.common;
 
 import de.superioz.moo.api.database.objects.Group;
-import de.superioz.moo.api.database.objects.PlayerData;
 import de.superioz.moo.api.database.objects.ServerPattern;
 import de.superioz.moo.api.utils.CollectionUtil;
 import de.superioz.moo.network.packets.PacketServerRequest;
@@ -169,13 +168,13 @@ public final class MooProxy {
      * @return The moo player
      */
     public static MooPlayer getPlayer(UUID uuid) {
-        PlayerData data = MooCache.getInstance().getPlayerMap().get(uuid);
+        MooPlayer player = MooCache.getInstance().getPlayerMap().get(uuid);
 
         // if data is null get offline player
-        if(data == null) {
-            data = MooQueries.getInstance().getPlayerData(uuid);
+        if(player == null || player.nexists()) {
+            player = new MooPlayer(MooQueries.getInstance().getPlayerData(uuid));
         }
-        return data == null ? null : new MooPlayer(data);
+        return player == null || player.nexists() ? null : player;
     }
 
     /**
@@ -185,17 +184,17 @@ public final class MooProxy {
      * @return The moo player
      */
     public static MooPlayer getPlayer(String name) {
-        PlayerData data = null;
-        for(PlayerData pd : MooCache.getInstance().getPlayerMap().readAllValues()) {
-            if(pd.getLastName().equals(name)) {
-                data = pd;
+        MooPlayer player = null;
+        for(MooPlayer p : MooCache.getInstance().getPlayerMap().readAllValues()) {
+            if(p.getName().equals(name)) {
+                player = p;
                 break;
             }
         }
-        if(data == null) {
-            data = MooQueries.getInstance().getPlayerData(name);
+        if(player == null || player.nexists()) {
+            player = new MooPlayer(MooQueries.getInstance().getPlayerData(name));
         }
-        return new MooPlayer(data);
+        return player;
     }
 
     /*
@@ -261,7 +260,7 @@ public final class MooProxy {
      * This will be executed to test how many servers are started and therefore
      * eventually starts server etc.
      */
-    public static void serverCycle(ServerPattern pattern) {
+    public synchronized static void serverCycle(ServerPattern pattern) {
         // cannot check null pattern
         if(pattern == null) return;
 
@@ -301,7 +300,7 @@ public final class MooProxy {
         }
     }
 
-    public static void serverCycleAll() {
+    public synchronized static void serverCycleAll() {
         MooCache.getInstance().getPatternMap().readAllValuesAsync()
                 .thenAccept(serverPatterns -> serverPatterns.forEach(MooProxy::serverCycle));
     }

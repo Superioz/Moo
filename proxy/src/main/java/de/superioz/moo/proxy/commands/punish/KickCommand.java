@@ -10,10 +10,9 @@ import de.superioz.moo.api.common.RunAsynchronous;
 import de.superioz.moo.api.io.LanguageManager;
 import de.superioz.moo.api.utils.StringUtil;
 import de.superioz.moo.network.common.MooPlayer;
-import de.superioz.moo.network.queries.ResponseStatus;
 import de.superioz.moo.network.common.MooProxy;
+import de.superioz.moo.network.queries.ResponseStatus;
 import de.superioz.moo.proxy.command.BungeeCommandContext;
-import de.superioz.moo.proxy.util.BungeeTeamChat;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
@@ -57,7 +56,7 @@ public class KickCommand {
         context.invalidArgument(status.isNok(), "kick-player-complete-failure", status);
 
         // send either directly or teamchat
-        if(BungeeTeamChat.getInstance().canTeamchat(context.getCommandSender())) {
+        /*if(BungeeTeamChat.getInstance().canTeamchat(context.getCommandSender())) {
             String displayReason = StringUtil.cutOff(reason, 15);
 
             // send message
@@ -67,7 +66,7 @@ public class KickCommand {
         }
         else {
             context.sendMessage("kick-player-complete-success", playerName);
-        }
+        }*/
     }
 
 }

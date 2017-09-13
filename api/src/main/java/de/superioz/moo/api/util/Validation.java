@@ -1,5 +1,7 @@
 package de.superioz.moo.api.util;
 
+import lombok.Getter;
+
 import java.util.regex.Pattern;
 
 public enum Validation {
@@ -24,13 +26,23 @@ public enum Validation {
             + "|([0-9a-f]{1,4}:){7}([0-9a-f]){1,4}|"
             + "((http://|https://)?(www.)?(([a-zA-Z0-9-]){2,}\\.){1,4}([a-zA-Z]){2,6}(/([a-zA-Z-_/\\.0-9#:?=&;,]*)?)?)"),
     TIME("[0-9]*[dhms]"),
-    RAM("[0-9]*(K|M){1}")
-    ;
+    RAM("[0-9]*(K|M){1}"),
+    MESSAGE_COMP_EVENT_PART("[0-9]?\"[^\"]*\",?"),
+    MESSAGE_COMP_EVENT("\\$\\{(" + MESSAGE_COMP_EVENT_PART.getRawRegex() + ",?){3}}\\$"),;
 
+    @Getter
+    private Pattern pattern;
     private String regex;
 
     Validation(String regex) {
         this.regex = regex;
+
+        try {
+            this.pattern = Pattern.compile(getRegex());
+        }
+        catch(Exception e) {
+            //
+        }
     }
 
     public String getRawRegex() {
@@ -42,7 +54,7 @@ public enum Validation {
     }
 
     public boolean matches(String s) {
-        return s != null && Pattern.compile(getRegex()).matcher(s).matches();
+        return s != null && pattern.matcher(s).matches();
     }
 
     public static Validation from(int id) {

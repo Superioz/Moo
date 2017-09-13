@@ -1,7 +1,6 @@
 package de.superioz.moo.proxy.commands.punish;
 
 import de.superioz.moo.api.command.Command;
-import de.superioz.moo.api.command.context.CommandContext;
 import de.superioz.moo.api.command.help.ArgumentHelp;
 import de.superioz.moo.api.command.help.ArgumentHelper;
 import de.superioz.moo.api.command.param.ParamSet;
@@ -9,16 +8,10 @@ import de.superioz.moo.api.command.tabcomplete.TabCompletion;
 import de.superioz.moo.api.command.tabcomplete.TabCompletor;
 import de.superioz.moo.api.common.PlayerProfile;
 import de.superioz.moo.api.common.RunAsynchronous;
-import de.superioz.moo.api.common.punishment.BanCategory;
-import de.superioz.moo.api.common.punishment.BanType;
 import de.superioz.moo.api.database.objects.Ban;
-import de.superioz.moo.api.database.objects.PlayerData;
 import de.superioz.moo.api.io.LanguageManager;
 import de.superioz.moo.api.utils.StringUtil;
-import de.superioz.moo.api.utils.TimeUtil;
-import de.superioz.moo.network.queries.MooQueries;
 import de.superioz.moo.proxy.command.BungeeCommandContext;
-import de.superioz.moo.proxy.util.BungeeTeamChat;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 
@@ -56,7 +49,7 @@ public class PunishInfoCommand {
 
         // if the current ban is not null list the executor and send info
         // otherwise send (not-banned)
-        if(currentBan != null) {
+        /*if(currentBan != null) {
             String banExecutorName = CommandContext.CONSOLE_NAME;
             PlayerData banExecutor = MooQueries.getInstance().getPlayerData(currentBan.getBy());
             if(banExecutor != null) banExecutorName = banExecutor.getLastName();
@@ -74,11 +67,11 @@ public class PunishInfoCommand {
                     start,
                     end,
                     typeColor + currentBan.getReason(),
-                    BungeeTeamChat.getInstance().getColor(banExecutor == null ? null : banExecutor.getUuid()) + banExecutorName));
+                    Moo.getInstance().getColoredName(banExecutor == null ? null : banExecutor.getUuid()) + banExecutorName));
         }
         else {
             context.sendMessage(LanguageManager.get("punishment-player-isnt-banned", playerInfo.getName()));
-        }
+        }*/
     }
 
 }

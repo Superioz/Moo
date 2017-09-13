@@ -9,7 +9,6 @@ import de.superioz.moo.api.database.query.DbQuery;
 import de.superioz.moo.api.database.query.DbQueryNode;
 import de.superioz.moo.api.database.query.DbQueryUnbaked;
 import de.superioz.moo.api.util.Validation;
-import de.superioz.moo.network.queries.MooQueries;
 import de.superioz.moo.network.queries.Queries;
 import de.superioz.moo.network.queries.ResponseStatus;
 
@@ -91,6 +90,15 @@ public class MooGroup extends ObjectWrapper<MooGroup, Group> implements Permissi
      */
     public String getName() {
         return wrappedObject.getName();
+    }
+
+    /**
+     * Gets the name as colored name
+     *
+     * @return The name
+     */
+    public String getColoredName() {
+        return getColor() + getName() + "&r";
     }
 
     /**
@@ -195,7 +203,7 @@ public class MooGroup extends ObjectWrapper<MooGroup, Group> implements Permissi
 
         // MooQueries
         if(checkLaziness()) {
-            return MooQueries.getInstance().modifyGroup(getName(), DbModifier.GROUP_NAME, name);
+            return modify(DbModifier.GROUP_NAME, name);
         }
         return ResponseStatus.OK;
     }
@@ -212,7 +220,7 @@ public class MooGroup extends ObjectWrapper<MooGroup, Group> implements Permissi
 
         // MooQueries
         if(checkLaziness()) {
-            return MooQueries.getInstance().modifyGroup(getName(), DbModifier.GROUP_RANK, rank);
+            return modify(DbModifier.GROUP_RANK, rank);
         }
         return ResponseStatus.OK;
     }
@@ -229,7 +237,7 @@ public class MooGroup extends ObjectWrapper<MooGroup, Group> implements Permissi
 
         // MooQueries
         if(checkLaziness()) {
-            return MooQueries.getInstance().modifyGroup(getName(), DbModifier.GROUP_PERMISSIONS, permissions);
+            return modify(DbModifier.GROUP_PERMISSIONS, permissions);
         }
         return ResponseStatus.OK;
     }
@@ -246,7 +254,7 @@ public class MooGroup extends ObjectWrapper<MooGroup, Group> implements Permissi
 
         // MooQueries
         if(checkLaziness()) {
-            return MooQueries.getInstance().modifyGroup(getName(), DbModifier.GROUP_INHERITANCES, parents);
+            return modify(DbModifier.GROUP_INHERITANCES, parents);
         }
         return ResponseStatus.OK;
     }
@@ -263,7 +271,7 @@ public class MooGroup extends ObjectWrapper<MooGroup, Group> implements Permissi
 
         // MooQueries
         if(checkLaziness()) {
-            return MooQueries.getInstance().modifyGroup(getName(), DbModifier.GROUP_PREFIX, prefix);
+            return modify(DbModifier.GROUP_PREFIX, prefix);
         }
         return ResponseStatus.OK;
     }
@@ -280,7 +288,7 @@ public class MooGroup extends ObjectWrapper<MooGroup, Group> implements Permissi
 
         // MooQueries
         if(checkLaziness()) {
-            return MooQueries.getInstance().modifyGroup(getName(), DbModifier.GROUP_SUFFIX, suffix);
+            return modify(DbModifier.GROUP_SUFFIX, suffix);
         }
         return ResponseStatus.OK;
     }
@@ -297,7 +305,7 @@ public class MooGroup extends ObjectWrapper<MooGroup, Group> implements Permissi
 
         // MooQueries
         if(checkLaziness()) {
-            return MooQueries.getInstance().modifyGroup(getName(), DbModifier.GROUP_COLOR, color);
+            return modify(DbModifier.GROUP_COLOR, color);
         }
         return ResponseStatus.OK;
     }
@@ -314,7 +322,7 @@ public class MooGroup extends ObjectWrapper<MooGroup, Group> implements Permissi
 
         // MooQueries
         if(checkLaziness()) {
-            return MooQueries.getInstance().modifyGroup(getName(), DbModifier.GROUP_TAB_PREFIX, tabPrefix);
+            return modify(DbModifier.GROUP_TAB_PREFIX, tabPrefix);
         }
         return ResponseStatus.OK;
     }
@@ -331,7 +339,7 @@ public class MooGroup extends ObjectWrapper<MooGroup, Group> implements Permissi
 
         // MooQueries
         if(checkLaziness()) {
-            return MooQueries.getInstance().modifyGroup(getName(), DbModifier.GROUP_TAB_SUFFIX, tabSuffix);
+            return modify(DbModifier.GROUP_TAB_SUFFIX, tabSuffix);
         }
         return ResponseStatus.OK;
     }

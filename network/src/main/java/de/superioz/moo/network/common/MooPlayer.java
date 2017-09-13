@@ -10,8 +10,10 @@ import de.superioz.moo.api.database.objects.PlayerData;
 import de.superioz.moo.api.io.LanguageManager;
 import de.superioz.moo.api.util.Validation;
 import de.superioz.moo.api.utils.PermissionUtil;
+import de.superioz.moo.network.exception.MooInputException;
 import de.superioz.moo.network.packets.PacketPlayerBan;
 import de.superioz.moo.network.packets.PacketPlayerKick;
+import de.superioz.moo.network.packets.PacketRequest;
 import de.superioz.moo.network.queries.MooQueries;
 import de.superioz.moo.network.queries.ResponseStatus;
 
@@ -28,7 +30,7 @@ public class MooPlayer extends ObjectWrapper<MooPlayer, PlayerData> implements P
 
     @Override
     public void update() {
-        this.wrappedObject = MooCache.getInstance().getPlayerMap().get(getUniqueId());
+        this.wrappedObject = MooCache.getInstance().getPlayerMap().get(getUniqueId()).unwrap();
     }
 
     /**
@@ -47,6 +49,15 @@ public class MooPlayer extends ObjectWrapper<MooPlayer, PlayerData> implements P
      */
     public String getName() {
         return wrappedObject.getLastName();
+    }
+
+    /**
+     * Gets the colored name
+     *
+     * @return The name
+     */
+    public String getColoredName() {
+        return getGroup().getColor() + getName();
     }
 
     /**
@@ -141,22 +152,13 @@ public class MooPlayer extends ObjectWrapper<MooPlayer, PlayerData> implements P
     }
 
     /**
-     * Gets the private permissions of this user
-     *
-     * @return The list of permissions
-     */
-    public List<String> getPrivatePermissions() {
-        return wrappedObject.getExtraPerms();
-    }
-
-    /**
      * Gets the permissions of the user (group + private)
      *
      * @return The list/set of permissions
      */
     public HashSet<String> getAllPermissions() {
         HashSet<String> l = PermissionUtil.getAllPermissions(getGroup().unwrap(), MooProxy.getRawGroups());
-        if(l == null) l.addAll(getPrivatePermissions());
+        if(l == null) l.addAll(getPermissions());
         return l;
     }
 
@@ -278,6 +280,21 @@ public class MooPlayer extends ObjectWrapper<MooPlayer, PlayerData> implements P
     }
 
     /**
+     * If you want to get the ping of another player use this method, otherwise
+     * I recommend ProxiedPlayer#getPing !
+     *
+     * @return The ping as int (in ms)
+     */
+    public int getPingExternally() {
+        try {
+            return PacketMessenger.transferToResponse(new PacketRequest(PacketRequest.Type.PING, getName())).toPrimitive(Integer.class);
+        }
+        catch(MooInputException e) {
+            return -1;
+        }
+    }
+
+    /**
      * Checks if the player is banned atm
      *
      * @return The result
@@ -315,7 +332,7 @@ public class MooPlayer extends ObjectWrapper<MooPlayer, PlayerData> implements P
 
     @Override
     public List<String> getPermissions() {
-        return getPrivatePermissions();
+        return wrappedObject.getExtraPerms();
     }
 
     /**

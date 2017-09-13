@@ -6,13 +6,11 @@ import de.superioz.moo.api.command.help.ArgumentHelper;
 import de.superioz.moo.api.command.tabcomplete.TabCompletion;
 import de.superioz.moo.api.command.tabcomplete.TabCompletor;
 import de.superioz.moo.api.common.RunAsynchronous;
-import de.superioz.moo.api.database.objects.Group;
 import de.superioz.moo.api.io.LanguageManager;
 import de.superioz.moo.api.utils.StringUtil;
 import de.superioz.moo.network.common.MooGroup;
 import de.superioz.moo.network.common.MooPlayer;
 import de.superioz.moo.network.common.MooProxy;
-import de.superioz.moo.network.queries.MooQueries;
 import de.superioz.moo.network.queries.ResponseStatus;
 import de.superioz.moo.proxy.command.BungeeCommandContext;
 import de.superioz.moo.proxy.command.BungeeParamSet;
@@ -32,7 +30,7 @@ public class RankCommand {
     public void onArgumentHelp(ArgumentHelper helper) {
         helper.react(1, Collections.singletonList(
                 LanguageManager.get("available-groups",
-                        StringUtil.getListToString(MooQueries.getInstance().listGroups(), ", ", Group::getName))
+                        StringUtil.getListToString(MooProxy.getGroups(), ", ", MooGroup::getName))
         ), RANK_LABEL);
     }
 
@@ -43,7 +41,7 @@ public class RankCommand {
         );
 
         completor.react(2, StringUtil.getStringList(
-                MooQueries.getInstance().listGroups(), Group::getName
+                MooProxy.getGroups(), MooGroup::getName
         ), RANK_LABEL);
     }
 
@@ -53,12 +51,12 @@ public class RankCommand {
         String playerName = args.get(0);
         MooPlayer player = args.getMooPlayer(playerName);
         context.invalidArgument(player.nexists(), "error-player-doesnt-exist", playerName);
-        MooGroup currentGroup = player.getGroup();
+        MooGroup oldGroup = player.getGroup();
 
         // if he only typed the playername send rank information
         if(args.size() == 1) {
             // if the player uses the 'steps' flag he want to rank the player
-            context.sendMessage("rank-of", playerName, currentGroup.getColor() + currentGroup.getName(), currentGroup.getName());
+            context.sendMessage("rank-of", playerName, oldGroup.getColor() + oldGroup.getName(), oldGroup.getName());
             return;
         }
 
@@ -70,7 +68,9 @@ public class RankCommand {
         // execute the ranking
         context.sendMessage("rank-player-load", playerName, groupName);
         ResponseStatus status = player.setGroup(newGroup);
-        context.sendMessage("rank-player-complete", status);
+        context.sendTeamChat("rank-teamchat-announcement",
+                player.getColoredName(), newGroup.getName(), context.getCommandSender().getName(), oldGroup.getName()
+        ).or("rank-player-complete", status);
     }
 
     @Command(label = UPRANK_LABEL, usage = "<player> [steps]")
@@ -79,6 +79,7 @@ public class RankCommand {
         String playerName = args.get(0);
         MooPlayer player = args.getMooPlayer(playerName);
         context.invalidArgument(player.nexists(), "error-player-doesnt-exist", playerName);
+        MooGroup oldGroup = player.getGroup();
 
         // get the steps for getting the group
         int steps = args.getInt(1, 1, integer -> integer <= 0);
@@ -88,7 +89,9 @@ public class RankCommand {
         // execute the ranking
         context.sendMessage("rank-player-load", playerName, newGroup.getName());
         ResponseStatus status = player.setGroup(newGroup);
-        context.sendMessage("rank-player-complete", status);
+        context.sendTeamChat("rank-teamchat-announcement",
+                player.getColoredName(), newGroup.getName(), context.getCommandSender().getName(), oldGroup.getName()
+        ).or("rank-player-complete", status);
     }
 
     @Command(label = DOWNRANK_LABEL, usage = "<player> [steps]")
@@ -97,6 +100,7 @@ public class RankCommand {
         String playerName = args.get(0);
         MooPlayer player = args.getMooPlayer(playerName);
         context.invalidArgument(player.nexists(), "error-player-doesnt-exist", playerName);
+        MooGroup oldGroup = player.getGroup();
 
         // get the steps for getting the group
         int steps = args.getInt(1, 1, integer -> integer <= 0);
@@ -106,7 +110,9 @@ public class RankCommand {
         // execute the ranking
         context.sendMessage("rank-player-load", playerName, newGroup.getName());
         ResponseStatus status = player.setGroup(newGroup);
-        context.sendMessage("rank-player-complete", status);
+        context.sendTeamChat("rank-teamchat-announcement",
+                player.getColoredName(), newGroup.getName(), context.getCommandSender().getName(), oldGroup.getName()
+        ).or("rank-player-complete", status);
     }
 
 }

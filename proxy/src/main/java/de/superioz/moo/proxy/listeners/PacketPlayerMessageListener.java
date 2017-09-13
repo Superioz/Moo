@@ -27,7 +27,7 @@ public class PacketPlayerMessageListener implements PacketAdapter {
         if(packet.colored) packetMessage = ChatUtil.colored(packetMessage);
         if(packet.formatted) packetMessage = SpecialCharacter.apply(packetMessage);
 
-        TextComponent message = new MessageComponent(packetMessage).formatAll().toTextComponent();
+        TextComponent message = new MessageComponent(packetMessage).toTextComponent();
 
         // if the type is private
         if(type == PacketPlayerMessage.Type.PRIVATE) {

@@ -48,7 +48,7 @@ public final class MooCache {
     /**
      * This map stores the playerData behind the player's uuid
      */
-    private RLocalCachedMap<UUID, PlayerData> playerMap;
+    private RLocalCachedMap<UUID, MooPlayer> playerMap;
 
     /**
      * This map stores the player's uuid behind the player's name

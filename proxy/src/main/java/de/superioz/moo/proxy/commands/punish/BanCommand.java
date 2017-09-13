@@ -16,7 +16,6 @@ import de.superioz.moo.network.common.MooPlayer;
 import de.superioz.moo.network.queries.ResponseStatus;
 import de.superioz.moo.proxy.command.BungeeCommandContext;
 import de.superioz.moo.proxy.command.BungeeParamSet;
-import de.superioz.moo.proxy.util.BungeeTeamChat;
 import javafx.util.Pair;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.ProxyServer;
@@ -121,7 +120,7 @@ public class BanCommand {
         context.invalidArgument(status == ResponseStatus.CONFLICT, "ban-player-already-banned", playerName);
 
         // send teamchat message or only direct to him
-        if(!BungeeTeamChat.getInstance().canTeamchat(context.getCommandSender())) {
+        /*if(!BungeeTeamChat.getInstance().canTeamchat(context.getCommandSender())) {
             context.sendMessage("ban-complete", status);
             return;
         }
@@ -137,7 +136,7 @@ public class BanCommand {
         BungeeTeamChat.getInstance().send(LanguageManager.get("ban-teamchat-announcement",
                 playerName, executor, typeColor + reason.getName(),
                 Arrays.asList("Details", start, end, typeColor + reason, executor))
-        );
+        );*/
     }
 
 }

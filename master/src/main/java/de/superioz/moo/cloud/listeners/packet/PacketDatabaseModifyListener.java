@@ -19,6 +19,7 @@ import de.superioz.moo.cloud.Cloud;
 import de.superioz.moo.cloud.database.DatabaseCollections;
 import de.superioz.moo.network.client.ClientType;
 import de.superioz.moo.network.common.MooGroup;
+import de.superioz.moo.network.common.MooPlayer;
 import de.superioz.moo.network.common.PacketMessenger;
 import de.superioz.moo.network.queries.ResponseStatus;
 import de.superioz.moo.network.packet.AbstractPacket;
@@ -247,7 +248,7 @@ public class PacketDatabaseModifyListener implements PacketAdapter {
             }
             else if(modifyType == DatabaseModifyType.CREATE || modifyType == DatabaseModifyType.MODIFY) {
                 PlayerData playerData = ReflectionUtil.deserialize(data, PlayerData.class);
-                MooCache.getInstance().getPlayerMap().fastPut(playerData.getUuid(), playerData);
+                MooCache.getInstance().getPlayerMap().fastPut(playerData.getUuid(), new MooPlayer(playerData));
 
                 // UPDATE PERMISSIONS IF EDITED
                 if(modifyType == DatabaseModifyType.MODIFY) {

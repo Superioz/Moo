@@ -86,10 +86,10 @@ public class MooServer {
      *
      * @return The list of players
      */
-    public List<PlayerData> getPlayers() {
-        List<PlayerData> players = new ArrayList<>();
+    public List<MooPlayer> getPlayers() {
+        List<MooPlayer> players = new ArrayList<>();
         MooCache.getInstance().getPlayerMap().values().forEach(playerData -> {
-            if(playerData.getCurrentServer().equals(getName())) players.add(playerData);
+            if(playerData.getCurrentServer().getName().equals(getName())) players.add(playerData);
         });
         return players;
     }

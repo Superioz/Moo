@@ -1,17 +1,16 @@
 package de.superioz.moo.minecraft.chat;
 
 import de.superioz.moo.api.util.Validation;
+import de.superioz.moo.api.utils.EnumUtil;
+import de.superioz.moo.api.utils.StringUtil;
 import de.superioz.moo.minecraft.util.ChatUtil;
 import javafx.util.Pair;
 import lombok.Getter;
 import lombok.Setter;
-import de.superioz.moo.api.utils.EnumUtil;
-import de.superioz.moo.api.utils.StringUtil;
 import net.md_5.bungee.api.chat.*;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Pattern;
 
 /**
  * A message component which uses a specific syntax to automatically determine the click/hover events<br>
@@ -24,9 +23,6 @@ import java.util.regex.Pattern;
  */
 @Getter
 public class MessageComponent {
-
-    public static final Pattern SYNTAX_PATTERN_PART = Pattern.compile("[0-9]?\"[^\"]*\",?");
-    public static final Pattern EVENT_SYNTAX_PATTERN = Pattern.compile("\\$\\{(" + SYNTAX_PATTERN_PART.pattern() + ",?){3}}\\$");
 
     //private TextComponent textComponent;
     private String message;
@@ -53,9 +49,9 @@ public class MessageComponent {
     public MessageComponent(String message) {
         this.message = message;
 
-        for(String s : StringUtil.split(message, EVENT_SYNTAX_PATTERN.pattern(),
+        for(String s : StringUtil.split(message, Validation.MESSAGE_COMP_EVENT.getRegex(),
                 true)) {
-            if(EVENT_SYNTAX_PATTERN.matcher(s).matches()) {
+            if(Validation.MESSAGE_COMP_EVENT.getPattern().matcher(s).matches()) {
                 this.entryList.add(new Pair<>(s, new EventEntry(s)));
             }
             else {
@@ -260,7 +256,7 @@ public class MessageComponent {
          * @return This
          */
         public EventEntry initSyntax(String syntax) {
-            this.syntaxParts = StringUtil.find(MessageComponent.SYNTAX_PATTERN_PART, syntax);
+            this.syntaxParts = StringUtil.find(Validation.MESSAGE_COMP_EVENT_PART.getRegex(), syntax);
 
             if(syntaxParts.size() >= 1) {
                 this.message = syntaxParts.get(0);

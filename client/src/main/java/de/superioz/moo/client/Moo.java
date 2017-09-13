@@ -1,7 +1,6 @@
 package de.superioz.moo.client;
 
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
-import de.superioz.moo.api.redis.RedisConnection;
 import de.superioz.moo.api.command.CommandRegistry;
 import de.superioz.moo.api.command.param.ParamType;
 import de.superioz.moo.api.config.NetworkConfigType;
@@ -9,14 +8,20 @@ import de.superioz.moo.api.event.EventExecutor;
 import de.superioz.moo.api.event.EventListener;
 import de.superioz.moo.api.exceptions.InvalidConfigException;
 import de.superioz.moo.api.io.JsonConfig;
-import de.superioz.moo.client.exception.MooInitializationException;
-import de.superioz.moo.client.listeners.QueryClientListener;
+import de.superioz.moo.api.io.LanguageManager;
+import de.superioz.moo.api.redis.RedisConnection;
+import de.superioz.moo.api.util.SpecialCharacter;
 import de.superioz.moo.client.command.params.GroupParamType;
 import de.superioz.moo.client.command.params.PlayerDataParamType;
 import de.superioz.moo.client.command.params.PlayerInfoParamType;
+import de.superioz.moo.client.exception.MooInitializationException;
+import de.superioz.moo.client.listeners.QueryClientListener;
 import de.superioz.moo.network.client.ClientType;
 import de.superioz.moo.network.client.NetworkClient;
-import de.superioz.moo.network.common.*;
+import de.superioz.moo.network.common.MooCache;
+import de.superioz.moo.network.common.MooPlayer;
+import de.superioz.moo.network.common.MooProxy;
+import de.superioz.moo.network.common.PacketMessenger;
 import de.superioz.moo.network.packet.PacketAdapter;
 import de.superioz.moo.network.packet.PacketAdapting;
 import de.superioz.moo.network.packets.PacketConfig;
@@ -32,6 +37,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.io.File;
+import java.util.UUID;
 import java.util.concurrent.*;
 import java.util.function.Consumer;
 import java.util.logging.Logger;
@@ -261,7 +267,7 @@ public class Moo {
     /**
      * Simply waiting for the client to list disconnected
      */
-    public void waitForShutdown(){
+    public void waitForShutdown() {
         while(isConnected()){
             try {
                 Thread.sleep(25L);
@@ -339,6 +345,57 @@ public class Moo {
     SPECIAL METHODS >> PACKET METHODS
     ===============================================
      */
+
+    /**
+     * Gets the colored name for this player
+     *
+     * @param player The The player
+     * @return The colored name
+     */
+    public String getColoredName(MooPlayer player) {
+        if(player == null || player.nexists()) return "&4.CONSOLE&r";
+        return player.getGroup().getColor() + player.getName() + "&r";
+    }
+
+    public String getColoredName(UUID uuid) {
+        return getColoredName(MooProxy.getPlayer(uuid));
+    }
+
+    /**
+     * Sends a teamchat or message or returns false if not possibru
+     *
+     * @param uuid      The uuid of the sender (or null for no player/console message, maybe only informative)
+     * @param colored   Should the message get colored? (replacing &)
+     * @param formatted Should the message get formatted? ({@link SpecialCharacter})
+     * @param msg       The message to be sent
+     * @return The result
+     */
+    public boolean sendTeamChat(UUID uuid, boolean colored, boolean formatted, String msg, Object... replacements) {
+        Integer rank = MooCache.getInstance().getConfigEntry(NetworkConfigType.TEAM_RANK);
+        MooPlayer player = null;
+
+        // if the uuid is not null its a player
+        if(uuid != null) {
+            player = MooProxy.getPlayer(uuid);
+
+            // cant send teamchat messages if rip.
+            if(player.getRank() < rank) {
+                return false;
+            }
+        }
+        else {
+            msg = LanguageManager.contains(msg) ? LanguageManager.get(msg, replacements) : msg;
+        }
+
+        String fullMessage = player == null
+                ? LanguageManager.get("teamchat-format", msg)
+                : LanguageManager.get("teamchat-format-message", getColoredName(player), msg);
+        return broadcast(fullMessage, rank, colored, formatted).isOk();
+    }
+
+    public boolean sendTeamChat(UUID uuid, String msg, Object... replacements) {
+        return sendTeamChat(uuid, true, true, msg, replacements);
+    }
 
     /**
      * Broadcasts a message across the network

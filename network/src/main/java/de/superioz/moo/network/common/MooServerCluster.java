@@ -28,8 +28,8 @@ public class MooServerCluster {
      *
      * @return The list of players
      */
-    public List<PlayerData> getOnlinePlayers() {
-        List<PlayerData> players = new ArrayList<>();
+    public List<MooPlayer> getOnlinePlayers() {
+        List<MooPlayer> players = new ArrayList<>();
         servers.forEach(server -> players.addAll(server.getPlayers()));
         return players;
     }

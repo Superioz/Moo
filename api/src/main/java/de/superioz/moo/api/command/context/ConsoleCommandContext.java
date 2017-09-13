@@ -18,7 +18,7 @@ public class ConsoleCommandContext extends CommandContext {
     }
 
     @Override
-    protected UUID getSendersUniqueId() {
+    public UUID getSendersUniqueId() {
         return CONSOLE_UUID;
     }
 

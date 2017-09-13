@@ -4,7 +4,7 @@ import de.superioz.moo.api.command.Command;
 import de.superioz.moo.api.command.param.ParamSet;
 import de.superioz.moo.api.common.RunAsynchronous;
 import de.superioz.moo.api.io.LanguageManager;
-import de.superioz.moo.proxy.util.BungeeTeamChat;
+import de.superioz.moo.client.Moo;
 import de.superioz.moo.proxy.command.BungeeCommandContext;
 
 @RunAsynchronous
@@ -21,7 +21,7 @@ public class TeamChatCommand {
 
         // list sender's name
         // and the permission of color/format
-        String sender = BungeeTeamChat.getInstance().getColoredName(context.getCommandSender());
+        String sender = Moo.getInstance().getColoredName(context.getSendersUniqueId());
 
         // list team chat format (either the message or blank format)
         // if flag r (=raw) exists ^
@@ -30,7 +30,7 @@ public class TeamChatCommand {
                 : LanguageManager.get("teamchat-format-message", sender, message);
 
         // dispatch message
-        BungeeTeamChat.getInstance().send(formattedMessage, colored, formatted);
+        Moo.getInstance().sendTeamChat(context.getSendersUniqueId(), formattedMessage);
     }
 
 }

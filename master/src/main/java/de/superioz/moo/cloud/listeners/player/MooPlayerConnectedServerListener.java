@@ -7,6 +7,7 @@ import de.superioz.moo.api.event.EventPriority;
 import de.superioz.moo.network.common.MooCache;
 import de.superioz.moo.cloud.Cloud;
 import de.superioz.moo.cloud.events.MooPlayerConnectedServerEvent;
+import de.superioz.moo.network.common.MooPlayer;
 import de.superioz.moo.network.queries.ResponseStatus;
 import de.superioz.moo.network.packets.PacketPlayerState;
 
@@ -21,7 +22,7 @@ public class MooPlayerConnectedServerListener implements EventListener {
         PacketPlayerState packet = event.getPacket();
 
         // list the player and check if exists
-        PlayerData player = MooCache.getInstance().getPlayerMap().get(data.getUuid());
+        MooPlayer player = MooCache.getInstance().getPlayerMap().get(data.getUuid());
         if(player == null) {
             packet.respond(ResponseStatus.NOT_FOUND);
             return;
@@ -32,8 +33,8 @@ public class MooPlayerConnectedServerListener implements EventListener {
         packet.respond(ResponseStatus.OK);
 
         // update Moo proxy and cache
-        Cloud.getInstance().getNetworkProxy().getPlayerMap().put(player.getUuid(), player);
-        Cloud.getInstance().getNetworkProxy().getPlayerNameMap().put(player.getLastName(), player);
+        Cloud.getInstance().getNetworkProxy().getPlayerMap().put(data.getUuid(), player.unwrap());
+        Cloud.getInstance().getNetworkProxy().getPlayerNameMap().put(player.getName(), player.unwrap());
         MooCache.getInstance().getPlayerMap().fastPutAsync(data.getUuid(), player);
     }
 

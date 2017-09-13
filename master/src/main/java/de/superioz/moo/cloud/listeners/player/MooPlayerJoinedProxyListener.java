@@ -11,6 +11,7 @@ import de.superioz.moo.api.event.EventPriority;
 import de.superioz.moo.cloud.Cloud;
 import de.superioz.moo.cloud.database.DatabaseCollections;
 import de.superioz.moo.cloud.events.MooPlayerJoinedProxyEvent;
+import de.superioz.moo.network.common.MooPlayer;
 import de.superioz.moo.network.queries.ResponseStatus;
 import de.superioz.moo.network.packets.PacketPlayerState;
 
@@ -49,7 +50,7 @@ public class MooPlayerJoinedProxyListener implements EventListener {
 
         // update moo cache (user count and playerData)
         MooCache.getInstance().getConfigMap().fastPutAsync(NetworkConfigType.PLAYER_COUNT.getKey(), Cloud.getInstance().getNetworkProxy().getPlayers().size());
-        MooCache.getInstance().getPlayerMap().fastPutAsync(data.getUuid(), data);
+        MooCache.getInstance().getPlayerMap().fastPutAsync(data.getUuid(), new MooPlayer(data));
         MooCache.getInstance().getNameUniqueIdMap().fastPutAsync(data.getLastName(), data.getUuid());
 
         packet.respond(ResponseStatus.OK);

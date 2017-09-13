@@ -10,22 +10,17 @@ import de.superioz.moo.api.database.query.DbQuery;
 import de.superioz.moo.api.database.query.DbQueryNode;
 import de.superioz.moo.api.database.query.DbQueryUnbaked;
 import de.superioz.moo.api.utils.PermissionUtil;
-import de.superioz.moo.network.common.MooCache;
-import de.superioz.moo.network.common.MooGroup;
-import de.superioz.moo.network.common.MooProxy;
-import de.superioz.moo.network.common.PacketMessenger;
+import de.superioz.moo.network.common.*;
 import de.superioz.moo.network.exception.MooInputException;
 import de.superioz.moo.network.exception.MooOutputException;
 import de.superioz.moo.network.packets.PacketPlayerMessage;
 import de.superioz.moo.network.packets.PacketPlayerProfile;
 import de.superioz.moo.network.packets.PacketPlayerState;
-import de.superioz.moo.network.packets.PacketRequest;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 import java.util.function.Consumer;
@@ -87,9 +82,9 @@ public final class MooQueries {
     }
 
     public PlayerData getPlayerData(UUID uuid) {
-        PlayerData data = MooCache.getInstance().getPlayerMap().get(uuid);
+        MooPlayer data = MooCache.getInstance().getPlayerMap().get(uuid);
         if(data != null) {
-            return data;
+            return data.unwrap();
         }
 
         try {
@@ -127,25 +122,6 @@ public final class MooQueries {
 
     public PlayerProfile getPlayerProfile(UUID uuid) {
         return getPlayerProfile(uuid.toString());
-    }
-
-    /**
-     * Get ping of the player
-     *
-     * @param playerName The playername
-     * @return The respond
-     */
-    public Integer getPlayerPing(String playerName) {
-        try {
-            return PacketMessenger.transferToResponse(new PacketRequest(PacketRequest.Type.PING, playerName)).toPrimitive(Integer.class);
-        }
-        catch(MooInputException e) {
-            return null;
-        }
-    }
-
-    public Integer getPlayerPing(UUID uuid) {
-        return getPlayerPing(uuid.toString());
     }
 
     /**
@@ -187,22 +163,6 @@ public final class MooQueries {
 
     public ResponseStatus sendMessage(PacketPlayerMessage.Type type, String message, String param) {
         return sendMessage(type, message, param, true, true);
-    }
-
-    /**
-     * Simply sets the targets group to given group
-     *
-     * @param target   The target
-     * @param newGroup The newGroup
-     * @return The response (CONFLICT if the group is the same)
-     */
-    public ResponseStatus rankPlayer(PlayerData target, Group newGroup) {
-        if(target.getGroup().equalsIgnoreCase(newGroup.getName())) {
-            return new Response(ResponseStatus.CONFLICT).getStatus();
-        }
-        return modifyPlayerData(target.getUuid(),
-                DbQueryUnbaked.newInstance(DbModifier.PLAYER_GROUP, newGroup.getName())
-                        .equate(DbModifier.PLAYER_RANK, newGroup.getRank()));
     }
 
     /*
@@ -313,18 +273,17 @@ public final class MooQueries {
      * @return The result
      */
     public boolean updatePermission(UUID uuid) {
-        PlayerData data = MooCache.getInstance().getPlayerMap().get(uuid);
-        if(data == null) return false;
-        String groupName = data.getGroup();
+        MooPlayer player = MooProxy.getPlayer(uuid);
+        if(player.nexists()) return false;
 
         // list the group out of the cache
         // if the group doesnt exist create a "default" group
-        MooGroup group = MooCache.getInstance().getGroupMap().get(groupName);
+        MooGroup group = player.getGroup();
         if(group == null) {
             group.setName(Group.DEFAULT_NAME);
 
             try {
-                this.createGroup(new Group(groupName));
+                group.create();
             }
             catch(MooOutputException e) {
                 e.printStackTrace();
@@ -334,25 +293,13 @@ public final class MooQueries {
             // MooCache.getInstance().getGroupMap().fastPutAsync(groupName, group);
 
             // sets the player's group
-            this.rankPlayer(data, group.unwrap());
+            player.setGroup(group);
         }
 
-        List<String> permissions = new ArrayList<>(data.getExtraPerms());
+        List<String> permissions = new ArrayList<>(player.getPermissions());
         permissions.addAll(PermissionUtil.getAllPermissions(group.unwrap(), MooProxy.getRawGroups()));
-        MooCache.getInstance().getPlayerPermissionMap().putAsync(data.getUuid(), permissions);
+        MooCache.getInstance().getPlayerPermissionMap().putAsync(player.getUniqueId(), permissions);
         return true;
-    }
-
-    /**
-     * Gets the color of the group with given name
-     *
-     * @param groupName The name of group
-     * @return The color as string
-     */
-    public String getGroupColor(String groupName) {
-        MooGroup group = getGroup(groupName);
-        if(group == null) return "&r";
-        return group.getColor();
     }
 
     /**
@@ -376,52 +323,10 @@ public final class MooQueries {
     }
 
     public MooGroup getGroup(UUID playerUniqueId) {
-        PlayerData data = MooCache.getInstance().getPlayerMap().get(playerUniqueId);
+        MooPlayer data = MooCache.getInstance().getPlayerMap().get(playerUniqueId);
         if(data == null) return null;
 
-        return getGroup(data.getGroup());
-    }
-
-    /**
-     * Get all groups currently stored (or fetch it from the cloud)
-     *
-     * @return The list of groups
-     */
-    public List<Group> listGroups() {
-        Collection<Group> groups = MooProxy.getRawGroups();
-        if(groups != null && !groups.isEmpty()) {
-            return new ArrayList<>(groups);
-        }
-        try {
-            return Queries.list(DatabaseType.GROUP, Group.class);
-        }
-        catch(MooInputException e) {
-            //
-        }
-        return new ArrayList<>();
-    }
-
-    /**
-     * Creates given group<br>
-     * Groupname is needed!
-     *
-     * @param group The group
-     * @return The status of the creation
-     */
-    public ResponseStatus createGroup(Group group) {
-        return Queries.create(DatabaseType.GROUP, group).getStatus();
-    }
-
-    public ResponseStatus modifyGroup(String groupName, DbQuery query) {
-        return Queries.modify(DatabaseType.GROUP, groupName, query).getStatus();
-    }
-
-    public ResponseStatus modifyGroup(String groupName, DbModifier modifier, Object val) {
-        return Queries.modify(DatabaseType.GROUP, groupName, DbQueryUnbaked.newInstance(modifier, val)).getStatus();
-    }
-
-    public ResponseStatus modifyGroup(String groupName, DbModifier modifier, DbQueryNode.Type type, Object val) {
-        return Queries.modify(DatabaseType.GROUP, groupName, DbQueryUnbaked.newInstance().add(modifier, type, val)).getStatus();
+        return data.getGroup();
     }
 
 }

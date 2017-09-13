@@ -10,6 +10,7 @@ import de.superioz.moo.api.events.CommandErrorEvent;
 import de.superioz.moo.api.exceptions.InvalidArgumentException;
 import de.superioz.moo.api.exceptions.InvalidCommandUsageException;
 import de.superioz.moo.api.io.LanguageManager;
+import de.superioz.moo.api.util.Validation;
 import lombok.Getter;
 import lombok.Setter;
 import net.jodah.expiringmap.ExpiringMap;
@@ -44,7 +45,7 @@ public abstract class CommandContext<T> {
      */
     public static final CommandContext DEFAULT = new CommandContext(null) {
         @Override
-        protected UUID getSendersUniqueId() {
+        public UUID getSendersUniqueId() {
             return CONSOLE_UUID;
         }
 
@@ -94,7 +95,7 @@ public abstract class CommandContext<T> {
      *
      * @return The uuid
      */
-    protected abstract UUID getSendersUniqueId();
+    public abstract UUID getSendersUniqueId();
 
     /**
      * Sends a message to given target
@@ -126,14 +127,42 @@ public abstract class CommandContext<T> {
      *
      * @param msg          The msg
      * @param replacements The replacements for the message
+     * @return The message context
      */
-    public void sendMessage(String msg, Object... replacements) {
+    public MessageContextResult<T> sendMessage(String msg, Object... replacements) {
         String fullMessage = LanguageManager.contains(msg) ? LanguageManager.get(msg, replacements) : msg;
+
+        // there is a hover/click event thingy inside!
+        // AND if it is the console we cannot do!
+        if(Validation.MESSAGE_COMP_EVENT.matches(msg) && isConsole()) {
+            return new MessageContextResult<>(this, msg, false, true);
+        }
+
+        // OTHERWISE can do!
         message(fullMessage, commandSender);
+        return new MessageContextResult<>(this, msg, true, true);
     }
 
     public void sendMessage(List<String> messages) {
         messages.forEach(s -> sendMessage(s));
+    }
+
+    /**
+     * Same as {@link #sendMessage(String, Object...)} but with a condition to be fullfilled
+     *
+     * @param condition    The condition
+     * @param msg          The message
+     * @param replacements The replacements for the message
+     * @return The message context
+     */
+    public MessageContextResult<T> sendMessage(boolean condition, String msg, Object... replacements) {
+        if(!condition) return new MessageContextResult<>(this, msg, false, true);
+        return sendMessage(msg, replacements);
+    }
+
+    public MessageContextResult<T> sendMessage(boolean condition) {
+        if(!condition) return new MessageContextResult<>(this, null, false, true);
+        return new MessageContextResult<>(this, null, true, true);
     }
 
     /**

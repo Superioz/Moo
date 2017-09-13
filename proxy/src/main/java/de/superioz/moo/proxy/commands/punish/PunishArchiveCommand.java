@@ -2,28 +2,21 @@ package de.superioz.moo.proxy.commands.punish;
 
 import de.superioz.moo.api.collection.PageableList;
 import de.superioz.moo.api.command.Command;
-import de.superioz.moo.api.command.context.CommandContext;
 import de.superioz.moo.api.command.help.ArgumentHelp;
 import de.superioz.moo.api.command.help.ArgumentHelper;
 import de.superioz.moo.api.command.param.ParamSet;
 import de.superioz.moo.api.command.tabcomplete.TabCompletion;
 import de.superioz.moo.api.command.tabcomplete.TabCompletor;
 import de.superioz.moo.api.common.RunAsynchronous;
-import de.superioz.moo.api.common.punishment.BanType;
-import de.superioz.moo.api.console.format.PageableListFormat;
 import de.superioz.moo.api.database.objects.Ban;
-import de.superioz.moo.api.database.objects.PlayerData;
 import de.superioz.moo.api.io.LanguageManager;
 import de.superioz.moo.api.util.Validation;
 import de.superioz.moo.api.utils.StringUtil;
-import de.superioz.moo.api.utils.TimeUtil;
 import de.superioz.moo.network.queries.MooQueries;
 import de.superioz.moo.proxy.command.BungeeCommandContext;
-import de.superioz.moo.proxy.util.BungeeTeamChat;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -74,7 +67,7 @@ public class PunishArchiveCommand {
         int page = args.getInt(0, 0);
 
         // sends the list
-        context.sendDisplayFormat(new PageableListFormat<Ban>(pageableList)
+        /*context.sendDisplayFormat(new PageableListFormat<Ban>(pageableList)
                 .page(page).header("punishment-archive-list-header").emptyList("punishment-archive-list-empty")
                 .doesntExist("error-page-doesnt-exist")
                 .emptyEntry("punishment-archive-list-entry-empty").entryFormat("punishment-archive-list-entry")
@@ -94,7 +87,7 @@ public class PunishArchiveCommand {
                                     BungeeTeamChat.getInstance().getColor(banExecutor == null ? null : banExecutor.getUuid()) + banExecutorName));
                 })
                 .footer("punishment-archive-next-page", "/punisharchive " + playerName + " " + (page + 1))
-        );
+        );*/
     }
 
 }
