@@ -24,6 +24,10 @@ import java.util.*;
  */
 public class MooPlayer extends ObjectWrapper<MooPlayer, PlayerData> implements PermissionHolder {
 
+    // dummy
+    public MooPlayer() {
+    }
+
     public MooPlayer(PlayerData wrappedObject) {
         super(wrappedObject == null ? PlayerData.NON_EXISTENT : wrappedObject);
     }

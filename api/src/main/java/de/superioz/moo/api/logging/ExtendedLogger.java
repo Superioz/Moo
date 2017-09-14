@@ -190,10 +190,20 @@ public class ExtendedLogger {
     }
 
     /**
-     * Prepares the message
+     * Logs a message
+     *
+     * @param msg       The message
+     * @param level     The print level (INFO, ..)
+     * @param throwable The error or null for no error
      */
-    public void prepareMessage() {
+    public void log(String msg, Level level, Throwable throwable) {
+        if(baseLogger != null) {
+            baseLogger.log(level, ConsoleColor.replaceColors(msg), throwable);
+        }
+    }
 
+    public void log(String msg, Level level) {
+        log(msg, level, null);
     }
 
     /**

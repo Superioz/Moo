@@ -25,6 +25,10 @@ public class MooGroup extends ObjectWrapper<MooGroup, Group> implements Permissi
     public static final Comparator<MooGroup> DEFAULT_COMPARISON = Comparator.comparing(MooGroup::getName);
     public static final Comparator<MooGroup> HIRARCHY_COMPARISON = (o1, o2) -> o1.getRank().compareTo(o2.getRank()) * -1;
 
+    // dummy constructor
+    public MooGroup() {
+    }
+
     public MooGroup(Group wrappedObject) {
         super(wrappedObject == null ? Group.NON_EXISTENT : wrappedObject);
     }

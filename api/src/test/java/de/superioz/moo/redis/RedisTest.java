@@ -12,6 +12,7 @@ import org.redisson.config.Config;
 
 public class RedisTest {
 
+
     @Test
     void connectingToRedisWorks() {
         Config config = new Config();

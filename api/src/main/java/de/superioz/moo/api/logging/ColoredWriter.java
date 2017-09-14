@@ -15,35 +15,35 @@ import java.util.logging.LogRecord;
  */
 public class ColoredWriter extends Handler {
 
-    private final Map<ConsoleColor, String> replacementByColor = new EnumMap<>(ConsoleColor.class);
+    public static final Map<ConsoleColor, String> REPLACEMENT_BY_COLOR = new EnumMap<>(ConsoleColor.class);
     private final ConsoleColor[] colors = ConsoleColor.values();
     private final ConsoleReader console;
 
     /*
     Adds ansi code for console color inside the replacement map
      */ {
-        replacementByColor.put(ConsoleColor.BLACK, Ansi.ansi().a(Ansi.Attribute.RESET).fg(Ansi.Color.BLACK).boldOff().toString());
-        replacementByColor.put(ConsoleColor.DARK_BLUE, Ansi.ansi().a(Ansi.Attribute.RESET).fg(Ansi.Color.BLUE).boldOff().toString());
-        replacementByColor.put(ConsoleColor.DARK_GREEN, Ansi.ansi().a(Ansi.Attribute.RESET).fg(Ansi.Color.GREEN).boldOff().toString());
-        replacementByColor.put(ConsoleColor.DARK_AQUA, Ansi.ansi().a(Ansi.Attribute.RESET).fg(Ansi.Color.CYAN).boldOff().toString());
-        replacementByColor.put(ConsoleColor.DARK_RED, Ansi.ansi().a(Ansi.Attribute.RESET).fg(Ansi.Color.RED).boldOff().toString());
-        replacementByColor.put(ConsoleColor.DARK_PURPLE, Ansi.ansi().a(Ansi.Attribute.RESET).fg(Ansi.Color.MAGENTA).boldOff().toString());
-        replacementByColor.put(ConsoleColor.GOLD, Ansi.ansi().a(Ansi.Attribute.RESET).fg(Ansi.Color.YELLOW).boldOff().toString());
-        replacementByColor.put(ConsoleColor.GRAY, Ansi.ansi().a(Ansi.Attribute.RESET).fg(Ansi.Color.WHITE).boldOff().toString());
-        replacementByColor.put(ConsoleColor.DARK_GRAY, Ansi.ansi().a(Ansi.Attribute.RESET).fg(Ansi.Color.BLACK).bold().toString());
-        replacementByColor.put(ConsoleColor.BLUE, Ansi.ansi().a(Ansi.Attribute.RESET).fg(Ansi.Color.BLUE).bold().toString());
-        replacementByColor.put(ConsoleColor.GREEN, Ansi.ansi().a(Ansi.Attribute.RESET).fg(Ansi.Color.GREEN).bold().toString());
-        replacementByColor.put(ConsoleColor.AQUA, Ansi.ansi().a(Ansi.Attribute.RESET).fg(Ansi.Color.CYAN).bold().toString());
-        replacementByColor.put(ConsoleColor.RED, Ansi.ansi().a(Ansi.Attribute.RESET).fg(Ansi.Color.RED).bold().toString());
-        replacementByColor.put(ConsoleColor.LIGHT_PURPLE, Ansi.ansi().a(Ansi.Attribute.RESET).fg(Ansi.Color.MAGENTA).bold().toString());
-        replacementByColor.put(ConsoleColor.YELLOW, Ansi.ansi().a(Ansi.Attribute.RESET).fg(Ansi.Color.YELLOW).bold().toString());
-        replacementByColor.put(ConsoleColor.WHITE, Ansi.ansi().a(Ansi.Attribute.RESET).fg(Ansi.Color.WHITE).bold().toString());
-        replacementByColor.put(ConsoleColor.MAGIC, Ansi.ansi().a(Ansi.Attribute.BLINK_SLOW).toString());
-        replacementByColor.put(ConsoleColor.BOLD, Ansi.ansi().a(Ansi.Attribute.UNDERLINE_DOUBLE).toString());
-        replacementByColor.put(ConsoleColor.STRIKETHROUGH, Ansi.ansi().a(Ansi.Attribute.STRIKETHROUGH_ON).toString());
-        replacementByColor.put(ConsoleColor.UNDERLINE, Ansi.ansi().a(Ansi.Attribute.UNDERLINE).toString());
-        replacementByColor.put(ConsoleColor.ITALIC, Ansi.ansi().a(Ansi.Attribute.ITALIC).toString());
-        replacementByColor.put(ConsoleColor.RESET, Ansi.ansi().a(Ansi.Attribute.RESET).toString());
+        REPLACEMENT_BY_COLOR.put(ConsoleColor.BLACK, Ansi.ansi().a(Ansi.Attribute.RESET).fg(Ansi.Color.BLACK).boldOff().toString());
+        REPLACEMENT_BY_COLOR.put(ConsoleColor.DARK_BLUE, Ansi.ansi().a(Ansi.Attribute.RESET).fg(Ansi.Color.BLUE).boldOff().toString());
+        REPLACEMENT_BY_COLOR.put(ConsoleColor.DARK_GREEN, Ansi.ansi().a(Ansi.Attribute.RESET).fg(Ansi.Color.GREEN).boldOff().toString());
+        REPLACEMENT_BY_COLOR.put(ConsoleColor.DARK_AQUA, Ansi.ansi().a(Ansi.Attribute.RESET).fg(Ansi.Color.CYAN).boldOff().toString());
+        REPLACEMENT_BY_COLOR.put(ConsoleColor.DARK_RED, Ansi.ansi().a(Ansi.Attribute.RESET).fg(Ansi.Color.RED).boldOff().toString());
+        REPLACEMENT_BY_COLOR.put(ConsoleColor.DARK_PURPLE, Ansi.ansi().a(Ansi.Attribute.RESET).fg(Ansi.Color.MAGENTA).boldOff().toString());
+        REPLACEMENT_BY_COLOR.put(ConsoleColor.GOLD, Ansi.ansi().a(Ansi.Attribute.RESET).fg(Ansi.Color.YELLOW).boldOff().toString());
+        REPLACEMENT_BY_COLOR.put(ConsoleColor.GRAY, Ansi.ansi().a(Ansi.Attribute.RESET).fg(Ansi.Color.WHITE).boldOff().toString());
+        REPLACEMENT_BY_COLOR.put(ConsoleColor.DARK_GRAY, Ansi.ansi().a(Ansi.Attribute.RESET).fg(Ansi.Color.BLACK).bold().toString());
+        REPLACEMENT_BY_COLOR.put(ConsoleColor.BLUE, Ansi.ansi().a(Ansi.Attribute.RESET).fg(Ansi.Color.BLUE).bold().toString());
+        REPLACEMENT_BY_COLOR.put(ConsoleColor.GREEN, Ansi.ansi().a(Ansi.Attribute.RESET).fg(Ansi.Color.GREEN).bold().toString());
+        REPLACEMENT_BY_COLOR.put(ConsoleColor.AQUA, Ansi.ansi().a(Ansi.Attribute.RESET).fg(Ansi.Color.CYAN).bold().toString());
+        REPLACEMENT_BY_COLOR.put(ConsoleColor.RED, Ansi.ansi().a(Ansi.Attribute.RESET).fg(Ansi.Color.RED).bold().toString());
+        REPLACEMENT_BY_COLOR.put(ConsoleColor.LIGHT_PURPLE, Ansi.ansi().a(Ansi.Attribute.RESET).fg(Ansi.Color.MAGENTA).bold().toString());
+        REPLACEMENT_BY_COLOR.put(ConsoleColor.YELLOW, Ansi.ansi().a(Ansi.Attribute.RESET).fg(Ansi.Color.YELLOW).bold().toString());
+        REPLACEMENT_BY_COLOR.put(ConsoleColor.WHITE, Ansi.ansi().a(Ansi.Attribute.RESET).fg(Ansi.Color.WHITE).bold().toString());
+        REPLACEMENT_BY_COLOR.put(ConsoleColor.MAGIC, Ansi.ansi().a(Ansi.Attribute.BLINK_SLOW).toString());
+        REPLACEMENT_BY_COLOR.put(ConsoleColor.BOLD, Ansi.ansi().a(Ansi.Attribute.UNDERLINE_DOUBLE).toString());
+        REPLACEMENT_BY_COLOR.put(ConsoleColor.STRIKETHROUGH, Ansi.ansi().a(Ansi.Attribute.STRIKETHROUGH_ON).toString());
+        REPLACEMENT_BY_COLOR.put(ConsoleColor.UNDERLINE, Ansi.ansi().a(Ansi.Attribute.UNDERLINE).toString());
+        REPLACEMENT_BY_COLOR.put(ConsoleColor.ITALIC, Ansi.ansi().a(Ansi.Attribute.ITALIC).toString());
+        REPLACEMENT_BY_COLOR.put(ConsoleColor.RESET, Ansi.ansi().a(Ansi.Attribute.RESET).toString());
     }
 
     public ColoredWriter(ConsoleReader console) {
@@ -57,10 +57,7 @@ public class ColoredWriter extends Handler {
      */
     public void print(String s) {
         // colorize the message
-        s = ConsoleColor.translateAlternateColorCodes('&', s);
-        for(ConsoleColor color : colors) {
-            s = s.replaceAll("(?i)" + color.toString(), replacementByColor.get(color));
-        }
+        s = ConsoleColor.replaceColors(s);
 
         try {
             console.print(Ansi.ansi().eraseLine(Ansi.Erase.ALL).toString() + ConsoleReader.RESET_LINE + s + Ansi.ansi().reset().toString());

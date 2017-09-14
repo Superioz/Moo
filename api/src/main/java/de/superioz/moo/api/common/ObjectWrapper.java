@@ -19,6 +19,10 @@ public abstract class ObjectWrapper<W, T> {
      */
     private int lazy = 0;
 
+    // dummy
+    public ObjectWrapper() {
+    }
+
     public ObjectWrapper(T wrappedObject) {
         this.wrappedObject = wrappedObject;
     }

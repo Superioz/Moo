@@ -57,6 +57,20 @@ public enum ConsoleColor {
     }
 
     /**
+     * Replaces color codes to ASCI colors
+     *
+     * @param input The input text
+     * @return The result
+     */
+    public static String replaceColors(String input) {
+        input = ConsoleColor.translateAlternateColorCodes('&', input);
+        for(ConsoleColor color : values()) {
+            input = input.replaceAll("(?i)" + color.toString(), ColoredWriter.REPLACEMENT_BY_COLOR.get(color));
+        }
+        return input;
+    }
+
+    /**
      * Strips the given message of all color codes
      *
      * @param input String to strip of color
@@ -90,20 +104,20 @@ public enum ConsoleColor {
         return new String(b);
     }
 
-    public static String translateLowSpectrum(char altColorChar, String textToTranslate){
+    public static String translateLowSpectrum(char altColorChar, String textToTranslate) {
         char[] b = textToTranslate.toCharArray();
         for(int i = 0; i < b.length - 1; i++) {
             if(b[i] == altColorChar && ALL_CODES.indexOf(b[i + 1]) > -1) {
                 char c = b[i + 1];
 
                 // the only difference between normal and low spectrum
-                if(DARK_GRAY_SPECTRUM.contains((c + "").toLowerCase())){
+                if(DARK_GRAY_SPECTRUM.contains((c + "").toLowerCase())) {
                     b[i + 1] = '8';
                 }
-                else if(GRAY_SPECTRUM.contains((c + "").toLowerCase())){
+                else if(GRAY_SPECTRUM.contains((c + "").toLowerCase())) {
                     b[i + 1] = '7';
                 }
-                else if(WHITE_SPECTRUM.contains((c + "").toLowerCase())){
+                else if(WHITE_SPECTRUM.contains((c + "").toLowerCase())) {
                     b[i + 1] = 'f';
                 }
                 b[i] = ConsoleColor.COLOR_CHAR;
