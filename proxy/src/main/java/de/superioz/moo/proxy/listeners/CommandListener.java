@@ -150,7 +150,7 @@ public class CommandListener extends CommandEventAdapter<CommandSender> implemen
                     coloredPath.add(color + wholePath.get(i));
                 }
 
-                listFormat.entryr(String.join(" ", coloredPath) + " &7" + children.getUsage().getBase(), suggestUsage, suggestUsage);
+                listFormat.entryr(String.join(" ", coloredPath) + " &7" + children.getUsage().getBase(), suggestUsage);
             }
 
             context.sendDisplayFormat(listFormat);
