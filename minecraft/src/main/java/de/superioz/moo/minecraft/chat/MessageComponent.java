@@ -49,9 +49,8 @@ public class MessageComponent {
     public MessageComponent(String message) {
         this.message = message;
 
-        for(String s : StringUtil.split(message, Validation.MESSAGE_COMP_EVENT.getRegex(),
-                true)) {
-            if(Validation.MESSAGE_COMP_EVENT.getPattern().matcher(s).matches()) {
+        for(String s : StringUtil.split(message, Validation.MESSAGE_COMP_EVENT.getRawRegex(), true)) {
+            if(Validation.MESSAGE_COMP_EVENT.matches(s)) {
                 this.entryList.add(new Pair<>(s, new EventEntry(s)));
             }
             else {
@@ -256,7 +255,7 @@ public class MessageComponent {
          * @return This
          */
         public EventEntry initSyntax(String syntax) {
-            this.syntaxParts = StringUtil.find(Validation.MESSAGE_COMP_EVENT_PART.getRegex(), syntax);
+            this.syntaxParts = StringUtil.find(Validation.MESSAGE_COMP_EVENT_PART.getRawRegex(), syntax);
 
             if(syntaxParts.size() >= 1) {
                 this.message = syntaxParts.get(0);

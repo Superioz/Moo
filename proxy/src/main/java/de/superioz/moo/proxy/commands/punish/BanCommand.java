@@ -3,6 +3,7 @@ package de.superioz.moo.proxy.commands.punish;
 import de.superioz.moo.api.command.Command;
 import de.superioz.moo.api.command.help.ArgumentHelp;
 import de.superioz.moo.api.command.help.ArgumentHelper;
+import de.superioz.moo.api.command.param.ParamSet;
 import de.superioz.moo.api.command.tabcomplete.TabCompletion;
 import de.superioz.moo.api.command.tabcomplete.TabCompletor;
 import de.superioz.moo.api.common.RunAsynchronous;
@@ -13,9 +14,9 @@ import de.superioz.moo.api.io.LanguageManager;
 import de.superioz.moo.api.utils.StringUtil;
 import de.superioz.moo.api.utils.TimeUtil;
 import de.superioz.moo.network.common.MooPlayer;
+import de.superioz.moo.network.common.MooProxy;
 import de.superioz.moo.network.queries.ResponseStatus;
 import de.superioz.moo.proxy.command.BungeeCommandContext;
-import de.superioz.moo.proxy.command.BungeeParamSet;
 import javafx.util.Pair;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.ProxyServer;
@@ -59,14 +60,14 @@ public class BanCommand {
     }
 
     @Command(label = BAN_LABEL, usage = "<player> <reason>")
-    public void ban(BungeeCommandContext context, BungeeParamSet args) {
+    public void ban(BungeeCommandContext context,ParamSet args) {
         CommandSender sender = context.getCommandSender();
         UUID executor = context.isConsole() ? null : ((ProxiedPlayer) context.getCommandSender()).getUniqueId();
         String playerName = args.get(0);
 
         // get player
         context.invalidArgument(playerName.equalsIgnoreCase(sender.getName()), "ban-cannot-ban-yourself");
-        MooPlayer player = args.getMooPlayer(playerName);
+        MooPlayer player = MooProxy.getPlayer(playerName);
         context.invalidArgument(!player.exists(), "error-player-doesnt-exist", playerName);
 
         // get the ban reason
@@ -81,14 +82,14 @@ public class BanCommand {
     }
 
     @Command(label = TEMPBAN_LABEL, usage = "<player> <reason> <time>")
-    public void tempban(BungeeCommandContext context, BungeeParamSet args) {
+    public void tempban(BungeeCommandContext context,ParamSet args) {
         CommandSender sender = context.getCommandSender();
         UUID executor = context.isConsole() ? null : ((ProxiedPlayer) context.getCommandSender()).getUniqueId();
         String playerName = args.get(0);
 
         // get player
         context.invalidArgument(playerName.equalsIgnoreCase(sender.getName()), "ban-cannot-ban-yourself");
-        MooPlayer player = args.getMooPlayer(playerName);
+        MooPlayer player = MooProxy.getPlayer(playerName);
         context.invalidArgument(!player.exists(), "error-player-doesnt-exist", playerName);
 
         // get the ban reason

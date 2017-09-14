@@ -16,9 +16,9 @@ import de.superioz.moo.api.util.Validation;
 import de.superioz.moo.api.utils.PermissionUtil;
 import de.superioz.moo.api.utils.StringUtil;
 import de.superioz.moo.network.common.MooPlayer;
+import de.superioz.moo.network.common.MooProxy;
 import de.superioz.moo.network.queries.ResponseStatus;
 import de.superioz.moo.proxy.command.BungeeCommandContext;
-import de.superioz.moo.proxy.command.BungeeParamSet;
 
 import java.util.Collections;
 import java.util.List;
@@ -54,15 +54,15 @@ public class PermCommand {
     }
 
     @Command(label = SYNTAX_COMMAND, parent = LABEL)
-    public void syntax(BungeeCommandContext context, BungeeParamSet args) {
-        context.sendMessage(LanguageManager.get("permission-syntax"));
+    public void syntax(BungeeCommandContext context, ParamSet args) {
+        context.sendMessage("permission-syntax");
     }
 
     @Command(label = LIST_COMMAND, parent = LABEL, usage = "<player> [page]")
-    public void list(BungeeCommandContext context, BungeeParamSet args) {
+    public void list(BungeeCommandContext context, ParamSet args) {
         // get moo player
         String playerName = args.get(0);
-        MooPlayer player = args.getMooPlayer(playerName);
+        MooPlayer player = MooProxy.getPlayer(playerName);
         context.invalidArgument(player.nexists(), "error-player-doesnt-exist", playerName);
 
         // get permissions
@@ -86,10 +86,10 @@ public class PermCommand {
     }
 
     @Command(label = ADD_COMMAND, parent = LABEL, usage = "<player> <permission>")
-    public void add(BungeeCommandContext context, BungeeParamSet args) {
+    public void add(BungeeCommandContext context, ParamSet args) {
         // get moo player
         String playerName = args.get(0);
-        MooPlayer player = args.getMooPlayer(playerName);
+        MooPlayer player = MooProxy.getPlayer(playerName);
         context.invalidArgument(player.nexists(), "error-player-doesnt-exist", playerName);
 
         // list permissions from arguments to be added
@@ -104,10 +104,10 @@ public class PermCommand {
     }
 
     @Command(label = REMOVE_COMMAND, parent = LABEL, usage = "<player> <permission>")
-    public void remove(BungeeCommandContext context, BungeeParamSet args) {
+    public void remove(BungeeCommandContext context,ParamSet args) {
         // get moo player
         String playerName = args.get(0);
-        MooPlayer player = args.getMooPlayer(playerName);
+        MooPlayer player = MooProxy.getPlayer(playerName);
         context.invalidArgument(player.nexists(), "error-player-doesnt-exist", playerName);
 
         // list permissions from arguments to be added
@@ -122,10 +122,10 @@ public class PermCommand {
     }
 
     @Command(label = CLEAR_COMMAND, parent = LABEL, usage = "<player>")
-    public void clear(BungeeCommandContext context, BungeeParamSet args) {
+    public void clear(BungeeCommandContext context,ParamSet args) {
         // get moo player
         String playerName = args.get(0);
-        MooPlayer player = args.getMooPlayer(playerName);
+        MooPlayer player = MooProxy.getPlayer(playerName);
         context.invalidArgument(player.nexists(), "error-player-doesnt-exist", playerName);
 
         // set permissions

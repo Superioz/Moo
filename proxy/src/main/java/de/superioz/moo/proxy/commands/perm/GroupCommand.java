@@ -23,7 +23,6 @@ import de.superioz.moo.network.common.MooGroup;
 import de.superioz.moo.network.common.MooProxy;
 import de.superioz.moo.network.queries.ResponseStatus;
 import de.superioz.moo.proxy.command.BungeeCommandContext;
-import de.superioz.moo.proxy.command.BungeeParamSet;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -105,9 +104,9 @@ public class GroupCommand {
     }
 
     @Command(label = INFO_COMMAND, parent = LABEL, usage = "<name>")
-    public void info(BungeeCommandContext context, BungeeParamSet args) {
+    public void info(BungeeCommandContext context,ParamSet args) {
         String groupName = args.get(0);
-        MooGroup group = args.getMooGroup(groupName);
+        MooGroup group = MooProxy.getGroup(groupName);
         context.invalidArgument(group.nexists(), "group-doesnt-exist", groupName);
 
         // send info
@@ -126,9 +125,9 @@ public class GroupCommand {
     }
 
     @Command(label = MODIFY_COMMAND, parent = LABEL, usage = "<name> <updates>")
-    public void modify(BungeeCommandContext context, BungeeParamSet args) {
+    public void modify(BungeeCommandContext context,ParamSet args) {
         String groupName = args.get(0);
-        MooGroup group = args.getMooGroup(groupName);
+        MooGroup group = MooProxy.getGroup(groupName);
         context.invalidArgument(!group.exists(), "group-doesnt-exist", groupName);
 
         // list updates (for modification)
@@ -142,9 +141,9 @@ public class GroupCommand {
     }
 
     @Command(label = CREATE_COMMAND, parent = LABEL, usage = "<name> [updates]")
-    public void create(BungeeCommandContext context, BungeeParamSet args) {
+    public void create(BungeeCommandContext context,ParamSet args) {
         String groupName = args.get(0);
-        MooGroup group = args.getMooGroup(groupName);
+        MooGroup group = MooProxy.getGroup(groupName);
         context.invalidArgument(group.exists(), "group-already-exists", groupName);
 
         // if group not exists create it
@@ -162,9 +161,9 @@ public class GroupCommand {
     }
 
     @Command(label = DELETE_COMMAND, parent = LABEL, usage = "<name>")
-    public void delete(BungeeCommandContext context, BungeeParamSet args) {
+    public void delete(BungeeCommandContext context,ParamSet args) {
         String groupName = args.get(0);
-        MooGroup group = args.getMooGroup(groupName);
+        MooGroup group = MooProxy.getGroup(groupName);
         context.invalidArgument(!group.exists(), "group-doesnt-exist", groupName);
 
         // execute deletion
@@ -180,9 +179,9 @@ public class GroupCommand {
      */
 
     @Command(label = LIST_PERM_COMMAND, parent = LABEL, usage = "<name> [page]")
-    public void listperm(BungeeCommandContext context, BungeeParamSet args) {
+    public void listperm(BungeeCommandContext context,ParamSet args) {
         String groupName = args.get(0);
-        MooGroup group = args.getMooGroup(groupName);
+        MooGroup group = MooProxy.getGroup(groupName);
         context.invalidArgument(!group.exists(), "group-doesnt-exist", groupName);
 
         // get list of perms
@@ -208,9 +207,9 @@ public class GroupCommand {
     }
 
     @Command(label = ADD_PERM_COMMAND, parent = LABEL, usage = "<name> <permission>")
-    public void addperm(BungeeCommandContext context, BungeeParamSet args) {
+    public void addperm(BungeeCommandContext context,ParamSet args) {
         String groupName = args.get(0);
-        MooGroup group = args.getMooGroup(groupName);
+        MooGroup group = MooProxy.getGroup(groupName);
         context.invalidArgument(group.nexists(), "group-doesnt-exist", groupName);
 
         // list permissions from arguments to be added
@@ -225,9 +224,9 @@ public class GroupCommand {
     }
 
     @Command(label = REMOVE_PERM_COMMAND, parent = LABEL, usage = "<name> <permission>")
-    public void remperm(BungeeCommandContext context, BungeeParamSet args) {
+    public void remperm(BungeeCommandContext context,ParamSet args) {
         String groupName = args.get(0);
-        MooGroup group = args.getMooGroup(groupName);
+        MooGroup group = MooProxy.getGroup(groupName);
         context.invalidArgument(group.nexists(), "group-doesnt-exist", groupName);
 
         // list permissions from arguments to be added
@@ -242,9 +241,9 @@ public class GroupCommand {
     }
 
     @Command(label = CLEAR_PERM_COMMAND, parent = LABEL, usage = "<name>")
-    public void clearperm(BungeeCommandContext context, BungeeParamSet args) {
+    public void clearperm(BungeeCommandContext context,ParamSet args) {
         String groupName = args.get(0);
-        MooGroup group = args.getMooGroup(groupName);
+        MooGroup group = MooProxy.getGroup(groupName);
         context.invalidArgument(!group.exists(), "group-doesnt-exist", groupName);
 
         // set permissions

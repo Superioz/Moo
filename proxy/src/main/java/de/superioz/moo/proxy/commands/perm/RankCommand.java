@@ -3,6 +3,7 @@ package de.superioz.moo.proxy.commands.perm;
 import de.superioz.moo.api.command.Command;
 import de.superioz.moo.api.command.help.ArgumentHelp;
 import de.superioz.moo.api.command.help.ArgumentHelper;
+import de.superioz.moo.api.command.param.ParamSet;
 import de.superioz.moo.api.command.tabcomplete.TabCompletion;
 import de.superioz.moo.api.command.tabcomplete.TabCompletor;
 import de.superioz.moo.api.common.RunAsynchronous;
@@ -13,7 +14,6 @@ import de.superioz.moo.network.common.MooPlayer;
 import de.superioz.moo.network.common.MooProxy;
 import de.superioz.moo.network.queries.ResponseStatus;
 import de.superioz.moo.proxy.command.BungeeCommandContext;
-import de.superioz.moo.proxy.command.BungeeParamSet;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 
@@ -46,10 +46,10 @@ public class RankCommand {
     }
 
     @Command(label = RANK_LABEL, usage = "<player> [group]")
-    public void onRankCommand(BungeeCommandContext context, BungeeParamSet args) {
+    public void onRankCommand(BungeeCommandContext context,ParamSet args) {
         // get player and therefore his group
         String playerName = args.get(0);
-        MooPlayer player = args.getMooPlayer(playerName);
+        MooPlayer player = MooProxy.getPlayer(playerName);
         context.invalidArgument(player.nexists(), "error-player-doesnt-exist", playerName);
         MooGroup oldGroup = player.getGroup();
 
@@ -62,7 +62,7 @@ public class RankCommand {
 
         // rank the player to the given group
         String groupName = args.get(1);
-        MooGroup newGroup = args.getMooGroup(groupName);
+        MooGroup newGroup = MooProxy.getGroup(groupName);
         context.invalidArgument(newGroup.nexists(), "group-doesnt-exist", groupName);
 
         // execute the ranking
@@ -74,10 +74,10 @@ public class RankCommand {
     }
 
     @Command(label = UPRANK_LABEL, usage = "<player> [steps]")
-    public void onUprankCommand(BungeeCommandContext context, BungeeParamSet args) {
+    public void onUprankCommand(BungeeCommandContext context,ParamSet args) {
         // get player and therefore his group
         String playerName = args.get(0);
-        MooPlayer player = args.getMooPlayer(playerName);
+        MooPlayer player = MooProxy.getPlayer(playerName);
         context.invalidArgument(player.nexists(), "error-player-doesnt-exist", playerName);
         MooGroup oldGroup = player.getGroup();
 
@@ -95,10 +95,10 @@ public class RankCommand {
     }
 
     @Command(label = DOWNRANK_LABEL, usage = "<player> [steps]")
-    public void onDownrankCommand(BungeeCommandContext context, BungeeParamSet args) {
+    public void onDownrankCommand(BungeeCommandContext context,ParamSet args) {
         // get player and therefore his group
         String playerName = args.get(0);
-        MooPlayer player = args.getMooPlayer(playerName);
+        MooPlayer player = MooProxy.getPlayer(playerName);
         context.invalidArgument(player.nexists(), "error-player-doesnt-exist", playerName);
         MooGroup oldGroup = player.getGroup();
 

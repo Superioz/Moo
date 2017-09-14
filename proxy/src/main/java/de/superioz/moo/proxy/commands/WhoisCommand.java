@@ -3,6 +3,7 @@ package de.superioz.moo.proxy.commands;
 import de.superioz.moo.api.command.Command;
 import de.superioz.moo.api.command.help.ArgumentHelp;
 import de.superioz.moo.api.command.help.ArgumentHelper;
+import de.superioz.moo.api.command.param.ParamSet;
 import de.superioz.moo.api.command.tabcomplete.TabCompletion;
 import de.superioz.moo.api.command.tabcomplete.TabCompletor;
 import de.superioz.moo.api.common.PlayerProfile;
@@ -14,8 +15,8 @@ import de.superioz.moo.api.io.LanguageManager;
 import de.superioz.moo.api.utils.StringUtil;
 import de.superioz.moo.api.utils.TimeUtil;
 import de.superioz.moo.network.common.MooPlayer;
+import de.superioz.moo.network.common.MooProxy;
 import de.superioz.moo.proxy.command.BungeeCommandContext;
-import de.superioz.moo.proxy.command.BungeeParamSet;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 
@@ -42,9 +43,9 @@ public class WhoisCommand {
     }
 
     @Command(label = LABEL, usage = "<player>")
-    public void onCommand(BungeeCommandContext context, BungeeParamSet args) {
+    public void onCommand(BungeeCommandContext context,ParamSet args) {
         String playerName = args.get(0);
-        MooPlayer player = args.getMooPlayer(playerName);
+        MooPlayer player = MooProxy.getPlayer(playerName);
         context.invalidArgument(!player.exists(), LanguageManager.get("error-player-doesnt-exist", playerName));
 
         // list current informations

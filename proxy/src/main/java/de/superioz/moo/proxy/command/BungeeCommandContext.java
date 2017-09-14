@@ -3,6 +3,7 @@ package de.superioz.moo.proxy.command;
 import de.superioz.moo.api.console.format.DisplayFormat;
 import de.superioz.moo.api.io.LanguageManager;
 import de.superioz.moo.client.command.ClientCommandContext;
+import de.superioz.moo.minecraft.chat.MessageComponent;
 import de.superioz.moo.minecraft.util.ChatUtil;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
@@ -33,7 +34,7 @@ public class BungeeCommandContext extends ClientCommandContext<CommandSender> {
 
     @Override
     protected void message(String msg, CommandSender commandSender) {
-        commandSender.sendMessage(ChatUtil.getEventMessage(msg, true).toTextComponent());
+        commandSender.sendMessage(new MessageComponent(msg).toTextComponent());
     }
 
     @Override
