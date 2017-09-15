@@ -56,9 +56,9 @@ public abstract class CommandContext<T> {
 
         @Override
         public void sendDisplayFormat(DisplayFormat format, Object[] receivers) {
-            format.getComponents().forEach((s, bool) -> {
+            format.getComponents().forEach(stringBooleanPair -> {
                 for(Object receiver : receivers) {
-                    message(s, receiver);
+                    message(stringBooleanPair.getKey(), receiver);
                 }
             });
         }

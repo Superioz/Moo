@@ -293,7 +293,7 @@ public final class StringUtil {
         placeHolders = StringUtil.find(REPLACE_REGEX, text);
 
         // get placeholders and replace them
-        for(int i = replacementIndex; i < placeHolders.size(); i++) {
+        for(int i = 0; i < placeHolders.size(); i++) {
             String placeHolder = placeHolders.get(i);
             Object replacement = i >= replacements.length ? null : replacements[i];
 

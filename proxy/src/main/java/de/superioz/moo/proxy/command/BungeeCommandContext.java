@@ -22,7 +22,8 @@ public class BungeeCommandContext extends ClientCommandContext<CommandSender> {
 
         if(receivers == null || receivers.length == 0) receivers = new CommandSender[]{getCommandSender()};
         for(CommandSender receiver : receivers) {
-            format.getComponents().forEach((s, bool) -> receiver.sendMessage(ChatUtil.getEventMessage(s, bool).toTextComponent()));
+            format.getComponents().forEach(stringBooleanPair
+                    -> receiver.sendMessage(ChatUtil.getEventMessage(stringBooleanPair.getKey(), stringBooleanPair.getValue()).toTextComponent()));
         }
     }
 

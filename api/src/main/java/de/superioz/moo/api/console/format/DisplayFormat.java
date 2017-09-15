@@ -1,10 +1,8 @@
 package de.superioz.moo.api.console.format;
 
+import de.superioz.moo.api.collection.DoubleList;
 import de.superioz.moo.api.io.LanguageManager;
 import lombok.Getter;
-
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * This format is for sending complex message formats to a user simply (like lists, ..)
@@ -13,7 +11,7 @@ import java.util.Map;
 public abstract class DisplayFormat {
 
     @Getter
-    private Map<String, Boolean> components = new HashMap<>();
+    private DoubleList<String, Boolean> components = new DoubleList<>();
 
     /**
      * In this method you can add components
@@ -38,7 +36,7 @@ public abstract class DisplayFormat {
      * @return This
      */
     protected DisplayFormat addMessage(String message, boolean condition) {
-        components.put(message, condition);
+        components.add(message, condition);
         return this;
     }
 

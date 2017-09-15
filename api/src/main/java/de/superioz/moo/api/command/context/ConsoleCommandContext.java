@@ -31,6 +31,6 @@ public class ConsoleCommandContext extends CommandContext {
     public void sendDisplayFormat(DisplayFormat format, Object[] receivers) {
         format.prepare();
 
-        format.getComponents().forEach((s, bool) -> logger.info(s));
+        format.getComponents().forEach(stringBooleanPair -> logger.info(stringBooleanPair.getKey()));
     }
 }

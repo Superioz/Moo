@@ -95,7 +95,7 @@ public class GroupCommand {
                 args.hasFlag("h") ? MooGroup.HIRARCHY_COMPARISON : MooGroup.DEFAULT_COMPARISON);
 
         // sends the pageable list with page as list format
-        context.sendDisplayFormat(new PageableListFormat<Group>(pageableList)
+        context.sendDisplayFormat(new PageableListFormat<MooGroup>(pageableList)
                 .page(page).doesntExist("error-page-doesnt-exist")
                 .emptyList("group-list-empty").header("group-list-header").emptyEntry("group-list-entry-empty")
                 .entryFormat("group-list-entry").entry(replacor -> replacor.accept(replacor.get().getName(), replacor.get().getRank()))

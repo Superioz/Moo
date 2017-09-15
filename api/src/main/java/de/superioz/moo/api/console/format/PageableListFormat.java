@@ -42,7 +42,7 @@ public class PageableListFormat<T> extends DisplayFormat {
 
         String seperationFormat = LanguageManager.contains("list-format-seperation")
                         ? LanguageManager.get("list-format-seperation", header, page + 1, pageableList.getMaxPages() + 1)
-                        : StringUtil.repeat("=", 20) + header + StringUtil.repeat("=", 20);
+                        : StringUtil.repeat("&7=", 20) + header + StringUtil.repeat("&7=", 20);
         addMessage(seperationFormat);
 
         // content

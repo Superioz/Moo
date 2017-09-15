@@ -1,7 +1,9 @@
 package de.superioz.moo.api.console.format;
 
 import de.superioz.moo.api.utils.StringUtil;
+import lombok.Getter;
 
+@Getter
 public class InfoListFormat extends DisplayFormat {
 
     private String entryFormat;
@@ -12,9 +14,7 @@ public class InfoListFormat extends DisplayFormat {
 
     @Override
     public void setupComponents() {
-        if(header != null) {
-            addMessage(header);
-        }
+        //.. nothing at all
     }
 
     /*
@@ -25,6 +25,8 @@ public class InfoListFormat extends DisplayFormat {
 
     public InfoListFormat header(String header, Object... replacements) {
         this.header = getMessage(header, replacements);
+
+        if(header != null) addMessage(this.header);
         return this;
     }
 
