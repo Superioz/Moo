@@ -1,7 +1,7 @@
 ### Make sure to have these boxes checked before submitting:
 - [ ] You are using Java 8+ (java -version in console to check that)
-- [ ] You installed the program correctly (See "Getting started" for instructions)
-- [ ] You tried to find the problem yourself but you came to the conclusion that it is worth opening an issue
+- [ ] You've installed the program correctly (See "Getting started" for instructions)
+- [ ] You've tried to find the problem yourself but you came to the conclusion that it is worth opening an issue
 
 ### Informations
 **Build Number:**  
