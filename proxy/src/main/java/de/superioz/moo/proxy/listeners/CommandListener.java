@@ -11,7 +11,7 @@ import de.superioz.moo.api.events.CommandErrorEvent;
 import de.superioz.moo.api.events.CommandHelpEvent;
 import de.superioz.moo.api.events.PreCommandEvent;
 import de.superioz.moo.api.events.TabCompleteEvent;
-import de.superioz.moo.api.exceptions.InvalidArgumentException;
+import de.superioz.moo.api.exceptions.CommandException;
 import de.superioz.moo.api.exceptions.InvalidCommandUsageException;
 import de.superioz.moo.api.io.LanguageManager;
 import de.superioz.moo.api.utils.StringUtil;
@@ -79,8 +79,8 @@ public class CommandListener extends CommandEventAdapter<CommandSender> implemen
         CommandContext context = event.getContext();
 
         // user used an invalid argument
-        if(exception instanceof InvalidArgumentException) {
-            InvalidArgumentException e = (InvalidArgumentException) exception;
+        if(exception instanceof CommandException) {
+            CommandException e = (CommandException) exception;
             context.sendMessage("&c" + e.getType().getMessage(e.getReplacements()));
 
             if(e.isCommandHelp()) {

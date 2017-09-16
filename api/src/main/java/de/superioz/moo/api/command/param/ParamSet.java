@@ -49,7 +49,7 @@ public class ParamSet extends GenericParameterSet {
             // if the flag is the help flag
             String flagLabel = param.replaceFirst("-", "");
             boolean hasFlag = commandInstance.getFlags().contains(flagLabel)
-                    || flagLabel.equals("?");
+                    || flagLabel.equals(CommandInstance.HELP_FLAG) || flagLabel.equals(CommandInstance.CHOICE_FLAG);
             if(param.startsWith(CommandFlag.SPECIFIER)
                     && hasFlag) {
                 if(lastIndex == -1) lastIndex = i;

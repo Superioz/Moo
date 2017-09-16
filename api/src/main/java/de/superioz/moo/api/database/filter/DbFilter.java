@@ -4,7 +4,7 @@ import com.mongodb.MongoClient;
 import com.mongodb.client.model.Filters;
 import de.superioz.moo.api.database.object.DataResolver;
 import de.superioz.moo.api.database.DatabaseCollection;
-import de.superioz.moo.api.exceptions.InvalidArgumentException;
+import de.superioz.moo.api.exceptions.CommandException;
 import de.superioz.moo.api.utils.ReflectionUtil;
 import de.superioz.moo.api.utils.StringUtil;
 import javafx.util.Pair;
@@ -61,9 +61,9 @@ public class DbFilter {
      * @param wrappedClass The wrapped class for eventually a prim key (only for this purpose)
      * @param msg          The message after global syntax
      * @return A new filter instance
-     * @throws InvalidArgumentException If one part of the syntax is wrong (message is the part itself)
+     * @throws CommandException If one part of the syntax is wrong (message is the part itself)
      */
-    public static DbFilter fromParameter(Class<?> wrappedClass, String msg) throws InvalidArgumentException {
+    public static DbFilter fromParameter(Class<?> wrappedClass, String msg) throws CommandException {
         if(!GLOBAL_PATTERN.matcher(msg).matches()) {
             return null;
         }

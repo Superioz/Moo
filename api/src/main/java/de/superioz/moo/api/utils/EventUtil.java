@@ -22,11 +22,8 @@ public final class EventUtil {
      * @param parameter       The event parameter
      * @param executorService The executor service
      * @param ears            The ears
-     * @return The result
      */
     public static <E> void execute(E parameter, ExecutorService executorService, List<EventEar> ears) {
-        Future<E> future = null;
-
         // sorting
         ears.sort((o1, o2) -> ((Integer) o2.getPriority().getValue()).compareTo(o1.getPriority().getValue()));
 

@@ -19,8 +19,8 @@ public final class PacketAdapting {
 
     private static PacketAdapting instance;
 
-    public static synchronized PacketAdapting getInstance(){
-        if(instance == null){
+    public static synchronized PacketAdapting getInstance() {
+        if(instance == null) {
             instance = new PacketAdapting();
         }
         return instance;
@@ -73,7 +73,7 @@ public final class PacketAdapting {
         int count = 0;
 
         for(PacketAdapter adapter : packetAdapter) {
-            if(!classAdapterMap.containsKey(adapter.getClass())){
+            if(!classAdapterMap.containsKey(adapter.getClass())) {
                 classAdapterMap.put(adapter.getClass(), EventUtil.fetchHandler(adapter, AbstractPacket.class, PacketHandler.class));
                 count++;
             }

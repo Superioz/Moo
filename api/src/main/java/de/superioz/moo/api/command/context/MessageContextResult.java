@@ -45,6 +45,11 @@ public class MessageContextResult<T> {
         return context.sendMessage(msg, replacements);
     }
 
+    public MessageContextResult<T> or(boolean condition, String msg, Object... replacements) {
+        if(!condition) return new MessageContextResult<>(context, msg, false, true);
+        return or(msg, replacements);
+    }
+
     /**
      * If the message couldn't be sent properly, let's try a complete different way!
      *

@@ -3,7 +3,7 @@ package de.superioz.moo.api.database.query;
 import de.superioz.moo.api.database.object.DataResolver;
 import de.superioz.moo.api.database.DbModifier;
 import de.superioz.moo.api.database.objects.PlayerData;
-import de.superioz.moo.api.exceptions.InvalidArgumentException;
+import de.superioz.moo.api.exceptions.CommandException;
 import de.superioz.moo.api.keyvalue.KeyMultiValue;
 import de.superioz.moo.api.keyvalue.Keyable;
 import de.superioz.moo.api.utils.ReflectionUtil;
@@ -63,9 +63,9 @@ public class DbQuery {
      * @param wrappedClass The class of the field keys (e.g. {@link PlayerData})
      * @param msg          The msg (e.g. "coins+50")
      * @return This
-     * @throws InvalidArgumentException If one part of the msg is wrong
+     * @throws CommandException If one part of the msg is wrong
      */
-    public static DbQuery fromParameter(Class<?> wrappedClass, String msg) throws InvalidArgumentException {
+    public static DbQuery fromParameter(Class<?> wrappedClass, String msg) throws CommandException {
         // if the msg doesnt match the pattern - return null
         if(!GLOBAL_PATTERN.matcher(msg).matches()) {
             return null;

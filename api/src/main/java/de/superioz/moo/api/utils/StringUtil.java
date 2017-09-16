@@ -3,7 +3,7 @@ package de.superioz.moo.api.utils;
 import com.google.common.base.Joiner;
 import com.google.common.base.Splitter;
 import com.google.common.base.Strings;
-import de.superioz.moo.api.exceptions.InvalidArgumentException;
+import de.superioz.moo.api.exceptions.CommandException;
 import de.superioz.moo.api.io.LanguageManager;
 import de.superioz.moo.api.io.PropertiesConfig;
 import javafx.util.Pair;
@@ -22,6 +22,8 @@ public final class StringUtil {
     public static final String SEPERATOR = "¶";
     public static final String SEPERATOR_2 = "Þ";
     public static final String SEPERATOR_3 = "þ";
+
+    public static final String ALPHA_NUMERIC = "abcdefghijklmnopqrstuvwxyzABSDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
 
     public static final Pattern SIMPLE_PLACEHOLER_REGEX = Pattern.compile("\\{[0-9]*}");
     public static final Pattern FORWARDING_PLACEHOLDER_REPLACE = Pattern.compile("\\([^\"]*\\)");
@@ -72,18 +74,18 @@ public final class StringUtil {
      * @param <T>        The type
      * @param <V>        The second type
      * @return The map
-     * @throws InvalidArgumentException If some part is wrong
+     * @throws CommandException If some part is wrong
      */
     public static <T, V> Map<Pair<String, T>, Pair<V, List<String>>> getByPattern(
             Pattern pattern, String msg, Function<String, T> f1, Function<T, String> f2, Function<String, V> f3, String valueRegex)
-            throws InvalidArgumentException {
+            throws CommandException {
         Map<Pair<String, T>, Pair<V, List<String>>> map = new HashMap<>();
 
         for(String s : StringUtil.find(pattern.pattern(), msg)) {
             T t = f1.apply(s);
 
             if(t == null) {
-                throw new InvalidArgumentException(InvalidArgumentException.Type.SIMPLE, s);
+                throw new CommandException(CommandException.Type.SIMPLE, s);
             }
 
             String[] spl = s.split(Pattern.quote(f2.apply(t)), 2);
@@ -524,6 +526,29 @@ public final class StringUtil {
             builder.append(sequence);
         }
         return builder.toString();
+    }
+
+    /**
+     * Gets a uniqueid from given values (with the length of {@code length})
+     *
+     * @param length The length of the uniqueid
+     * @param seeds  The seeds (objects to determine the random seed)
+     * @return The uniqueid as string
+     */
+    public static String getUniqueId(int length, Object... seeds) {
+        long l = 0;
+        for(Object seed : seeds) {
+            l += seed instanceof Long ? (Long) seed : seed.hashCode();
+        }
+        Random r = new Random(l);
+
+        // get id out of alpha numeric char array (just some random chars)
+        char[] chars = ALPHA_NUMERIC.toCharArray();
+        char[] id = new char[length];
+        for(int i2 = 0; i2 < length; ++i2) {
+            id[i2] = chars[r.nextInt(chars.length)];
+        }
+        return new String(id);
     }
 
     /**

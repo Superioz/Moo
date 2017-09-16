@@ -2,7 +2,7 @@ package de.superioz.moo.api.command.param;
 
 import de.superioz.moo.api.command.CommandFlag;
 import de.superioz.moo.api.command.CommandRegistry;
-import de.superioz.moo.api.exceptions.InvalidArgumentException;
+import de.superioz.moo.api.exceptions.CommandException;
 import de.superioz.moo.api.util.Operator;
 import de.superioz.moo.api.util.Validation;
 import de.superioz.moo.api.utils.StringUtil;
@@ -216,7 +216,7 @@ public abstract class GenericParameterSet {
         }
         if(Number.class.isAssignableFrom(type.typeClass()) && t == null) {
             if(backupVal != null) return backupVal;
-            throw new InvalidArgumentException(InvalidArgumentException.Type.CONVERT, param, tClass.getSimpleName());
+            throw new CommandException(CommandException.Type.CONVERT, param, tClass.getSimpleName());
         }
 
         return t;

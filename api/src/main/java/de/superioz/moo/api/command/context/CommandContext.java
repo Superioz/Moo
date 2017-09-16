@@ -2,15 +2,17 @@ package de.superioz.moo.api.command.context;
 
 import de.superioz.moo.api.collection.MultiCache;
 import de.superioz.moo.api.command.CommandInstance;
+import de.superioz.moo.api.command.choice.CommandChoice;
 import de.superioz.moo.api.command.help.ArgumentHelper;
 import de.superioz.moo.api.command.param.ParamSet;
 import de.superioz.moo.api.console.format.DisplayFormat;
 import de.superioz.moo.api.event.EventExecutor;
 import de.superioz.moo.api.events.CommandErrorEvent;
-import de.superioz.moo.api.exceptions.InvalidArgumentException;
+import de.superioz.moo.api.exceptions.CommandException;
 import de.superioz.moo.api.exceptions.InvalidCommandUsageException;
 import de.superioz.moo.api.io.LanguageManager;
 import de.superioz.moo.api.util.Validation;
+import de.superioz.moo.api.utils.StringUtil;
 import lombok.Getter;
 import lombok.Setter;
 import net.jodah.expiringmap.ExpiringMap;
@@ -20,6 +22,7 @@ import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 /**
  * The context of the command means a wrapper for the command itself, the command sender and the
@@ -67,7 +70,12 @@ public abstract class CommandContext<T> {
     /**
      * This cache is for storing values during executing commands
      */
-    private static MultiCache<UUID, String, Object> contextCache = new MultiCache<>();
+    private static final MultiCache<UUID, String, Object> CONTEXT_CACHE = new MultiCache<>();
+
+    /**
+     * This cache is for storing command choices
+     */
+    private static final MultiCache<UUID, String, CommandChoice> CHOICE_CACHE = new MultiCache<>();
 
     /**
      * Sender of the command (can be null)
@@ -190,13 +198,13 @@ public abstract class CommandContext<T> {
      *
      * @param message The message
      * @param help    If the command helper should be triggered too
-     * @throws InvalidArgumentException To cancel the command execution
+     * @throws CommandException To cancel the command execution
      */
-    public void invalidArgument(String message, boolean help) throws InvalidArgumentException {
-        throw new InvalidArgumentException(InvalidArgumentException.Type.CUSTOM, message).commandHelp(help);
+    public void invalidArgument(String message, boolean help) throws CommandException {
+        throw new CommandException(CommandException.Type.CUSTOM, message).commandHelp(help);
     }
 
-    public void invalidArgument(String message) throws InvalidArgumentException {
+    public void invalidArgument(String message) throws CommandException {
         invalidArgument(message, false);
     }
 
@@ -207,13 +215,13 @@ public abstract class CommandContext<T> {
      * @param condition The condition which should be true
      * @param help      Should the argument helper be called too?
      * @param message   The message to be sent after the condition is true
-     * @throws InvalidArgumentException If the condition is true (To cancel the command execution)
+     * @throws CommandException If the condition is true (To cancel the command execution)
      */
-    public void invalidArgument(boolean condition, boolean help, String message) throws InvalidArgumentException {
+    public void invalidArgument(boolean condition, boolean help, String message) throws CommandException {
         if(condition) invalidArgument(message, help);
     }
 
-    public void invalidArgument(boolean condition, String msg, Object... replacements) throws InvalidArgumentException {
+    public void invalidArgument(boolean condition, String msg, Object... replacements) throws CommandException {
         String finalMessage = LanguageManager.contains(msg) ? LanguageManager.get(msg, replacements) : msg;
         invalidArgument(condition, false, finalMessage);
     }
@@ -325,6 +333,28 @@ public abstract class CommandContext<T> {
     }
 
     /**
+     * Initialises a command choice for confirmation
+     *
+     * @param message      The message (either a Language key or the message)
+     * @param replacements Replacement for thee message
+     * @return The CommandChoice
+     */
+    public CommandChoice choice(String message, Object... replacements) {
+        message = LanguageManager.contains(message) ? LanguageManager.get(message, replacements) : StringUtil.format(message, replacements);
+        return new CommandChoice(this, message);
+    }
+
+    public void createChoice(CommandChoice choice) {
+        //TODO
+        CHOICE_CACHE.put(getSendersUniqueId(), getCommand().getLabel() + " " + getParamSet().getRawCommandline(), choice, new Consumer<CommandChoice>() {
+            @Override
+            public void accept(CommandChoice choice) {
+
+            }
+        });
+    }
+
+    /**
      * Stores a value with the key temporarily
      *
      * @param key              The key
@@ -338,11 +368,19 @@ public abstract class CommandContext<T> {
         UUID uuid = getSendersUniqueId();
         String realKey = getCommand().getLabel() + ":" + key;
 
-        contextCache.put(uuid, realKey, value, policy, duration, unit, removalListeners);
+        CONTEXT_CACHE.put(uuid, realKey, value, policy, duration, unit, removalListeners);
+    }
+
+    public void set(Object value, ExpiringMap.ExpirationPolicy policy, long duration, TimeUnit unit, Consumer... removalListeners) {
+        this.set(value.getClass().getName(), value, policy, duration, unit, removalListeners);
     }
 
     public void set(String key, Object value, Consumer... removalListeners) {
         this.set(key, value, null, -1, null, removalListeners);
+    }
+
+    public void set(Object value, Consumer... removalListeners) {
+        this.set(value, null, -1, null, removalListeners);
     }
 
     /**
@@ -360,6 +398,10 @@ public abstract class CommandContext<T> {
         set(key, value, ExpiringMap.ExpirationPolicy.ACCESSED, duration, unit, removalListeners);
     }
 
+    public void setExpireAfterAccess(Object value, long duration, TimeUnit unit, Consumer... removalListeners) {
+        set(value, ExpiringMap.ExpirationPolicy.ACCESSED, duration, unit, removalListeners);
+    }
+
     /**
      * Similar function as {@link #set(String, Object, ExpiringMap.ExpirationPolicy, long, TimeUnit, Consumer[])}
      * but the value stored inside will be removed after {@code duration} after setting the value
@@ -374,15 +416,43 @@ public abstract class CommandContext<T> {
         set(key, value, ExpiringMap.ExpirationPolicy.CREATED, duration, unit, removalListeners);
     }
 
+    public void setExpireAfterCreation(Object value, long duration, TimeUnit unit, Consumer... removalListeners) {
+        set(value, ExpiringMap.ExpirationPolicy.CREATED, duration, unit, removalListeners);
+    }
+
     /**
-     * Gets a before stored value by key
+     * Gets a value stored before by key
      *
-     * @param key The key
+     * @param key      The key
+     * @param supplier The supplier if the value does not exist
      * @return The value
      */
+    public <V> V get(String key, Supplier<V> supplier) {
+        Object o = CONTEXT_CACHE.get(getSendersUniqueId(), getCommand().getLabel() + ":" + key);
+        if(o == null) {
+            o = supplier.get();
+            this.set(o);
+        }
+        return (V) o;
+    }
+
     public <V> V get(String key) {
-        return (V) contextCache.get(getSendersUniqueId(),
-                getCommand().getLabel() + ":" + key);
+        return get(key, null);
+    }
+
+    /**
+     * Gets a value stored before by class name
+     *
+     * @param c        The class
+     * @param supplier The supplier if the value does not exist
+     * @return The value
+     */
+    public <V> V get(Class<?> c, Supplier<V> supplier) {
+        return get(c.getName(), supplier);
+    }
+
+    public <V> V get(Class<?> c) {
+        return get(c, null);
     }
 
 }

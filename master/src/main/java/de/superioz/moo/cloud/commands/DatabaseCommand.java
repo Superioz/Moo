@@ -15,7 +15,7 @@ import de.superioz.moo.api.database.filter.DbFilter;
 import de.superioz.moo.api.database.object.DataResolver;
 import de.superioz.moo.api.database.query.DbQuery;
 import de.superioz.moo.api.database.query.DbQueryNode;
-import de.superioz.moo.api.exceptions.InvalidArgumentException;
+import de.superioz.moo.api.exceptions.CommandException;
 import de.superioz.moo.api.util.Operator;
 import de.superioz.moo.api.util.Procedure;
 import de.superioz.moo.api.utils.ReflectionUtil;
@@ -300,7 +300,7 @@ public class DatabaseCommand {
                 DbQuery query = DbQuery.fromParameter(type.getWrappedClass(), args.get(1));
                 if(query != null) query.apply(toCreate);
             }
-            catch(InvalidArgumentException ex) {
+            catch(CommandException ex) {
                 context.sendHelp();
             }
         }

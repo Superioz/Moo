@@ -1,6 +1,6 @@
 package de.superioz.moo.api.command.param;
 
-import de.superioz.moo.api.exceptions.InvalidArgumentException;
+import de.superioz.moo.api.exceptions.CommandException;
 import lombok.Getter;
 import de.superioz.moo.api.command.CommandRegistry;
 import de.superioz.moo.api.util.Operator;
@@ -59,10 +59,10 @@ public class ParamFilter<T extends Number> {
             r = attribute.check(type, s, arg);
             if(!r) {
                 if(attribute == ParamFilterAttribute.CUSTOM) {
-                    throw new InvalidArgumentException(InvalidArgumentException.Type.CUSTOM, type.handleCustomException(s));
+                    throw new CommandException(CommandException.Type.CUSTOM, type.handleCustomException(s));
                 }
                 String n = attribute == ParamFilterAttribute.NEGATIVE ? "<0" : attribute == ParamFilterAttribute.POSITIVE ? ">0" : s;
-                throw new InvalidArgumentException(InvalidArgumentException.Type.VALIDATE, arg, n);
+                throw new CommandException(CommandException.Type.VALIDATE, arg, n);
             }
         }
         return r;

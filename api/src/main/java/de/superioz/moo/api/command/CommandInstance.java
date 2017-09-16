@@ -33,6 +33,11 @@ public class CommandInstance {
     public static final String HELP_FLAG = "?";
 
     /**
+     * The choice flag
+     */
+    public static final String CHOICE_FLAG = "!";
+
+    /**
      * The path indicator/seperator
      */
     public static final String PATH = ".";

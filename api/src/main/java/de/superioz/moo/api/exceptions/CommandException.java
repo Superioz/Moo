@@ -15,18 +15,18 @@ import java.util.List;
  * @see Type
  */
 @Getter
-public class InvalidArgumentException extends RuntimeException {
+public class CommandException extends RuntimeException {
 
     private Type type;
     private boolean commandHelp;
     private List<Object> replacements;
 
-    public InvalidArgumentException(Type type, Object... replacements) {
+    public CommandException(Type type, Object... replacements) {
         this.type = type;
         this.replacements = Arrays.asList(replacements);
     }
 
-    public InvalidArgumentException commandHelp(boolean commandHelp) {
+    public CommandException commandHelp(boolean commandHelp) {
         this.commandHelp = commandHelp;
         return this;
     }

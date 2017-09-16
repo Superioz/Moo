@@ -3,7 +3,7 @@ package de.superioz.moo.api.console;
 import de.superioz.moo.api.events.CommandErrorEvent;
 import de.superioz.moo.api.events.CommandHelpEvent;
 import de.superioz.moo.api.events.TabCompleteEvent;
-import de.superioz.moo.api.exceptions.InvalidArgumentException;
+import de.superioz.moo.api.exceptions.CommandException;
 import javafx.util.Pair;
 import de.superioz.moo.api.command.CommandEventAdapter;
 import de.superioz.moo.api.command.CommandInstance;
@@ -41,8 +41,8 @@ public class ConsoleCommandEventAdapter extends CommandEventAdapter {
         Throwable exception = event.getException();
         CommandContext context = event.getContext();
 
-        if(exception instanceof InvalidArgumentException) {
-            InvalidArgumentException e = (InvalidArgumentException) exception;
+        if(exception instanceof CommandException) {
+            CommandException e = (CommandException) exception;
             context.sendMessage("§c" + e.getType().getMessage(e.getReplacements()));
 
             if(e.isCommandHelp()) {

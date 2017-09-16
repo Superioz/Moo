@@ -104,7 +104,7 @@ public class GroupCommand {
     }
 
     @Command(label = INFO_COMMAND, parent = LABEL, usage = "<name>")
-    public void info(BungeeCommandContext context,ParamSet args) {
+    public void info(BungeeCommandContext context, ParamSet args) {
         String groupName = args.get(0);
         MooGroup group = MooProxy.getGroup(groupName);
         context.invalidArgument(group.nexists(), "group-doesnt-exist", groupName);
@@ -125,7 +125,7 @@ public class GroupCommand {
     }
 
     @Command(label = MODIFY_COMMAND, parent = LABEL, usage = "<name> <updates>")
-    public void modify(BungeeCommandContext context,ParamSet args) {
+    public void modify(BungeeCommandContext context, ParamSet args) {
         String groupName = args.get(0);
         MooGroup group = MooProxy.getGroup(groupName);
         context.invalidArgument(!group.exists(), "group-doesnt-exist", groupName);
@@ -137,11 +137,12 @@ public class GroupCommand {
         // execute modification
         context.sendMessage("group-modify-load", groupName);
         ResponseStatus status = group.modify(updates);
-        context.sendMessage("group-modify-complete", status);
+        context.sendMessage(status.isOk(), "group-modify-complete-success", status)
+                .or("group-modify-complete-failure", status);
     }
 
     @Command(label = CREATE_COMMAND, parent = LABEL, usage = "<name> [updates]")
-    public void create(BungeeCommandContext context,ParamSet args) {
+    public void create(BungeeCommandContext context, ParamSet args) {
         String groupName = args.get(0);
         MooGroup group = MooProxy.getGroup(groupName);
         context.invalidArgument(group.exists(), "group-already-exists", groupName);
@@ -157,11 +158,12 @@ public class GroupCommand {
         // execute creation
         context.sendMessage("group-create-load", groupName);
         ResponseStatus status = group.create();
-        context.sendMessage("group-create-complete", status);
+        context.sendMessage(status.isOk(), "group-create-complete-success", status)
+                .or("group-create-complete-failure", status);
     }
 
     @Command(label = DELETE_COMMAND, parent = LABEL, usage = "<name>")
-    public void delete(BungeeCommandContext context,ParamSet args) {
+    public void delete(BungeeCommandContext context, ParamSet args) {
         String groupName = args.get(0);
         MooGroup group = MooProxy.getGroup(groupName);
         context.invalidArgument(!group.exists(), "group-doesnt-exist", groupName);
@@ -169,7 +171,8 @@ public class GroupCommand {
         // execute deletion
         context.sendMessage("group-delete-load", groupName);
         ResponseStatus status = group.delete();
-        context.sendMessage("group-delete-complete", status);
+        context.sendMessage(status.isOk(), "group-delete-complete-success", status)
+                .or("group-delete-complete-failure", status);
     }
 
     /*
@@ -179,7 +182,7 @@ public class GroupCommand {
      */
 
     @Command(label = LIST_PERM_COMMAND, parent = LABEL, usage = "<name> [page]")
-    public void listperm(BungeeCommandContext context,ParamSet args) {
+    public void listperm(BungeeCommandContext context, ParamSet args) {
         String groupName = args.get(0);
         MooGroup group = MooProxy.getGroup(groupName);
         context.invalidArgument(!group.exists(), "group-doesnt-exist", groupName);
@@ -207,7 +210,7 @@ public class GroupCommand {
     }
 
     @Command(label = ADD_PERM_COMMAND, parent = LABEL, usage = "<name> <permission>")
-    public void addperm(BungeeCommandContext context,ParamSet args) {
+    public void addperm(BungeeCommandContext context, ParamSet args) {
         String groupName = args.get(0);
         MooGroup group = MooProxy.getGroup(groupName);
         context.invalidArgument(group.nexists(), "group-doesnt-exist", groupName);
@@ -220,11 +223,12 @@ public class GroupCommand {
         // set permissions
         context.sendMessage("permission-add-load");
         ResponseStatus status = group.addPermission(argPermissions);
-        context.sendMessage("permission-add-complete", status);
+        context.sendMessage(status.isOk(), "permission-add-complete-success", status)
+                .or("permission-add-complete-failure", status);
     }
 
     @Command(label = REMOVE_PERM_COMMAND, parent = LABEL, usage = "<name> <permission>")
-    public void remperm(BungeeCommandContext context,ParamSet args) {
+    public void remperm(BungeeCommandContext context, ParamSet args) {
         String groupName = args.get(0);
         MooGroup group = MooProxy.getGroup(groupName);
         context.invalidArgument(group.nexists(), "group-doesnt-exist", groupName);
@@ -237,19 +241,28 @@ public class GroupCommand {
         // set permissions
         context.sendMessage("permission-remove-load");
         ResponseStatus status = group.removePermission(argPermissions);
-        context.sendMessage("permission-remove-complete", status);
+        context.sendMessage(status.isOk(), "permission-remove-complete-success", status)
+                .or("permission-remove-complete-failure", status);
     }
 
     @Command(label = CLEAR_PERM_COMMAND, parent = LABEL, usage = "<name>")
-    public void clearperm(BungeeCommandContext context,ParamSet args) {
+    public void clearperm(BungeeCommandContext context, ParamSet args) {
         String groupName = args.get(0);
-        MooGroup group = MooProxy.getGroup(groupName);
-        context.invalidArgument(!group.exists(), "group-doesnt-exist", groupName);
+        MooGroup group = context.get(MooGroup.class, () -> MooProxy.getGroup(groupName));
+        context.invalidArgument(group.nexists(), "group-doesnt-exist", groupName);
+
+        if(!args.hasFlag("y")) {
+            context.choice("").create();
+
+            //
+
+        }
 
         // set permissions
         context.sendMessage("permission-clear-load");
         ResponseStatus status = group.clearPermission();
-        context.sendMessage("permission-remove-complete", status);
+        context.sendMessage(status.isOk(), "permission-remove-complete-success", status)
+                .or("permission-remove-complete-failure", status);
     }
 
 }
