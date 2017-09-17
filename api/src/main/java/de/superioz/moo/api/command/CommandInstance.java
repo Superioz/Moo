@@ -31,11 +31,19 @@ public class CommandInstance {
      * The help flag
      */
     public static final String HELP_FLAG = "?";
-
     /**
      * The choice flag
      */
     public static final String CHOICE_FLAG = "!";
+    /**
+     * Skips the choice flag (y = yes or yeah)
+     */
+    public static final String CHOICE_SKIP_FLAG = "y";
+
+    /**
+     * All predefined flags
+     */
+    public static final String[] PREDEFINED_FLAGS = {HELP_FLAG, CHOICE_FLAG, CHOICE_SKIP_FLAG};
 
     /**
      * The path indicator/seperator

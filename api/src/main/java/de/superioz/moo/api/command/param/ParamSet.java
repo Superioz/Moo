@@ -1,5 +1,6 @@
 package de.superioz.moo.api.command.param;
 
+import de.superioz.moo.api.utils.CollectionUtil;
 import lombok.Getter;
 import de.superioz.moo.api.command.CommandFlag;
 import de.superioz.moo.api.command.CommandInstance;
@@ -49,7 +50,7 @@ public class ParamSet extends GenericParameterSet {
             // if the flag is the help flag
             String flagLabel = param.replaceFirst("-", "");
             boolean hasFlag = commandInstance.getFlags().contains(flagLabel)
-                    || flagLabel.equals(CommandInstance.HELP_FLAG) || flagLabel.equals(CommandInstance.CHOICE_FLAG);
+                    || CollectionUtil.contains(CommandInstance.PREDEFINED_FLAGS, flagLabel);
             if(param.startsWith(CommandFlag.SPECIFIER)
                     && hasFlag) {
                 if(lastIndex == -1) lastIndex = i;

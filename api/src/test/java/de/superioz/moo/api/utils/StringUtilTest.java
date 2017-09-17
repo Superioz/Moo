@@ -37,4 +37,17 @@ public class StringUtilTest {
         System.out.println("SIZE: " + set.size() + "/" + times);
     }*/
 
+   /*public static void main(String[] args){
+       MultiCache<UUID, String, Object> cache = new MultiCache<>();
+       UUID uuid = UUID.randomUUID();
+
+       cache.put(uuid, "test", 14, ExpiringMap.ExpirationPolicy.CREATED, 5, TimeUnit.SECONDS, new Consumer<Object>() {
+           @Override
+           public void accept(Object o) {
+               System.out.println("RIP!");
+           }
+       });
+       cache.remove(uuid, "test");
+   }*/
+
 }

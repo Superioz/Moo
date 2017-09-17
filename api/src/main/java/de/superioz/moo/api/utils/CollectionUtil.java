@@ -76,4 +76,16 @@ public final class CollectionUtil {
         return eList.get(index);
     }
 
+    /**
+     * Checks if the array contains given value
+     *
+     * @param array The array
+     * @param v     The value
+     * @param <V>   The type of the value
+     * @return The result
+     */
+    public static <V> boolean contains(V[] array, V v) {
+        return Arrays.asList(array).contains(v);
+    }
+
 }

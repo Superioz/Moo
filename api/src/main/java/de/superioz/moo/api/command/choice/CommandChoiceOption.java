@@ -6,6 +6,12 @@ import lombok.Getter;
 public class CommandChoiceOption {
 
     /**
+     * Empty command choice
+     */
+    public static CommandChoiceOption EMPTY = new CommandChoiceOption(() -> {
+    });
+
+    /**
      * When the option got chosen
      */
     private Runnable runnable;

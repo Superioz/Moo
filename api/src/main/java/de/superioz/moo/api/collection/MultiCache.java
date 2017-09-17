@@ -90,6 +90,50 @@ public class MultiCache<F, K, V> {
     }
 
     /**
+     * Checks if the cache contains given keys
+     *
+     * @param firstKey The first key
+     * @param key      The second key
+     * @return The result
+     */
+    public boolean contains(F firstKey, K key) {
+        if(firstKey == null || key == null) return false;
+        ExpiringMap<K, V> cache = handle.getIfPresent(firstKey);
+        return cache != null && cache.containsKey(key);
+    }
+
+    /**
+     * Removes a value
+     *
+     * @param firstKey The first key
+     * @param key      The second key
+     * @return The removed value (null for none)
+     */
+    public V remove(F firstKey, K key) {
+        if(firstKey == null || key == null) return null;
+        ExpiringMap<K, V> cache = handle.getIfPresent(firstKey);
+        if(cache == null) return null;
+        return cache.remove(key);
+    }
+
+    /**
+     * Removes every value which key is starts with the prefix given
+     *
+     * @param firstKey The firstkey
+     * @param prefix   The prefix
+     */
+    public void removeSimilar(F firstKey, String prefix) {
+        if(firstKey == null || prefix == null) return;
+        ExpiringMap<K, V> cache = handle.getIfPresent(firstKey);
+        if(cache == null) return;
+
+        for(K key : cache.keySet()) {
+            String s = key + "";
+            if(s.startsWith(prefix)) cache.remove(key);
+        }
+    }
+
+    /**
      * Builds a new expiring map
      *
      * @return The map

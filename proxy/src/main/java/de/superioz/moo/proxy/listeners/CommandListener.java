@@ -11,6 +11,7 @@ import de.superioz.moo.api.events.CommandErrorEvent;
 import de.superioz.moo.api.events.CommandHelpEvent;
 import de.superioz.moo.api.events.PreCommandEvent;
 import de.superioz.moo.api.events.TabCompleteEvent;
+import de.superioz.moo.api.exceptions.CommandChoiceException;
 import de.superioz.moo.api.exceptions.CommandException;
 import de.superioz.moo.api.exceptions.InvalidCommandUsageException;
 import de.superioz.moo.api.io.LanguageManager;
@@ -98,6 +99,21 @@ public class CommandListener extends CommandEventAdapter<CommandSender> implemen
 
             context.sendUsage(LanguageManager.get("usage-prefix"), true);
             context.sendHelp(e.getHelpParams());
+        }
+        // command choice exception
+        else if(exception instanceof CommandChoiceException) {
+            CommandChoiceException choiceException = (CommandChoiceException) exception;
+
+            //TODO
+            if(choiceException.getType() == CommandChoiceException.Type.CANCELLED) {
+                // send command execution cancelled
+            }
+            else if(choiceException.getType() == CommandChoiceException.Type.NO_CHOICE) {
+                // send no command choice found
+            }
+            else if(choiceException.getType() == CommandChoiceException.Type.TIMEOUT) {
+                // send command choice timeout
+            }
         }
         // moo exception
         else if(exception instanceof MooOutputException) {

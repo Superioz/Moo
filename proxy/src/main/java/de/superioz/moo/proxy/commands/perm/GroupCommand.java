@@ -251,12 +251,8 @@ public class GroupCommand {
         MooGroup group = context.get(MooGroup.class, () -> MooProxy.getGroup(groupName));
         context.invalidArgument(group.nexists(), "group-doesnt-exist", groupName);
 
-        if(!args.hasFlag("y")) {
-            context.choice("").create();
-
-            //
-
-        }
+        // choice
+        context.choice("").create();
 
         // set permissions
         context.sendMessage("permission-clear-load");

@@ -3,11 +3,13 @@ package de.superioz.moo.api.command.context;
 import de.superioz.moo.api.collection.MultiCache;
 import de.superioz.moo.api.command.CommandInstance;
 import de.superioz.moo.api.command.choice.CommandChoice;
+import de.superioz.moo.api.command.choice.CommandChoiceOption;
 import de.superioz.moo.api.command.help.ArgumentHelper;
 import de.superioz.moo.api.command.param.ParamSet;
 import de.superioz.moo.api.console.format.DisplayFormat;
 import de.superioz.moo.api.event.EventExecutor;
 import de.superioz.moo.api.events.CommandErrorEvent;
+import de.superioz.moo.api.exceptions.CommandChoiceException;
 import de.superioz.moo.api.exceptions.CommandException;
 import de.superioz.moo.api.exceptions.InvalidCommandUsageException;
 import de.superioz.moo.api.io.LanguageManager;
@@ -333,25 +335,99 @@ public abstract class CommandContext<T> {
     }
 
     /**
-     * Initialises a command choice for confirmation
+     * Simple yes/no choice
+     *
+     * @param message      The message
+     * @param replacements The replacements for the message
+     */
+    public void simpleChoice(String message, Object... replacements) {
+        choice(message, replacements).options(
+                new CommandChoiceOption(null),
+                new CommandChoiceOption(() -> {
+                    throw new CommandChoiceException(CommandChoiceException.Type.CANCELLED);
+                })
+        ).create();
+    }
+
+    /**
+     * Initialises a command choice for confirmation<br>
+     * If you use the choice skip flag the first option will be used
      *
      * @param message      The message (either a Language key or the message)
      * @param replacements Replacement for thee message
      * @return The CommandChoice
      */
     public CommandChoice choice(String message, Object... replacements) {
+        if(hasChoice()) {
+            return getChoice();
+        }
         message = LanguageManager.contains(message) ? LanguageManager.get(message, replacements) : StringUtil.format(message, replacements);
         return new CommandChoice(this, message);
     }
 
-    public void createChoice(CommandChoice choice) {
-        //TODO
-        CHOICE_CACHE.put(getSendersUniqueId(), getCommand().getLabel() + " " + getParamSet().getRawCommandline(), choice, new Consumer<CommandChoice>() {
-            @Override
-            public void accept(CommandChoice choice) {
+    /**
+     * Creates a command choice<br>
+     * Use {@link #choice(String, Object...)} for using the builder
+     *
+     * @param choice The command choice
+     * @throws CommandException For sending the message to the user
+     */
+    public CommandChoiceOption cycleChoice(CommandChoice choice) throws CommandException {
+        // the player wants to skip the choice (meaning TRUE)
+        if(getParamSet().hasFlag(CommandInstance.CHOICE_SKIP_FLAG)) return choice.getOption(0);
 
+        // he chose a choice flag
+        String key = getCommand().getLabel() + " " + getParamSet().getRawCommandline();
+        if(getParamSet().hasFlag(CommandInstance.CHOICE_FLAG)) {
+            // no choice available!
+            if(!hasChoice()) {
+                // throw exception
+                throw new CommandChoiceException(CommandChoiceException.Type.NO_CHOICE);
             }
-        });
+
+            // remove from cache
+            CHOICE_CACHE.remove(getSendersUniqueId(), key);
+
+            int id = getParamSet().getFlag(CommandInstance.CHOICE_FLAG).getInt(0, 0);
+            CommandChoiceOption option = choice.getOption(id);
+            if(option.getRunnable() != null) option.getRunnable().run();
+            return option;
+        }
+        if(hasChoice()) return CommandChoiceOption.EMPTY;
+
+        // put choice into cache
+        CHOICE_CACHE.put(getSendersUniqueId(), key, choice,
+                ExpiringMap.ExpirationPolicy.CREATED, 5, TimeUnit.SECONDS, (Consumer<CommandChoice>) commandChoice -> {
+                    // choice timed out
+                    CONTEXT_CACHE.removeSimilar(getSendersUniqueId(), getCommand().getLabel());
+
+                    // throw timeout
+                    throw new CommandChoiceException(CommandChoiceException.Type.TIMEOUT);
+                });
+
+        // send this to the user
+        throw new CommandException(CommandException.Type.CUSTOM, choice.getMessage());
+    }
+
+    /**
+     * Gets a choice (null if no choice atm)
+     *
+     * @return The choice
+     */
+    public CommandChoice getChoice() {
+        String key = getCommand().getLabel() + " " + getParamSet().getRawCommandline();
+        if(!hasChoice()) return null;
+        return CHOICE_CACHE.get(getSendersUniqueId(), key);
+    }
+
+    /**
+     * Checks if the command has currently a choice
+     *
+     * @return The result
+     */
+    public boolean hasChoice() {
+        String key = getCommand().getLabel() + " " + getParamSet().getRawCommandline();
+        return CHOICE_CACHE.contains(getSendersUniqueId(), key);
     }
 
     /**
