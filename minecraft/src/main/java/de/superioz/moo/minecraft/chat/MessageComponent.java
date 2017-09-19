@@ -117,8 +117,9 @@ public class MessageComponent {
             TextEntry value = entry.getValue();
 
             if(value instanceof EventEntry) {
-                this.entryCursor = i;
+                this.entryCursor = i + 1;
                 eventEntry = (EventEntry) value;
+                break;
             }
         }
         if(eventEntry == null) return this;

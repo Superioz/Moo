@@ -51,7 +51,7 @@ public class PacketEncoder extends MessageToByteEncoder<AbstractPacket> {
                 packet.write(buffer);
             }
             catch(Exception e) {
-                output.clear();
+                output.clear().release();
 
                 System.err.println("Error inside " + packet.getName() + "#write method: " + e.getClass().getSimpleName());
                 e.printStackTrace();

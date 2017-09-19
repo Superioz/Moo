@@ -35,7 +35,8 @@ public class BungeeCommandContext extends ClientCommandContext<CommandSender> {
 
     @Override
     protected void message(String msg, CommandSender commandSender) {
-        commandSender.sendMessage(new MessageComponent(msg).toTextComponent());
+        MessageComponent messageComponent = new MessageComponent(msg);
+        commandSender.sendMessage(messageComponent.toTextComponent());
     }
 
     @Override

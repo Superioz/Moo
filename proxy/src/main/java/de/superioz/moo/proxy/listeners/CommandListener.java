@@ -103,15 +103,19 @@ public class CommandListener extends CommandEventAdapter<CommandSender> implemen
         // command choice exception
         else if(exception instanceof CommandChoiceException) {
             CommandChoiceException choiceException = (CommandChoiceException) exception;
+            System.out.println("CHOICE: " + choiceException.getType());
 
             //TODO
             if(choiceException.getType() == CommandChoiceException.Type.CANCELLED) {
+                context.sendMessage("CANCELLED");
                 // send command execution cancelled
             }
             else if(choiceException.getType() == CommandChoiceException.Type.NO_CHOICE) {
+                context.sendMessage("NO_CHOICE");
                 // send no command choice found
             }
             else if(choiceException.getType() == CommandChoiceException.Type.TIMEOUT) {
+                context.sendMessage("TIMEOUT");
                 // send command choice timeout
             }
         }

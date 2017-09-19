@@ -157,7 +157,7 @@ public class GroupCommand {
 
         // execute creation
         context.sendMessage("group-create-load", groupName);
-        ResponseStatus status = group.create();
+        ResponseStatus status = group.init(groupName).create();
         context.sendMessage(status.isOk(), "group-create-complete-success", status)
                 .or("group-create-complete-failure", status);
     }
@@ -252,7 +252,7 @@ public class GroupCommand {
         context.invalidArgument(group.nexists(), "group-doesnt-exist", groupName);
 
         // choice
-        context.choice("").create();
+        context.simpleChoice("permission-clear-ask", groupName);
 
         // set permissions
         context.sendMessage("permission-clear-load");

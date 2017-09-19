@@ -39,11 +39,23 @@ public class MooGroup extends ObjectWrapper<MooGroup, Group> implements Permissi
     }
 
     /**
+     * Simply sets the name
+     *
+     * @param name The name
+     * @return This
+     */
+    public MooGroup init(String name) {
+        if(wrappedObject != null) wrappedObject.setName(name);
+        return this;
+    }
+
+    /**
      * Creates this group
      *
      * @return The status
      */
     public ResponseStatus create() {
+        if(getName() == null) return ResponseStatus.BAD_REQUEST;
         return Queries.create(DatabaseType.GROUP, wrappedObject).getStatus();
     }
 

@@ -103,7 +103,9 @@ public final class MooProxy {
     public static MooGroup getGroup(String name) {
         MooGroup group = MooCache.getInstance().getGroupMap().get(name);
 
-        if(group == null) return new MooGroup(null);
+        if(group == null) {
+            group = new MooGroup(null);
+        }
         return group;
     }
 

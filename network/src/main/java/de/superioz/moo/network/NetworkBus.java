@@ -123,6 +123,14 @@ public class NetworkBus {
         }
         channel.writeAndFlush(packet);
 
+        // releases the packetbuf
+        try {
+            packet.getBuf().release();
+        }
+        catch(Exception e) {
+            //
+        }
+
         // callbacks
         if(callbacks.length != 0) {
             handle.getCallbacks().put(packet.getQueryUid(), new ArrayList<>(Arrays.asList(callbacks)));

@@ -402,7 +402,8 @@ public abstract class CommandContext<T> {
                     CONTEXT_CACHE.removeSimilar(getSendersUniqueId(), getCommand().getLabel());
 
                     // throw timeout
-                    throw new CommandChoiceException(CommandChoiceException.Type.TIMEOUT);
+                    EventExecutor.getInstance().execute(new CommandErrorEvent<>(CommandContext.this, CommandContext.this.getCommand(),
+                            new CommandChoiceException(CommandChoiceException.Type.TIMEOUT)));
                 });
 
         // send this to the user

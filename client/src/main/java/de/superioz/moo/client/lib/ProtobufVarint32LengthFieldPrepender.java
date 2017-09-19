@@ -7,9 +7,6 @@ import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToByteEncoder;
 
-/**
- * Created on 13.11.2016.
- */
 @ChannelHandler.Sharable
 public class ProtobufVarint32LengthFieldPrepender
         extends MessageToByteEncoder<ByteBuf> {
@@ -26,5 +23,6 @@ public class ProtobufVarint32LengthFieldPrepender
         localCodedOutputStream.flush();
 
         paramByteBuf2.writeBytes(paramByteBuf1, paramByteBuf1.readerIndex(), i);
+        paramByteBuf2.release();
     }
 }
