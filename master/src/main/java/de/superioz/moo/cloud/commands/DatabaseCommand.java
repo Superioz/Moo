@@ -20,12 +20,13 @@ import de.superioz.moo.api.util.Operator;
 import de.superioz.moo.api.util.Procedure;
 import de.superioz.moo.api.utils.ReflectionUtil;
 import de.superioz.moo.api.utils.StringUtil;
+import de.superioz.moo.network.packets.PacketDatabaseCount;
 import de.superioz.moo.network.queries.Queries;
 import de.superioz.moo.network.queries.Response;
-import de.superioz.moo.network.packets.PacketDatabaseCount;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Supplier;
 
 public class DatabaseCommand {
 
@@ -85,52 +86,56 @@ public class DatabaseCommand {
 
     @Command(label = "dbmodify", usage = "<database> <filter> <updates>",
             flags = {"l"})
-    public void dbmodify(CommandContext context, ParamSet set) {
-        Queries queries = Queries.newInstance();
+    public void dbmodify(CommandContext context, ParamSet args) {
+        // get the database
+        String database = args.get(0);
+        DatabaseType type = args.getEnum(0, DatabaseType.class);
+        context.invalidArgument(type == null, "&cThis type does not exist! (" + database + ")");
+        context.invalidArgument(type.getWrappedClass() == null, "&cThis type is not databaseable! (" + database + ")");
 
-        // list the database
-        DatabaseType type = set.getEnum(0, DatabaseType.class);
-        if(type == null) queries.scope(set.get(0));
-        else queries.scope(type);
+        // queries
+        Queries queries = Queries.newInstance();
+        queries.scope(type);
 
         // list the filter
-        String rawFilter = set.get(1);
+        String rawFilter = args.get(1);
         DbFilter filter = DbFilter.fromParameter(type == null ? null : type.getWrappedClass(), rawFilter);
         queries.filter(filter);
 
         // set the limit
-        if(set.hasFlag("l")) {
-            CommandFlag flag = set.getFlag("l");
+        if(args.hasFlag("l")) {
+            CommandFlag flag = args.getFlag("l");
             int limit = flag.getInt(0, -1);
             queries.limit(limit);
         }
 
         // list the updates
-        String rawUpdates = set.get(2);
+        String rawUpdates = args.get(2);
         Class<?> updateClass = type == null ? null : type.getWrappedClass();
         DbQuery query = DbQuery.fromParameter(updateClass, rawUpdates);
         queries.update(query);
 
+        // send response
         context.sendMessage(StringUtil.format("Modify database entries of {0} ... (Filtersize: {1}) (Updatessize: {2})",
                 queries.getDatabase(), queries.getFilter().getSize(), queries.getQuery().getSize()));
-
-        // send response
         Response response = queries.execute();
-
         context.sendMessage("Modification complete. (" + response.getMessageAsList() + ")");
     }
 
     @Command(label = "dbinfo", usage = "<database> <filter> [page]",
             flags = {"l", "s"})
     public void dbinfo(CommandContext context, ParamSet args) {
-        Queries queries = Queries.newInstance();
-
-        // list the database
+        // get the database
+        String database = args.get(0);
         DatabaseType type = args.getEnum(0, DatabaseType.class);
-        if(type == null) queries.scope(args.get(0));
-        else queries.scope(type);
+        context.invalidArgument(type == null, "&cThis type does not exist! (" + database + ")");
+        context.invalidArgument(type.getWrappedClass() == null, "&cThis type is not databaseable! (" + database + ")");
 
-        // list the filter
+        // queries
+        Queries queries = Queries.newInstance();
+        queries.scope(type);
+
+        // get the filter
         String rawFilter = args.get(1);
         DbFilter filter = DbFilter.fromParameter(type == null ? null : type.getWrappedClass(), rawFilter);
         queries.filter(filter);
@@ -160,12 +165,6 @@ public class DatabaseCommand {
         int page = args.getInt(2, 0);
         int sizePerPage = args.hasFlag("s") ? args.getFlag("s").getInt(0, -1) : -1;
         PageableList<String> pageableList = new PageableList<>(data, sizePerPage);
-        List<String> entryPage = pageableList.getPage(page);
-
-        if(entryPage == null) {
-            context.sendMessage("§cThis page doesn't exist! (" + page + ")");
-            return;
-        }
 
         // send pageable list
         context.sendDisplayFormat(new PageableListFormat<>(pageableList)
@@ -179,64 +178,62 @@ public class DatabaseCommand {
 
     @Command(label = "dbcount", usage = "<database>")
     public void dbcount(CommandContext context, ParamSet args) {
-        Queries queries = Queries.newInstance();
-
-        // list the database
+        // get the database
+        String database = args.get(0);
         DatabaseType type = args.getEnum(0, DatabaseType.class);
-        if(type == null) queries.scope(args.get(0));
-        else queries.scope(type);
+        context.invalidArgument(type == null, "&cThis type does not exist! (" + database + ")");
+        context.invalidArgument(type.getWrappedClass() == null, "&cThis type is not databaseable! (" + database + ")");
+
+        // queries
+        Queries queries = Queries.newInstance();
+        queries.scope(type);
         queries.count(PacketDatabaseCount.CountType.NUMBER);
 
+        // execute query
         context.sendMessage(StringUtil.format("Retrieve database's entry count of {0} ...", queries.getDatabase()));
-
-        // send response
         Response response = queries.execute();
-
         int count = Integer.parseInt(response.getMessage());
-        context.sendMessage(StringUtil.format("Count: {0} {entry|entries}", count, count > 1));
+        context.sendMessage("Count: {0}", count);
     }
 
     @Command(label = "dblist", usage = "<database> [page]",
             flags = {"l", "s"})
     public void dblist(CommandContext context, ParamSet args) {
-        Queries queries = Queries.newInstance();
-        String database =  args.get(0);
-
-        // list the database
+        // get the database
+        String database = args.get(0);
         DatabaseType type = args.getEnum(0, DatabaseType.class);
         context.invalidArgument(type == null, "&cThis type does not exist! (" + database + ")");
+        context.invalidArgument(type.getWrappedClass() == null, "&cThis type is not databaseable! (" + database + ")");
+
+        // queries
+        Queries queries = Queries.newInstance();
+        queries.scope(type);
         queries.count(PacketDatabaseCount.CountType.LIST);
         queries.limit(args.hasFlag("l") ? args.getFlag("l").getInt(0, -1) : -1);
 
-        // ..
-        context.sendMessage(StringUtil.format("List entries of {0} ...", queries.getDatabase()));
-
         // list response
-        Response response = (Response) context.get(database);
-        if(response == null) {
-            response = queries.execute();
-            context.setExpireAfterCreation(database, response, 15, TimeUnit.SECONDS);
-        }
-
         // display data
+        context.sendMessage("List entries of {0} ...", queries.getDatabase());
+        Response response = (Response) context.get(database, (Supplier<Response>) () -> {
+            Response r = queries.execute();
+            context.setExpireAfterCreation(database, r, 15, TimeUnit.SECONDS);
+            return r;
+        });
         List<String> data = response.getMessageAsList();
-        context.sendMessage("Received data(" + data.size() + "):");
 
-        int page = args.getInt(2, 0);
+        // ..
+        int page = args.getInt(1, 0);
         int sizePerPage = args.hasFlag("s") ? args.getFlag("s").getInt(0, -1) : -1;
         PageableList<String> pageableList = new PageableList<>(data, sizePerPage);
-        List<String> entryPage = pageableList.getPage(page);
-
-        if(entryPage == null) {
-            context.sendMessage("§cThis page doesn't exist! (" + page + ")");
-            return;
-        }
+        context.invalidArgument(pageableList.isEmpty(), "&cThere is nothing to display!");
 
         // display format
-        context.sendDisplayFormat(new PageableListFormat<>(pageableList)
+        context.sendMessage("Received data(" + data.size() + "):");
+        context.sendDisplayFormat(new PageableListFormat<String>(pageableList)
                 .page(page)
                 .doesntExist("§cThis page doesn't exist! (" + page + ")")
                 .header("Database List(" + (page + 1) + "/" + (pageableList.getMaxPages() + 1) + ")")
+                .entry(replacor -> replacor.accept(replacor.get()))
                 .emptyEntry("#")
                 .entryFormat("# {0}")
         );
@@ -244,45 +241,49 @@ public class DatabaseCommand {
 
     @Command(label = "dbdelete", usage = "<database> <filter>",
             flags = {"l"})
-    public void dbdelete(CommandContext context, ParamSet set) {
-        Queries queries = Queries.newInstance();
+    public void dbdelete(CommandContext context, ParamSet args) {
+        // get the database
+        String database = args.get(0);
+        DatabaseType type = args.getEnum(0, DatabaseType.class);
+        context.invalidArgument(type == null, "&cThis type does not exist! (" + database + ")");
+        context.invalidArgument(type.getWrappedClass() == null, "&cThis type is not databaseable! (" + database + ")");
 
-        // list the database
-        DatabaseType type = set.getEnum(0, DatabaseType.class);
-        if(type == null) queries.scope(set.get(0));
-        else queries.scope(type);
+        // queries
+        Queries queries = Queries.newInstance();
+        queries.scope(type);
 
         // list the filter
-        String rawFilter = set.get(1);
+        String rawFilter = args.get(1);
         DbFilter filter = DbFilter.fromParameter(type == null ? null : type.getWrappedClass(), rawFilter);
         queries.filter(filter);
         queries.deletion();
 
         // set the limit
-        if(set.hasFlag("l")) {
-            CommandFlag flag = set.getFlag("l");
+        if(args.hasFlag("l")) {
+            CommandFlag flag = args.getFlag("l");
             int limit = flag.getInt(0, -1);
             queries.limit(limit);
         }
 
+        // send response
         context.sendMessage(StringUtil.format("Delete database entries of {0} ... (Filtersize: {1})",
                 queries.getDatabase(), queries.getFilter().getSize()));
-
-        // send response
         Response response = queries.execute();
-
         context.sendMessage("Deletion complete. (" + response.getMessageAsList() + ")");
     }
 
     @Command(label = "dbcreate", usage = "<database> [updates]",
             flags = {"l"})
     public void dbcreate(CommandContext context, ParamSet args) {
-        Queries queries = Queries.newInstance();
-
-        // list the database
+        // get the database
+        String database = args.get(0);
         DatabaseType type = args.getEnum(0, DatabaseType.class);
-        if(type == null) queries.scope(args.get(0));
-        else queries.scope(type);
+        context.invalidArgument(type == null, "&cThis type does not exist! (" + database + ")");
+        context.invalidArgument(type.getWrappedClass() == null, "&cThis type is not databaseable! (" + database + ")");
+
+        // queries
+        Queries queries = Queries.newInstance();
+        queries.scope(type);
 
         // the object to be created
         Object toCreate = null;
@@ -306,11 +307,9 @@ public class DatabaseCommand {
         }
         queries.creation(toCreate);
 
-        context.sendMessage(StringUtil.format("Create database entries for {0} ...", queries.getDatabase()));
-
         // send response
+        context.sendMessage(StringUtil.format("Create database entries for {0} ...", queries.getDatabase()));
         Response response = queries.execute();
-
         context.sendMessage("Creation complete. (" + response.getMessageAsList() + ")");
     }
 

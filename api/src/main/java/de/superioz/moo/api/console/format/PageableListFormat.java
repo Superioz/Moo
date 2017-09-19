@@ -52,8 +52,14 @@ public class PageableListFormat<T> extends DisplayFormat {
                 return;
             }
 
+            // replacor
             Replacor<T> replacor = new Replacor<>(t);
-            entryConsumer.accept(replacor);
+            if(entryConsumer != null){
+                entryConsumer.accept(replacor);
+            }
+            else{
+                replacor.accept(replacor.get());
+            }
 
             String entry = StringUtil.format(entryFormat, replacor.getReplacements());
             addMessage(entry, condition == null ? true : condition.apply(t));

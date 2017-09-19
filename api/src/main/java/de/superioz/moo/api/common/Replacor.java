@@ -5,7 +5,7 @@ import lombok.Getter;
 public class Replacor<T> {
 
     @Getter
-    private Object[] replacements;
+    private Object[] replacements = new Object[0];
 
     private T t;
 
