@@ -506,7 +506,7 @@ public abstract class CommandContext<T> {
      */
     public <V> V get(String key, Supplier<V> supplier) {
         Object o = CONTEXT_CACHE.get(getSendersUniqueId(), getCommand().getLabel() + ":" + key);
-        if(o == null) {
+        if(o == null && supplier != null) {
             o = supplier.get();
             this.set(o);
         }

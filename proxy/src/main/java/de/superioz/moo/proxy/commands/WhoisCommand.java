@@ -46,6 +46,8 @@ public class WhoisCommand {
     public void onCommand(BungeeCommandContext context,ParamSet args) {
         String playerName = args.get(0);
         MooPlayer player = MooProxy.getPlayer(playerName);
+        System.out.println("DATA: " + player.unwrap());
+        System.out.println("UUID: " + player.getUniqueId());
         context.invalidArgument(!player.exists(), LanguageManager.get("error-player-doesnt-exist", playerName));
 
         // list current informations

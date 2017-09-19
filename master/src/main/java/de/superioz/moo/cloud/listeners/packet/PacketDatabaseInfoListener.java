@@ -41,12 +41,12 @@ public class PacketDatabaseInfoListener implements PacketAdapter {
         }
 
         // list the database collection
-        DatabaseCollection module = Cloud.getInstance().getDatabaseCollection(type);
-        Cloud.getInstance().getLogger().debug("Attempting to fetch data from modules .. (" + type.name() + ")." +
+        DatabaseCollection collection = Cloud.getInstance().getDatabaseCollection(type);
+        Cloud.getInstance().getLogger().debug("Attempting to fetch data from collections .. (" + type.name() + ")." +
                 " With filter (as " + filter + ")");
 
         // list data from filtering
-        List<Object> data = module.getFilteredData(DatabaseCollections.PLAYER, filter, packet.queried, packet.limit);
+        List<Object> data = collection.getFilteredData(DatabaseCollections.PLAYER, filter, packet.queried, packet.limit);
 
         // check result
         if(data.isEmpty()) {

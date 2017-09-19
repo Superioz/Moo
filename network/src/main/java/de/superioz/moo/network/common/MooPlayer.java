@@ -43,6 +43,7 @@ public class MooPlayer extends ObjectWrapper<MooPlayer, PlayerData> implements P
      * @return The uuid
      */
     public UUID getUniqueId() {
+        if(wrappedObject == null) return null;
         return wrappedObject.getUuid();
     }
 

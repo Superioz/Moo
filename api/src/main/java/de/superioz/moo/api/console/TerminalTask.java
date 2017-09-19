@@ -48,6 +48,8 @@ public class TerminalTask implements Runnable {
             reader.setCompletionHandler(new CandidateCompletionHandler());
             reader.addCompleter(new CandidateCompleter());
 
+            System.out.println("Started terminal task in thread " + Thread.currentThread().getName() + ".");
+
             String line;
             while((line = reader.readLine()) != null){
                 newLine.accept(line);
@@ -57,7 +59,7 @@ public class TerminalTask implements Runnable {
             // mostly this error happens when the console is not exited properly
             // I only witnesses it while executing the cloud on linux and closing
             // the console forcefully
-            System.err.println("Error while JLine Terminal! (" + e.getMessage() + ")");
+            System.err.println("Error while initializing JLine Terminal! (" + e.getMessage() + ")");
         }
         finally {
             try {

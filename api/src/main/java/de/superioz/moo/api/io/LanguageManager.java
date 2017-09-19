@@ -51,7 +51,7 @@ public class LanguageManager {
      * @return The result
      */
     public boolean isLoaded() {
-        return handle.isLoaded();
+        return handle != null && handle.isLoaded();
     }
 
     /**
@@ -92,6 +92,7 @@ public class LanguageManager {
      * @return The size as int
      */
     public static int size() {
+        if(handle == null) return -1;
         return handle.size();
     }
 
@@ -102,7 +103,7 @@ public class LanguageManager {
      * @return The result
      */
     public static boolean contains(String key) {
-        return handle.containsKey(key);
+        return handle != null && handle.containsKey(key);
     }
 
     /**

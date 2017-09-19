@@ -200,22 +200,22 @@ public class DatabaseCommand {
             flags = {"l", "s"})
     public void dblist(CommandContext context, ParamSet args) {
         Queries queries = Queries.newInstance();
+        String database =  args.get(0);
 
         // list the database
         DatabaseType type = args.getEnum(0, DatabaseType.class);
-        if(type == null) queries.scope(args.get(0));
-        else queries.scope(type);
+        context.invalidArgument(type == null, "&cThis type does not exist! (" + database + ")");
         queries.count(PacketDatabaseCount.CountType.LIST);
         queries.limit(args.hasFlag("l") ? args.getFlag("l").getInt(0, -1) : -1);
 
+        // ..
         context.sendMessage(StringUtil.format("List entries of {0} ...", queries.getDatabase()));
 
         // list response
-        String k = args.get(0);
-        Response response = (Response) context.get(k);
+        Response response = (Response) context.get(database);
         if(response == null) {
             response = queries.execute();
-            context.setExpireAfterCreation(k, response, 15, TimeUnit.SECONDS);
+            context.setExpireAfterCreation(database, response, 15, TimeUnit.SECONDS);
         }
 
         // display data

@@ -54,7 +54,7 @@ public final class EventUtil {
             return true;
         }
         catch(Exception e) {
-            System.err.println("Could not invoke listener method!");
+            System.err.println("Could not invoke listener method! Thread: ");
             e.printStackTrace();
             return false;
         }
