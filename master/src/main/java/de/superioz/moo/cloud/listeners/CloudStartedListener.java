@@ -25,8 +25,11 @@ public class CloudStartedListener implements EventListener {
                 MooCache.getInstance().getGroupMap().fastPutAsync(group.getName(), new MooGroup(group));
             });
         }
+        catch(NullPointerException npe) {
+            Cloud.getInstance().getLogger().severe("Couldn't load groups.", npe);
+        }
         catch(Exception e) {
-            Cloud.getInstance().getLogger().debug("Couldn't load groups. It seems the database/cache is not available.");
+            Cloud.getInstance().getLogger().debug("Couldn't load groups. It seems the database/cache is not available. (" + e.getClass().getSimpleName() + ")");
             // MHH WEIRD
         }
     }

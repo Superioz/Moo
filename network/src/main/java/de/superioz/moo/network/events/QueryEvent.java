@@ -38,6 +38,7 @@ public class QueryEvent implements Event, Supplyable<Response>, Cancellable {
 
     @Override
     public void accept(Response response) {
+        if(!supplier.isEmpty()) return;
         supplier.accept(response);
     }
 

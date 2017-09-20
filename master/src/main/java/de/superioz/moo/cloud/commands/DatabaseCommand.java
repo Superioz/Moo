@@ -160,6 +160,7 @@ public class DatabaseCommand {
 
         // display data
         List<String> data = response.getMessageAsList();
+        context.invalidArgument(data.isEmpty(), "&cNo data found!");
         context.sendMessage("Received data(" + data.size() + "):");
 
         int page = args.getInt(2, 0);
@@ -220,7 +221,7 @@ public class DatabaseCommand {
             return r;
         });
         List<String> data = response.getMessageAsList();
-        System.out.println("DATA: " + data);
+        context.invalidArgument(data.isEmpty(), "&cNo data found!");
 
         // ..
         int page = args.getInt(1, 0);
@@ -297,9 +298,10 @@ public class DatabaseCommand {
         }
 
         // if he uses argument updates
+        DbQuery query = null;
         if(args.size() > 1) {
             try {
-                DbQuery query = DbQuery.fromParameter(type.getWrappedClass(), args.get(1));
+                query = DbQuery.fromParameter(type.getWrappedClass(), args.get(1));
                 if(query != null) query.apply(toCreate);
             }
             catch(CommandException ex) {
@@ -311,7 +313,7 @@ public class DatabaseCommand {
         // send response
         context.sendMessage(StringUtil.format("Create database entries for {0} ...", queries.getDatabase()));
         Response response = queries.execute();
-        context.sendMessage("Creation complete. (" + response.getMessageAsList() + ")");
+        context.sendMessage("Creation complete. (" + response.getStatus() + ")");
     }
 
 }

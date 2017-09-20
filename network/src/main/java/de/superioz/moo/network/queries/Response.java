@@ -109,7 +109,7 @@ public class Response {
      * @return The list of strings
      */
     public List<String> getMessageAsList() {
-        if(message == null || message.isEmpty()) return new ArrayList<>();
+        if(message == null || message.isEmpty() || message.get(0).isEmpty()) return new ArrayList<>();
         return message;
     }
 
