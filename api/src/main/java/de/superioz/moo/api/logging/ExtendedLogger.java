@@ -12,6 +12,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.nio.charset.Charset;
+import java.nio.file.AccessDeniedException;
 import java.nio.file.Files;
 import java.util.Arrays;
 import java.util.concurrent.ExecutorService;
@@ -96,6 +97,9 @@ public class ExtendedLogger {
             fileHandler.setFormatter(COLORLESS_FORMATTING);
             fileHandler.setEncoding(ENCODING);
             baseLogger.addHandler(fileHandler);
+        }
+        catch(AccessDeniedException ex) {
+            System.err.println("Logger does not have access to some files! Is there another cloud running at the moment?");
         }
         catch(Exception ex) {
             System.err.println("Could not register logger!");

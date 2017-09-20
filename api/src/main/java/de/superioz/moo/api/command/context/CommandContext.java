@@ -140,7 +140,7 @@ public abstract class CommandContext<T> {
      * @return The message context
      */
     public MessageContextResult<T> sendMessage(String msg, Object... replacements) {
-        String fullMessage = LanguageManager.contains(msg) ? LanguageManager.get(msg, replacements) : msg;
+        String fullMessage = LanguageManager.contains(msg) ? LanguageManager.get(msg, replacements) : StringUtil.format(msg, replacements);
 
         // there is a hover/click event thingy inside!
         // AND if it is the console we cannot do!

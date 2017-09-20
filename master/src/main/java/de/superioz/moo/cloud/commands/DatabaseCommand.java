@@ -220,6 +220,7 @@ public class DatabaseCommand {
             return r;
         });
         List<String> data = response.getMessageAsList();
+        System.out.println("DATA: " + data);
 
         // ..
         int page = args.getInt(1, 0);
